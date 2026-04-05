@@ -1,0 +1,32 @@
+Baseline Analysis (first 10 products)    
+                                                                    
+  Overall: 4 pass / 6 fail (40% pass rate)                          
+                                                                  
+  Best-performing criteria (100% good):                             
+  - Length - all 10 descriptions hit the 50–90 word target          
+  - Cost - all 10 calls under $0.00005                              
+  - Fluency - all 10 read as cohesive, natural prose                
+                                                                    
+  keep eye on:                                                         
+  - Grammar - 8 good, 2 ok (minor issues like missing articles, ANC 
+  misspelling)                                                      
+  - Latency - 6 good, 4 ok (I suspect a network issue)
+                                                                    
+  Worst-performing criteria:                                        
+  - Grounding - 6 ok, 4 good (60% fail). The #1 driver of failures  
+  due to the auto-reject rule. The model consistently adds          
+  unsupported quality claims ("superior sound," "lightning-fast,"   
+  "eco-friendly") and lifestyle claims ("active lifestyle," "busy   
+  life").                                                           
+  - Tone - 6 ok, 4 good (60% ok). The model tends toward mild       
+  superlatives ("ultimate," "exceptional," "future of…") that push  
+  tone from good to ok.                                             
+                       
+  Improvement strategy for next task:                               
+  1. Grounding is the top priority - it triggers automatic rejection
+   when not "good." The prompt should more aggressively forbid      
+  unsupported quality adjectives and lifestyle claims.              
+  2. Tone - instruct the model to avoid superlatives and grand      
+  marketing phrases. Use concrete benefit language instead.   
+  3. Grammar and Latency are minor issues that don't require prompt 
+  changes.

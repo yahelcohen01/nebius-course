@@ -1,0 +1,64 @@
+(*) Criterion definitions:
+
+    1. Grounding: "Sticks to information provided". Grounding evaluates whether the factual claims in the description are supported by the provided product attributes. It does NOT evaluate writing quality (Fluency), voice (Tone), or mechanical correctness (Grammar).
+
+        * Good: Every factual claim in the description is directly supported by the provided product structured attributes. Generic marketing language ("great choice", "you'll love it") is acceptable since it makes no specific factual claim. The following category-based inferences are allowed:
+            - Physical/sensory properties from materials (steel - durable, cotton - soft, leather - premium-feeling)
+            - Functional capabilities from structured attributes (Bluetooth 5.0 - wireless connectivity, 12-speed gear - versatile shifting) Lifestyle, values, or use-case claims not stated in the features (eco-friendly, perfect for hiking, great gift idea) are NOT considered grounded and will downgrade the rating.
+        * Ok: The description is mostly faithful, but contains AT LEAST one instance of unsupported-but-plausible opinion or suggestion: a subjective claim that isn't in the input but doesn't contradict it and cannot be verified as true or false (e.g., "perfect for hiking", "makes a great gift", "eco-friendly choice").
+        * Bad: The description contradicts provided features (stating something that conflicts with the provided data, e.g., "titanium" instead of steel as the material), OR contains one or more fabricated specific/technical claims: verifiable details that are not present in the input data (e.g., "waterproof to 30 meters", "available in 5 colors", "FDA-approved").
+
+    2. Length (50-90 words):
+
+        * Good: 50-90 words
+        * Ok: 40-49 or 91-110 words
+        * Bad: fewer than 40 or more than 110 words
+
+    3. Latency (avg. time per call):
+
+        * Good: ≤ 3 seconds
+        * Ok: 3-5 seconds
+        * Bad: > 5 seconds
+
+    4. Cost (avg. price per call):
+
+        * Good: ≤ $0.00005 per call
+        * Ok: $0.00005-$0.0001 per call
+        * Bad: > $0.0001 per call
+
+    5. Grammar (correct spelling & punctuation):
+
+        * Good: No spelling, punctuation, or grammatical errors.
+        * Ok: Contains 1-2 minor errors that don't hinder readability (e.g., a missing comma, a minor typo).
+        * Bad: Contains 3+ errors, OR any error that changes meaning or makes a sentence hard to understand.
+
+    6. Fluency: "Natural, easy-to-read sentences" Fluency evaluates whether the description reads smoothly as coherent, human-sounding prose. It does NOT evaluate whether the voice is appropriate for e-commerce (Tone), whether the facts are accurate (Grounding), or whether spelling and punctuation are correct (Grammar).
+        
+        Two components:
+            - Flow/cohesion - the description reads as a unified paragraph, not a list of disconnected facts. Observable markers: sentences reference or build on each other, related features are grouped together, there's some logical progression (e.g., what it is -> what it's made of -> what that means for you).
+            - Naturalness - the description sounds like something a human copywriter would write. Observable markers: varied sentence structure (not every sentence follows the same pattern), no awkward or stilted phrasing, doesn't read like bullet points reformatted into sentences.
+        
+        * Good: Both components satisfied - cohesive flow and natural-sounding.
+        * Ok: One component breaks down - e.g., natural phrasing but sentences feel disconnected, or well-structured but with some robotic/repetitive patterns.
+        * Bad: Both components fail - reads like a list of disjointed facts in awkward or repetitive phrasing.
+
+    7. Tone - "Friendly, credible sales voice" Tone evaluates whether the description uses the right voice for e-commerce product copy. It does NOT evaluate whether the text flows well (Fluency) or is mechanically correct (Grammar).
+        
+        Two components:
+            - Friendliness: warm, approachable, benefit-oriented. Speaks to the customer about what the product does for them, not at them with raw specs.
+            - Credibility: confident but measured. No unsupported superlatives ("the BEST ever"), no high-pressure urgency ("buy NOW before it's gone!"), no stacked vague intensifiers ("truly absolutely incredible").
+        
+        * Good: Both satisfied - warm and inviting without overselling. Uses benefit-oriented language, feels professional and approachable.
+        * Ok: Leans too far in one direction - either too dry/clinical (spec-sheet voice, lists features without connecting to benefits) OR mildly over-enthusiastic (some unnecessary superlatives, slightly salesy) but still broadly appropriate for e-commerce.
+        * Bad: Clearly wrong voice - either reads like a technical manual with zero sales appeal, OR is aggressively pushy/hyperbolic (infomercial-style pressure, excessive exclamation marks, high-pressure urgency, stacked superlatives).
+
+(*) Pass / fail "formula": 
+
+    1.   Cumulative pass bar: At least 3 good ratings and 0 bad ratings.
+    2.   List Go / no-go rules:
+        - If Grounding is not GOOD, the description is rejected.
+        - If Grammar is BAD, the description is rejected.
+        - If Fluency is BAD, the description is rejected.
+        - If Tone is BAD, the description is rejected.
+        - If Grammar + Fluency + Tone is OK, the description is rejected.
+
