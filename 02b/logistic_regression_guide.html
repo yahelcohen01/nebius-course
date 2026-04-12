@@ -1,0 +1,2710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Field Guide to Logistic Regression — for the LLM Architectures Hometask</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[
+          {left:'$$',right:'$$',display:true},
+          {left:'$',right:'$',display:false},
+          {left:'\\[',right:'\\]',display:true},
+          {left:'\\(',right:'\\)',display:false}
+        ], throwOnError:false});"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper:        #F4ECD6;
+  --paper-deep:   #ECE1BD;
+  --paper-card:   #FAF3DD;
+  --ink:          #1A2438;
+  --ink-soft:     #2E3A5C;
+  --ink-faint:    #6B7388;
+  --vermillion:   #B83A1F;
+  --vermillion-2: #D14E2E;
+  --sage:         #4F6B57;
+  --ochre:        #C68A1F;
+  --rule:         rgba(26, 36, 56, 0.16);
+  --rule-strong:  rgba(26, 36, 56, 0.45);
+
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-body:    'Newsreader', Georgia, serif;
+  --font-mono:    'IBM Plex Mono', 'Menlo', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--paper);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 19px;
+  line-height: 1.66;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* paper grain */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.40   0 0 0 0 0.30   0 0 0 0 0.10   0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* warm vignette */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse 110% 80% at 50% 30%, transparent 40%, rgba(98, 60, 10, 0.08) 100%);
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 64px 40px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ───────── HERO ───────── */
+.hero {
+  margin-bottom: 96px;
+  position: relative;
+}
+
+.hero .preface {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-bottom: 36px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.hero .preface span.dot {
+  width: 4px; height: 4px;
+  background: var(--vermillion);
+  border-radius: 50%;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(48px, 7.6vw, 124px);
+  line-height: 0.88;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+  margin-bottom: 38px;
+  font-variation-settings: "SOFT" 60, "WONK" 1, "opsz" 144;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--vermillion);
+  font-weight: 400;
+  display: inline-block;
+}
+
+.hero .deck {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 23px;
+  max-width: 720px;
+  color: var(--ink-soft);
+  line-height: 1.42;
+  font-weight: 350;
+}
+
+.hero .meta {
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.hero .meta div span {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 6px;
+  font-family: var(--font-body);
+}
+
+/* ───────── TOC ───────── */
+.toc {
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 36px 0;
+  margin: 64px 0 120px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+}
+
+.toc h3 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--vermillion);
+  font-weight: 500;
+}
+
+.toc ol {
+  list-style: none;
+  columns: 2;
+  column-gap: 56px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 350;
+  font-variation-settings: "SOFT" 30;
+}
+
+.toc ol li {
+  break-inside: avoid;
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.toc ol li:last-child { border-bottom: 0; }
+
+.toc ol li a {
+  color: var(--ink);
+  text-decoration: none;
+  flex: 1;
+  transition: color 0.18s;
+}
+
+.toc ol li a:hover { color: var(--vermillion); }
+
+.toc ol li::before {
+  content: counter(toc, decimal-leading-zero);
+  counter-increment: toc;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--vermillion);
+  letter-spacing: 0.06em;
+}
+
+.toc ol { counter-reset: toc; }
+
+/* ───────── SECTIONS ───────── */
+.section {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 720px);
+  gap: 60px;
+  margin: 96px 0;
+  position: relative;
+}
+
+.section .gutter {
+  text-align: right;
+  padding-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--vermillion);
+  text-transform: uppercase;
+  position: sticky;
+  top: 32px;
+  align-self: flex-start;
+  height: fit-content;
+}
+
+.section .gutter .num::before {
+  content: '§ ';
+}
+
+.section .gutter .num {
+  display: block;
+  font-size: 13px;
+  color: var(--vermillion);
+  font-weight: 500;
+}
+
+.section .gutter .tag {
+  display: block;
+  margin-top: 6px;
+  color: var(--ink-faint);
+  font-size: 10px;
+}
+
+.section h2 {
+  font-family: var(--font-display);
+  font-weight: 350;
+  font-size: clamp(36px, 4.4vw, 60px);
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  margin-bottom: 32px;
+  font-variation-settings: "SOFT" 40, "opsz" 60;
+}
+
+.section h2 em {
+  font-style: italic;
+  color: var(--vermillion);
+}
+
+.section .body { max-width: 720px; }
+
+.section .body p {
+  margin-bottom: 22px;
+}
+
+.section .body h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 22px;
+  margin: 36px 0 14px;
+  letter-spacing: -0.01em;
+  font-variation-settings: "SOFT" 50;
+  color: var(--ink);
+}
+
+.section .body h3 .marker {
+  color: var(--vermillion);
+  font-weight: 400;
+  margin-right: 10px;
+}
+
+/* drop cap */
+.section .body > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 0.82;
+  float: left;
+  margin: 10px 14px -6px 0;
+  color: var(--vermillion);
+  font-variation-settings: "SOFT" 100, "opsz" 144;
+}
+
+/* sidenote */
+.sidenote {
+  font-size: 14px;
+  line-height: 1.52;
+  color: var(--ink-soft);
+  font-style: italic;
+  border-left: 2px solid var(--vermillion);
+  padding: 4px 0 4px 16px;
+  margin: 26px 0;
+  font-weight: 350;
+}
+
+.sidenote strong {
+  font-style: normal;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--vermillion);
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* pull quote */
+blockquote.pull {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 30px;
+  line-height: 1.22;
+  color: var(--vermillion);
+  margin: 44px -20px;
+  padding: 0 0 0 28px;
+  font-weight: 300;
+  border-left: 3px solid var(--vermillion);
+  font-variation-settings: "SOFT" 50, "opsz" 90;
+}
+
+/* lists */
+.body ul, .body ol {
+  margin: 8px 0 24px 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.body ul li, .body ol li {
+  padding-left: 28px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.body ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--vermillion);
+  font-weight: 600;
+}
+
+.body ol { counter-reset: ord; }
+.body ol li { counter-increment: ord; }
+.body ol li::before {
+  content: counter(ord) ".";
+  position: absolute;
+  left: 0;
+  color: var(--vermillion);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  top: 4px;
+  font-weight: 500;
+}
+
+/* code */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--paper-deep);
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.6;
+  background: var(--paper-deep);
+  border-left: 3px solid var(--ink);
+  padding: 22px 26px;
+  margin: 28px 0;
+  overflow-x: auto;
+  color: var(--ink);
+  position: relative;
+}
+
+pre::before {
+  content: attr(data-label);
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border: 0;
+}
+
+/* figures */
+figure {
+  margin: 40px -10px;
+  padding: 30px 26px 22px;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  position: relative;
+}
+
+figure::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px dashed var(--rule);
+  pointer-events: none;
+}
+
+figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 1;
+}
+
+figcaption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-faint);
+  margin-top: 18px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+figcaption .num {
+  color: var(--vermillion);
+  margin-right: 6px;
+}
+
+/* katex */
+.katex-display {
+  margin: 26px 0 !important;
+  padding: 18px 20px;
+  border-left: 2px solid var(--ochre);
+  background: rgba(198, 138, 31, 0.06);
+}
+
+.katex { font-size: 1.02em !important; }
+
+/* ───────── INTERACTIVE: SIGMOID PLAYGROUND ───────── */
+.sig-demo {
+  background: var(--paper-card);
+  border: 1px solid var(--ink);
+  padding: 0;
+  margin: 44px -10px;
+  position: relative;
+}
+
+.sig-demo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ink);
+  transform: translate(7px, 7px);
+  z-index: -1;
+  background: var(--paper);
+}
+
+.sig-demo .header {
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper-deep);
+}
+
+.sig-demo .header h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--vermillion);
+  font-weight: 600;
+}
+
+.sig-demo .header .tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+.sig-demo .body-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 0;
+}
+
+.sig-plot {
+  padding: 24px;
+  border-right: 1px solid var(--rule);
+}
+
+.sig-stats {
+  padding: 24px 28px;
+  background: var(--paper);
+}
+
+.sig-control {
+  padding: 24px 28px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-deep);
+  grid-column: 1 / -1;
+}
+
+.sig-control label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  margin-bottom: 14px;
+}
+
+.sig-control label .val {
+  font-size: 22px;
+  color: var(--vermillion);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.sig-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: var(--ink);
+  outline: none;
+}
+
+.sig-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  background: var(--vermillion);
+  border: 3px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--ink);
+  border-radius: 50%;
+  cursor: grab;
+  transition: transform 0.15s;
+}
+
+.sig-slider::-webkit-slider-thumb:hover { transform: scale(1.18); }
+.sig-slider::-webkit-slider-thumb:active { cursor: grabbing; }
+
+.sig-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: var(--vermillion);
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  cursor: grab;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px dotted var(--rule);
+}
+
+.stat-row:last-child { border-bottom: 0; }
+
+.stat-row .key {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+}
+
+.stat-row .num {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.stat-row.warn .num { color: var(--vermillion); }
+
+/* ───────── INTERACTIVE: L1 SPARSITY ───────── */
+.l1-demo {
+  background: var(--paper-card);
+  border: 1px solid var(--ink);
+  padding: 0;
+  margin: 44px -10px;
+  position: relative;
+}
+
+.l1-demo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ink);
+  transform: translate(7px, 7px);
+  z-index: -1;
+  background: var(--paper);
+}
+
+.l1-demo .header {
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper-deep);
+}
+
+.l1-demo .header h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--vermillion);
+  font-weight: 600;
+}
+
+.l1-demo .header .tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+.l1-bars {
+  padding: 28px 28px 8px;
+  display: grid;
+  grid-template-columns: repeat(30, 1fr);
+  gap: 4px;
+  align-items: end;
+  height: 220px;
+}
+
+.l1-bars .bar {
+  background: var(--ink);
+  position: relative;
+  transition: height 0.28s ease, background 0.2s;
+  min-height: 1px;
+}
+
+.l1-bars .bar.zero {
+  background: var(--vermillion);
+  opacity: 0.35;
+}
+
+.l1-bars .bar.center {
+  background: var(--ink-faint);
+  height: 1px !important;
+  opacity: 0.4;
+}
+
+.l1-control {
+  padding: 24px 28px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-deep);
+}
+
+.l1-stats-row {
+  padding: 16px 28px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  gap: 36px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+.l1-stats-row span.val {
+  font-size: 16px;
+  color: var(--vermillion);
+  margin-left: 8px;
+  text-transform: none;
+}
+
+/* ───────── TASK CARDS ───────── */
+.tasks {
+  margin: 80px 0;
+}
+
+.task-card {
+  border: 1px solid var(--ink);
+  padding: 36px 40px;
+  margin: 32px 0;
+  background: var(--paper-card);
+  position: relative;
+}
+
+.task-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ink);
+  transform: translate(8px, 8px);
+  z-index: -1;
+  background: var(--paper);
+}
+
+.task-card .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  margin-bottom: 8px;
+}
+
+.task-card h3 {
+  font-family: var(--font-display);
+  font-weight: 350;
+  font-size: 32px;
+  margin-bottom: 8px;
+  font-variation-settings: "SOFT" 50, "opsz" 60;
+  letter-spacing: -0.01em;
+}
+
+.task-card .points {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 22px;
+}
+
+.task-card .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  margin-top: 24px;
+}
+
+.task-card .col h4 {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--vermillion);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.task-card .col ul li {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.task-card .col ul li::before {
+  content: '▸';
+  color: var(--vermillion);
+}
+
+/* ornament */
+.ornament {
+  text-align: center;
+  margin: 90px 0;
+  color: var(--vermillion);
+}
+
+.ornament svg { display: inline-block; }
+
+/* footer */
+footer {
+  text-align: center;
+  padding: 100px 40px 80px;
+  border-top: 1px solid var(--rule);
+  margin-top: 120px;
+  position: relative;
+}
+
+footer .colophon {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink-soft);
+  font-weight: 300;
+  margin-bottom: 28px;
+  font-variation-settings: "SOFT" 50;
+}
+
+footer .signature {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+}
+
+/* animations */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero > * {
+  animation: fade-up 1s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+.hero .preface { animation-delay: 0s; }
+.hero h1       { animation-delay: 0.18s; }
+.hero .deck    { animation-delay: 0.42s; }
+.hero .meta    { animation-delay: 0.64s; }
+
+@keyframes draw-stroke {
+  to { stroke-dashoffset: 0; }
+}
+
+.draw-anim {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw-stroke 2.4s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* mobile */
+@media (max-width: 980px) {
+  .page { padding: 48px 24px; }
+  .section { grid-template-columns: 1fr; gap: 16px; }
+  .section .gutter { position: static; text-align: left; }
+  .toc { grid-template-columns: 1fr; gap: 24px; }
+  .toc ol { columns: 1; }
+  .hero .meta { grid-template-columns: 1fr 1fr; }
+  body { font-size: 17px; }
+  .sig-demo .body-grid { grid-template-columns: 1fr; }
+  .sig-plot { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .task-card .grid { grid-template-columns: 1fr; gap: 22px; }
+  .l1-bars { grid-template-columns: repeat(20, 1fr); }
+}
+
+/* selection */
+::selection {
+  background: var(--vermillion);
+  color: var(--paper);
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ╭──────────── HERO ────────────╮ -->
+  <header class="hero">
+    <div class="preface">
+      <span>Vol. 02b</span>
+      <span class="dot"></span>
+      <span>Field Guide</span>
+      <span class="dot"></span>
+      <span>For solving alone</span>
+    </div>
+
+    <h1>A Field Guide<br>to <em>Logistic</em><br>Regression.</h1>
+
+    <p class="deck">
+      A study companion for Hometask 1, Part 1 — written so that after reading it
+      you can write the code yourself, and understand what every line is asking of you.
+    </p>
+
+    <div class="meta">
+      <div>For<span>LLM Architectures, Hometask 01</span></div>
+      <div>Covers<span>Parts 1 &amp; 2 — all 100 pts</span></div>
+      <div>Reading time<span>≈ 35 minutes, slow</span></div>
+      <div>Promise<span>Concepts only — no solutions</span></div>
+    </div>
+  </header>
+
+  <!-- ╭──────────── TOC ────────────╮ -->
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#s1">What logistic regression actually is</a></li>
+      <li><a href="#s2">The sigmoid, an honest probability</a></li>
+      <li><a href="#s3">Binary cross-entropy &amp; the meaning of surprise</a></li>
+      <li><a href="#s4">Numerical stability — the BCE side</a></li>
+      <li><a href="#s5">Numerical stability — the softmax side</a></li>
+      <li><a href="#s6">Building the model in PyTorch</a></li>
+      <li><a href="#s7">Why weight initialization matters (or doesn't)</a></li>
+      <li><a href="#s8">Mini-batch SGD, told slowly</a></li>
+      <li><a href="#s9">Learning rate &amp; batch size, two dials</a></li>
+      <li><a href="#s10">Choosing a metric you can defend</a></li>
+      <li><a href="#s11">Why we regularize at all</a></li>
+      <li><a href="#s12">L1 vs L2 — diamonds &amp; circles</a></li>
+      <li><a href="#s13">What to expect from your λ sweep</a></li>
+      <li><a href="#s14">The five tasks, distilled</a></li>
+      <li><a href="#s15">What an optimizer actually does</a></li>
+      <li><a href="#s16">The four optimizers, in order</a></li>
+      <li><a href="#s17">Two landscapes — bowl &amp; camel</a></li>
+      <li><a href="#s18">Reading your optimizer results</a></li>
+    </ol>
+  </nav>
+
+  <!-- ═══════════════════ §1 ═══════════════════ -->
+  <section class="section" id="s1">
+    <div class="gutter">
+      <span class="num">01</span>
+      <span class="tag">Foundations</span>
+    </div>
+    <div class="body">
+      <h2>What logistic regression <em>actually</em> is.</h2>
+
+      <p>
+        Forget the name for a moment. Logistic regression is a tool for answering one question:
+        <strong>"given these features, what's the probability that this example belongs to class 1?"</strong>
+        It is misleadingly named — the word "regression" only refers to how it is fitted, not what
+        it does. It is a classifier through and through.
+      </p>
+
+      <p>
+        Mechanically, it is two tiny pieces glued together. First, a <em>linear score</em>: take
+        the input vector $x$, multiply it elementwise by a weight vector $w$, sum, and add a
+        bias $b$. Call the result $z$, the <em>logit</em>:
+      </p>
+
+      $$z \;=\; w^\top x + b$$
+
+      <p>
+        Then, a <em>squashing function</em> — the sigmoid — that takes $z$ (any real number from
+        $-\infty$ to $+\infty$) and pinches it down into a probability between $0$ and $1$:
+      </p>
+
+      $$\hat{y} \;=\; \sigma(z) \;=\; \frac{1}{1 + e^{-z}}$$
+
+      <p>
+        That's the entire model. To turn the probability into a hard prediction you pick a
+        threshold (usually $0.5$). Anything above that is class 1; anything below is class 0.
+      </p>
+
+      <div class="sidenote">
+        <strong>Why "linear"?</strong>
+        Because the boundary between predicted class 0 and predicted class 1 is the set of points
+        where $\sigma(z) = 0.5$, which is where $z = 0$, which is the hyperplane $w^\top x + b = 0$.
+        A flat slice through feature-space.
+      </div>
+
+      <p>
+        For your hometask the input $x$ is a 10,000-dimensional bag-of-words vector — a count of
+        how often each vocabulary word appears in a movie review. The output is one number: the
+        probability the review is positive. So your $w$ is a vector of 10,000 weights, one per
+        vocabulary word, each saying "how much does seeing this word make me think positive vs.
+        negative?" A learned $w$ is a tiny lexicon of sentiment.
+      </p>
+
+      <blockquote class="pull">
+        Logistic regression is a lexicon you don't have to write by hand.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §2 ═══════════════════ -->
+  <section class="section" id="s2">
+    <div class="gutter">
+      <span class="num">02</span>
+      <span class="tag">Foundations</span>
+    </div>
+    <div class="body">
+      <h2>The sigmoid — an honest <em>probability.</em></h2>
+
+      <p>
+        The sigmoid is the bridge from "any real number" to "valid probability". It looks like an
+        elongated S laid on its side: flat at the bottom, steep through the middle, flat at the
+        top. Three properties matter:
+      </p>
+
+      <ol>
+        <li>$\sigma(0) = 0.5$. Equal evidence both ways means equal probability.</li>
+        <li>It is symmetric around the origin: $\sigma(-z) = 1 - \sigma(z)$.</li>
+        <li>It <em>saturates</em> in the tails: $\sigma(10) \approx 0.99995$, $\sigma(-10) \approx 0.00005$. This will haunt us in §4.</li>
+      </ol>
+
+      <p>
+        Drag the slider below. Move the logit $z$ from very negative to very positive and watch
+        the probability climb. Pay attention to two things: how fast the probability changes
+        around $z = 0$, and how slowly it changes once you're past $|z| > 4$.
+      </p>
+
+      <!-- INTERACTIVE: SIGMOID PLAYGROUND -->
+      <div class="sig-demo" id="sig-demo">
+        <div class="header">
+          <h4>Interactive · The Sigmoid &amp; BCE</h4>
+          <span class="tag">drag the slider</span>
+        </div>
+        <div class="body-grid">
+          <div class="sig-plot">
+            <svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+              <!-- axes -->
+              <line x1="20" y1="220" x2="380" y2="220" stroke="#1A2438" stroke-width="1"/>
+              <line x1="200" y1="20" x2="200" y2="220" stroke="#1A2438" stroke-width="1" stroke-dasharray="2,3" opacity="0.5"/>
+              <line x1="20" y1="120" x2="380" y2="120" stroke="#1A2438" stroke-width="0.6" stroke-dasharray="2,3" opacity="0.4"/>
+              <line x1="20" y1="20" x2="380" y2="20" stroke="#1A2438" stroke-width="0.4" opacity="0.3"/>
+
+              <!-- labels -->
+              <text x="380" y="234" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">z = +6</text>
+              <text x="20"  y="234" font-family="IBM Plex Mono" font-size="9" fill="#6B7388">z = −6</text>
+              <text x="384" y="24"  font-family="IBM Plex Mono" font-size="9" fill="#6B7388">σ=1</text>
+              <text x="384" y="124" font-family="IBM Plex Mono" font-size="9" fill="#6B7388">0.5</text>
+              <text x="384" y="223" font-family="IBM Plex Mono" font-size="9" fill="#6B7388">σ=0</text>
+
+              <!-- sigmoid curve placeholder -->
+              <path id="sig-curve" fill="none" stroke="#B83A1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="draw-anim" />
+
+              <!-- marker -->
+              <line id="sig-marker-v" x1="200" y1="20" x2="200" y2="220" stroke="#1A2438" stroke-width="1.2"/>
+              <circle id="sig-marker" cx="200" cy="120" r="6" fill="#B83A1F" stroke="#F4ECD6" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="sig-stats">
+            <div class="stat-row">
+              <span class="key">σ(z)</span>
+              <span class="num" id="sig-out">0.500</span>
+            </div>
+            <div class="stat-row">
+              <span class="key">Loss · y = 1</span>
+              <span class="num" id="bce1-out">0.693</span>
+            </div>
+            <div class="stat-row">
+              <span class="key">Loss · y = 0</span>
+              <span class="num" id="bce0-out">0.693</span>
+            </div>
+            <div class="stat-row warn">
+              <span class="key">Saturation?</span>
+              <span class="num" id="sat-out">no</span>
+            </div>
+          </div>
+        </div>
+        <div class="sig-control">
+          <label>Logit z<span class="val" id="z-val">0.00</span></label>
+          <input type="range" id="z-slider" class="sig-slider" min="-6" max="6" step="0.05" value="0">
+        </div>
+      </div>
+
+      <p>
+        Notice how, when you push $z$ to $+5$, the sigmoid is already nearly $0.993$. By $+6$ it
+        is $0.998$. By $+15$ it is, for floating-point purposes, exactly $1.0$. The information
+        content of "is this confident" has been crushed into the last few digits of a float, where
+        it is about to disappear.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §3 ═══════════════════ -->
+  <section class="section" id="s3">
+    <div class="gutter">
+      <span class="num">03</span>
+      <span class="tag">Loss</span>
+    </div>
+    <div class="body">
+      <h2>Binary cross-entropy &amp; the meaning of <em>surprise.</em></h2>
+
+      <p>
+        We need a way to score "how wrong was the model on this example?" — a loss. For
+        regression you reach for squared error. For classification with probabilities, the
+        right tool is the <strong>cross-entropy</strong>, and there is a beautiful reason why.
+      </p>
+
+      <p>
+        Think of $-\log p$ as the <em>surprise</em> of seeing an event with probability $p$.
+        If you predicted something with probability $0.99$ and it happens, $-\log(0.99) \approx 0.01$ —
+        almost no surprise. If you predicted it with probability $0.01$ and it happens anyway,
+        $-\log(0.01) \approx 4.6$ — large surprise. Surprise is a punishment proportional to
+        how badly you misjudged the world.
+      </p>
+
+      <p>
+        The binary cross-entropy is just "the surprise of the true label, averaged over the
+        batch":
+      </p>
+
+      $$L \;=\; -\frac{1}{N}\sum_{i=1}^N\Big[\, y_i \log \hat{y}_i \;+\; (1 - y_i) \log(1 - \hat{y}_i) \,\Big]$$
+
+      <p>
+        Read the bracketed term carefully. Only one of the two pieces is "live" for any given
+        example, because $y_i$ is either $0$ or $1$:
+      </p>
+
+      <ul>
+        <li>If $y_i = 1$, the second term vanishes and you're left with $-\log \hat{y}_i$. Want $\hat{y}$ near 1.</li>
+        <li>If $y_i = 0$, the first term vanishes and you're left with $-\log(1 - \hat{y}_i)$. Want $\hat{y}$ near 0.</li>
+      </ul>
+
+      <div class="sidenote">
+        <strong>Why not squared error?</strong>
+        With sigmoid + MSE the loss surface is non-convex and the gradient is tiny exactly where
+        the model is most wrong (deep in saturation). BCE was designed to <em>cancel out</em> the
+        sigmoid derivative when you take gradients, leaving a clean linear pull toward the right
+        answer. It is the loss the sigmoid was made for.
+      </div>
+
+      <p>
+        Look back at the playground in §2. The "Loss · y = 1" and "Loss · y = 0" rows are
+        exactly $-\log\hat{y}$ and $-\log(1-\hat{y})$. Drag the slider all the way to one end
+        and watch the corresponding loss number explode. That explosion is your enemy in §4.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §4 ═══════════════════ -->
+  <section class="section" id="s4">
+    <div class="gutter">
+      <span class="num">04</span>
+      <span class="tag">Stability</span>
+    </div>
+    <div class="body">
+      <h2>Numerical stability — the <em>BCE</em> side.</h2>
+
+      <p>
+        Floating-point numbers are not real numbers. They have limits. A 32-bit float can only
+        represent values down to about $1.4 \times 10^{-45}$ before it underflows to zero. When
+        the sigmoid output gets close enough to $0$ or $1$, it <em>becomes</em> exactly $0$ or
+        exactly $1$. And then:
+      </p>
+
+      $$\log(0) = -\infty \qquad \log(1 - 1) = \log(0) = -\infty$$
+
+      <p>
+        $-\infty$ multiplied by anything is still $-\infty$, and $-\infty$ summed into your loss
+        gives you a NaN, and a NaN flowing through backpropagation poisons your weights forever.
+        One bad batch and the entire run is ruined.
+      </p>
+
+      <p>
+        The cheap, robust fix: <strong>clamp the prediction</strong> away from the danger zone
+        before you take the log. Pick a tiny $\varepsilon$ — the standard choice is $10^{-15}$ — and
+        squeeze every $\hat{y}$ into the safe range $[\,\varepsilon,\; 1 - \varepsilon\,]$:
+      </p>
+
+      <pre data-label="pseudocode">y_pred = sigmoid(logits)
+y_pred = clamp(y_pred, eps, 1 - eps)
+loss   = -mean( y * log(y_pred) + (1 - y) * log(1 - y_pred) )</pre>
+
+      <p>
+        With clamping, the worst the model can be punished is roughly
+        $-\log(10^{-15}) \approx 34.5$. Painful but finite. Training survives.
+      </p>
+
+      <div class="sidenote">
+        <strong>Bonus knowledge</strong>
+        Production frameworks (PyTorch's <code>BCEWithLogitsLoss</code>) skip the clamp entirely
+        by working directly on the logits, never materialising the saturated probabilities. The
+        formula is rearranged into <code>max(z, 0) − z·y + log1p(exp(−|z|))</code>, which is
+        stable for any $z$. For the hometask you implement the clamp version, but it's worth
+        knowing why production code looks weird.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §5 ═══════════════════ -->
+  <section class="section" id="s5">
+    <div class="gutter">
+      <span class="num">05</span>
+      <span class="tag">Stability</span>
+    </div>
+    <div class="body">
+      <h2>Numerical stability — the <em>softmax</em> side.</h2>
+
+      <p>
+        Softmax is the multi-class generalisation of the sigmoid. Given a vector of logits
+        $z = [z_1, z_2, \ldots, z_K]$, it produces a probability distribution over $K$ classes:
+      </p>
+
+      $$\text{softmax}(z)_i \;=\; \frac{e^{z_i}}{\sum_{j=1}^K e^{z_j}}$$
+
+      <p>
+        Two things can go wrong with the naive formula. If any $z_i$ is large (say $1000$),
+        $e^{z_i}$ <em>overflows</em> to infinity. If every $z_i$ is very negative, every
+        $e^{z_i}$ underflows to zero, the denominator becomes zero, and you divide by zero.
+        Either way: NaN.
+      </p>
+
+      <p>
+        The fix is the most quietly elegant trick in deep learning. Subtract the maximum logit
+        from every logit before exponentiating:
+      </p>
+
+      $$\text{softmax}(z)_i \;=\; \frac{e^{z_i - \max(z)}}{\sum_{j=1}^K e^{z_j - \max(z)}}$$
+
+      <h3><span class="marker">i.</span>Why this gives the same answer.</h3>
+
+      <p>
+        Let $c = \max(z)$. We want to show that subtracting $c$ leaves the ratio unchanged.
+        Multiply numerator and denominator by $e^{-c}$:
+      </p>
+
+      $$\frac{e^{z_i}}{\sum_j e^{z_j}} \;=\; \frac{e^{-c} \cdot e^{z_i}}{e^{-c} \cdot \sum_j e^{z_j}} \;=\; \frac{e^{z_i - c}}{\sum_j e^{z_j - c}}$$
+
+      <p>
+        The constant factor cancels. The transformation is exact algebra, not an approximation.
+      </p>
+
+      <h3><span class="marker">ii.</span>Why this is suddenly stable.</h3>
+
+      <p>
+        After subtracting the max, every $(z_i - c)$ is at most $0$. So every $e^{z_i - c}$ is
+        in $(0, 1]$. The biggest exponent is $0$, giving $e^0 = 1$ — no overflow is possible.
+        And because at least one term in the denominator is exactly $1$, the denominator is
+        always at least $1$, so we never divide by zero either.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- Naive panel -->
+          <text x="20" y="24" font-family="IBM Plex Mono" font-size="11" fill="#B83A1F" font-weight="600">NAIVE</text>
+          <text x="20" y="50" font-family="IBM Plex Mono" font-size="13" fill="#1A2438">z   = [1000, 1001, 1002]</text>
+          <text x="20" y="76" font-family="IBM Plex Mono" font-size="13" fill="#1A2438">e^z = [Infinity, Infinity, Infinity]</text>
+          <text x="20" y="102" font-family="IBM Plex Mono" font-size="13" fill="#B83A1F">→  NaN / NaN  =  💀</text>
+
+          <!-- separator -->
+          <line x1="20" y1="124" x2="580" y2="124" stroke="#1A2438" opacity="0.2" stroke-dasharray="2,4"/>
+
+          <!-- Stable panel -->
+          <text x="20" y="150" font-family="IBM Plex Mono" font-size="11" fill="#4F6B57" font-weight="600">STABLE  (subtract max = 1002)</text>
+          <text x="20" y="176" font-family="IBM Plex Mono" font-size="13" fill="#1A2438">z − c = [−2, −1, 0]</text>
+          <text x="20" y="202" font-family="IBM Plex Mono" font-size="13" fill="#1A2438">e^(z−c) = [0.135, 0.368, 1.000]   →   softmax = [0.090, 0.245, 0.665]</text>
+        </svg>
+        <figcaption><span class="num">Fig. 01</span>The same input vector — once unsafe, once safe. Subtracting the max changes the bookkeeping, not the answer.</figcaption>
+      </figure>
+
+      <p>
+        For the cross-entropy you take the log of softmax, which under the same trick becomes
+        the <strong>log-sum-exp</strong> form:
+        $\log \text{softmax}(z)_i = (z_i - c) - \log \sum_j e^{z_j - c}$. The sum inside the log
+        is now safe (always $\geq 1$), so the log never sees zero.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §6 ═══════════════════ -->
+  <section class="section" id="s6">
+    <div class="gutter">
+      <span class="num">06</span>
+      <span class="tag">PyTorch</span>
+    </div>
+    <div class="body">
+      <h2>Building the model in <em>PyTorch.</em></h2>
+
+      <p>
+        <code>nn.Module</code> is PyTorch's base class for "anything that has learnable
+        parameters and a forward pass." When you subclass it, two things matter most: the
+        <code>__init__</code> creates the learnable tensors, and <code>forward</code> defines
+        how an input becomes an output. Everything else — gradient tracking, parameter
+        registration, GPU movement — is handled for you, as long as you wrap parameters in
+        <code>nn.Parameter</code>.
+      </p>
+
+      <p>
+        For a logistic regression you need exactly two learnable things:
+      </p>
+
+      <ul>
+        <li><strong>w</strong> — a weight tensor of shape <code>(n_features, 1)</code>. The trailing 1 makes the matrix multiply <code>x @ w</code> produce a column of logits, one per example.</li>
+        <li><strong>b</strong> — a bias tensor of shape <code>(1,)</code>. Broadcasts across the batch.</li>
+      </ul>
+
+      <p>
+        The <code>forward</code> pass is the model's mathematical definition translated to
+        PyTorch ops. Three lines:
+      </p>
+
+      <pre data-label="forward · pseudocode">def forward(self, x):
+    logits = x @ self.w + self.b   # shape (batch, 1)
+    probs  = torch.sigmoid(logits) # shape (batch, 1)
+    return probs</pre>
+
+      <p>
+        The <code>predict</code> method exists only for evaluation: take the probabilities and
+        threshold them at $0.5$ to get hard class labels. It is <em>never</em> called during
+        training — the loss operates on probabilities, not on hard labels.
+      </p>
+
+      <div class="sidenote">
+        <strong>About .clone().detach()</strong>
+        If a user passes a pre-built tensor as the initialization, you should clone-and-detach
+        it before wrapping in <code>nn.Parameter</code>. Cloning ensures the parameter doesn't
+        share memory with the caller's tensor (so future changes don't bleed in). Detaching
+        breaks any computation graph the caller's tensor might be carrying. It's hygiene.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §7 ═══════════════════ -->
+  <section class="section" id="s7">
+    <div class="gutter">
+      <span class="num">07</span>
+      <span class="tag">PyTorch</span>
+    </div>
+    <div class="body">
+      <h2>Why weight initialization matters <em>(or doesn't).</em></h2>
+
+      <p>
+        In a deep network, initializing every weight to zero is broken — every neuron in a
+        layer would compute the same thing, and the symmetry would never break under gradient
+        descent. People panic about init for that reason. <strong>For logistic regression that
+        panic is misplaced.</strong>
+      </p>
+
+      <p>
+        The BCE loss for a sigmoid linear model is <em>convex</em>. There is exactly one
+        minimum. Gradient descent will find it from anywhere — including from all-zeros. So
+        why would you ever pick random init? Two reasons:
+      </p>
+
+      <ol>
+        <li><strong>Speed.</strong> A small random kick can put you in a slightly steeper part of the loss landscape on the first step, sometimes shaving a few epochs off training.</li>
+        <li><strong>Tie-breaking under regularization.</strong> Once you add L1 (§12), the optimum may not be unique — a random init lets the optimizer commit to one solution rather than oscillating among several.</li>
+      </ol>
+
+      <blockquote class="pull">
+        Random init for logistic regression is a luxury, not a survival tool.
+      </blockquote>
+
+      <p>
+        One warning that <em>does</em> apply: the random values must be <strong>small</strong>.
+        If you initialize $w$ with values around 1, your initial logits could be in the tens or
+        hundreds, the sigmoid saturates, the gradient (which is proportional to $\sigma(z)(1 -
+        \sigma(z))$) effectively vanishes, and training crawls. The standard recipe is something
+        like $\mathcal{N}(0, 0.01^2)$ — small enough to keep early logits in the linear part of
+        the sigmoid.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §8 ═══════════════════ -->
+  <section class="section" id="s8">
+    <div class="gutter">
+      <span class="num">08</span>
+      <span class="tag">Optimization</span>
+    </div>
+    <div class="body">
+      <h2>Mini-batch SGD, told <em>slowly.</em></h2>
+
+      <p>
+        Gradient descent is one idea repeated forever: compute the gradient of the loss with
+        respect to the parameters, take a small step in the opposite direction, repeat. The
+        only question is "what data do you use to compute that gradient?" There are three
+        answers:
+      </p>
+
+      <ul>
+        <li><strong>Full-batch (vanilla GD).</strong> Use the entire training set every step. The gradient is exact but expensive — one update per pass through the data.</li>
+        <li><strong>Stochastic (pure SGD).</strong> Use one example per step. Cheap and noisy. The "stochastic" part means each step is a random direction that's only roughly correct on average.</li>
+        <li><strong>Mini-batch SGD.</strong> The compromise everyone actually uses. Take a small random subset of $B$ examples, compute the gradient on that, step. Then again with a fresh subset.</li>
+      </ul>
+
+      <p>
+        Mini-batch wins almost everywhere. It is dramatically faster than full-batch (you take
+        many steps per epoch), much less noisy than pure SGD (the average over $B$ examples is a
+        decent estimate), and on a GPU it benefits from vectorisation — computing on $B$
+        examples is usually nearly as fast as computing on $1$.
+      </p>
+
+      <p>
+        The training loop pattern, in shape:
+      </p>
+
+      <pre data-label="loop · pseudocode">for epoch in range(num_epochs):
+    shuffle(training_indices)        # critical — see sidenote
+    for batch in batches(training_indices, B):
+        optimizer.zero_grad()        # don't accumulate yesterday's gradients
+        y_hat = model(x_batch)
+        loss  = bce(y_hat, y_batch)
+        loss.backward()              # populate .grad
+        optimizer.step()             # w ← w − lr * w.grad
+    log(metric(model, x_val, y_val))</pre>
+
+      <div class="sidenote">
+        <strong>Always shuffle.</strong>
+        If your data is sorted by class (all positives first, all negatives second), failing to
+        shuffle means every batch is class-pure. The gradient on a class-pure batch points the
+        wrong way as often as it points the right way, and training never converges. Shuffling
+        once per epoch is the cheap insurance.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §9 ═══════════════════ -->
+  <section class="section" id="s9">
+    <div class="gutter">
+      <span class="num">09</span>
+      <span class="tag">Hyperparameters</span>
+    </div>
+    <div class="body">
+      <h2>Learning rate &amp; batch size, <em>two dials.</em></h2>
+
+      <p>
+        These two hyperparameters are the most consequential dials in any SGD run, and they
+        interact. Understanding how is the entire point of Task 1.4.
+      </p>
+
+      <h3><span class="marker">i.</span>Learning rate</h3>
+
+      <p>
+        The learning rate $\eta$ scales every parameter update. Too small and training crawls
+        — you spend most epochs barely moving. Too large and the loss oscillates or diverges
+        outright (look for <code>nan</code> in your loss log; that's a divergence). The sweet
+        spot is the largest learning rate at which training is still <em>monotonically</em>
+        decreasing on average.
+      </p>
+
+      <h3><span class="marker">ii.</span>Batch size</h3>
+
+      <p>
+        The batch size $B$ controls how noisy your gradient estimate is. Smaller batches give
+        noisier gradients, but more steps per epoch. Larger batches give smoother gradients but
+        fewer steps per epoch. The variance of the gradient estimate scales like $1/B$.
+      </p>
+
+      <h3><span class="marker">iii.</span>The interaction</h3>
+
+      <p>
+        Here is the rule that ties them together: <strong>larger batches tolerate larger
+        learning rates</strong>. Because a big-batch gradient is less noisy, you can take a
+        bigger step in that direction without overshooting. The classic heuristic is the
+        <em>linear scaling rule</em>: if you double $B$, you can roughly double $\eta$.
+      </p>
+
+      <p>
+        This means your hometask heatmap will <strong>not</strong> show one universal
+        best-corner. It will show a <em>diagonal ridge</em>: small batch with small lr is fine,
+        large batch with large lr is fine, but the off-diagonal corners — small batch + large
+        lr (divergence) and large batch + small lr (underfitting) — are where things go
+        wrong.
+      </p>
+
+      <div class="sidenote">
+        <strong>What to look for in the heatmap</strong>
+        Divergence shows up as a sudden drop to chance-level accuracy or as outright NaN.
+        Underfitting shows up as accuracy noticeably worse than your best cell. The "good"
+        cells should form a band running diagonally across the grid.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §10 ═══════════════════ -->
+  <section class="section" id="s10">
+    <div class="gutter">
+      <span class="num">10</span>
+      <span class="tag">Evaluation</span>
+    </div>
+    <div class="body">
+      <h2>Choosing a metric you can <em>defend.</em></h2>
+
+      <p>
+        The hometask asks you to pick an evaluation metric and briefly justify it. Don't pick
+        one because it sounds smart. Pick one because of what your data looks like. This
+        section is longer than the others because the task explicitly grades you on the
+        <em>justification</em>, not the choice — you need enough depth to write a defensible
+        paragraph.
+      </p>
+
+      <h3><span class="marker">i.</span>The confusion matrix — foundation for everything</h3>
+
+      <p>
+        Every classification metric is built on a single 2×2 grid. For binary classification,
+        each prediction falls into exactly one of four cells:
+      </p>
+
+      <pre data-label="confusion matrix">                    Actual label
+                  positive    negative
+     Predicted  ┌──────────┬──────────┐
+      positive  │    TP    │    FP    │
+                ├──────────┼──────────┤
+      negative  │    FN    │    TN    │
+                └──────────┴──────────┘
+
+  TP = true  positive  (correctly called positive)
+  FP = false positive  (negative, wrongly called positive)
+  FN = false negative  (positive, wrongly called negative)
+  TN = true  negative  (correctly called negative)</pre>
+
+      <p>
+        Every metric is a different recipe on those four numbers. Once you understand the
+        grid, you understand every metric.
+      </p>
+
+      <h3><span class="marker">ii.</span>A running example</h3>
+
+      <p>
+        Imagine a validation set of 100 reviews: 60 positive, 40 negative. Your model produces:
+      </p>
+
+      <pre data-label="example">TP = 50    FP = 10
+FN = 10    TN = 30</pre>
+
+      <p>
+        Let's compute every metric from this one grid.
+      </p>
+
+      <h3><span class="marker">iii.</span>Accuracy — "what fraction did we get right?"</h3>
+
+      $$\text{accuracy} = \frac{TP + TN}{TP + TN + FP + FN} = \frac{50 + 30}{100} = 0.80$$
+
+      <p>
+        Instantly interpretable — "80% correct." That is its only virtue. Its fatal flaw:
+        <strong>it collapses on imbalanced datasets</strong>. If your data is 99% negative
+        and 1% positive (fraud, medical screening, spam), a model that always predicts
+        "negative" achieves 99% accuracy and has learned literally nothing. The trivial
+        majority-class baseline dominates, and the metric cannot distinguish it from a real
+        model.
+      </p>
+
+      <div class="sidenote">
+        <strong>Rule of thumb.</strong>
+        Accuracy is meaningful only when the classes are roughly balanced <em>and</em> you
+        care about both kinds of error equally. Otherwise it's misleading.
+      </div>
+
+      <h3><span class="marker">iv.</span>Precision — "when we said positive, were we right?"</h3>
+
+      $$\text{precision} = \frac{TP}{TP + FP} = \frac{50}{50 + 10} = 0.833$$
+
+      <p>
+        Of every 100 times the model said "positive", about 83 of them actually were. Notice
+        what precision <em>ignores</em>: false negatives. A model that predicts "positive"
+        exactly once, and happens to be right, has precision = 100% — even if it missed a
+        thousand other positives.
+      </p>
+
+      <p>
+        You care about precision when a <strong>false positive is expensive</strong>:
+      </p>
+
+      <ul>
+        <li><strong>Spam filter</strong> — flagging a real email as spam makes the user miss something important.</li>
+        <li><strong>Investment recommendation</strong> — recommending a bad stock loses money.</li>
+        <li><strong>Content moderation</strong> — removing legitimate posts causes user backlash.</li>
+      </ul>
+
+      <h3><span class="marker">v.</span>Recall — "of all actual positives, how many did we catch?"</h3>
+
+      $$\text{recall} = \frac{TP}{TP + FN} = \frac{50}{50 + 10} = 0.833$$
+
+      <p>
+        Of the 60 actual positive reviews, the model found 50. Recall ignores false
+        positives: a model that predicts "positive" for everything has recall = 100% — and is
+        useless because it flags every email as spam too.
+      </p>
+
+      <p>
+        You care about recall when a <strong>false negative is expensive</strong>:
+      </p>
+
+      <ul>
+        <li><strong>Cancer screening</strong> — missing a tumour is catastrophic; a false alarm just triggers another test.</li>
+        <li><strong>Fraud detection</strong> — missing real fraud costs money; a false alarm just annoys a legitimate customer.</li>
+        <li><strong>Safety systems</strong> — a missed warning can kill; a false alarm is merely noisy.</li>
+      </ul>
+
+      <h3><span class="marker">vi.</span>F1 — the harmonic mean of precision &amp; recall</h3>
+
+      $$F_1 \;=\; 2 \cdot \frac{\text{precision} \cdot \text{recall}}{\text{precision} + \text{recall}} \;=\; 2 \cdot \frac{0.833 \cdot 0.833}{0.833 + 0.833} \;=\; 0.833$$
+
+      <p>
+        The F1 score is the <em>harmonic mean</em> of precision and recall, not the plain
+        arithmetic average. That choice is deliberate: the harmonic mean <strong>punishes
+        imbalance</strong> between the two numbers.
+      </p>
+
+      <p>
+        Compare two models:
+      </p>
+
+      <ul>
+        <li><strong>Model A</strong> — precision 0.9, recall 0.9. Average = 0.9. F1 = 0.9. Both metrics honest.</li>
+        <li><strong>Model B</strong> — precision 1.0, recall 0.1. Average = 0.55 (sounds OK!). <strong>F1 = 0.18</strong> (correctly says "broken").</li>
+      </ul>
+
+      <p>
+        The arithmetic mean lets a great number (1.0) hide a terrible one (0.1). F1 refuses.
+        The harmonic mean is always dragged toward the <em>smaller</em> of the two inputs, so
+        F1 tracks your bottleneck, not your best number.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+          <text x="40" y="24" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F" font-weight="600">HOW F1 COLLAPSES AS RECALL DROPS (precision held at 1.0)</text>
+
+          <!-- rows -->
+          <g font-family="IBM Plex Mono" font-size="11" fill="#1A2438">
+            <text x="40"  y="54">precision = 1.0</text>
+            <text x="40"  y="74">recall    = 1.00 → 0.80 → 0.50 → 0.20 → 0.10 → 0.01</text>
+            <text x="40"  y="94" fill="#6B7388">arith avg = 1.00 → 0.90 → 0.75 → 0.60 → 0.55 → 0.505</text>
+            <text x="40"  y="114" fill="#B83A1F">F1        = 1.00 → 0.89 → 0.67 → 0.33 → 0.18 → 0.020</text>
+          </g>
+
+          <text x="40" y="140" font-family="IBM Plex Mono" font-size="9" fill="#6B7388">
+            Arithmetic mean stays near 0.5 because 1.0 props it up. F1 collapses toward the smaller number.
+          </text>
+        </svg>
+        <figcaption><span class="num">Fig. 03</span>Why F1 is unforgiving: the harmonic mean tracks the bottleneck.</figcaption>
+      </figure>
+
+      <p>
+        Use F1 when you want a single number that stays honest across imbalanced datasets and
+        you can't say in advance whether FP or FN is worse. It's a conservative default
+        that's hard to game.
+      </p>
+
+      <h3><span class="marker">vii.</span>How to pick for your hometask dataset</h3>
+
+      <p>
+        Don't guess. Before you train anything, check the class balance of your actual data:
+      </p>
+
+      <pre data-label="class balance check">n_pos = (y_train == 1).sum()
+n_neg = (y_train == 0).sum()
+print(f"positive: {n_pos} ({100*n_pos/len(y_train):.1f}%)")
+print(f"negative: {n_neg} ({100*n_neg/len(y_train):.1f}%)")</pre>
+
+      <p>
+        SST-2 (the typical dataset for this hometask) is roughly <strong>50/50 balanced</strong>.
+        That's the number you want to cite in your write-up.
+      </p>
+
+      <p>
+        A decision tree for your justification:
+      </p>
+
+      <pre data-label="decision tree">Is the dataset roughly balanced (each class ≥ 40%)?
+│
+├── YES → accuracy is fine. F1 is also fine and more conservative.
+│         Pick one, cite the balance, done.
+│
+└── NO  → accuracy is misleading. Use F1 / precision / recall.
+          └── Do you care more about FP or FN?
+              ├── FP is worse → precision
+              ├── FN is worse → recall
+              └── both / unsure → F1</pre>
+
+      <h3><span class="marker">viii.</span>Writing the defense paragraph</h3>
+
+      <p>
+        The hometask says "briefly explain why this metric is suitable". A minimum-viable
+        answer has three beats: (1) the class balance you <em>observed</em>, (2) the metric
+        you picked and why it fits, (3) what you'd do instead if the balance were different.
+        A template:
+      </p>
+
+      <blockquote class="pull">
+        "SST-2 is roughly balanced (≈50% positive, ≈50% negative), so accuracy is meaningful: the 'always predict majority' baseline is not strong. I also compute F1 as a sanity check; it matches accuracy closely, confirming precision and recall are not diverging. If the dataset were imbalanced (say 90/10), I would switch to F1 to avoid rewarding trivial majority-class predictions."
+      </blockquote>
+
+      <p>
+        Three sentences. Shows you looked at the data. Shows you considered alternatives.
+        Shows you can defend your choice. That is what "briefly explain" means in a graded
+        assignment.
+      </p>
+
+      <h3><span class="marker">ix.</span>Computing metrics in PyTorch</h3>
+
+      <p>
+        You can roll them by hand from the confusion-matrix counts — which is a good exercise
+        because it keeps the math visible:
+      </p>
+
+      <pre data-label="hand-rolled · pseudocode">with torch.no_grad():
+    preds = model.predict(x_val)
+
+    tp = ((preds == 1) &amp; (y_val == 1)).sum().item()
+    fp = ((preds == 1) &amp; (y_val == 0)).sum().item()
+    fn = ((preds == 0) &amp; (y_val == 1)).sum().item()
+    tn = ((preds == 0) &amp; (y_val == 0)).sum().item()
+
+    accuracy  = (tp + tn) / (tp + fp + fn + tn)
+    precision = tp / (tp + fp + 1e-9)     # +eps avoids div-by-zero
+    recall    = tp / (tp + fn + 1e-9)
+    f1        = 2 * precision * recall / (precision + recall + 1e-9)</pre>
+
+      <p>
+        Or let sklearn do it for you in one line:
+      </p>
+
+      <pre data-label="sklearn · pseudocode">from sklearn.metrics import accuracy_score, f1_score
+
+acc = accuracy_score(y_val.numpy(), preds.numpy())
+f1  = f1_score(y_val.numpy(), preds.numpy())</pre>
+
+      <p>
+        Both give the same answer. The hand-rolled version is better for learning; the
+        sklearn version is better once you know what you're doing.
+      </p>
+
+      <h3><span class="marker">x.</span>The key takeaway</h3>
+
+      <p>
+        The hometask is not testing whether you pick the "right" metric. It is testing
+        whether you <em>thought about it</em> — whether you can look at your data, identify
+        the relevant trade-off, and justify a choice. A confident three-sentence paragraph
+        beats a vague one-liner every time, regardless of which metric you picked.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §11 ═══════════════════ -->
+  <section class="section" id="s11">
+    <div class="gutter">
+      <span class="num">11</span>
+      <span class="tag">Regularization</span>
+    </div>
+    <div class="body">
+      <h2>Why we <em>regularize</em> at all.</h2>
+
+      <p>
+        Imagine your model has 10,000 features and 7,000 training examples. There are far more
+        knobs than there are constraints. The model can — if you let it — find a setting of $w$
+        that fits the training data essentially perfectly, including all of the noise. Reviews
+        with the word "Tuesday" happen to skew positive in your training set? The model learns
+        to weight Tuesday. Test set, different reviews, no Tuesday signal: model misses.
+      </p>
+
+      <p>
+        That phenomenon is <em>overfitting</em>. The cure is to discourage the model from
+        being too confident in any one feature. We do this by adding a <strong>penalty</strong>
+        to the loss — a term that grows when the weights grow, so the optimizer has to balance
+        "fit the data" against "keep weights modest."
+      </p>
+
+      $$L_{\text{total}}(w, b) \;=\; \underbrace{\text{BCE}(w, b)}_{\text{fit the data}} \;+\; \underbrace{\lambda \cdot \Omega(w)}_{\text{stay modest}}$$
+
+      <p>
+        The two common penalty functions $\Omega(w)$ are L2 (sum of squared weights) and L1
+        (sum of absolute weights). They look similar on paper. They behave very differently in
+        practice.
+      </p>
+
+      $$\text{L2: } \;\Omega(w) = \sum_i w_i^2 \qquad\qquad \text{L1: } \;\Omega(w) = \sum_i |w_i|$$
+
+      <div class="sidenote">
+        <strong>Don't penalize the bias.</strong>
+        The bias is just an intercept — it shifts the decision boundary toward or away from
+        the origin. Penalizing it would push the boundary toward the origin for no good
+        reason. Standard practice is to apply the penalty only to $w$.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §12 ═══════════════════ -->
+  <section class="section" id="s12">
+    <div class="gutter">
+      <span class="num">12</span>
+      <span class="tag">Regularization</span>
+    </div>
+    <div class="body">
+      <h2>L1 vs L2 — <em>diamonds</em> &amp; circles.</h2>
+
+      <p>
+        The most famous picture in all of regularization is the one that explains why L1
+        produces sparse solutions and L2 doesn't. Here it is.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- L1 panel -->
+          <g transform="translate(0,0)">
+            <text x="150" y="22" font-family="IBM Plex Mono" font-size="11" fill="#B83A1F" text-anchor="middle" font-weight="600">L1 — DIAMOND</text>
+
+            <!-- axes -->
+            <line x1="40" y1="150" x2="260" y2="150" stroke="#1A2438" stroke-width="0.7" opacity="0.5"/>
+            <line x1="150" y1="40" x2="150" y2="260" stroke="#1A2438" stroke-width="0.7" opacity="0.5"/>
+
+            <text x="262" y="153" font-family="IBM Plex Mono" font-size="9" fill="#6B7388">w₁</text>
+            <text x="153" y="38" font-family="IBM Plex Mono" font-size="9" fill="#6B7388">w₂</text>
+
+            <!-- diamond constraint -->
+            <polygon points="150,90 210,150 150,210 90,150" fill="rgba(184,58,31,0.1)" stroke="#B83A1F" stroke-width="2"/>
+
+            <!-- loss contours (ellipses centered off-axis) -->
+            <ellipse cx="200" cy="100" rx="80" ry="40" fill="none" stroke="#1A2438" stroke-width="0.8" opacity="0.4" transform="rotate(-25 200 100)"/>
+            <ellipse cx="200" cy="100" rx="55" ry="28" fill="none" stroke="#1A2438" stroke-width="0.8" opacity="0.5" transform="rotate(-25 200 100)"/>
+            <ellipse cx="200" cy="100" rx="35" ry="18" fill="none" stroke="#1A2438" stroke-width="0.8" opacity="0.6" transform="rotate(-25 200 100)"/>
+            <ellipse cx="200" cy="100" rx="20" ry="10" fill="none" stroke="#1A2438" stroke-width="0.8" opacity="0.7" transform="rotate(-25 200 100)"/>
+
+            <!-- touch point at corner -->
+            <circle cx="150" cy="90" r="5" fill="#B83A1F" stroke="#F4ECD6" stroke-width="2"/>
+            <text x="158" y="84" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F" font-weight="600">w₁ = 0</text>
+          </g>
+
+          <!-- L2 panel -->
+          <g transform="translate(300,0)">
+            <text x="150" y="22" font-family="IBM Plex Mono" font-size="11" fill="#4F6B57" text-anchor="middle" font-weight="600">L2 — CIRCLE</text>
+
+            <!-- axes -->
+            <line x1="40" y1="150" x2="260" y2="150" stroke="#1A2438" stroke-width="0.7" opacity="0.5"/>
+            <line x1="150" y1="40" x2="150" y2="260" stroke="#1A2438" stroke-width="0.7" opacity="0.5"/>
+
+            <text x="262" y="153" font-family="IBM Plex Mono" font-size="9" fill="#6B7388">w₁</text>
+            <text x="153" y="38" font-family="IBM Plex Mono" font-size="9" fill="#6B7388">w₂</text>
+
+            <!-- circle constraint -->
+            <circle cx="150" cy="150" r="60" fill="rgba(79,107,87,0.10)" stroke="#4F6B57" stroke-width="2"/>
+
+            <!-- same contours -->
+            <ellipse cx="200" cy="100" rx="80" ry="40" fill="none" stroke="#1A2438" stroke-width="0.8" opacity="0.4" transform="rotate(-25 200 100)"/>
+            <ellipse cx="200" cy="100" rx="55" ry="28" fill="none" stroke="#1A2438" stroke-width="0.8" opacity="0.5" transform="rotate(-25 200 100)"/>
+            <ellipse cx="200" cy="100" rx="35" ry="18" fill="none" stroke="#1A2438" stroke-width="0.8" opacity="0.6" transform="rotate(-25 200 100)"/>
+            <ellipse cx="200" cy="100" rx="20" ry="10" fill="none" stroke="#1A2438" stroke-width="0.8" opacity="0.7" transform="rotate(-25 200 100)"/>
+
+            <!-- touch point on the curve, away from axes -->
+            <circle cx="183" cy="100" r="5" fill="#4F6B57" stroke="#F4ECD6" stroke-width="2"/>
+            <text x="192" y="96" font-family="IBM Plex Mono" font-size="10" fill="#4F6B57" font-weight="600">both ≠ 0</text>
+          </g>
+        </svg>
+        <figcaption><span class="num">Fig. 02</span>The constraint region (red diamond / green circle) is where the penalty allows the weights to live. The loss contours are level sets of the data-fitting term. The optimum is where the smallest contour first touches the region — and corners like to be touched.</figcaption>
+      </figure>
+
+      <p>
+        Imagine you have a fixed budget for $\Omega(w)$. Under L1, the budget defines a
+        diamond — a square rotated 45°, with corners on the coordinate axes. Under L2, it's a
+        circle. The unconstrained loss minimum sits somewhere out beyond either region. To
+        find the constrained best, you grow the loss contours from that center until they
+        first <em>touch</em> the constraint region. Whichever point gets touched is your
+        answer.
+      </p>
+
+      <p>
+        For the diamond, the touch point is overwhelmingly likely to be a <strong>corner</strong>
+        — and corners lie on axes, meaning at least one $w_i = 0$. For the circle, the touch
+        point is just some generic point on the boundary; nothing makes it prefer the axes.
+        That's why L1 produces sparsity: it pushes solutions to corners. L2 just shrinks them.
+      </p>
+
+      <h3><span class="marker">iii.</span>The gradient view</h3>
+
+      <p>
+        The same story shows up in the gradients. The gradient of $|w_i|$ is $\text{sign}(w_i)$
+        — a constant-magnitude pull toward zero, no matter how small $w_i$ already is. The
+        gradient of $w_i^2$ is $2 w_i$ — which <em>vanishes</em> as $w_i$ shrinks. So L1 keeps
+        pressing tiny weights all the way to zero; L2 gives up before it gets there.
+      </p>
+
+      <h3><span class="marker">iv.</span>Why your SGD won't make weights exactly zero</h3>
+
+      <p>
+        Despite all this, when you train with mini-batch SGD on an L1-regularized loss, you'll
+        find very few weights at <em>exactly</em> zero. Many will be tiny — $10^{-6}$,
+        $10^{-8}$ — but not literally zero. This is because at every step, the noisy
+        mini-batch gradient nudges weights slightly off zero just as the L1 penalty was about
+        to clip them. To get true zeros you need <strong>proximal methods</strong> (e.g.
+        ISTA, FISTA) that explicitly soft-threshold weights every step. The hometask asks you
+        to count weights below $10^{-7}$ as a workaround — it captures the same pattern.
+      </p>
+
+      <p>
+        Now play with the slider. Each bar below is a weight. As you raise $\lambda$, watch
+        how L1 sparsifies — the smaller weights collapse to (effectively) zero while the
+        larger ones survive a little longer.
+      </p>
+
+      <!-- INTERACTIVE: L1 SPARSITY DEMO -->
+      <div class="l1-demo" id="l1-demo">
+        <div class="header">
+          <h4>Interactive · L1 Soft-Thresholding</h4>
+          <span class="tag">drag λ</span>
+        </div>
+        <div class="l1-bars" id="l1-bars"></div>
+        <div class="l1-stats-row">
+          <div>λ <span class="val" id="lambda-val">0.00</span></div>
+          <div>Active weights <span class="val" id="active-count">30 / 30</span></div>
+          <div>‖w‖₁ <span class="val" id="l1-norm">0.00</span></div>
+        </div>
+        <div class="l1-control">
+          <input type="range" id="lambda-slider" class="sig-slider" min="0" max="1" step="0.01" value="0">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §13 ═══════════════════ -->
+  <section class="section" id="s13">
+    <div class="gutter">
+      <span class="num">13</span>
+      <span class="tag">Experiments</span>
+    </div>
+    <div class="body">
+      <h2>What to expect from your <em>λ sweep.</em></h2>
+
+      <p>
+        Task 1.5 asks you to run training for $\lambda \in \{0, 10^{-4}, 10^{-3}, 10^{-2},
+        10^{-1}\}$ and report what happens. Before you run anything, predict the shapes of
+        the curves. If reality matches your prediction, you understand. If it doesn't,
+        understanding is waiting on the other side.
+      </p>
+
+      <h3><span class="marker">i.</span>Number of non-zero weights vs λ</h3>
+      <p>
+        Monotonically decreasing. At $\lambda = 0$ all 10,000 weights are "active". As $\lambda$
+        grows, more and more weights drop below your $10^{-7}$ threshold. The drop is steepest
+        in the middle of the sweep and flattens at both ends.
+      </p>
+
+      <h3><span class="marker">ii.</span>Train metric vs λ</h3>
+      <p>
+        Decreasing. At $\lambda = 0$ the model fits the training set as well as it can. As you
+        regularize harder, the model gets less and less freedom to fit, so train accuracy
+        falls. The fall is gentle for small $\lambda$ and steep for large $\lambda$.
+      </p>
+
+      <h3><span class="marker">iii.</span>Validation metric vs λ</h3>
+      <p>
+        <strong>U-shaped.</strong> This is the whole reason you're doing the sweep. With no
+        regularization the model overfits — train high, val lower. With a little
+        regularization, you trade a tiny bit of train accuracy for a meaningful bump in val.
+        With too much regularization, the model loses the ability to learn at all and val
+        crashes alongside train. The best $\lambda$ is the bottom of the U.
+      </p>
+
+      <h3><span class="marker">iv.</span>Individual weight trajectories</h3>
+      <p>
+        For a few of the features that L1 ends up killing, plot their weight value over
+        training steps. You should see a clean decay toward zero. For features that survive,
+        the weights move around but stay nontrivial. Plot both kinds on the same axes — the
+        contrast is the picture.
+      </p>
+
+      <blockquote class="pull">
+        Predict the shape, then run the experiment. If it matches you understand; if not, you're about to.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §14 ═══════════════════ -->
+  <section class="section" id="s14">
+    <div class="gutter">
+      <span class="num">14</span>
+      <span class="tag">Playbook</span>
+    </div>
+    <div class="body">
+      <h2>The five tasks, <em>distilled.</em></h2>
+
+      <p>
+        Below is one card per sub-task. Each card lists the <em>concepts you'll need</em> from
+        this guide and the <em>thinking</em> required to assemble the answer. None of these
+        cards contain code — that's your part.
+      </p>
+
+      <div class="tasks">
+
+        <!-- TASK 1.1 -->
+        <div class="task-card">
+          <div class="num">Task 1.1</div>
+          <h3>Binary vs softmax &amp; numerical stability</h3>
+          <div class="points">10 points · conceptual + implementation</div>
+
+          <div class="grid">
+            <div class="col">
+              <h4>Concepts</h4>
+              <ul>
+                <li>Sigmoid saturation in floating-point (§2)</li>
+                <li>Why log(0) explodes (§4)</li>
+                <li>Clamping with ε = 10⁻¹⁵ (§4)</li>
+                <li>The max-subtraction trick &amp; its proof (§5)</li>
+                <li>Log-sum-exp form (§5)</li>
+              </ul>
+            </div>
+            <div class="col">
+              <h4>Thinking</h4>
+              <ul>
+                <li>For the conceptual answers: explain in your own words what fails, why subtracting max preserves the result (algebra: factor out e⁻ᶜ), and why every exponent ≤ 0 is now safe.</li>
+                <li>For the BCE function: write the formula, but clamp y_pred before any log call.</li>
+                <li>Verify on a stress test: pass logits like ±50 and confirm no NaN.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- TASK 1.2 -->
+        <div class="task-card">
+          <div class="num">Task 1.2</div>
+          <h3>The LogisticRegression class</h3>
+          <div class="points">10 points · PyTorch nn.Module</div>
+
+          <div class="grid">
+            <div class="col">
+              <h4>Concepts</h4>
+              <ul>
+                <li>nn.Module basics (§6)</li>
+                <li>Why w must be shape (n_features, 1) (§6)</li>
+                <li>nn.Parameter wrapping (§6)</li>
+                <li>clone().detach() hygiene (§6)</li>
+                <li>Init options &amp; "small" random scale (§7)</li>
+              </ul>
+            </div>
+            <div class="col">
+              <h4>Thinking</h4>
+              <ul>
+                <li>In __init__: branch on the init argument, build the right tensor, wrap with nn.Parameter.</li>
+                <li>Initialize bias as nn.Parameter(torch.zeros(1)).</li>
+                <li>In forward: matrix multiply, add bias, sigmoid. Three lines.</li>
+                <li>In predict: forward then threshold at 0.5 — return integer labels, not floats.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- TASK 1.3 -->
+        <div class="task-card">
+          <div class="num">Task 1.3</div>
+          <h3>Train with mini-batch SGD</h3>
+          <div class="points">10 points · the training loop</div>
+
+          <div class="grid">
+            <div class="col">
+              <h4>Concepts</h4>
+              <ul>
+                <li>The SGD loop pattern (§8)</li>
+                <li>Shuffling matters (§8)</li>
+                <li>zero_grad before backward (§8)</li>
+                <li>Choosing &amp; defending a metric (§10)</li>
+              </ul>
+            </div>
+            <div class="col">
+              <h4>Thinking</h4>
+              <ul>
+                <li>Build the model and a torch.optim.SGD optimizer with the given lr.</li>
+                <li>Each epoch: shuffle indices, iterate over them in chunks of size batch_size, run forward/loss/backward/step.</li>
+                <li>After each batch, snapshot w and b into history (detach + clone, otherwise you'll save references that all point to the latest values).</li>
+                <li>After each epoch, compute &amp; log: train loss, train metric, val metric.</li>
+                <li>For the metric: pick accuracy or F1; in your write-up, cite the class balance you observed.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- TASK 1.4 -->
+        <div class="task-card">
+          <div class="num">Task 1.4</div>
+          <h3>Hyperparameter sweep &amp; heatmap</h3>
+          <div class="points">20 points · experiments + analysis</div>
+
+          <div class="grid">
+            <div class="col">
+              <h4>Concepts</h4>
+              <ul>
+                <li>How lr affects convergence vs stability (§9)</li>
+                <li>How batch size affects gradient noise (§9)</li>
+                <li>The lr × batch interaction &amp; the diagonal ridge (§9)</li>
+              </ul>
+            </div>
+            <div class="col">
+              <h4>Thinking</h4>
+              <ul>
+                <li>Two nested loops over the lr and batch_size lists. For each combo, call your sgd_logistic_regression and store the final train + val metric.</li>
+                <li>Plot two heatmaps (train + val) with matplotlib.imshow or seaborn.heatmap. Annotate the cells with the values.</li>
+                <li>In your analysis: identify the diagonal ridge, point out where divergence shows up (corner with small batch + large lr), point out underfitting (corner with large batch + small lr). Tie each pattern to a specific cell of your heatmap.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- TASK 1.5 -->
+        <div class="task-card">
+          <div class="num">Task 1.5</div>
+          <h3>L1 regularization &amp; sparsity</h3>
+          <div class="points">20 points · regularization + experiments</div>
+
+          <div class="grid">
+            <div class="col">
+              <h4>Concepts</h4>
+              <ul>
+                <li>What regularization does (§11)</li>
+                <li>L1 vs L2 geometric intuition (§12)</li>
+                <li>Why SGD doesn't make exact zeros (§12)</li>
+                <li>Predicted shapes for the four plots (§13)</li>
+              </ul>
+            </div>
+            <div class="col">
+              <h4>Thinking</h4>
+              <ul>
+                <li>Modify your loss inside the training loop: when penalty is 'l1', add reg_lambda × torch.abs(model.w).sum() to the BCE before .backward(). Don't penalize bias.</li>
+                <li>For the init comparison: run the same setup with init='zeros' and init='random'. Record final metrics + count of weights with |w| &lt; 1e-7. Discuss any difference.</li>
+                <li>For the λ sweep: nested loop, collect train metric, val metric, non-zero count for each λ in {0, 1e-4, 1e-3, 1e-2, 1e-1}.</li>
+                <li>Make four plots: non-zero count vs λ, train vs λ, val vs λ, individual weight trajectories for ~5 features L1 kills.</li>
+                <li>Write the insights paragraph with reference to the U-shape in val and where you'd pick λ.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §15 ═══════════════════ -->
+  <section class="section" id="s15">
+    <div class="gutter">
+      <span class="num">15</span>
+      <span class="tag">Part 2 · Optimizers</span>
+    </div>
+    <div class="body">
+      <h2>What an optimizer <em>actually</em> does.</h2>
+
+      <p>
+        An optimizer is the rulebook that turns gradients into parameter updates.
+        Plain SGD — the one you built in Part 1 — is the simplest possible rule:
+        <em>take a small step in the direction of the negative gradient, repeat</em>.
+        Every other optimizer you will ever meet — Momentum, AdaGrad, RMSprop, Adam,
+        Lion, Shampoo — is a refinement of that same core idea, trying to make each
+        step smarter in some specific way.
+      </p>
+
+      <p>
+        The scaffolding around every optimizer is always the same. On each step you:
+      </p>
+
+      <ol>
+        <li>Compute the gradient of the loss at the current parameters.</li>
+        <li>Read (and update) some internal state — possibly nothing, possibly a velocity vector, possibly a running average of squared gradients.</li>
+        <li>Combine the gradient and the state into an update direction and size.</li>
+        <li>Apply the update to the parameters.</li>
+      </ol>
+
+      <p>
+        The difference between GD, Momentum, AdaGrad, and Adam lives entirely in
+        steps 2 and 3. The shell is identical. Once you internalize that, all four
+        optimizers stop being four separate recipes and start being four variations
+        on a theme.
+      </p>
+
+      <blockquote class="pull">
+        Four optimizers, one loop, four update rules. The loop is the boring part.
+      </blockquote>
+
+      <div class="sidenote">
+        <strong>Why does this deserve its own task?</strong>
+        Part 1 trained logistic regression on a convex, well-conditioned loss.
+        Everything worked because the problem was easy. Part 2 throws optimizers
+        at a non-convex, narrow-valley, many-local-minima landscape — precisely so
+        you can see where plain SGD <em>breaks</em> and why the other three were
+        invented.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §16 ═══════════════════ -->
+  <section class="section" id="s16">
+    <div class="gutter">
+      <span class="num">16</span>
+      <span class="tag">Part 2 · Optimizers</span>
+    </div>
+    <div class="body">
+      <h2>The four optimizers, in <em>order.</em></h2>
+
+      <p>
+        You will implement these in order of increasing cleverness. Each one fixes a
+        specific weakness in the one before it. Understanding <em>why</em> each
+        addition was made matters far more than memorizing the formula — the formulas
+        follow naturally from the motivation.
+      </p>
+
+      <h3><span class="marker">i.</span>Gradient Descent — the baseline</h3>
+
+      $$\theta_{t+1} \;=\; \theta_t \;-\; \eta \, \nabla f(\theta_t)$$
+
+      <p>
+        No memory of past gradients. Each step is myopic — it looks only at the
+        slope <em>right here, right now</em>, and marches in the steepest descent
+        direction. In a nice round basin this is perfectly adequate. In a narrow
+        curved valley, the gradient points <em>across</em> the valley toward the
+        opposite wall, and plain GD bounces from wall to wall, making almost no
+        progress along the valley floor. This is the classic "ravine" failure mode
+        and it's exactly what the Six-hump Camel will expose.
+      </p>
+
+      <h3><span class="marker">ii.</span>Momentum — a heavy ball</h3>
+
+      $$v_{t+1} \;=\; \beta \, v_t \;+\; \nabla f(\theta_t)$$
+      $$\theta_{t+1} \;=\; \theta_t \;-\; \eta \, v_{t+1}$$
+
+      <p>
+        Instead of a dimensionless point that teleports one step at a time, imagine
+        a heavy ball rolling downhill. It has <em>inertia</em>. In a narrow valley
+        where the gradient flips direction every few steps, the ball's accumulated
+        velocity averages the oscillations out — side-to-side components cancel,
+        forward motion along the valley floor survives. On a consistent slope the
+        velocity keeps growing, so the ball actively <em>accelerates</em> downhill.
+      </p>
+
+      <p>
+        The hyperparameter $\beta$ (typically $0.9$) controls how much of the past
+        velocity you carry forward. The "effective memory" of momentum is roughly
+        $1/(1-\beta)$ steps — so $\beta = 0.9$ means you're averaging the last ten
+        gradients. Higher $\beta$ = more inertia = smoother path but slower turns.
+      </p>
+
+      <div class="sidenote">
+        <strong>Nesterov momentum.</strong>
+        A popular variant "looks ahead" by evaluating the gradient at
+        $\theta_t - \eta\beta v_t$ instead of at $\theta_t$. You don't need it for
+        this hometask, but most deep-learning code calling "momentum" is actually
+        doing Nesterov by default.
+      </div>
+
+      <h3><span class="marker">iii.</span>AdaGrad — per-parameter learning rates</h3>
+
+      $$G_{t+1} \;=\; G_t \;+\; \nabla f(\theta_t) \odot \nabla f(\theta_t)$$
+      $$\theta_{t+1} \;=\; \theta_t \;-\; \frac{\eta}{\sqrt{G_{t+1}} + \varepsilon} \odot \nabla f(\theta_t)$$
+
+      <p>
+        Momentum treats every parameter with the same learning rate. AdaGrad throws
+        that out: it tracks a running sum of squared gradients for <em>each</em>
+        parameter independently (the $\odot$ means elementwise), and divides each
+        step by the square root of that sum. Parameters that have had large
+        gradients historically get damped; parameters that have been quiet get
+        amplified.
+      </p>
+
+      <p>
+        This is fantastic for sparse data — the classic example is a language model
+        where common words get big gradients every batch and rare words get
+        gradients once in a blue moon. AdaGrad automatically reins in the common
+        words and lets the rare ones take bigger steps. You get per-feature
+        learning rates for free.
+      </p>
+
+      <p>
+        <strong>The fatal flaw:</strong> $G$ only ever <em>grows</em>. It never
+        decays. So the effective learning rate $\eta / \sqrt{G}$ monotonically
+        shrinks — at roughly $O(t^{-1/2})$ — and eventually the optimizer stops
+        moving even if the minimum is still far away. AdaGrad "runs out of energy".
+        This is exactly the observation that motivated Adam.
+      </p>
+
+      <h3><span class="marker">iv.</span>Adam — the default for everything</h3>
+
+      $$m_{t+1} \;=\; \beta_1 m_t + (1 - \beta_1) \, \nabla f(\theta_t)$$
+      $$v_{t+1} \;=\; \beta_2 v_t + (1 - \beta_2) \, \nabla f(\theta_t)^2$$
+      $$\hat{m}_{t+1} = \frac{m_{t+1}}{1 - \beta_1^{\,t+1}} \qquad \hat{v}_{t+1} = \frac{v_{t+1}}{1 - \beta_2^{\,t+1}}$$
+      $$\theta_{t+1} \;=\; \theta_t \;-\; \eta \, \frac{\hat{m}_{t+1}}{\sqrt{\hat{v}_{t+1}} + \varepsilon}$$
+
+      <p>
+        Adam stands for "adaptive moment estimation", and it is cleaner than it
+        looks. Read it as <strong>Momentum + decaying AdaGrad + bias correction</strong>:
+      </p>
+
+      <ul>
+        <li><strong>$m$ is momentum, but decayed.</strong> It is an exponential moving average of the gradient. Unlike classical momentum's ever-growing velocity, old contributions to $m$ slowly fade.</li>
+        <li><strong>$v$ is AdaGrad, but forgiving.</strong> It is an exponential moving average of the <em>squared</em> gradient. Unlike AdaGrad's monotonically-growing $G$, $v$ decays too — so the learning rate never dies. This is the fix for AdaGrad's fatal flaw.</li>
+        <li><strong>The hats are bias correction.</strong> Because $m$ and $v$ start at zero, the early values underestimate the true running averages (especially when $\beta_1, \beta_2$ are close to 1). Dividing by $(1 - \beta^{\,t+1})$ corrects for this startup bias. Without it, Adam's first few dozen steps would be unfairly small.</li>
+        <li><strong>The final update divides momentum by RMS.</strong> You move in the momentum direction, scaled per-parameter by the inverse root-mean-square of recent gradients — exactly what AdaGrad was doing, just with a finite memory window.</li>
+      </ul>
+
+      <p>
+        Typical defaults that you can copy without guilt: $\beta_1 = 0.9$,
+        $\beta_2 = 0.999$, $\varepsilon = 10^{-8}$, and learning rate $\eta$
+        somewhere from $10^{-4}$ to $10^{-2}$. The reason Adam is the default
+        optimizer in almost every modern deep-learning codebase is not that it is
+        always <em>best</em> — it's that it is almost never
+        <em>catastrophic</em>. It works out-of-the-box on a shockingly wide
+        variety of problems, including non-convex ones.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §17 ═══════════════════ -->
+  <section class="section" id="s17">
+    <div class="gutter">
+      <span class="num">17</span>
+      <span class="tag">Part 2 · Landscapes</span>
+    </div>
+    <div class="body">
+      <h2>Two landscapes — bowl &amp; <em>camel.</em></h2>
+
+      <p>
+        Part 2 gives you two test functions, chosen specifically to expose the
+        strengths and weaknesses of the four optimizers. Treat them as a
+        <em>diagnostic</em>: the same optimizer will look very different on each,
+        and the difference is what tells you what each method is actually for.
+      </p>
+
+      <h3><span class="marker">A.</span>The convex bowl</h3>
+
+      $$f(x,y) \;=\; x^2 \;+\; 2y^2$$
+
+      <p>
+        A single global minimum at the origin. The level sets are ellipses —
+        <em>twice</em> as narrow in the $y$ direction as in the $x$ direction,
+        because the $y$ coefficient is bigger. From any starting point, the
+        gradient points roughly toward the origin; the only complication is that
+        the $y$ direction is "steeper" than the $x$ direction, so vanilla GD with
+        a single scalar learning rate will either overshoot in $y$ or creep in
+        $x$. Watch how each optimizer handles this asymmetry — it's the simplest
+        possible form of ill-conditioning, and it's already enough to separate the
+        adaptive methods from GD.
+      </p>
+
+      <h3><span class="marker">B.</span>The Six-hump Camel</h3>
+
+      $$f(x,y) \;=\; \left(4 - 2.1 x^2 + \tfrac{x^4}{3}\right)x^2 \;+\; x y \;+\; \left(-4 + 4 y^2\right)y^2$$
+
+      <p>
+        A genuinely nasty playground. It has:
+      </p>
+
+      <ul>
+        <li><strong>Two global minima</strong> at $(+0.0898,\, -0.7126)$ and $(-0.0898,\, +0.7126)$, with value $\approx -1.0316$.</li>
+        <li><strong>Four additional local minima</strong> (the "six humps" in the name) plus several saddle points.</li>
+        <li><strong>Narrow curved valleys</strong> where vanilla GD oscillates wildly.</li>
+        <li><strong>Flat-ish regions</strong> where gradients are tiny and GD crawls.</li>
+      </ul>
+
+      <p>
+        You'll start from $(-2,\, -1.5)$ — deliberately far from any minimum, on
+        the outskirts of the "interesting" region. Different optimizers will
+        take <em>different paths</em> and may end up in <em>different basins</em>.
+        Some will find a global minimum. Some will get trapped in a local one.
+        <strong>That outcome spread is the whole point.</strong> Don't be alarmed
+        if a method converges to a non-global minimum — document it, explain why,
+        and you're doing the task correctly.
+      </p>
+
+      <div class="sidenote">
+        <strong>Why this function?</strong>
+        The Six-hump Camel is a standard benchmark in global-optimization
+        literature precisely because it combines smooth analytic structure with
+        multiple local traps. It is hard enough to distinguish good methods from
+        bad, but simple enough to visualize cleanly in 2D. Every optimization
+        textbook uses it.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §18 ═══════════════════ -->
+  <section class="section" id="s18">
+    <div class="gutter">
+      <span class="num">18</span>
+      <span class="tag">Part 2 · Experiments</span>
+    </div>
+    <div class="body">
+      <h2>Reading your optimizer <em>results.</em></h2>
+
+      <p>
+        As in §13, the experiment is more useful if you <em>predict</em> the
+        shape of the answer before you run it. Here's what to expect, roughly,
+        and the reasoning behind each prediction.
+      </p>
+
+      <h3><span class="marker">i.</span>On the convex bowl</h3>
+
+      <ul>
+        <li><strong>All four converge</strong> to the origin. The bowl is convex — there is nowhere else to go.</li>
+        <li><strong>GD is the slowest.</strong> With a single scalar learning rate it cannot adapt to the elongated ellipses; pick too large an $\eta$ and it oscillates in $y$, pick too small and it crawls in $x$.</li>
+        <li><strong>Momentum is notably faster.</strong> Velocity accumulates along the long axis and the $y$-oscillations partially cancel. The trajectory looks smoother and more decisive.</li>
+        <li><strong>AdaGrad handles the asymmetry automatically.</strong> The $y$ gradient has historically been larger, so its effective learning rate is smaller. The path is more balanced than GD's.</li>
+        <li><strong>Adam is typically fastest or tied.</strong> On a problem this simple, any adaptive method will look clean. Expect a nearly-straight descent.</li>
+      </ul>
+
+      <h3><span class="marker">ii.</span>On the Six-hump Camel</h3>
+
+      <ul>
+        <li><strong>GD is the most likely to get stuck.</strong> Narrow valleys cause oscillations; local minima near the starting point capture it easily.</li>
+        <li><strong>Momentum can escape shallow traps</strong> by coasting through them on accumulated velocity. With the wrong $\eta$ or $\beta$, it overshoots past a good minimum and ends up somewhere else.</li>
+        <li><strong>AdaGrad tends to "run out of steam"</strong> — remember, its $G$ only grows, so after a while every step is tiny. It typically converges to <em>whatever</em> minimum is closest, global or not.</li>
+        <li><strong>Adam usually finds a good minimum</strong>, but the starting point matters. From $(-2, -1.5)$ you may or may not land in a global minimum depending on your lr. If you want to prove the basin-of-attraction story, try a handful of starting points.</li>
+      </ul>
+
+      <h3><span class="marker">iii.</span>Hyperparameter sensitivity</h3>
+
+      <p>
+        Do not expect one set of hyperparameters to work across both functions.
+        The camel is genuinely harder and needs more care. Rough starting ranges
+        to try:
+      </p>
+
+      <ul>
+        <li><strong>GD:</strong> $\eta \in [0.001,\, 0.1]$ for the bowl; smaller for the camel to avoid divergence.</li>
+        <li><strong>Momentum:</strong> same $\eta$ range as GD, with $\beta = 0.9$ as the standard.</li>
+        <li><strong>AdaGrad:</strong> $\eta \in [0.1,\, 1.0]$ — AdaGrad deliberately needs a bigger starting lr because it shrinks aggressively.</li>
+        <li><strong>Adam:</strong> $\eta \in [0.001,\, 0.1]$. The default of $10^{-3}$ is very conservative; on a toy 2-D problem you can often push it higher.</li>
+      </ul>
+
+      <p>
+        And give the experiment enough steps. The slower optimizers (plain GD in
+        particular) need on the order of 2000 iterations to visibly converge on
+        the bowl; less than that and you will unfairly penalise them.
+      </p>
+
+      <h3><span class="marker">iv.</span>The DRY hint</h3>
+
+      <p>
+        The hometask text asks you — sincerely — whether you can get rid of the
+        repetition in the four optimizer functions. You absolutely can. Every
+        optimizer follows the same loop; only the <strong>update rule</strong>
+        changes. Factor out the loop, accept the update rule as a function
+        parameter, and pass a different small function for each optimizer:
+      </p>
+
+      <pre data-label="scaffolding · pseudocode">def run(f, theta0, update_step, n_steps, **hparams):
+    theta      = torch.tensor(theta0, dtype=torch.float32, requires_grad=True)
+    state      = {}                  # per-optimizer scratch (v, G, m, etc.)
+    trajectory = [theta.detach().clone()]
+    values     = [f(theta).item()]
+
+    for t in range(n_steps):
+        loss = f(theta)
+        loss.backward()
+        with torch.no_grad():
+            update_step(theta, state, t, **hparams)
+        theta.grad.zero_()
+        trajectory.append(theta.detach().clone())
+        values.append(loss.item())
+
+    return torch.stack(trajectory), values</pre>
+
+      <p>
+        Each optimizer becomes a five-line <code>update_step</code> function.
+        That is the shape the instructor is hinting at — seeing it is part of
+        the lesson.
+      </p>
+
+      <blockquote class="pull">
+        The boilerplate is identical. The four optimizers are four update rules, not four loops.
+      </blockquote>
+
+      <h3><span class="marker">v.</span>The analysis paragraphs</h3>
+
+      <p>
+        The hometask asks for a 2–3 paragraph summary. Use the following prompts
+        as scaffolding, with reference to your specific plots:
+      </p>
+
+      <ul>
+        <li>Which optimizer wins on the bowl, and why? (Tie it to the elongation of the ellipses.)</li>
+        <li>Which optimizer wins on the camel, and does it reliably find a global minimum from $(-2, -1.5)$? If not, which basin does it land in?</li>
+        <li>Do the same hyperparameters transfer between the two functions? If you had to pick one lr per optimizer for both, what would it cost you?</li>
+        <li>For each optimizer beyond plain GD, what specific weakness of GD does it fix, and what new weakness (if any) does it introduce?</li>
+      </ul>
+
+      <p>
+        A good answer cites specific cells of your plots — "on the camel, GD
+        oscillates in the ravine near $(-1, 0.5)$ between steps 40 and 120" —
+        rather than speaking in generalities.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ TASK 2 CARD ═══════════════════ -->
+  <section class="section" id="s14-part2">
+    <div class="gutter">
+      <span class="num">14.b</span>
+      <span class="tag">Playbook · Part 2</span>
+    </div>
+    <div class="body">
+      <h2>The sixth task, <em>distilled.</em></h2>
+
+      <p>
+        Same structure as the Part 1 cards in §14. Concepts on the left,
+        thinking on the right, no solutions anywhere.
+      </p>
+
+      <div class="tasks">
+
+        <!-- TASK 2 -->
+        <div class="task-card">
+          <div class="num">Task 2</div>
+          <h3>Optimizers on simple vs. hard functions</h3>
+          <div class="points">30 points · implementation + experiments + analysis</div>
+
+          <div class="grid">
+            <div class="col">
+              <h4>Concepts</h4>
+              <ul>
+                <li>The shared optimizer scaffolding (§15)</li>
+                <li>GD, Momentum, AdaGrad, Adam update rules (§16)</li>
+                <li>Why Momentum helps in narrow valleys (§16)</li>
+                <li>AdaGrad's shrinking-lr fatal flaw (§16)</li>
+                <li>Adam = Momentum + decaying AdaGrad + bias correction (§16)</li>
+                <li>Convex bowl vs six-hump camel (§17)</li>
+                <li>Expected behavior of each optimizer on each (§18)</li>
+                <li>The DRY scaffolding hint (§18)</li>
+              </ul>
+            </div>
+            <div class="col">
+              <h4>Thinking</h4>
+              <ul>
+                <li>Fill in the four skeletons: compute loss, call backward, update parameters per the rule, zero the grad.</li>
+                <li>For Momentum: the velocity <code>v</code> must persist across iterations — declare it outside the loop.</li>
+                <li>For AdaGrad: same, but with elementwise squared-gradient accumulation into <code>G</code>.</li>
+                <li>For Adam: two state tensors (<code>m</code>, <code>v</code>), plus bias correction using the current step index.</li>
+                <li>Run each optimizer on <em>both</em> functions from $(-2, -1.5)$ with at least 2000 steps.</li>
+                <li>One plot of function value vs iteration <em>per function</em>, with all four optimizers overlaid on the same axes.</li>
+                <li>Trajectory overlays on the contour plot of each function (use <code>plot_trajectories_camel_log</code>).</li>
+                <li>Write the analysis paragraphs answering the four prompts in §18.v. Cite specific plot regions.</li>
+                <li>Bonus (encouraged by the prompt): collapse the four near-duplicate functions into one with a pluggable update rule.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament">
+    <svg width="80" height="20" viewBox="0 0 80 20" fill="none">
+      <line x1="0" y1="10" x2="28" y2="10" stroke="currentColor" stroke-width="1"/>
+      <circle cx="40" cy="10" r="3" fill="currentColor"/>
+      <line x1="52" y1="10" x2="80" y2="10" stroke="currentColor" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <footer>
+    <p class="colophon">
+      Set in Fraunces &amp; Newsreader. Hand-bound for one student, on one weekend, before one homework deadline.
+    </p>
+    <p class="signature">— Field Guide № 01 · Logistic Regression —</p>
+  </footer>
+
+</div>
+
+<script>
+/* ───────── SIGMOID PLAYGROUND ───────── */
+(function() {
+  const slider  = document.getElementById('z-slider');
+  const zVal    = document.getElementById('z-val');
+  const sigOut  = document.getElementById('sig-out');
+  const bce1Out = document.getElementById('bce1-out');
+  const bce0Out = document.getElementById('bce0-out');
+  const satOut  = document.getElementById('sat-out');
+  const marker  = document.getElementById('sig-marker');
+  const markerV = document.getElementById('sig-marker-v');
+  const curve   = document.getElementById('sig-curve');
+
+  const PLOT_X_MIN = -6, PLOT_X_MAX = 6;
+  const PLOT_LEFT = 20, PLOT_RIGHT = 380;
+  const PLOT_TOP = 20,  PLOT_BOTTOM = 220;
+
+  function xToPx(x) {
+    return PLOT_LEFT + (x - PLOT_X_MIN) / (PLOT_X_MAX - PLOT_X_MIN) * (PLOT_RIGHT - PLOT_LEFT);
+  }
+  function yToPx(y) {
+    return PLOT_BOTTOM - y * (PLOT_BOTTOM - PLOT_TOP);
+  }
+  function sigmoid(z) { return 1 / (1 + Math.exp(-z)); }
+
+  // build curve
+  let pts = [];
+  for (let i = 0; i <= 200; i++) {
+    const z = PLOT_X_MIN + (PLOT_X_MAX - PLOT_X_MIN) * i / 200;
+    pts.push(xToPx(z) + ',' + yToPx(sigmoid(z)));
+  }
+  curve.setAttribute('d', 'M' + pts.join(' L'));
+
+  function update() {
+    const z = parseFloat(slider.value);
+    const p = sigmoid(z);
+    const eps = 1e-15;
+    const safe = Math.min(Math.max(p, eps), 1 - eps);
+    const bce1 = -Math.log(safe);
+    const bce0 = -Math.log(1 - safe);
+
+    zVal.textContent  = (z >= 0 ? '+' : '') + z.toFixed(2);
+    sigOut.textContent = p.toFixed(p < 0.001 || p > 0.999 ? 6 : 3);
+    bce1Out.textContent = bce1.toFixed(2);
+    bce0Out.textContent = bce0.toFixed(2);
+
+    const saturated = (p < 0.01 || p > 0.99);
+    satOut.textContent = saturated ? 'yes' : 'no';
+    satOut.parentElement.classList.toggle('warn', saturated);
+
+    const px = xToPx(z), py = yToPx(p);
+    marker.setAttribute('cx', px);
+    marker.setAttribute('cy', py);
+    markerV.setAttribute('x1', px);
+    markerV.setAttribute('x2', px);
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+
+/* ───────── L1 SPARSITY DEMO ───────── */
+(function() {
+  const NUM_W = 30;
+  // generate a fixed pseudo-random "trained" weight set (Gaussian-ish)
+  // distinct sizes so the sparsification looks dramatic
+  const seed = [
+    0.82, -0.45, 0.07, 0.61, -0.18, 0.04, 0.95, -0.72, 0.13, -0.28,
+    0.56, -0.04, 0.39, -0.83, 0.21, 0.02, -0.51, 0.66, -0.09, 0.77,
+    -0.33, 0.16, -0.06, 0.43, -0.91, 0.25, -0.11, 0.58, -0.71, 0.36
+  ];
+
+  const container = document.getElementById('l1-bars');
+  const slider    = document.getElementById('lambda-slider');
+  const lamVal    = document.getElementById('lambda-val');
+  const activeCnt = document.getElementById('active-count');
+  const l1Norm    = document.getElementById('l1-norm');
+
+  // build bars
+  for (let i = 0; i < NUM_W; i++) {
+    const div = document.createElement('div');
+    div.className = 'bar';
+    container.appendChild(div);
+  }
+
+  function softThreshold(w, lam) {
+    if (w >  lam) return w - lam;
+    if (w < -lam) return w + lam;
+    return 0;
+  }
+
+  function update() {
+    const lam = parseFloat(slider.value);
+    lamVal.textContent = lam.toFixed(2);
+
+    let active = 0, l1 = 0;
+    const bars = container.children;
+
+    for (let i = 0; i < NUM_W; i++) {
+      const w = softThreshold(seed[i], lam);
+      const mag = Math.abs(w);
+      l1 += mag;
+      if (mag > 1e-7) active++;
+
+      const bar = bars[i];
+      // height ∝ magnitude. max raw = ~0.95, max bar = 200px
+      const heightPx = Math.max(1, mag * 210);
+      bar.style.height = heightPx + 'px';
+      bar.classList.toggle('zero', mag <= 1e-7);
+    }
+
+    activeCnt.textContent = active + ' / ' + NUM_W;
+    l1Norm.textContent = l1.toFixed(2);
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+
+/* ───────── REVEAL ON SCROLL ───────── */
+(function() {
+  const els = document.querySelectorAll('.section, .toc, .task-card');
+  els.forEach(el => el.classList.add('reveal'));
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+  els.forEach(el => obs.observe(el));
+})();
+</script>
+</body>
+</html>
