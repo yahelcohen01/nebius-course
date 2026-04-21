@@ -64,11 +64,12 @@ nebius-course/
 ├── 01-ai-model-to-ai-product/
 │   └── assignment_01/                           ← first assignment
 ├── 02-LLM-Architectures/
-│   ├── LLM_Architectures,_hometask_1.ipynb      ← hometask notebook
-│   ├── logistic_regression_guide.html           ← HTML study guide
-│   ├── logistic_regression_guide.md             ← MD study guide
-│   ├── pytorch_primer.md                        ← PyTorch API reference
-│   └── task2_solution.py                        ← optimizer comparison code
+│   └── assignment_01/
+│       ├── LLM_Architectures,_hometask_1.ipynb  ← hometask notebook
+│       ├── logistic_regression_guide.html       ← HTML study guide
+│       ├── logistic_regression_guide.md         ← MD study guide
+│       ├── pytorch_primer.md                    ← PyTorch API reference
+│       └── task2_solution.py                    ← optimizer comparison code
 └── [future folders: 03-topic-name/, etc.]
 ```
 
