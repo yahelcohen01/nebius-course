@@ -474,6 +474,58 @@ $$\text{L2: } \;\Omega(w) = \sum_i w_i^2 \qquad\qquad \text{L1: } \;\Omega(w) = 
 
 ## § 12 — L1 vs L2 — diamonds & circles
 
+### i. The plain-language version
+
+You have 10,000 words (features). Some are useful for predicting sentiment ("great", "terrible", "boring"). Most are noise ("Tuesday", "camera", "three"). You want the model to **ignore the noise words** by setting their weights to zero or near-zero. L1 and L2 are two different strategies for doing that, and they differ dramatically in outcome.
+
+**L2 — "shrink everything evenly":** adds $\lambda \sum w_i^2$ to the loss. The pull toward zero is proportional to each weight's current size — big weights get pulled hard, tiny weights get pulled softly. Result: everything shrinks, but **nothing actually reaches zero**. You still have 10,000 non-zero weights, just smaller ones.
+
+**L1 — "kill the unimportant ones":** adds $\lambda \sum |w_i|$ to the loss. The pull toward zero has **constant force**. Whether the weight is 0.5 or 0.001, L1 shoves it with the same strength. Small weights get dragged all the way to zero; large weights survive. **L1 does feature selection** — it decides which words matter and zeroes out the rest.
+
+```text
+Before regularization:
+████████   big    ("great")
+██████     medium ("film")
+████       small  ("Tuesday")
+██         tiny   ("camera")
+
+After L2 — everything shrinks, nothing dies:
+██████     smaller
+████       smaller
+███        smaller
+█          smaller but still alive
+
+After L1 — small ones die, big ones survive:
+███████    slightly smaller
+█████      slightly smaller
+░          → effectively zero (killed!)
+░          → effectively zero (killed!)
+```
+
+### i.b Concrete numbers
+
+Suppose you have 5 weights before regularization:
+
+```text
+Before:  w = [0.80,  0.50,  0.05,  -0.03,  0.01]
+
+L2 penalty for each:  w² = [0.64,  0.25,  0.0025,  0.0009,  0.0001]
+  → L2 pulls 0.05 with force 0.05, pulls 0.01 with force 0.01
+  → the small ones barely get pushed
+
+L1 penalty for each: |w| = [0.80,  0.50,  0.05,   0.03,   0.01]
+  → L1 pulls 0.05 with force 1.0 (sign), pulls 0.01 with force 1.0 (same!)
+  → the small ones get pushed JUST AS HARD as the big ones
+
+After many steps:
+  L2: w ≈ [0.60,  0.38,  0.04,  -0.02,  0.008]   ← all smaller, none zero
+  L1: w ≈ [0.65,  0.35,  0.00,   0.00,  0.000]   ← small ones died!
+```
+
+The key insight: L2's push is *proportional* to the weight (big weights feel it more). L1's push is *constant* (everyone feels the same force). Constant force + small weight = death.
+
+### ii. The geometric view (the famous picture)
+
 The most famous picture in all of regularization is the one that explains why L1 produces sparse solutions and L2 doesn't.
 
 ```text
@@ -525,25 +577,97 @@ Watch how the smallest-magnitude weights go to zero **first** and the largest ha
 
 ## § 13 — What to expect from your λ sweep
 
-Task 1.5 asks you to run training for $\lambda \in \{0, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ and report what happens. **Before you run anything, predict the shapes of the curves.** If reality matches your prediction, you understand. If it doesn't, understanding is waiting on the other side.
+You're going to run training with five values of $\lambda$: $\{0,\ 10^{-4},\ 10^{-3},\ 10^{-2},\ 10^{-1}\}$. Before you run anything, **predict the shapes of the curves**. If reality matches your prediction, you understand. If it doesn't, understanding is waiting on the other side.
 
-### i. Number of non-zero weights vs λ
+Think of $\lambda$ as a dial from "no penalty" to "maximum penalty". Each plot shows what happens as you turn that dial from left to right:
 
-Monotonically decreasing. At $\lambda = 0$ all 10,000 weights are "active". As $\lambda$ grows, more and more weights drop below your $10^{-7}$ threshold. The drop is steepest in the middle of the sweep and flattens at both ends.
+### i. Non-zero weights vs λ
+
+```text
+non-zero weights
+10000 ■────────
+ 8000          ■───
+ 5000               ■───
+ 2000                    ■───
+  500                         ■
+      ──────────────────────────── λ
+      0    1e-4  1e-3  1e-2  1e-1
+```
+
+**Goes down.** More penalty → more weights killed. At $\lambda = 0$ all 10,000 weights are alive. At $\lambda = 0.1$ most are dead. This is L1 doing feature selection — the dial is choosing how many words matter.
 
 ### ii. Train metric vs λ
 
-Decreasing. At $\lambda = 0$ the model fits the training set as well as it can. As you regularize harder, the model gets less and less freedom to fit, so train accuracy falls. The fall is gentle for small $\lambda$ and steep for large $\lambda$.
+```text
+train accuracy
+ 0.90 ■────────■───
+ 0.80                ■───
+ 0.70                     ■───
+ 0.55                          ■
+      ──────────────────────────── λ
+      0    1e-4  1e-3  1e-2  1e-1
+```
 
-### iii. Validation metric vs λ
+**Goes down.** More penalty → model has less freedom → can't fit the training data as well. At $\lambda = 0$ it memorizes everything. At $\lambda = 0.1$ it's too constrained to learn much.
 
-**U-shaped.** This is the whole reason you're doing the sweep. With no regularization the model overfits — train high, val lower. With a little regularization, you trade a tiny bit of train accuracy for a meaningful bump in val. With too much regularization, the model loses the ability to learn at all and val crashes alongside train. **The best $\lambda$ is the bottom of the U.**
+### iii. Validation metric vs λ — THE IMPORTANT ONE
+
+```text
+val accuracy
+ 0.78           ■───■
+ 0.75 ■────■              ■
+ 0.70                          ■
+      ──────────────────────────── λ
+      0    1e-4  1e-3  1e-2  1e-1
+```
+
+**U-shaped** (inverted-U for accuracy). This is the whole reason you're doing the sweep:
+
+| λ | What happens | Val accuracy |
+|---|---|---|
+| 0 | No penalty. Model memorizes noise in training data. Overfits. | OK but not best |
+| Small (1e-4, 1e-3) | Kills noisy features. Model focuses on useful words. Generalizes better. | **Best** |
+| Big (1e-1) | Kills useful features too. Model can't learn anything. Underfits. | Bad |
+
+The **sweet spot** — the peak of the curve — is the $\lambda$ you'd pick for production. It's the best trade-off between "fit the data" and "stay simple."
 
 ### iv. Individual weight trajectories
 
-For a few of the features that L1 ends up killing, plot their weight value over training steps. You should see a clean decay toward zero. For features that survive, the weights move around but stay nontrivial. Plot both kinds on the same axes — the contrast is the picture.
+Pick 5 features that L1 eliminated (weights near zero at the end) and plot their weight value over training steps:
 
-> ### *Predict the shape, then run the experiment. If it matches you understand; if not, you're about to.*
+```text
+weight value
+ 0.01 ──╲
+         ╲──╲
+              ╲──╲
+                   ╲── → 0.0  (feature died around step 400)
+      ──────────────────────── step
+      0    200   400   600
+```
+
+You should see a clean decay toward zero. For features that **survive**, the weights bounce around but stay nontrivial. Plot both kinds on the same axes — the contrast tells the story.
+
+### v. The one-sentence summary for your insights
+
+### v. Example: what the results table might look like
+
+Before running, this is the *rough shape* of the numbers you should expect (yours will differ — but the trends should match):
+
+```text
+λ        Non-zero weights   Train acc   Val acc    What happened
+──────   ────────────────   ─────────   ─────────  ─────────────────────────
+0        10000              0.90        0.75       overfits — memorizes noise
+1e-4     9800               0.89        0.76       slight cleanup
+1e-3     7500               0.86        0.78  ←── sweet spot (val peaks!)
+1e-2     3000               0.78        0.76       more features killed
+1e-1     200                0.58        0.55       model crippled — underfits
+```
+
+Look at the val accuracy column — it rises to a peak around $\lambda = 10^{-3}$ and then falls. That peak is where the model has learned to ignore noise without losing the ability to use useful features. **That is the trade-off you're documenting.**
+
+### vi. The one-sentence summary for your insights
+
+> ### *Small λ kills noise features and improves generalization. Large λ kills everything and collapses. The optimal λ is where validation accuracy peaks.*
 
 ---
 

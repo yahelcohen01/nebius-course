@@ -1806,6 +1806,130 @@ f1  = f1_score(y_val.numpy(), preds.numpy())</pre>
     <div class="body">
       <h2>L1 vs L2 — <em>diamonds</em> &amp; circles.</h2>
 
+      <h3><span class="marker">i.</span>The plain-language version</h3>
+
+      <p>
+        You have 10,000 words (features). Some are useful for predicting sentiment
+        ("great", "terrible", "boring"). Most are noise ("Tuesday", "camera", "three").
+        You want the model to <strong>ignore the noise words</strong> by setting their
+        weights to zero or near-zero. L1 and L2 are two different strategies for doing that,
+        and they differ dramatically in outcome.
+      </p>
+
+      <p>
+        <strong>L2 — "shrink everything evenly":</strong> adds
+        $\lambda \sum w_i^2$ to the loss. The pull toward zero is proportional to each
+        weight's current size — big weights get pulled hard, tiny weights get pulled softly.
+        Result: everything shrinks, but <em>nothing actually reaches zero</em>. You still
+        have 10,000 non-zero weights, just smaller ones.
+      </p>
+
+      <p>
+        <strong>L1 — "kill the unimportant ones":</strong> adds
+        $\lambda \sum |w_i|$ to the loss. The pull toward zero has <em>constant force</em>.
+        Whether the weight is 0.5 or 0.001, L1 shoves it with the same strength. Small
+        weights get dragged all the way to zero; large weights survive. L1 does
+        <strong>feature selection</strong> — it decides which words matter and zeroes out
+        the rest.
+      </p>
+
+      <!-- Weight bar comparison: Before / L2 / L1 -->
+      <figure>
+        <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+          <!-- BEFORE -->
+          <text x="20" y="20" font-family="IBM Plex Mono" font-size="11" fill="#1A2438" font-weight="600">BEFORE REGULARIZATION</text>
+          <rect x="120" y="30" width="200" height="16" rx="2" fill="#1A2438"/>
+          <text x="326" y="43" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.80  "great"</text>
+          <rect x="120" y="52" width="125" height="16" rx="2" fill="#1A2438"/>
+          <text x="251" y="65" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.50  "film"</text>
+          <rect x="120" y="74" width="13" height="16" rx="2" fill="#1A2438"/>
+          <text x="139" y="87" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.05  "Tuesday"</text>
+          <rect x="120" y="96" width="3" height="16" rx="2" fill="#1A2438"/>
+          <text x="129" y="109" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.01  "camera"</text>
+
+          <!-- L2 -->
+          <line x1="20" y1="130" x2="580" y2="130" stroke="#1A2438" opacity="0.15"/>
+          <text x="20" y="152" font-family="IBM Plex Mono" font-size="11" fill="#4F6B57" font-weight="600">AFTER L2 — everything shrinks, nothing dies</text>
+          <rect x="120" y="162" width="150" height="16" rx="2" fill="#4F6B57"/>
+          <text x="276" y="175" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.60  smaller</text>
+          <rect x="120" y="184" width="95" height="16" rx="2" fill="#4F6B57"/>
+          <text x="221" y="197" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.38  smaller</text>
+          <rect x="120" y="206" width="10" height="16" rx="2" fill="#4F6B57"/>
+          <text x="136" y="219" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.04  smaller but still alive</text>
+          <rect x="120" y="228" width="2" height="16" rx="2" fill="#4F6B57"/>
+          <text x="128" y="241" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.008 still alive</text>
+
+          <!-- L1 -->
+          <line x1="20" y1="260" x2="580" y2="260" stroke="#1A2438" opacity="0.15"/>
+          <text x="20" y="282" font-family="IBM Plex Mono" font-size="11" fill="#B83A1F" font-weight="600">AFTER L1 — small ones die, big ones survive</text>
+          <rect x="120" y="292" width="162" height="16" rx="2" fill="#B83A1F"/>
+          <text x="288" y="305" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.65  survived</text>
+          <rect x="120" y="314" width="88" height="16" rx="2" fill="#B83A1F"/>
+          <text x="214" y="327" font-family="IBM Plex Mono" font-size="10" fill="#6B7388">w = 0.35  survived</text>
+          <rect x="120" y="292" width="0" height="0"/>
+          <text x="120" y="349" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F" font-weight="500">w = 0.00  KILLED  ×  ×</text>
+        </svg>
+        <figcaption><span class="num">Fig. 04</span>L2 shrinks all weights proportionally — nothing reaches zero. L1's constant force pushes small weights all the way to zero.</figcaption>
+      </figure>
+
+      <h3><span class="marker">i.b</span>Concrete numbers</h3>
+
+      <p>
+        Suppose you have 5 weights before regularization. The difference between L1 and L2
+        is in <em>how hard</em> each weight gets pulled toward zero:
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Header -->
+          <text x="20" y="20" font-family="IBM Plex Mono" font-size="10" fill="#6B7388" font-weight="600">WEIGHT</text>
+          <text x="120" y="20" font-family="IBM Plex Mono" font-size="10" fill="#4F6B57" font-weight="600">L2 PULL FORCE (= 2w)</text>
+          <text x="340" y="20" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F" font-weight="600">L1 PULL FORCE (= sign)</text>
+
+          <!-- Row 1 -->
+          <text x="20" y="48" font-family="IBM Plex Mono" font-size="12" fill="#1A2438">0.80</text>
+          <rect x="120" y="36" width="160" height="14" rx="2" fill="#4F6B57" opacity="0.7"/>
+          <text x="286" y="48" font-family="IBM Plex Mono" font-size="10" fill="#4F6B57">1.60</text>
+          <rect x="340" y="36" width="200" height="14" rx="2" fill="#B83A1F" opacity="0.7"/>
+          <text x="546" y="48" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F">1.0</text>
+
+          <!-- Row 2 -->
+          <text x="20" y="78" font-family="IBM Plex Mono" font-size="12" fill="#1A2438">0.50</text>
+          <rect x="120" y="66" width="100" height="14" rx="2" fill="#4F6B57" opacity="0.7"/>
+          <text x="226" y="78" font-family="IBM Plex Mono" font-size="10" fill="#4F6B57">1.00</text>
+          <rect x="340" y="66" width="200" height="14" rx="2" fill="#B83A1F" opacity="0.7"/>
+          <text x="546" y="78" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F">1.0</text>
+
+          <!-- Row 3 -->
+          <text x="20" y="108" font-family="IBM Plex Mono" font-size="12" fill="#1A2438">0.05</text>
+          <rect x="120" y="96" width="10" height="14" rx="2" fill="#4F6B57" opacity="0.7"/>
+          <text x="136" y="108" font-family="IBM Plex Mono" font-size="10" fill="#4F6B57">0.10</text>
+          <rect x="340" y="96" width="200" height="14" rx="2" fill="#B83A1F" opacity="0.7"/>
+          <text x="546" y="108" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F">1.0</text>
+
+          <!-- Row 4 -->
+          <text x="20" y="138" font-family="IBM Plex Mono" font-size="12" fill="#1A2438">0.01</text>
+          <rect x="120" y="126" width="2" height="14" rx="2" fill="#4F6B57" opacity="0.7"/>
+          <text x="128" y="138" font-family="IBM Plex Mono" font-size="10" fill="#4F6B57">0.02</text>
+          <rect x="340" y="126" width="200" height="14" rx="2" fill="#B83A1F" opacity="0.7"/>
+          <text x="546" y="138" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F">1.0</text>
+
+          <!-- Insight -->
+          <line x1="20" y1="160" x2="580" y2="160" stroke="#1A2438" opacity="0.12"/>
+          <text x="120" y="180" font-family="IBM Plex Mono" font-size="10" fill="#4F6B57">L2: tiny weight → tiny push → survives</text>
+          <text x="340" y="180" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F">L1: tiny weight → SAME push → dies</text>
+        </svg>
+        <figcaption><span class="num">Fig. 05</span>L2 pull weakens as w shrinks (proportional). L1 pull stays at full strength regardless of weight size (constant). That's why L1 kills small weights.</figcaption>
+      </figure>
+
+      <p>
+        The key insight: L2's push is <em>proportional</em> to the weight (big weights
+        feel it more). L1's push is <em>constant</em> (everyone feels the same force).
+        Constant force + small weight = death.
+      </p>
+
+      <h3><span class="marker">ii.</span>The geometric view (the famous picture)</h3>
+
       <p>
         The most famous picture in all of regularization is the one that explains why L1
         produces sparse solutions and L2 doesn't. Here it is.
@@ -1938,45 +2062,252 @@ f1  = f1_score(y_val.numpy(), preds.numpy())</pre>
       <h2>What to expect from your <em>λ sweep.</em></h2>
 
       <p>
-        Task 1.5 asks you to run training for $\lambda \in \{0, 10^{-4}, 10^{-3}, 10^{-2},
-        10^{-1}\}$ and report what happens. Before you run anything, predict the shapes of
-        the curves. If reality matches your prediction, you understand. If it doesn't,
+        You're going to run training with five values of $\lambda$:
+        $\{0,\, 10^{-4},\, 10^{-3},\, 10^{-2},\, 10^{-1}\}$.
+        Before you run anything, <strong>predict the shapes of the curves</strong>.
+        If reality matches your prediction, you understand. If it doesn't,
         understanding is waiting on the other side.
       </p>
 
-      <h3><span class="marker">i.</span>Number of non-zero weights vs λ</h3>
       <p>
-        Monotonically decreasing. At $\lambda = 0$ all 10,000 weights are "active". As $\lambda$
-        grows, more and more weights drop below your $10^{-7}$ threshold. The drop is steepest
-        in the middle of the sweep and flattens at both ends.
+        Think of $\lambda$ as a dial from "no penalty" to "maximum penalty". Each plot
+        shows what happens as you turn that dial from left to right:
+      </p>
+
+      <h3><span class="marker">i.</span>Non-zero weights vs λ</h3>
+
+      <figure>
+        <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- axes -->
+          <line x1="60" y1="170" x2="460" y2="170" stroke="#1A2438" stroke-width="1"/>
+          <line x1="60" y1="30" x2="60" y2="170" stroke="#1A2438" stroke-width="1"/>
+          <!-- y labels -->
+          <text x="50" y="40" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">10000</text>
+          <text x="50" y="75" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">7500</text>
+          <text x="50" y="110" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">5000</text>
+          <text x="50" y="145" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">2500</text>
+          <text x="50" y="173" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0</text>
+          <!-- x labels -->
+          <text x="60"  y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">0</text>
+          <text x="160" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-4</text>
+          <text x="260" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-3</text>
+          <text x="360" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-2</text>
+          <text x="460" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-1</text>
+          <text x="260" y="200" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">λ →</text>
+          <!-- curve -->
+          <polyline points="60,36 160,43 260,72 360,120 460,158" fill="none" stroke="#B83A1F" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="60" cy="36" r="4" fill="#B83A1F"/><circle cx="160" cy="43" r="4" fill="#B83A1F"/><circle cx="260" cy="72" r="4" fill="#B83A1F"/><circle cx="360" cy="120" r="4" fill="#B83A1F"/><circle cx="460" cy="158" r="4" fill="#B83A1F"/>
+          <!-- annotation -->
+          <text x="380" y="25" font-family="IBM Plex Mono" font-size="10" fill="#B83A1F" font-weight="600">↓ DECREASING</text>
+        </svg>
+        <figcaption><span class="num">Fig. 06</span>Non-zero weights vs λ — monotonically decreasing.</figcaption>
+      </figure>
+
+      <p>
+        <strong>Goes down.</strong> More penalty → more weights killed. At $\lambda = 0$
+        all 10,000 weights are alive. At $\lambda = 0.1$ most are dead. This is L1 doing
+        feature selection — the dial is choosing how many words matter.
       </p>
 
       <h3><span class="marker">ii.</span>Train metric vs λ</h3>
+
+      <figure>
+        <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- axes -->
+          <line x1="60" y1="170" x2="460" y2="170" stroke="#1A2438" stroke-width="1"/>
+          <line x1="60" y1="30" x2="60" y2="170" stroke="#1A2438" stroke-width="1"/>
+          <!-- y labels -->
+          <text x="50" y="40" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.90</text>
+          <text x="50" y="75" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.80</text>
+          <text x="50" y="110" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.70</text>
+          <text x="50" y="145" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.60</text>
+          <text x="50" y="173" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.50</text>
+          <!-- x labels -->
+          <text x="60"  y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">0</text>
+          <text x="160" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-4</text>
+          <text x="260" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-3</text>
+          <text x="360" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-2</text>
+          <text x="460" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-1</text>
+          <text x="260" y="200" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">λ →</text>
+          <!-- curve -->
+          <polyline points="60,36 160,43 260,75 360,120 460,155" fill="none" stroke="#4F6B57" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="60" cy="36" r="4" fill="#4F6B57"/><circle cx="160" cy="43" r="4" fill="#4F6B57"/><circle cx="260" cy="75" r="4" fill="#4F6B57"/><circle cx="360" cy="120" r="4" fill="#4F6B57"/><circle cx="460" cy="155" r="4" fill="#4F6B57"/>
+          <!-- annotation -->
+          <text x="380" y="25" font-family="IBM Plex Mono" font-size="10" fill="#4F6B57" font-weight="600">↓ DECREASING</text>
+        </svg>
+        <figcaption><span class="num">Fig. 07</span>Train accuracy vs λ — model loses freedom to fit as penalty increases.</figcaption>
+      </figure>
+
       <p>
-        Decreasing. At $\lambda = 0$ the model fits the training set as well as it can. As you
-        regularize harder, the model gets less and less freedom to fit, so train accuracy
-        falls. The fall is gentle for small $\lambda$ and steep for large $\lambda$.
+        <strong>Goes down.</strong> More penalty → model has less freedom → can't fit
+        the training data as well. At $\lambda = 0$ it memorizes everything. At
+        $\lambda = 0.1$ it's too constrained to learn much.
       </p>
 
-      <h3><span class="marker">iii.</span>Validation metric vs λ</h3>
+      <h3><span class="marker">iii.</span>Validation metric vs λ — THE IMPORTANT ONE</h3>
+
+      <figure>
+        <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- axes -->
+          <line x1="60" y1="170" x2="460" y2="170" stroke="#1A2438" stroke-width="1"/>
+          <line x1="60" y1="30" x2="60" y2="170" stroke="#1A2438" stroke-width="1"/>
+          <!-- y labels -->
+          <text x="50" y="47" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.80</text>
+          <text x="50" y="82" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.75</text>
+          <text x="50" y="117" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.70</text>
+          <text x="50" y="152" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.65</text>
+          <text x="50" y="173" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.60</text>
+          <!-- x labels -->
+          <text x="60"  y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">0</text>
+          <text x="160" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-4</text>
+          <text x="260" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-3</text>
+          <text x="360" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-2</text>
+          <text x="460" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">1e-1</text>
+          <text x="260" y="200" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">λ →</text>
+          <!-- curve (inverted U) -->
+          <polyline points="60,82 160,65 260,43 360,72 460,145" fill="none" stroke="#C68A1F" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="60" cy="82" r="4" fill="#C68A1F"/><circle cx="160" cy="65" r="4" fill="#C68A1F"/><circle cx="260" cy="43" r="5" fill="#C68A1F" stroke="#F4ECD6" stroke-width="2"/><circle cx="360" cy="72" r="4" fill="#C68A1F"/><circle cx="460" cy="145" r="4" fill="#C68A1F"/>
+          <!-- peak annotation -->
+          <line x1="260" y1="43" x2="260" y2="28" stroke="#C68A1F" stroke-width="1" stroke-dasharray="2,2"/>
+          <text x="260" y="22" font-family="IBM Plex Mono" font-size="10" fill="#C68A1F" font-weight="600" text-anchor="middle">SWEET SPOT</text>
+          <!-- labels -->
+          <text x="62" y="98" font-family="IBM Plex Mono" font-size="8" fill="#6B7388">overfits</text>
+          <text x="420" y="160" font-family="IBM Plex Mono" font-size="8" fill="#6B7388">underfits</text>
+        </svg>
+        <figcaption><span class="num">Fig. 08</span>Validation accuracy vs λ — the inverted-U. The peak is the optimal trade-off between fitting and simplicity.</figcaption>
+      </figure>
+
       <p>
-        <strong>U-shaped.</strong> This is the whole reason you're doing the sweep. With no
-        regularization the model overfits — train high, val lower. With a little
-        regularization, you trade a tiny bit of train accuracy for a meaningful bump in val.
-        With too much regularization, the model loses the ability to learn at all and val
-        crashes alongside train. The best $\lambda$ is the bottom of the U.
+        <strong>U-shaped</strong> (inverted-U for accuracy). This is the whole reason
+        you're doing the sweep:
+      </p>
+
+      <ul>
+        <li><strong>$\lambda = 0$</strong> — no penalty. Model memorizes noise in training data. Overfits. Val is OK but not the best.</li>
+        <li><strong>Small $\lambda$ (1e-4, 1e-3)</strong> — kills noisy features. Model focuses on useful words. Generalizes better. <strong>Val peaks here.</strong></li>
+        <li><strong>Big $\lambda$ (1e-1)</strong> — kills useful features too. Model can't learn anything meaningful. Both train and val drop. Underfits.</li>
+      </ul>
+
+      <p>
+        The <strong>sweet spot</strong> — the peak of the curve — is the $\lambda$ you'd
+        pick for production. It's the best trade-off between "fit the data" and "stay simple."
       </p>
 
       <h3><span class="marker">iv.</span>Individual weight trajectories</h3>
+
+      <figure>
+        <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- axes -->
+          <line x1="60" y1="170" x2="460" y2="170" stroke="#1A2438" stroke-width="1"/>
+          <line x1="60" y1="30" x2="60" y2="170" stroke="#1A2438" stroke-width="1"/>
+          <!-- y labels -->
+          <text x="50" y="40" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.5</text>
+          <text x="50" y="100" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0.25</text>
+          <text x="50" y="173" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="end">0</text>
+          <!-- x labels -->
+          <text x="60"  y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388">0</text>
+          <text x="160" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">200</text>
+          <text x="260" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">400</text>
+          <text x="360" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">600</text>
+          <text x="460" y="186" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">800</text>
+          <text x="260" y="200" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle">training step →</text>
+
+          <!-- Surviving weight (stays high, bounces) -->
+          <polyline points="60,60 110,55 160,62 210,50 260,58 310,52 360,56 410,48 460,53" fill="none" stroke="#4F6B57" stroke-width="2" stroke-linejoin="round"/>
+          <text x="465" y="50" font-family="IBM Plex Mono" font-size="9" fill="#4F6B57" font-weight="600">survives</text>
+
+          <!-- Killed weight 1 (decays to ~0) -->
+          <polyline points="60,110 110,120 160,135 210,148 260,155 310,162 360,166 410,168 460,169" fill="none" stroke="#B83A1F" stroke-width="2" stroke-linejoin="round" opacity="0.8"/>
+          <text x="465" y="166" font-family="IBM Plex Mono" font-size="9" fill="#B83A1F" font-weight="600">→ 0</text>
+
+          <!-- Killed weight 2 (decays faster) -->
+          <polyline points="60,130 110,142 160,155 210,162 260,166 310,168 360,169 410,170 460,170" fill="none" stroke="#B83A1F" stroke-width="1.5" stroke-linejoin="round" opacity="0.5"/>
+
+          <!-- Killed weight 3 (decays fastest) -->
+          <polyline points="60,145 110,156 160,163 210,167 260,169 310,170 360,170 410,170 460,170" fill="none" stroke="#B83A1F" stroke-width="1.5" stroke-linejoin="round" opacity="0.35"/>
+
+          <!-- zero line -->
+          <line x1="60" y1="170" x2="460" y2="170" stroke="#B83A1F" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.5"/>
+        </svg>
+        <figcaption><span class="num">Fig. 09</span>Weight trajectories — surviving features (green) stay nontrivial; killed features (red) decay toward zero at different speeds. Plot both on the same axes.</figcaption>
+      </figure>
+
       <p>
-        For a few of the features that L1 ends up killing, plot their weight value over
-        training steps. You should see a clean decay toward zero. For features that survive,
-        the weights move around but stay nontrivial. Plot both kinds on the same axes — the
-        contrast is the picture.
+        Pick 5 features that L1 eliminated (weights near zero at the end) and plot their
+        weight value over training steps. You should see a clean decay toward zero. For
+        features that <em>survive</em>, the weights bounce around but stay nontrivial.
+        Plot both kinds on the same axes — the contrast tells the story.
       </p>
 
+      <h3><span class="marker">v.</span>Example: what the results table might look like</h3>
+
+      <p>
+        Before running, this is the <em>rough shape</em> of the numbers you should expect
+        (yours will differ — but the trends should match):
+      </p>
+
+      <div style="overflow-x: auto; margin: 28px 0;">
+        <table style="width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--ink);">
+              <th style="text-align: left; padding: 10px 14px; color: var(--vermillion); text-transform: uppercase; font-size: 10px; letter-spacing: 0.12em;">λ</th>
+              <th style="text-align: right; padding: 10px 14px; color: var(--vermillion); text-transform: uppercase; font-size: 10px; letter-spacing: 0.12em;">Non-zero</th>
+              <th style="text-align: right; padding: 10px 14px; color: var(--vermillion); text-transform: uppercase; font-size: 10px; letter-spacing: 0.12em;">Train acc</th>
+              <th style="text-align: right; padding: 10px 14px; color: var(--vermillion); text-transform: uppercase; font-size: 10px; letter-spacing: 0.12em;">Val acc</th>
+              <th style="text-align: left; padding: 10px 14px; color: var(--vermillion); text-transform: uppercase; font-size: 10px; letter-spacing: 0.12em;">What happened</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px dotted var(--rule);">
+              <td style="padding: 8px 14px;">0</td>
+              <td style="padding: 8px 14px; text-align: right;">10000</td>
+              <td style="padding: 8px 14px; text-align: right;">0.90</td>
+              <td style="padding: 8px 14px; text-align: right;">0.75</td>
+              <td style="padding: 8px 14px; color: var(--ink-faint); font-style: italic;">overfits — memorizes noise</td>
+            </tr>
+            <tr style="border-bottom: 1px dotted var(--rule);">
+              <td style="padding: 8px 14px;">10<sup>-4</sup></td>
+              <td style="padding: 8px 14px; text-align: right;">9800</td>
+              <td style="padding: 8px 14px; text-align: right;">0.89</td>
+              <td style="padding: 8px 14px; text-align: right;">0.76</td>
+              <td style="padding: 8px 14px; color: var(--ink-faint); font-style: italic;">slight cleanup</td>
+            </tr>
+            <tr style="border-bottom: 1px dotted var(--rule); background: rgba(198, 138, 31, 0.08);">
+              <td style="padding: 8px 14px; color: var(--ochre); font-weight: 600;">10<sup>-3</sup></td>
+              <td style="padding: 8px 14px; text-align: right;">7500</td>
+              <td style="padding: 8px 14px; text-align: right;">0.86</td>
+              <td style="padding: 8px 14px; text-align: right; color: var(--ochre); font-weight: 600;">0.78</td>
+              <td style="padding: 8px 14px; color: var(--ochre); font-weight: 500;">sweet spot — val peaks here</td>
+            </tr>
+            <tr style="border-bottom: 1px dotted var(--rule);">
+              <td style="padding: 8px 14px;">10<sup>-2</sup></td>
+              <td style="padding: 8px 14px; text-align: right;">3000</td>
+              <td style="padding: 8px 14px; text-align: right;">0.78</td>
+              <td style="padding: 8px 14px; text-align: right;">0.76</td>
+              <td style="padding: 8px 14px; color: var(--ink-faint); font-style: italic;">more features killed</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 14px;">10<sup>-1</sup></td>
+              <td style="padding: 8px 14px; text-align: right;">200</td>
+              <td style="padding: 8px 14px; text-align: right;">0.58</td>
+              <td style="padding: 8px 14px; text-align: right;">0.55</td>
+              <td style="padding: 8px 14px; color: var(--ink-faint); font-style: italic;">model crippled — underfits</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Look at the val accuracy column — it rises to a peak around $\lambda = 10^{-3}$ and
+        then falls. That peak is where the model has learned to ignore noise without losing
+        the ability to use useful features. <strong>That is the trade-off you're
+        documenting.</strong>
+      </p>
+
+      <h3><span class="marker">vi.</span>The one-sentence summary for your insights</h3>
+
       <blockquote class="pull">
-        Predict the shape, then run the experiment. If it matches you understand; if not, you're about to.
+        Small λ kills noise features and improves generalization. Large λ kills everything and collapses. The optimal λ is where validation accuracy peaks.
       </blockquote>
     </div>
   </section>
