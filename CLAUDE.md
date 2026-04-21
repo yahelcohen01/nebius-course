@@ -61,15 +61,15 @@ nebius-course/
 │       ├── test-code/SKILL.md
 │       ├── write-analysis/SKILL.md
 │       └── pytorch-help/SKILL.md
-├── 01a/
-│   └── assignment_01/                  ← first assignment
-├── 02b/
-│   ├── LLM_Architectures,_hometask_1.ipynb  ← hometask notebook
-│   ├── logistic_regression_guide.html       ← HTML study guide
-│   ├── logistic_regression_guide.md         ← MD study guide
-│   ├── pytorch_primer.md                    ← PyTorch API reference
-│   └── task2_solution.py                    ← optimizer comparison code
-└── [future folders: 03/, 04/, etc.]
+├── 01-ai-model-to-ai-product/
+│   └── assignment_01/                           ← first assignment
+├── 02-LLM-Architectures/
+│   ├── LLM_Architectures,_hometask_1.ipynb      ← hometask notebook
+│   ├── logistic_regression_guide.html           ← HTML study guide
+│   ├── logistic_regression_guide.md             ← MD study guide
+│   ├── pytorch_primer.md                        ← PyTorch API reference
+│   └── task2_solution.py                        ← optimizer comparison code
+└── [future folders: 03-topic-name/, etc.]
 ```
 
 ## Code Conventions
