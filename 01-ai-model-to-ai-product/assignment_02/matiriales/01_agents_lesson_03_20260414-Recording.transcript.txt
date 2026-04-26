@@ -1,0 +1,5742 @@
+WEBVTT
+
+1
+00:00:04.175 --> 00:00:09.975
+Pini Koplovitch: So please meet Yuval in person.
+
+
+2
+00:00:12.555 --> 00:00:14.765
+Pini Koplovitch: Hi, everybody.
+
+
+3
+00:00:15.445 --> 00:00:35.285
+Pini Koplovitch: tell you, I watched a bit of my first two lectures. It seems like I was doing them through my sleep, so I'm sorry about that. You got, like, the… not the full experience. Maybe after today you would wish I would have another day without sleep, but…
+
+
+4
+00:00:35.385 --> 00:00:41.634
+Pini Koplovitch: let's say I do it anyway. Usually, I'm not the kind of person who needs a microphone to talk.
+
+
+5
+00:00:42.595 --> 00:00:44.745
+Pini Koplovitch: So, we should have fun today.
+
+
+6
+00:00:44.965 --> 00:00:54.064
+Pini Koplovitch: But do we need the code that will show, or are you gonna show it? I have no idea, maybe, maybe neither. But we'll get there, we'll get there. We have some time.
+
+
+7
+00:00:54.295 --> 00:01:02.645
+Pini Koplovitch: And so… You… you have… you mentioned some feedbacks on previous lectures.
+
+
+8
+00:01:03.075 --> 00:01:09.244
+Pini Koplovitch: I will say, usually my philosophy in AI, and especially in courses like this, which
+
+
+9
+00:01:09.535 --> 00:01:17.795
+Pini Koplovitch: For me, Model 1 is kind of like the intro model for this entire field. So I'm kind of trying to run through
+
+
+10
+00:01:17.905 --> 00:01:34.795
+Pini Koplovitch: everything together and do a lot. And also, with the webinar format, it was kind of hard to actually see people or understand, do I need to go slower, do we need to go faster? Today, we're gonna maybe slow up a bit,
+
+
+11
+00:01:35.065 --> 00:01:46.064
+Pini Koplovitch: I'm saying that, I'm not… I can't really go slow, but stop me. Like, I can try to repeat myself several times, and maybe it will work, but we will… we will focus.
+
+
+12
+00:01:46.075 --> 00:01:57.654
+Pini Koplovitch: On RUG and AI systems. Okay, this is Dave. Next, lesson, without me, is with, Tom. So,
+
+
+13
+00:01:57.655 --> 00:02:08.614
+Pini Koplovitch: You're getting a nice break. I will be in San Francisco, so I will not be able to be here, and we will meet each other, I think, in 4 weeks or something. We have some time until the last time.
+
+
+14
+00:02:10.665 --> 00:02:13.064
+Pini Koplovitch: So, let's get started.
+
+
+15
+00:02:13.915 --> 00:02:20.274
+Pini Koplovitch: I was supposed to say, hi, nice to meet you in person, but I did it before, so… Sorry, not a lot of memes today,
+
+
+16
+00:02:21.025 --> 00:02:24.455
+Pini Koplovitch: They didn't manage to do anything that was actually fun.
+
+
+17
+00:02:24.525 --> 00:02:41.674
+Pini Koplovitch: This is the plan for today. YRAG, I don't know if you actually spoke with Noah about what is fine-tuning, but I spoke a little bit about what is fine-tuning, and usually those things come together, so I'm allowing myself to mention.
+
+
+18
+00:02:42.395 --> 00:02:45.285
+Pini Koplovitch: Is everything okay? Yeah, I'm just a bit nervous.
+
+
+19
+00:02:48.245 --> 00:02:49.065
+Pini Koplovitch: Thank you.
+
+
+20
+00:02:57.175 --> 00:02:57.865
+Pini Koplovitch: I mean?
+
+
+21
+00:02:58.405 --> 00:03:00.254
+Pini Koplovitch: Cool, apparently it's not when you came here anymore.
+
+
+22
+00:03:04.385 --> 00:03:05.255
+Pini Koplovitch: So…
+
+
+23
+00:03:05.355 --> 00:03:13.515
+Pini Koplovitch: Oh, okay. If you can't hear me, it doesn't matter, I'm just saying what we're going to talk about today. Nothing important.
+
+
+24
+00:03:15.565 --> 00:03:32.465
+Pini Koplovitch: Then we're gonna talk about… this is like a test, right? When you're doing some course, and then you have to… what happens when you don't have a presentation? Do you remember what you're talking about? We're gonna talk about RAG from scratch. Maybe some of it will be basic, but we will cover, like, the basic and advanced together.
+
+
+25
+00:03:32.465 --> 00:03:42.884
+Pini Koplovitch: A lot of information Samuel will get right now. If you're not getting everything, that's okay, and there's a lot of things that took me a lot of time to understand, and I'm sharing it with you.
+
+
+26
+00:03:42.905 --> 00:03:46.134
+Pini Koplovitch: Afterwards, we will talk a little bit about
+
+
+27
+00:03:46.195 --> 00:04:01.455
+Pini Koplovitch: when not to do RAG, some out-of-the-box solutions for RAG. We will see a demo of RAG, like, the stupidest code ever, just to understand and get a feel. Usually, people use frameworks for that, nobody actually writes this code, but this will help you.
+
+
+28
+00:04:01.535 --> 00:04:19.895
+Pini Koplovitch: maybe understand better. And also, you wanted me to run some code, at least from the feedbacks. We'll wait for the feedback for this lecture to see if it worked or didn't work. After that, we will talk about drag evaluation. Remember, I promised you we'll talk about evaluation every time, because this is fun.
+
+
+29
+00:04:20.915 --> 00:04:23.765
+Pini Koplovitch: Look, everybody hates evaluation, but everybody has to do that.
+
+
+30
+00:04:23.955 --> 00:04:29.604
+Pini Koplovitch: Ben… Don't remember number 5?
+
+
+31
+00:04:30.805 --> 00:04:41.995
+Pini Koplovitch: Why, right, workflows and AI systems, which is essentially a whole other subject. It's kind of tied to other things.
+
+
+32
+00:04:42.085 --> 00:05:00.295
+Pini Koplovitch: RAG is kind of like a private case of an AI system, so it makes sense to do it together. Also, because you're going to talk about AI agents next week, we do want to talk about everything which is not proper agents. And, in the end, I will do, like, a teaser for agents to still come standard.
+
+
+33
+00:05:01.035 --> 00:05:06.744
+Pini Koplovitch: Paul, are we hyped? Are we ready? We have air conditioner now, we can do it.
+
+
+34
+00:05:07.135 --> 00:05:12.114
+Pini Koplovitch: So, why rock? Why even do that? Kind of funny that this…
+
+
+35
+00:05:12.715 --> 00:05:25.834
+Pini Koplovitch: kind of, like, you know, the basics of AA systems. This is something that was originated, I think, in 2023, 2022, something like that. The concept of retrieval augmented generation. The person who wrote this paperwork
+
+
+36
+00:05:26.035 --> 00:05:36.195
+Pini Koplovitch: at least he used to work in Cohere. If you know this company, he went and managed a group of engineers there. I'm not sure if he's still working there.
+
+
+37
+00:05:42.025 --> 00:05:43.984
+Pini Koplovitch: I may call it a second behind you.
+
+
+38
+00:05:46.445 --> 00:06:02.485
+Pini Koplovitch: And this is, like, the concept of when do you need to do something. And if we're talking about what problems RAG do solve, okay, it's the context problem, or, like, the relevant context problem, or the data problem.
+
+
+39
+00:06:02.515 --> 00:06:14.634
+Pini Koplovitch: You think about it as two ways, right? The cutoff problem of the model, right, information that the model doesn't have because it's updated, or simply private data that the model just don't know.
+
+
+40
+00:06:14.855 --> 00:06:22.855
+Pini Koplovitch: It's also not very wise to think of models as that, like, creatures actually have a lot of correct information.
+
+
+41
+00:06:23.165 --> 00:06:26.964
+Pini Koplovitch: Smart, smart stuff to think about them as…
+
+
+42
+00:06:27.125 --> 00:06:37.784
+Pini Koplovitch: Have, like, some sort of understanding capabilities of when and where to get the information, and not just to rely on what they say in order to solve problems.
+
+
+43
+00:06:38.345 --> 00:06:40.695
+Pini Koplovitch: Because it's not necessarily…
+
+
+44
+00:06:40.855 --> 00:06:57.835
+Pini Koplovitch: not everything they know is true, and also why it's true, but this is, like, a whole other debate. So, we've seen this, right? This is how we want to start to work with language models. We start somewhere here, we have a model, and we try something.
+
+
+45
+00:06:57.865 --> 00:07:09.244
+Pini Koplovitch: prompt, maybe a few shots, some other methods of prompt engineering. And then we can go to either the LLM optimization part, how the model needs to act, and then we will do fine-tuning.
+
+
+46
+00:07:09.345 --> 00:07:13.305
+Pini Koplovitch: R… Our problems are actually not about
+
+
+47
+00:07:13.435 --> 00:07:23.644
+Pini Koplovitch: how the model acts, or how the model talks, but the information that the model has, the details that it provides in the answers. And in this case, we want to improve the context.
+
+
+48
+00:07:23.834 --> 00:07:26.314
+Pini Koplovitch: And this is… Right.
+
+
+49
+00:07:26.515 --> 00:07:28.555
+Pini Koplovitch: This is where we want to do right.
+
+
+50
+00:07:28.874 --> 00:07:44.024
+Pini Koplovitch: So, if fine-tuning is… I really like the parrot, allegory, so we'll continue… these are, like, the last two slides we'll see about that. But if, we would think about the LLM as a parrot, we have this dataset of,
+
+
+51
+00:07:44.025 --> 00:07:54.705
+Pini Koplovitch: a library in the pre-training, and then some sort of a smaller library, a private knowledge base that we're doing SFT on it, and then we have a parrot that read a lot of books.
+
+
+52
+00:07:55.595 --> 00:08:04.824
+Pini Koplovitch: think about yourself, that you read a lot of books, you kind of know a lot of things, but you don't really remember every little detail. Whereas, if you're doing RAG,
+
+
+53
+00:08:04.975 --> 00:08:11.324
+Pini Koplovitch: Instead of a parrot that's read a lot of books, we have a parrot with a smart search engine that is in the library.
+
+
+54
+00:08:11.485 --> 00:08:22.245
+Pini Koplovitch: So, everything you need to understand, every detail that you need, disparate has had the query to this database, and then it retrieves it and gives you the information.
+
+
+55
+00:08:22.575 --> 00:08:25.665
+Pini Koplovitch: This is kind of the diff… and it's…
+
+
+56
+00:08:26.145 --> 00:08:36.135
+Pini Koplovitch: We're talking about 2024, 2025 even. We had a lot of customers that, in every call said they want to do fine-tuning. Why? Because they have a lot of data.
+
+
+57
+00:08:36.165 --> 00:08:51.144
+Pini Koplovitch: And there's one very, very nice story from OpenAI that I really like. They said that they worked with a client, and they said, oh, we have a lot of Slack conversations from our workers, we can use that to fine-tune a model, and we have the best agent in the world.
+
+
+58
+00:08:51.145 --> 00:08:58.385
+Pini Koplovitch: And then they use that, they fine-tuned this model, and then they asked the model to write a report. And then the model said, I'll do it tomorrow.
+
+
+59
+00:08:59.165 --> 00:09:13.004
+Pini Koplovitch: So, not everything needs to be fine-tuned, and if we, like, a lot of data doesn't necessarily mean fine-tuned. What you need to ask yourself is what do you actually want the model to do?
+
+
+60
+00:09:13.175 --> 00:09:18.424
+Pini Koplovitch: And this is the one-liner, which sounds, for some reason, I put it on a lot of
+
+
+61
+00:09:18.755 --> 00:09:23.815
+Pini Koplovitch: In a lot of lines, but anyway, the model survives like
+
+
+62
+00:09:23.905 --> 00:09:42.315
+Pini Koplovitch: style, if you're working at Amazon, for instance, there is a very, very clear-cut example of the Amazonian way to write docs. Have you heard about that? You have to be positive, you have to… but you have to say superpowers, you can't… and you have to say growth opportunities, you can't say bad things.
+
+
+63
+00:09:42.315 --> 00:09:52.974
+Pini Koplovitch: You have to talk in a very active way, like, I did something, and not this something was done to me. So this is a style, this is a tone, these are guidelines of how you write something.
+
+
+64
+00:09:53.015 --> 00:09:56.665
+Pini Koplovitch: And… This is quintessential. Thank you.
+
+
+65
+00:09:56.995 --> 00:10:01.604
+Pini Koplovitch: Hank, if you wanted to talk like a lawyer, you know, and lawyers are…
+
+
+66
+00:10:01.755 --> 00:10:14.804
+Pini Koplovitch: large are gone. Again, fine-tuned. Pairs will spend a lot of time in the library. Whereas, if you want the model to write about something correctly, this is where we need rug. Pair it in the library.
+
+
+67
+00:10:16.735 --> 00:10:23.564
+Pini Koplovitch: This was just, like, the short misconception of, when fine-tuning, when rug, I will not talk about fine-tuning ever again. Yes.
+
+
+68
+00:10:24.005 --> 00:10:37.144
+Pini Koplovitch: Yeah, so just about functioning, basically. I promise I will not talk about it again. This is the last time? I lied, there's another slide later. So, we can see that, like, usual model can, like.
+
+
+69
+00:10:37.605 --> 00:10:46.595
+Pini Koplovitch: Just a lot of data, general world data, and just, like, see it again when asked about, right?
+
+
+70
+00:10:46.865 --> 00:10:57.994
+Pini Koplovitch: Pine training is actually just continuing this process of, you know, training the model. So why, in the same way that you train a base model, and you let it learn about the world.
+
+
+71
+00:10:58.115 --> 00:11:03.894
+Pini Koplovitch: Why isn't functioning… It doesn't learn about the world. Do I need to repeat the question?
+
+
+72
+00:11:04.925 --> 00:11:06.984
+Pini Koplovitch: Oh, fudge.
+
+
+73
+00:11:08.335 --> 00:11:28.075
+Pini Koplovitch: Yeah, when I understood that, I'm recording, trying to censor myself. The question was, I'm sorry, I'm, abbreviating, and I have a lot to do today. The question was, if in a base pre-training of a base model, we're feeding a lot of information and letting it learn the information, right? I'm using your words correctly?
+
+
+74
+00:11:28.395 --> 00:11:33.014
+Pini Koplovitch: Great. Why aren't we doing it in fine-tuning? Because it's essentially the same process.
+
+
+75
+00:11:33.955 --> 00:11:46.654
+Pini Koplovitch: The answer is that this question is not phrased correctly. We're not teaching the model information, we're not teaching the model facts, we're teaching the model language.
+
+
+76
+00:11:46.895 --> 00:11:56.274
+Pini Koplovitch: want to show what's statistically… how does it look? And you can give it a lot of information from Reddit, for instance, and think about
+
+
+77
+00:11:56.625 --> 00:11:58.654
+Pini Koplovitch: Have you been to Reddit lately?
+
+
+78
+00:11:59.225 --> 00:12:01.205
+Pini Koplovitch: All of the information there is correct.
+
+
+79
+00:12:01.545 --> 00:12:04.415
+Pini Koplovitch: Does this answer your question?
+
+
+80
+00:12:05.935 --> 00:12:11.724
+Pini Koplovitch: Not really. Okay, so… Let me define something, which is grounding.
+
+
+81
+00:12:11.875 --> 00:12:27.574
+Pini Koplovitch: Where, essentially, you don't really know what's true anymore, right? And grounding tends to mean it's true based on something. When we say true, it means grounded in the reality. For instance, I can say the colors of the wall here are brown.
+
+
+82
+00:12:27.955 --> 00:12:32.775
+Pini Koplovitch: Or beige, or I'm not really sure. Maybe I'm colorful, I don't know.
+
+
+83
+00:12:32.915 --> 00:12:40.235
+Pini Koplovitch: Brown, we can agree, this is grounded in that reality. But if I will say right now that
+
+
+84
+00:12:40.385 --> 00:12:42.624
+Pini Koplovitch: I will give you some details on me.
+
+
+85
+00:12:42.775 --> 00:12:58.614
+Pini Koplovitch: You don't really know me, but if you have my biography or something like that, you can ground it through there. So, when we are training a model, we're training it to understand language, and we want it to, like, understand tone, style, structure, meaning.
+
+
+86
+00:12:58.835 --> 00:13:01.575
+Pini Koplovitch: The details that it learns.
+
+
+87
+00:13:01.785 --> 00:13:08.294
+Pini Koplovitch: the information, it's kind of a side effect. A good side effect, but it's not the goal.
+
+
+88
+00:13:12.045 --> 00:13:15.684
+Pini Koplovitch: So, let's continue. We're gonna do Rock from Scratch.
+
+
+89
+00:13:16.515 --> 00:13:18.454
+Pini Koplovitch: Yeah, I'm doing a lot of…
+
+
+90
+00:13:18.635 --> 00:13:33.284
+Pini Koplovitch: like, we had a lot of things with RAG, and only 6 months ago, I came to the realization, like, the most simple realization I think anybody starts learning RAG. I know that, so this is why I'm saying this right now. RAG is…
+
+
+91
+00:13:33.435 --> 00:13:39.615
+Pini Koplovitch: Essentially, a hard problem, because we have to optimize something. We don't really want to optimize.
+
+
+92
+00:13:39.865 --> 00:13:50.294
+Pini Koplovitch: What does it mean to derive? It means that we want to give the model the best context possible in the prompt for it to be able to answer something.
+
+
+93
+00:13:50.455 --> 00:13:51.455
+Pini Koplovitch: And…
+
+
+94
+00:13:51.675 --> 00:14:07.014
+Pini Koplovitch: Don, let's remove all the… who's the president of the United States, or all the current knowledge. This is, like, the knowledge cutoff is not the interesting part here. Let's imagine that we are a bank or a healthcare organization. We have private information.
+
+
+95
+00:14:07.015 --> 00:14:13.304
+Pini Koplovitch: We want answers based on this private information, something no model has seen before, and this has to be grounded in this information.
+
+
+96
+00:14:14.785 --> 00:14:21.514
+Pini Koplovitch: Essentially, if I could, I would just take all this information, shove it into the model, and say good luck.
+
+
+97
+00:14:22.115 --> 00:14:27.505
+Pini Koplovitch: And this is the best context, right? I'm giving you the correct context somewhere there.
+
+
+98
+00:14:28.385 --> 00:14:30.564
+Pini Koplovitch: But… it's a lot of harm.
+
+
+99
+00:14:30.895 --> 00:14:40.385
+Pini Koplovitch: It's a lot of data, and we already know that long context is not necessarily enough, and so on and so on. The debate over which one context versus Robin, all those kind of things.
+
+
+100
+00:14:41.005 --> 00:14:48.894
+Pini Koplovitch: It's still going. You can still, like, throw a rock on someone in Silicon Valley, and they will fight you over that. So…
+
+
+101
+00:14:49.075 --> 00:15:07.735
+Pini Koplovitch: This is, like, this is what you really need to understand. RAG is essentially finding the best context, and in this process, we have… we are essentially adding more problems to the system, more complexity, in order to compensate on the memory problem and the context problem.
+
+
+102
+00:15:08.785 --> 00:15:15.365
+Pini Koplovitch: So, what is RUG? Initials of Retrieval Augmented Generation.
+
+
+103
+00:15:15.575 --> 00:15:23.014
+Pini Koplovitch: We have… you can think about the system as two ways. We have the retrieval part, and the augmented generation part.
+
+
+104
+00:15:23.155 --> 00:15:26.854
+Pini Koplovitch: In the retrieval part, these are the things that happen online. In the retrieval part,
+
+
+105
+00:15:27.245 --> 00:15:32.315
+Pini Koplovitch: Looking in my database, retrieving pieces of information.
+
+
+106
+00:15:32.435 --> 00:15:39.005
+Pini Koplovitch: In the augmented generation part, I'm putting those pieces, those chunks, those segments of text.
+
+
+107
+00:15:39.325 --> 00:15:45.685
+Pini Koplovitch: Into a prompt, and based on that, like, augmented generate… the generation is augmented by this content.
+
+
+108
+00:15:45.955 --> 00:15:47.764
+Pini Koplovitch: That's all there is.
+
+
+109
+00:15:48.455 --> 00:15:57.915
+Pini Koplovitch: I don't really care about all those things. Let's continue. This is the basic process, I would say. Recipe, pipeline, whatever.
+
+
+110
+00:15:58.155 --> 00:16:04.784
+Pini Koplovitch: Tanking… Betting. This is sometimes also called indexing, this process.
+
+
+111
+00:16:05.205 --> 00:16:13.635
+Pini Koplovitch: Retrieve, generate, where this is indexing, and this is something which is done offline. What do I mean when I say offline? This is done once.
+
+
+112
+00:16:14.505 --> 00:16:18.974
+Pini Koplovitch: You can do it a lot of the times, but this is something that's usually done once.
+
+
+113
+00:16:19.295 --> 00:16:28.555
+Pini Koplovitch: You can add documents, you can, you know, do embedding all over again if you're tweaking the model or something like that, but this is not something you would usually
+
+
+114
+00:16:28.965 --> 00:16:30.185
+Pini Koplovitch: Play a lot with.
+
+
+115
+00:16:30.345 --> 00:16:37.774
+Pini Koplovitch: And this is also not the places that Usually people talk about Vicar, It's hard.
+
+
+116
+00:16:38.975 --> 00:16:45.884
+Pini Koplovitch: And this happens at inference, for every time, test time, okay, this happens every time I'm operating this system.
+
+
+117
+00:16:46.265 --> 00:16:49.265
+Pini Koplovitch: That retrieve part, and then the generation part.
+
+
+118
+00:16:51.825 --> 00:17:05.034
+Pini Koplovitch: Every few slides, I will ask you questions, but, like, feel free to stop me. If I will not have time, I will just tell you, let's take it offline, and then we will not take it offline. Or… or maybe. From my experience, usually you don't take it offline, really.
+
+
+119
+00:17:06.225 --> 00:17:06.905
+Pini Koplovitch: And…
+
+
+120
+00:17:07.225 --> 00:17:22.895
+Pini Koplovitch: I would say there is even step zero to all this that I will not really talk about a lot, but it's the whole world. And this is the preprocessing or parsing, usually. Because we have PDFs.
+
+
+121
+00:17:22.995 --> 00:17:27.594
+Pini Koplovitch: We have Word documents, HTML tables, we have images.
+
+
+122
+00:17:27.715 --> 00:17:31.765
+Pini Koplovitch: empty file, And you can think of a lot of other formats, right?
+
+
+123
+00:17:32.435 --> 00:17:42.474
+Pini Koplovitch: all your favorite chatbot agents now work with PPT, or whatever. You can just upload these documents and say, oh, help me do this, do that.
+
+
+124
+00:17:42.775 --> 00:17:43.884
+Pini Koplovitch: And so on.
+
+
+125
+00:17:43.995 --> 00:17:49.985
+Pini Koplovitch: But it's not really easy. And, for instance, PDF is the quintessential example, because
+
+
+126
+00:17:50.165 --> 00:18:01.474
+Pini Koplovitch: This, apparently, when I showed it to a friend, he told me, yeah, PDF is not a format that is meant to be comfortable to read. It's a format for printers that are supposed to look pretty.
+
+
+127
+00:18:01.905 --> 00:18:06.804
+Pini Koplovitch: Okay, but it's not 3D for model, right? I don't know if you noticed, by the way, for every…
+
+
+128
+00:18:08.595 --> 00:18:27.214
+Pini Koplovitch: every technical product right now that has some sort of documentation platform, there's also a slash LLM page, something like that, that is kind of like all the documentation in Markdown style, for easier access to LLMs to process. It's something that happens automatically, usually, with the…
+
+
+129
+00:18:27.445 --> 00:18:29.864
+Pini Koplovitch: Meeting, or those kind of, platforms.
+
+
+130
+00:18:30.675 --> 00:18:37.705
+Pini Koplovitch: Not really interesting, just, a side effect. So… RCPDF is really hard.
+
+
+131
+00:18:38.005 --> 00:18:40.525
+Pini Koplovitch: 2026, and it's still a very hard cat.
+
+
+132
+00:18:43.355 --> 00:18:55.435
+Pini Koplovitch: You can use… these are popular parsers that… I know that Lama Parse is currently considered state-of-the-art in most things. Amazon Textract, if you are already using with AWS,
+
+
+133
+00:18:55.655 --> 00:18:58.105
+Pini Koplovitch: You can probably, use that.
+
+
+134
+00:18:58.305 --> 00:19:02.845
+Pini Koplovitch: It works well, from my experience, but I haven't worked with that a lot.
+
+
+135
+00:19:03.665 --> 00:19:07.995
+Pini Koplovitch: I will also start to shamelessly plug a bit of things we're doing at AI21.
+
+
+136
+00:19:08.385 --> 00:19:13.485
+Pini Koplovitch: I will ask you, what if you're not working in English? And what if your language is…
+
+
+137
+00:19:14.335 --> 00:19:21.344
+Pini Koplovitch: Right to left, instead of left to right. I know it says left to right pardon, it was light and I didn't notice that.
+
+
+138
+00:19:21.495 --> 00:19:22.665
+Pini Koplovitch: So it's outside now?
+
+
+139
+00:19:22.825 --> 00:19:30.565
+Pini Koplovitch: So, just briefly to talk about what do you bother me with that, the other way around, most parsers are…
+
+
+140
+00:19:30.945 --> 00:19:39.085
+Pini Koplovitch: really working well with Latin languages, and when you do want to work with languages such as Hebrew or Arabic.
+
+
+141
+00:19:39.465 --> 00:19:41.834
+Pini Koplovitch: It's not as optimal.
+
+
+142
+00:19:41.955 --> 00:19:55.035
+Pini Koplovitch: So, this graph just shows you a solution that we did in AI21, a really, really nice algorithm that uses images. I will not talk about it more, but in every image that you see here, there is a link.
+
+
+143
+00:19:55.245 --> 00:20:05.614
+Pini Koplovitch: So, does this have anything to do with the nature of the language, or with the amount of… The nature of the language that is right to left. Sorry?
+
+
+144
+00:20:13.625 --> 00:20:27.744
+Pini Koplovitch: No, so… it's best for Latin, like, English, Spanish, and for Chinese, they have their own, which works pretty well. Japanese, I'm not sure, but I think they are really invested, like.
+
+
+145
+00:20:27.745 --> 00:20:34.564
+Pini Koplovitch: And probably just open their, offices and stuff, so I'm guessing. This work mainly focused on Hebrew and Arabic.
+
+
+146
+00:20:35.235 --> 00:20:45.614
+Pini Koplovitch: And I don't want to, like, publish everything. If it's interesting for you, check the link, there is a blog that explains everything there.
+
+
+147
+00:20:46.625 --> 00:20:56.375
+Pini Koplovitch: Both the amount of data and the fact that they are not working very well in those type of languages.
+
+
+148
+00:20:56.635 --> 00:21:01.925
+Pini Koplovitch: Essentially, what's happening here is that we tricked the model, because what you can do is kind of, like, translate
+
+
+149
+00:21:02.095 --> 00:21:16.034
+Pini Koplovitch: maybe indent to parse, or something like that. We're tricking the model to think that this, parsing, this language is actually right to left. Left to right. What do you mean by saying they're not working very well with these images?
+
+
+150
+00:21:16.475 --> 00:21:29.685
+Pini Koplovitch: For GPT-4.0, for instance, if you just give it a file, because this is a vision model. Yeah, this is the result, but I'm trying to understand why. Do you need to, like, do you need a specific architecture to address
+
+
+151
+00:21:30.905 --> 00:21:36.435
+Pini Koplovitch: No, it's mostly the training data and how much do you train.
+
+
+152
+00:21:36.575 --> 00:21:37.395
+Pini Koplovitch: Yes.
+
+
+153
+00:21:40.275 --> 00:21:48.385
+Pini Koplovitch: Now that we covered that, and by the way, there will be a lot of places where I will say there's a link if you want to read about it, we can talk about it later, and we have to continue.
+
+
+154
+00:21:49.195 --> 00:21:52.375
+Pini Koplovitch: this is chunky, and this is, like, I think the…
+
+
+155
+00:21:53.075 --> 00:22:05.545
+Pini Koplovitch: most abstract way I could show that. Chunking, a lot of times you will see it as segmentation. There are other words that I don't remember right now. Chunking is usually the,
+
+
+156
+00:22:06.265 --> 00:22:17.444
+Pini Koplovitch: both top, use words. And this is just saying I'm gonna take my text and punch it. I'm gonna divide it into segments that I can store there
+
+
+157
+00:22:17.595 --> 00:22:19.125
+Pini Koplovitch: In some sort of database.
+
+
+158
+00:22:19.635 --> 00:22:21.664
+Pini Koplovitch: So you can see here 3 examples.
+
+
+159
+00:22:21.955 --> 00:22:22.875
+Pini Koplovitch: out.
+
+
+160
+00:22:23.225 --> 00:22:29.085
+Pini Koplovitch: And also, why do we have trunking? Well, we'll see that, we will come back to the examples after that.
+
+
+161
+00:22:29.465 --> 00:22:37.875
+Pini Koplovitch: First of all, we want to get some sort of semantic clarity, right? And here we have a question of chunk size.
+
+
+162
+00:22:39.145 --> 00:22:43.874
+Pini Koplovitch: What does it mean to have large chunk size, or a smaller chunk size?
+
+
+163
+00:22:46.205 --> 00:22:56.334
+Pini Koplovitch: Yeah, so tokens is the amount of that, but what… if I have smaller chunk size, what do I get?
+
+
+164
+00:22:56.595 --> 00:23:05.845
+Pini Koplovitch: Yeah, okay, so I'm hearing a lot of… so, first of all, smaller chunks, I'm losing, let's call it global context, or, like, the main picture context.
+
+
+165
+00:23:06.025 --> 00:23:17.044
+Pini Koplovitch: I am gaining, like, the other way around, right? I am gaining more granular context, I would say, if the chances are smaller. However, I'm enlarging the…
+
+
+166
+00:23:17.545 --> 00:23:19.165
+Pini Koplovitch: The size of my database.
+
+
+167
+00:23:19.325 --> 00:23:23.275
+Pini Koplovitch: So, this is essentially just by doing chunking.
+
+
+168
+00:23:23.635 --> 00:23:32.355
+Pini Koplovitch: Alright, I am taking big documents and chunking them into pieces, so… doesn't matter what the size is, I'm still losing the main picture. Yes?
+
+
+169
+00:23:33.405 --> 00:23:37.655
+Pini Koplovitch: Double, count it for small size, then for large size.
+
+
+170
+00:23:37.765 --> 00:23:45.595
+Pini Koplovitch: Check your, homework assignment, and then talk. Don't get it.
+
+
+171
+00:23:45.885 --> 00:23:50.285
+Pini Koplovitch: But let's talk later. But with… I literally wrote a blog about that.
+
+
+172
+00:23:50.915 --> 00:23:52.815
+Pini Koplovitch: So, we can talk about it a lot.
+
+
+173
+00:23:53.925 --> 00:24:04.125
+Pini Koplovitch: Okay, so this is for, chunking. Usually, in all systems, you put a single, single chunk, in everything.
+
+
+174
+00:24:05.035 --> 00:24:06.585
+Pini Koplovitch: Okay, we can, rank.
+
+
+175
+00:24:06.915 --> 00:24:20.024
+Pini Koplovitch: different, sorry, passages, paragraphs, maybe some… some things in documents are not… never that important, and they will just disappear somewhere in my dataset. And…
+
+
+176
+00:24:20.255 --> 00:24:27.794
+Pini Koplovitch: This allows me to be very flexible with my retrieval strategy. I can try several things, depending on the query.
+
+
+177
+00:24:29.235 --> 00:24:34.924
+Pini Koplovitch: This is example chunking. We have large chunk size.
+
+
+178
+00:24:35.205 --> 00:24:41.294
+Pini Koplovitch: As you can see, every color represents that term. Not sure how much, like, 50 shades of gray here.
+
+
+179
+00:24:41.785 --> 00:24:53.275
+Pini Koplovitch: But this is all the same gray. It seems weird on this, on this screen, but this means… this picture is supposed to say all of this is the same chunk, okay? This is a large chunk side.
+
+
+180
+00:24:53.465 --> 00:24:55.855
+Pini Koplovitch: Very limited with my,
+
+
+181
+00:24:56.545 --> 00:25:12.465
+Pini Koplovitch: PPT capabilities, I'm sorry. This is fixed chunk size. Again, I don't know if you can see it clearly, but you can see 3 different chunks, right, 3 different colors, and they all have the same amount of token.
+
+
+182
+00:25:13.245 --> 00:25:26.855
+Pini Koplovitch: And here we have adaptive chunk size, you can see here 4 chunks, right? Again, a lot of grays, 4 chunks, each of them in a different color, in the sense that each of them, it's not necessarily,
+
+
+183
+00:25:26.955 --> 00:25:27.845
+Pini Koplovitch: content.
+
+
+184
+00:25:28.295 --> 00:25:37.345
+Pini Koplovitch: Usually… How does this happen? If your changing strategy is a more semantic-based.
+
+
+185
+00:25:37.465 --> 00:25:42.124
+Pini Koplovitch: This is something that used to be… People used to research that.
+
+
+186
+00:25:42.245 --> 00:25:45.185
+Pini Koplovitch: It's not… nobody…
+
+
+187
+00:25:46.445 --> 00:25:54.955
+Pini Koplovitch: Not that I'm aware of actively talking about that. It's just an option, and I will not talk about it more. Most people just use this one.
+
+
+188
+00:25:55.135 --> 00:26:01.695
+Pini Koplovitch: But chunking in general is, is a subject that not a lot of people like to… What?
+
+
+189
+00:26:02.605 --> 00:26:08.824
+Pini Koplovitch: And it didn't… we have a clicker, but it didn't work here. If you can… if you can make it work, I will be very happy.
+
+
+190
+00:26:08.935 --> 00:26:10.984
+Pini Koplovitch: I don't know if anyone can be…
+
+
+191
+00:26:11.365 --> 00:26:16.775
+Pini Koplovitch: What do you mean, LLM tracking? Give your document to LLM and tell him to separate by subject.
+
+
+192
+00:26:17.465 --> 00:26:23.214
+Pini Koplovitch: So, again, this is kind of like adaptive chunk size, and this is…
+
+
+193
+00:26:27.745 --> 00:26:28.605
+Pini Koplovitch: stop.
+
+
+194
+00:26:28.745 --> 00:26:31.545
+Pini Koplovitch: Mark? I don't think that's been.
+
+
+195
+00:26:32.245 --> 00:26:37.524
+Pini Koplovitch: No, it was me, I haven't. We have pointers there, so it's more convenient to show.
+
+
+196
+00:26:43.275 --> 00:26:57.095
+Pini Koplovitch: explain what RAG is, but I cannot operate on plastic. Okay, so, what is better here? A fixed size is 20 feet, or just, chopping to run the point?
+
+
+197
+00:26:57.815 --> 00:27:00.254
+Pini Koplovitch: Jumping in. So, it's,
+
+
+198
+00:27:01.105 --> 00:27:17.925
+Pini Koplovitch: Essentially, you just say, in most cases, and what we'll also see in the example that we will run, you say, like, 500 tokens, and then just take the data and flash 500 windows of the, like, a sliding window of 500, usually with some overlap.
+
+
+199
+00:27:19.895 --> 00:27:26.584
+Pini Koplovitch: Okay, I'll continue, I have to run a bit, sorry.
+
+
+200
+00:27:27.245 --> 00:27:40.424
+Pini Koplovitch: So, checking. If we want to do it in a bit, level up, let's say, usually what people do is… I will say, I'm just presenting a lot of options. You can check in natural boundaries.
+
+
+201
+00:27:40.425 --> 00:27:47.375
+Pini Koplovitch: Paragraphs, sections, and so on. And a lot of the time, you can notice that maybe if,
+
+
+202
+00:27:47.935 --> 00:27:56.524
+Pini Koplovitch: if you have a title in an HTML and you want the whole section after that. Not a lot of people do that. Apparently, it's not as effective
+
+
+203
+00:27:56.525 --> 00:28:08.605
+Pini Koplovitch: for the effort, overlapping chunks. This is something that is common practice, this is something that works, so you probably… you can either say chunk size and what is the token of the overlap.
+
+
+204
+00:28:08.675 --> 00:28:15.484
+Pini Koplovitch: Or you can say 20% overlap, doesn't matter, you will still get this, right? So we have information.
+
+
+205
+00:28:15.565 --> 00:28:17.664
+Pini Koplovitch: That appears in two different chunks.
+
+
+206
+00:28:18.135 --> 00:28:32.434
+Pini Koplovitch: And you can also do data enhancement or text planting. For instance, a lot of the time, you can add some sort of a summary or some metadata to your chart. So, to do… to put, like, a…
+
+
+207
+00:28:32.435 --> 00:28:42.234
+Pini Koplovitch: two-line summary to the document, and add this to every paragraph. If you have a very large data set, this is something that sometimes people do.
+
+
+208
+00:28:42.405 --> 00:28:43.855
+Pini Koplovitch: Right? Literally.
+
+
+209
+00:28:44.315 --> 00:28:51.555
+Pini Koplovitch: So you can… there's a lot of options. You can even… you can go, like, simpler in the case of you can actually label your data.
+
+
+210
+00:28:51.695 --> 00:29:01.714
+Pini Koplovitch: Right, so you can put manual tags for every, data point that you have, and then you can say, Wendy, I want to just search in Microsoft-related.
+
+
+211
+00:29:02.135 --> 00:29:03.534
+Pini Koplovitch: Or something like that.
+
+
+212
+00:29:04.035 --> 00:29:07.415
+Pini Koplovitch: So, these are things that people do, overlapping.
+
+
+213
+00:29:07.555 --> 00:29:15.064
+Pini Koplovitch: It's common practice, this is standard. Data enhancement, it depends how big an elaborate your system is, and how much you want to invest in that.
+
+
+214
+00:29:17.755 --> 00:29:18.685
+Pini Koplovitch: Yeah.
+
+
+215
+00:29:18.875 --> 00:29:20.875
+Pini Koplovitch: And,
+
+
+216
+00:29:21.145 --> 00:29:34.625
+Pini Koplovitch: There was a question, before. I gave another, the plug on a blog that we… a work we did in AI21. Again, there's a link here, just to say that… that chunking is a place that you can still
+
+
+217
+00:29:34.625 --> 00:29:42.855
+Pini Koplovitch: research quite a bit. What you can see here is experiments that we did on smaller, datasets, just to show,
+
+
+218
+00:29:43.015 --> 00:29:48.285
+Pini Koplovitch: Potential, and we saw that if you can, if you really can't create multiple
+
+
+219
+00:29:48.435 --> 00:29:52.505
+Pini Koplovitch: Copies of your dataset, and you do multiple chunk sizes.
+
+
+220
+00:29:52.925 --> 00:30:12.544
+Pini Koplovitch: you do the search in all of them, and then combine everything to be better, you can get the orange line. So it's much higher than all the blue ones. This is what you actually see here. If it interests you, again, there's a link here, and I think it's kind of like a bonus assignment in your homework, if you want to play with it.
+
+
+221
+00:30:15.475 --> 00:30:19.285
+Pini Koplovitch: Recall. We're gonna talk about it.
+
+
+222
+00:30:19.895 --> 00:30:20.775
+Pini Koplovitch: Sorry.
+
+
+223
+00:30:22.225 --> 00:30:23.235
+Pini Koplovitch: Titan.
+
+
+224
+00:30:23.655 --> 00:30:43.565
+Pini Koplovitch: Again, we briefly talked about embedding previously, right? So, what is an embedding model? Essentially, we're taking text, and we're putting it into numbers, right? We want to represent it in some sense that will have some sort of meaning. So, this is a good embedding model.
+
+
+225
+00:30:43.985 --> 00:30:51.725
+Pini Koplovitch: But, again, very… Very, very, in a PPT style, not…
+
+
+226
+00:30:52.045 --> 00:31:04.384
+Pini Koplovitch: Can't actually see those things, and most of the time, we're talking about a lot of dimensions. But here you can see King, Queen, and prince, which are roughly related, are in a good place. Banana, fruit, and apple.
+
+
+227
+00:31:04.385 --> 00:31:13.325
+Pini Koplovitch: are also very close, so this is something good. This means that we can measure… actually capture similarity. Whereas here.
+
+
+228
+00:31:14.125 --> 00:31:25.445
+Pini Koplovitch: This is bad, right? Because Apple and queen and Prince are kind of the same… in the same place, and banana and fruit and king, we are not actually capturing similarity over there.
+
+
+229
+00:31:26.215 --> 00:31:36.375
+Pini Koplovitch: So this is what we want. This is the hope for embedding models, that things that are close in meaning will be close in this space.
+
+
+230
+00:31:36.675 --> 00:31:47.924
+Pini Koplovitch: Of course, it's not just embedding model. If I want to define what closeness is or what similarity is, I also have to give you what metric I'm using, right? What is the similarity metric?
+
+
+231
+00:31:48.565 --> 00:31:55.105
+Pini Koplovitch: The simplest one, the cosine similarity, this is what mostly is used.
+
+
+232
+00:31:55.595 --> 00:31:57.915
+Pini Koplovitch: Just because… Easier?
+
+
+233
+00:31:59.525 --> 00:32:06.855
+Pini Koplovitch: It's kind of like meaning only, you can do the dot product, which is essentially with cosine similarity, but just not normalized.
+
+
+234
+00:32:07.195 --> 00:32:14.284
+Pini Koplovitch: Euclidia and L2, I'm not sure… I haven't seen people actually use that outside of homework assignment.
+
+
+235
+00:32:15.085 --> 00:32:19.125
+Pini Koplovitch: And hybrid, which is actually interesting.
+
+
+236
+00:32:19.635 --> 00:32:32.755
+Pini Koplovitch: I will not talk about… I think you are talking a little bit about, like, TXIDF and those on, like, classical, NLP with not. Not sure, but these are, like, keyword search methods.
+
+
+237
+00:32:32.955 --> 00:32:35.374
+Pini Koplovitch: And hybrid search, a lot of the time.
+
+
+238
+00:32:35.535 --> 00:32:43.594
+Pini Koplovitch: It combines both semantic search and keyword-based search to get… sometimes there are questions that
+
+
+239
+00:32:43.985 --> 00:32:48.364
+Pini Koplovitch: the keyword search will work much better. I'll stick support for both of those.
+
+
+240
+00:32:51.065 --> 00:32:54.905
+Pini Koplovitch: Doesn't matter. I just told you everything you need to know about that, yeah.
+
+
+241
+00:32:55.325 --> 00:33:07.365
+Pini Koplovitch: Say semantic. What do you mean exactly? Does it look at the chunk of the word and say what it means in that, like, there's a model that tells you what it is, or is the cosine mathematic?
+
+
+242
+00:33:07.735 --> 00:33:10.335
+Pini Koplovitch: Second… There's a little bit more.
+
+
+243
+00:33:10.845 --> 00:33:17.554
+Pini Koplovitch: What exactly does it mean? The word semantic, or… The meaning of semantic in this kind of hybrid.
+
+
+244
+00:33:18.405 --> 00:33:23.534
+Pini Koplovitch: In hybrid? What does it mean? Semantic, it means one of the similarity metrics.
+
+
+245
+00:33:23.985 --> 00:33:27.324
+Pini Koplovitch: All of those, so keyword doesn't use the embedding.
+
+
+246
+00:33:28.165 --> 00:33:35.785
+Pini Koplovitch: Right? If I want to do keyword search, I'm just doing keyword search. When I'm saying semantic search, I'm meaning that I'm doing it in the embedding space.
+
+
+247
+00:33:35.915 --> 00:33:39.094
+Pini Koplovitch: Is it cosign, for example. Cosign, yes.
+
+
+248
+00:33:39.315 --> 00:33:41.305
+Pini Koplovitch: But, like, when I say semantic, I'm not…
+
+
+249
+00:33:41.485 --> 00:33:49.175
+Pini Koplovitch: I'm not, tying myself into one method. Yeah?
+
+
+250
+00:33:50.025 --> 00:33:53.465
+Pini Koplovitch: Question, if creating an embedding model is a supervised task.
+
+
+251
+00:33:53.895 --> 00:34:02.975
+Pini Koplovitch: I think not, but I'm… I'm not sure. I don't remember. I didn't… like, I learned about it before, but I didn't…
+
+
+252
+00:34:03.185 --> 00:34:06.414
+Pini Koplovitch: Yeah, you can train it in a different, but, like…
+
+
+253
+00:34:06.735 --> 00:34:09.335
+Pini Koplovitch: I'm not the right person to answer that, I'm sorry.
+
+
+254
+00:34:11.655 --> 00:34:16.925
+Pini Koplovitch: You've seen this picture, I'm guessing, sometimes from the popular war to death.
+
+
+255
+00:34:17.035 --> 00:34:22.914
+Pini Koplovitch: It's also a lie, and by the way, this picture, there's, like, a lot of, debates on that.
+
+
+256
+00:34:23.205 --> 00:34:34.425
+Pini Koplovitch: It's kind of a lie, but you can see here that it's not a good embedding model plus singularity metric. It can also give us
+
+
+257
+00:34:34.425 --> 00:34:45.814
+Pini Koplovitch: distances, preserve some sort of distances between king to queen and men to woman. If you want to read about it, this is not, like, they did some mathematical tricks to get this.
+
+
+258
+00:34:46.045 --> 00:34:51.885
+Pini Koplovitch: Everything is legal, everything is okay, it's just not the raw output of the… Open down here.
+
+
+259
+00:34:53.125 --> 00:34:58.634
+Pini Koplovitch: And then… After we have everything embedded, right, so every chunk
+
+
+260
+00:34:58.915 --> 00:35:02.885
+Pini Koplovitch: is a vector, now we want to store this in a vector DB.
+
+
+261
+00:35:03.095 --> 00:35:10.345
+Pini Koplovitch: What does this mean? I want to start this embedding vectors alongside the original chunks, right? Because if I want to pull this
+
+
+262
+00:35:10.585 --> 00:35:12.404
+Pini Koplovitch: But if I wanted to take this chunk.
+
+
+263
+00:35:12.815 --> 00:35:17.844
+Pini Koplovitch: In the end, I need the words for the… for the model.
+
+
+264
+00:35:17.955 --> 00:35:19.035
+Pini Koplovitch: have…
+
+
+265
+00:35:19.685 --> 00:35:37.405
+Pini Koplovitch: Doesn't matter. Sports some sort of search, whatever. ChromaDB is something that we will see today in the notebook, something, easy, in memory, also files, so it's not something, like, not a cloud or anything, it's something small people use.
+
+
+266
+00:35:37.645 --> 00:35:44.085
+Pini Koplovitch: for small systems. Pinecone, I think, is the most famous one. They're also Israeli company.
+
+
+267
+00:35:44.225 --> 00:35:47.505
+Pini Koplovitch: She's nice, wavy heads, and many more.
+
+
+268
+00:35:53.845 --> 00:35:59.204
+Pini Koplovitch: No, it doesn't matter, like, I didn't say anything interesting. Now we're gonna talk about the interesting part, which is the retrieval.
+
+
+269
+00:35:59.805 --> 00:36:12.644
+Pini Koplovitch: Yeah, this probably is the most interesting part in ROG, because we already covered everything we… most of the things we need to cover about the generation part, right? It's essentially just more concepts, prompt engineering.
+
+
+270
+00:36:13.065 --> 00:36:21.684
+Pini Koplovitch: So what? I do have a question. Yes. The embedded… embedding is tailored, or is it, like, looking at a bit at the context?
+
+
+271
+00:36:22.355 --> 00:36:41.694
+Pini Koplovitch: And so it depends on how you want to… Sorry. Is the embedding per word, or per chunk, or per whatever? You can essentially take any text and shove it into the embedding model. There is some sort of limit for the embedding model, right?
+
+
+272
+00:36:42.395 --> 00:36:48.155
+Pini Koplovitch: Every model and its limit, but you can embed, like, a word, or you can embed
+
+
+273
+00:36:48.325 --> 00:36:54.964
+Pini Koplovitch: So, like, you can…
+
+
+274
+00:36:55.455 --> 00:37:04.595
+Pini Koplovitch: you can do whatever. There's a lot of… sometimes… you can usually just take all the chunk and embed it. Sometimes…
+
+
+275
+00:37:04.725 --> 00:37:17.594
+Pini Koplovitch: People who try to research and be more smarter, like, summarize this, because you're not… if you're losing something in the embedding process, it doesn't matter, because you also have the original chunk.
+
+
+276
+00:37:17.795 --> 00:37:27.255
+Pini Koplovitch: The common practice is to just put all the change in the embedding model. Parse, it has its own problems, because if it's too big, you don't really have a lot of need.
+
+
+277
+00:37:27.515 --> 00:37:35.464
+Pini Koplovitch: Yes. How many dimensions do we have in the eye? Do I… both dimensions there, or only two dimensions?
+
+
+278
+00:37:35.535 --> 00:37:51.164
+Pini Koplovitch: What do you mean in the rug? In the… Whenever you put the vector somewhere, is that the only 2-3 dimensions in the space? No, no, it's, like, 700, 500, or thousands. This is a, like, a PCA…
+
+
+279
+00:37:51.225 --> 00:37:56.454
+Pini Koplovitch: For presentation. And how do we know, like, how does the modular know…
+
+
+280
+00:37:56.825 --> 00:37:59.815
+Pini Koplovitch: How to, like, create the embedding.
+
+
+281
+00:38:00.035 --> 00:38:11.724
+Pini Koplovitch: what's the vector? It's based really on me, so it knows the language. So, if you're talking about how to train an embedding model. Like I said, I'm not really an expert on that.
+
+
+282
+00:38:13.305 --> 00:38:23.325
+Pini Koplovitch: So, I'm just assuming that I have a good embedding model, which I suggest you to do the same, and there's not… there's not a lot of gain to actually train an embedding model on your own.
+
+
+283
+00:38:24.275 --> 00:38:34.124
+Pini Koplovitch: Okay, so retrieval. Again, the interesting part, I would say, of this talk, where what we have is we want to convert a query to embedding.
+
+
+284
+00:38:34.365 --> 00:38:41.524
+Pini Koplovitch: Right? And then want to compare it to all the stored vectors, and we want to return the top K most
+
+
+285
+00:38:41.745 --> 00:38:42.855
+Pini Koplovitch: Similar chunk.
+
+
+286
+00:38:42.925 --> 00:39:01.264
+Pini Koplovitch: Not to be confused with top K we talked about two weeks ago, or month… whenever we talked about the first lecture, we said top K, not the same. That one no longer exists, I think, in most models, isn't. This is the top K that we actually care about. The top K chunks, the top K segments.
+
+
+287
+00:39:01.335 --> 00:39:03.225
+Pini Koplovitch: TopK document.
+
+
+288
+00:39:03.425 --> 00:39:11.524
+Pini Koplovitch: And we need to remember that garbage retrieval is garbage generation. Garbage in, garbage out is true for everything, and also here.
+
+
+289
+00:39:14.095 --> 00:39:24.664
+Pini Koplovitch: Some words that we need to understand, tough shape, how many chunks do we retrieve? Similarity metrics? Again, we have the cosine, dot product, L2,
+
+
+290
+00:39:24.845 --> 00:39:29.385
+Pini Koplovitch: I want to play with… I… this is not the place that I would start chaining, like, the…
+
+
+291
+00:39:29.645 --> 00:39:39.435
+Pini Koplovitch: the metric, the chunk size, and metadata filtering. So we can save the date of every document, the source, where it came from, and so on.
+
+
+292
+00:39:39.545 --> 00:39:46.764
+Pini Koplovitch: I will also say, in this day and age where we're talking a lot about the models have longer contacts.
+
+
+293
+00:39:46.935 --> 00:39:55.674
+Pini Koplovitch: And we kind of don't want to fall into problems with retrieval. A lot of the time, what actually happens is that
+
+
+294
+00:39:56.365 --> 00:40:03.045
+Pini Koplovitch: You do retrieve chunks, But in the process, you… when you retrieve a chunk.
+
+
+295
+00:40:03.175 --> 00:40:12.855
+Pini Koplovitch: instead of just giving the chunk as a prompt, you give the entire document. So, you're saving… instead of saving all the… just the chunk, you're saving the source
+
+
+296
+00:40:12.975 --> 00:40:20.365
+Pini Koplovitch: the source document. And then, when you're doing the… right, when you do the retrieval, instead of getting chunked.
+
+
+297
+00:40:20.485 --> 00:40:23.804
+Pini Koplovitch: For every chunk that you retrieve, you're actually getting the entire document.
+
+
+298
+00:40:24.435 --> 00:40:27.394
+Pini Koplovitch: So, this is something that happens a lot.
+
+
+299
+00:40:28.255 --> 00:40:30.225
+Pini Koplovitch: Big systems, at least.
+
+
+300
+00:40:31.525 --> 00:40:32.305
+Pini Koplovitch: Definitely.
+
+
+301
+00:40:36.655 --> 00:40:42.874
+Pini Koplovitch: Sorry, yeah, I… Sorry, I'm sorry if it wasn't clear, I will talk about it more.
+
+
+302
+00:40:43.185 --> 00:40:47.685
+Pini Koplovitch: failure mode for retrieval. Again, this is essentially a search problem.
+
+
+303
+00:40:47.875 --> 00:40:51.975
+Pini Koplovitch: And search problems are not easy, these are not things that…
+
+
+304
+00:40:52.225 --> 00:40:58.715
+Pini Koplovitch: Really? These are not things that are easy to solve, and this is actually a lot of the problems that we have in RAD systems.
+
+
+305
+00:40:58.905 --> 00:41:04.244
+Pini Koplovitch: So, maybe the relevant stock isn't retrieved, right? This is a problem that can,
+
+
+306
+00:41:04.914 --> 00:41:10.675
+Pini Koplovitch: Maybe the retrieved docs that came back are noisy or irrelevant.
+
+
+307
+00:41:11.025 --> 00:41:14.474
+Pini Koplovitch: This can happen together, or just one of them.
+
+
+308
+00:41:15.204 --> 00:41:18.975
+Pini Koplovitch: The context may be missing, because the chunk is too small.
+
+
+309
+00:41:19.265 --> 00:41:20.145
+Pini Koplovitch: Oh.
+
+
+310
+00:41:20.485 --> 00:41:40.135
+Pini Koplovitch: like relevant doc not retrieved, but it's a more delicate case in the sense that I did retrieve something which is relevant, but I needed more from the beginning, or from the end, or something like that. For instance, for missing context chunks too small, a solution will be, for every chunk, retrieve the entire document the chunk came from.
+
+
+311
+00:41:41.735 --> 00:41:47.475
+Pini Koplovitch: I hope it was clearer and not there. And wrong ranking order.
+
+
+312
+00:41:47.895 --> 00:41:58.595
+Pini Koplovitch: Okay, so if you think about it, right, the model itself can give me, like, the 100 documents from the doc product, and then I'm choosing the top K, top 5 ones.
+
+
+313
+00:41:58.935 --> 00:42:04.974
+Pini Koplovitch: Maybe the right document was place 90, or place 80, or something like that.
+
+
+314
+00:42:05.375 --> 00:42:09.695
+Pini Koplovitch: There's also a solution for that that a lot of the time people use.
+
+
+315
+00:42:11.125 --> 00:42:15.254
+Pini Koplovitch: Yes. Technically, how to happen with the LLM?
+
+
+316
+00:42:16.125 --> 00:42:25.464
+Pini Koplovitch: stops in the middle, you turn, and then use a tool to get… to retrieve the data? What if, so, you mean how does…
+
+
+317
+00:42:25.585 --> 00:42:39.934
+Pini Koplovitch: So, it may be… maybe it was a mistake to put this place, though, in the beginning, so maybe let's walk through the process again. That's a good question, and thank you for that. Sorry? Repeat your question?
+
+
+318
+00:42:40.715 --> 00:42:41.395
+Pini Koplovitch: have…
+
+
+319
+00:42:42.095 --> 00:42:50.114
+Pini Koplovitch: The question was something… wasn't… something that wasn't clear, and I hope that this will answer to it, and then I will ask the question again.
+
+
+320
+00:42:50.245 --> 00:42:52.465
+Pini Koplovitch: Oh, sorry?
+
+
+321
+00:42:52.785 --> 00:43:00.325
+Pini Koplovitch: Yeah, it's just, like, a very simplistic, image. So, we have a question from the user. We're asking.
+
+
+322
+00:43:02.455 --> 00:43:06.334
+Pini Koplovitch: We have a question from the user. We're asking our system.
+
+
+323
+00:43:06.535 --> 00:43:13.514
+Pini Koplovitch: Let's pretend that the question is phrased correctly and everything is cool. We're converting
+
+
+324
+00:43:13.655 --> 00:43:17.465
+Pini Koplovitch: There's… what we're seeing here, by the way, is just retrieval and generation.
+
+
+325
+00:43:17.885 --> 00:43:27.475
+Pini Koplovitch: We're converting this question, this query, into an embedding. This is the retrieval part, it happens over there. It is searched.
+
+
+326
+00:43:27.665 --> 00:43:29.584
+Pini Koplovitch: in the vector DB.
+
+
+327
+00:43:30.025 --> 00:43:32.255
+Pini Koplovitch: Relevant document, relevant chunk.
+
+
+328
+00:43:32.435 --> 00:43:33.275
+Pini Koplovitch: back.
+
+
+329
+00:43:33.415 --> 00:43:40.504
+Pini Koplovitch: This is the retrieval part. Boom, you can see here, question plus relevant document. Up until here, this was the retrieval part.
+
+
+330
+00:43:40.795 --> 00:43:49.804
+Pini Koplovitch: And then, from this question and relevant documents, I'm building a prompt, I'm putting it into the model, and this is the augmented generation part.
+
+
+331
+00:43:50.475 --> 00:43:54.914
+Pini Koplovitch: This makes sense? Yeah, thank you. It was, missing there. One time.
+
+
+332
+00:43:55.085 --> 00:44:02.895
+Pini Koplovitch: So, this is an example of a one-time question. Yes, every time, like, if you want to ask more questions.
+
+
+333
+00:44:02.995 --> 00:44:20.014
+Pini Koplovitch: You just have to give another query. LLM won't come back and say, this information will get more. The LLM to the… No, no, if this was an agent, or, like, a more complex system, you can say, do I have all the information that I need?
+
+
+334
+00:44:20.455 --> 00:44:27.054
+Pini Koplovitch: Hmm, no? What should I do? Let's go to Rack. But we're much, we're much simpler today.
+
+
+335
+00:44:28.365 --> 00:44:44.964
+Pini Koplovitch: Yes? Search is without LLM, it's just a… Search is without LLM? Usually without LLM. You can… everything you can do with LLMs today, you shouldn't do everything with LLMs, but you can, and search is not a… not a component.
+
+
+336
+00:44:47.315 --> 00:44:48.605
+Pini Koplovitch: Are we?
+
+
+337
+00:44:48.935 --> 00:44:53.434
+Pini Koplovitch: But I'm supposed to give you a short break right now, but are we okay? Can we do a few more minutes?
+
+
+338
+00:44:55.145 --> 00:44:58.265
+Pini Koplovitch: Alright, cool. How do we measure retrieval?
+
+
+339
+00:44:58.765 --> 00:45:05.174
+Pini Koplovitch: So, as you can see here, this is from a blog… a research blog that Databricks released.
+
+
+340
+00:45:05.355 --> 00:45:14.835
+Pini Koplovitch: About a year ago, I just really like what you can see here. On the left, Databricks, FinanceBench, NQ, Hotpot. You can see these are names of data sets.
+
+
+341
+00:45:15.455 --> 00:45:17.664
+Pini Koplovitch: At Recall at K.
+
+
+342
+00:45:18.445 --> 00:45:32.074
+Pini Koplovitch: In this case, right, we talked about recall as a classification problem. What does it mean, recall for… sorry, for retrieval? It means that in this data set.
+
+
+343
+00:45:32.415 --> 00:45:38.354
+Pini Koplovitch: I have ground truth, and the ground truths are… is what are the relevant chunks?
+
+
+344
+00:45:39.125 --> 00:45:42.385
+Pini Koplovitch: And the grand truth here for this type of,
+
+
+345
+00:45:42.955 --> 00:45:48.594
+Pini Koplovitch: for this type of benchmark is not the answer, is I have a question in a lot of chunks.
+
+
+346
+00:45:48.805 --> 00:45:54.444
+Pini Koplovitch: And the grand truth is, what are the relevant chunks that the retrieval engine had to return?
+
+
+347
+00:45:54.865 --> 00:45:56.035
+Pini Koplovitch: Is this clear?
+
+
+348
+00:45:56.195 --> 00:45:59.685
+Pini Koplovitch: Yes, I will repeat it again.
+
+
+349
+00:45:59.865 --> 00:46:09.695
+Pini Koplovitch: Okay? The data set that we're seeing here for retrieval problems is not question and answers. We have a question.
+
+
+350
+00:46:10.095 --> 00:46:18.124
+Pini Koplovitch: Set of documents, and the ground truth, or the golden document, are the documents that the model needs to return.
+
+
+351
+00:46:18.365 --> 00:46:23.225
+Pini Koplovitch: You selected, like, 5 documents, and if you didn't receive them… Yes.
+
+
+352
+00:46:23.545 --> 00:46:34.275
+Pini Koplovitch: So usually, like, if it's a very, very small problem, you can say that one document is relevant, right? Maybe some of them. For instance, Hotpot QA, Hotspot is,
+
+
+353
+00:46:35.075 --> 00:46:53.185
+Pini Koplovitch: Don't remember, it's like a hot pot. The thing about this dataset, for instance, is that you need, for every question, you need several sources to answer, so this is something which is nicer. And recall, if recall is 1, it means that the model, the retrieval engine, returns all the relevant documents.
+
+
+354
+00:46:54.515 --> 00:47:00.864
+Pini Koplovitch: But… Sorry, we're not measuring precision here, okay? Any questions about what is recall?
+
+
+355
+00:47:01.125 --> 00:47:03.735
+Pini Koplovitch: Not future questions, just about what is recall.
+
+
+356
+00:47:04.165 --> 00:47:19.344
+Pini Koplovitch: Great. Yes, yes. You're labeled for each query which documents? Yes, which are the documents. Because you're supposed to be able to do it for any query.
+
+
+357
+00:47:19.705 --> 00:47:31.345
+Pini Koplovitch: I have a dataset that includes, like, let's say 10,000… 10,000 documents. Okay. For every query, I have the 1, 2, 3, 5 whatever documents that is needed to answer this query.
+
+
+358
+00:47:32.115 --> 00:47:48.814
+Pini Koplovitch: Let's talk about it later. And this is what you can see here. Of course, higher is better, and you can see above is a retrieved chunk. So, if the top K was just 1, I only retrieved one chunk, 5, and the 1, and this is the context length.
+
+
+359
+00:47:49.075 --> 00:47:53.704
+Pini Koplovitch: So… Obviously, what you expect is that the longer
+
+
+360
+00:47:54.275 --> 00:48:00.334
+Pini Koplovitch: Alright, the longer the context, right, the more documents I retrieve, the recall will be higher.
+
+
+361
+00:48:00.455 --> 00:48:07.695
+Pini Koplovitch: Because I have more options to return, right? I'm not measuring precision. I just don't want to miss any of the documents.
+
+
+362
+00:48:08.175 --> 00:48:09.684
+Pini Koplovitch: Is this clear?
+
+
+363
+00:48:09.825 --> 00:48:25.174
+Pini Koplovitch: recall is probably the only important measurement for retrieval. The entire database? No, context length is the sum of the chunks. But the length of the… basically, the entire knowledge base.
+
+
+364
+00:48:25.585 --> 00:48:33.085
+Pini Koplovitch: No, no, no, these are the chunks that the model retrieved. Every one of those datasets has, like, thousands or tens of thousands of documents.
+
+
+365
+00:48:33.915 --> 00:48:39.284
+Pini Koplovitch: If… it says here, if the… because every chunk here is, let's say, something like 500,
+
+
+366
+00:48:39.385 --> 00:48:50.055
+Pini Koplovitch: I know, every chunk is around 2K, 1K tokens, so if it retrieves one chunk, this is the size of the context that you will send to the LLM for the generation, and so on.
+
+
+367
+00:48:50.115 --> 00:49:00.874
+Pini Koplovitch: But just go to that, look at the retrieved chunks, and you can see here that, obviously, when we have retrieving more chunks, the recall is higher, right, because I'm retrieving more chunks.
+
+
+368
+00:49:01.365 --> 00:49:06.755
+Pini Koplovitch: And what's interesting to see here is that at some point, you get some sort of situation.
+
+
+369
+00:49:07.455 --> 00:49:12.475
+Pini Koplovitch: And you can say that… look, we're not even talking about generation, right? But…
+
+
+370
+00:49:13.095 --> 00:49:17.895
+Pini Koplovitch: What we're saying here is that just optimizing for recall is not enough.
+
+
+371
+00:49:18.015 --> 00:49:35.995
+Pini Koplovitch: This is usually the main metric when we talk about retrieval, but when you actually build it in the… in practice, you can't only build for recall, because then your context plan will be very, very big, and there's a lot of trash inside there, right? There's something like, I don't know.
+
+
+372
+00:49:36.305 --> 00:49:43.074
+Pini Koplovitch: You can see here, for instance, that the natural question, from 13, you always get it right, because it's an easier data set.
+
+
+373
+00:49:43.455 --> 00:49:44.675
+Pini Koplovitch: So…
+
+
+374
+00:49:46.115 --> 00:50:03.795
+Pini Koplovitch: Sorry? So really, you shouldn't always just enlarge it, even though the recall is better. This blog, by the way, was to promote the concept of, long context is good for models, it's not rug versus long context, it's rug plus long context.
+
+
+375
+00:50:03.885 --> 00:50:11.725
+Pini Koplovitch: That's the reason for the… The model basically takes all the chunks, folks holding this test? Yes.
+
+
+376
+00:50:12.075 --> 00:50:21.554
+Pini Koplovitch: Now, if I retrieve all the chunks, I will get… Just take everything. Yes, but this is… this is… this is just that. Like, so I… I will get a very, very high star in retrieval. That's not true.
+
+
+377
+00:50:21.935 --> 00:50:35.934
+Pini Koplovitch: It's nothing, yes, but that's the thing, like, but 13, for instance, is a very reliable number. Even 20, like, you can… you don't always do it with, like, 5. This is something for homework, usually.
+
+
+378
+00:50:37.195 --> 00:50:39.855
+Pini Koplovitch: Oh, and only recall matters, so…
+
+
+379
+00:50:40.335 --> 00:50:51.025
+Pini Koplovitch: It talks a lot. What you can see here, same graph, but this is the average answer correctness, meaning for the entire system. And you can see that even though the recall improved in all of them.
+
+
+380
+00:50:51.425 --> 00:51:01.265
+Pini Koplovitch: This is not the case for all the models. I don't want… I'm not going to get into this at all right now, but you can just say that when you actually measure the entire system.
+
+
+381
+00:51:01.825 --> 00:51:06.714
+Pini Koplovitch: Increasing the amount of chance didn't work for all models.
+
+
+382
+00:51:06.975 --> 00:51:08.494
+Pini Koplovitch: That's all I wanted to say.
+
+
+383
+00:51:11.825 --> 00:51:29.504
+Pini Koplovitch: let's just finish the retrieval part, and then we'll give you the break. So, Retrieval++ is kind of like a way of me saying how you can improve your retrieval. So, you can do hybrid search, we've briefly mentioned that. R-ranking. What does this mean to do a re-ranking? It means that the…
+
+
+384
+00:51:29.575 --> 00:51:32.935
+Pini Koplovitch: In my search, the retriever provides
+
+
+385
+00:51:33.085 --> 00:51:50.684
+Pini Koplovitch: let's say 100 chunks, and top K says which one I want to take, and they're our orders. I can say, well, now I have an easier problem, and a re-ranker essentially takes the… whatever the retriever's outputs, let's say 100 chunks, and re-rank them.
+
+
+386
+00:51:50.865 --> 00:51:58.204
+Pini Koplovitch: just on that. We have the query, and this 100 chunks, and then just do re-ranking on these again. And this improves
+
+
+387
+00:51:58.375 --> 00:52:11.835
+Pini Koplovitch: a lot of the… Is this on the query? Yes, the query and the… you get the query and the top chunks from the retriever, and do… just change the ranking.
+
+
+388
+00:52:12.025 --> 00:52:16.655
+Pini Koplovitch: Cohere, I think, have the best known model that we rank her.
+
+
+389
+00:52:16.815 --> 00:52:22.055
+Pini Koplovitch: Very small model, doesn't have a lot of latency. A lot of the time, it improves the system.
+
+
+390
+00:52:22.435 --> 00:52:41.714
+Pini Koplovitch: Multi-hop retrievers, so you can retrieve, expand, retrieve again, don't want to get into this. Neighbor expansion, every time you're adding the… you're retrieving a chunk, you're also retrieving its neighbors, if you're putting metadata of the location. And multi-query retrieval, so ask multiple variants of the query.
+
+
+391
+00:52:41.875 --> 00:52:46.144
+Pini Koplovitch: Again, another option, I will not go into any of these.
+
+
+392
+00:52:46.905 --> 00:52:55.134
+Pini Koplovitch: Let's take a break, and then go back to step 4 generation. 6.45, and we're here.
+
+
+393
+00:53:00.845 --> 00:53:05.525
+Pini Koplovitch: Okay.
+
+
+394
+00:53:31.545 --> 00:53:32.235
+Pini Koplovitch: P?
+
+
+395
+00:53:46.385 --> 00:53:48.085
+Pini Koplovitch: Happy shows!
+
+
+396
+00:54:10.075 --> 00:54:17.365
+Pini Koplovitch: Okay?
+
+
+397
+00:54:18.135 --> 00:54:22.465
+Pini Koplovitch: There's a social relationship.
+
+
+398
+00:55:12.455 --> 00:55:15.334
+Pini Koplovitch: Nick, I got her document at the bottom.
+
+
+399
+00:55:15.615 --> 00:55:16.565
+Pini Koplovitch: Back in the movie.
+
+
+400
+00:55:52.915 --> 00:55:54.384
+Pini Koplovitch: We know that the Lord.
+
+
+401
+00:55:56.545 --> 00:55:56.944
+Pini Koplovitch: woman…
+
+
+402
+00:56:19.075 --> 00:56:20.325
+Pini Koplovitch: Yes, of course.
+
+
+403
+00:57:00.015 --> 00:57:01.335
+Pini Koplovitch: Presentation?
+
+
+404
+00:57:18.355 --> 00:57:51.215
+Pini Koplovitch: asce… in the wrong drinking powder, or… Patrick, then…
+
+
+405
+00:58:05.245 --> 00:58:20.685
+Pini Koplovitch: assemble, se…
+
+
+406
+00:58:47.665 --> 00:58:56.455
+Pini Koplovitch: Still debugging.
+
+
+407
+00:59:02.365 --> 00:59:03.565
+Pini Koplovitch: Without mine.
+
+
+408
+00:59:04.135 --> 00:59:12.395
+Pini Koplovitch: If any of the eye is, noisy a lot.
+
+
+409
+00:59:13.785 --> 00:59:33.424
+Pini Koplovitch: a ideology.
+
+
+410
+00:59:52.685 --> 00:59:54.415
+Pini Koplovitch: Valiant Agency authentic.
+
+
+411
+00:59:55.135 --> 01:00:02.244
+Pini Koplovitch: Yeah, most are very different.
+
+
+412
+01:00:13.695 --> 01:00:33.415
+Pini Koplovitch: Sheila.
+
+
+413
+01:01:05.205 --> 01:01:07.125
+Pini Koplovitch: A chaux?
+
+
+414
+01:01:07.305 --> 01:01:10.075
+Pini Koplovitch: insurance, additional partnership.
+
+
+415
+01:01:10.205 --> 01:01:15.005
+Pini Koplovitch: Shalla, give us a thousand?
+
+
+416
+01:01:30.575 --> 01:01:31.555
+Pini Koplovitch: the product.
+
+
+417
+01:01:50.585 --> 01:01:56.965
+Pini Koplovitch: from the search bar, that will, the search internet for Canyon.
+
+
+418
+01:02:15.095 --> 01:02:16.195
+Pini Koplovitch: About it.
+
+
+419
+01:02:17.775 --> 01:02:18.985
+Pini Koplovitch: That's alive.
+
+
+420
+01:02:31.625 --> 01:02:47.855
+Pini Koplovitch: I ain't… Have the contextualization, or… In addition to the market.
+
+
+421
+01:03:33.455 --> 01:03:34.425
+Pini Koplovitch: I'm out.
+
+
+422
+01:03:44.135 --> 01:03:46.815
+Pini Koplovitch: I… I understand that.
+
+
+423
+01:03:58.955 --> 01:03:59.904
+Pini Koplovitch: Got it, bye.
+
+
+424
+01:04:00.755 --> 01:04:04.954
+Pini Koplovitch: Where… It's… Not all about 8 times.
+
+
+425
+01:04:05.735 --> 01:04:06.615
+Pini Koplovitch: Nope.
+
+
+426
+01:04:18.205 --> 01:04:19.354
+Pini Koplovitch: Here's a discussion.
+
+
+427
+01:04:27.925 --> 01:04:28.835
+Pini Koplovitch: Okay.
+
+
+428
+01:04:38.045 --> 01:04:38.895
+Pini Koplovitch: Awesome.
+
+
+429
+01:04:47.325 --> 01:04:48.285
+Pini Koplovitch: Not bad.
+
+
+430
+01:04:58.565 --> 01:04:59.295
+Pini Koplovitch: I agree.
+
+
+431
+01:05:02.235 --> 01:05:03.505
+Pini Koplovitch: Got it, that's fine.
+
+
+432
+01:05:13.595 --> 01:05:15.355
+Pini Koplovitch: It's important.
+
+
+433
+01:05:17.515 --> 01:05:25.274
+Pini Koplovitch: There is, I'm usually more… more handled with text, but there are embedding models of some sort for images.
+
+
+434
+01:05:25.975 --> 01:05:36.494
+Pini Koplovitch: you can do from the images themselves, or you can use DLMs to extract some text from there. Then, it depends on your query, is it an image, or is it a text?
+
+
+435
+01:05:36.665 --> 01:05:42.624
+Pini Koplovitch: If your query is a text, then you'll probably want to either use a VLM for that.
+
+
+436
+01:05:42.905 --> 01:05:49.075
+Pini Koplovitch: Asian language model to either extract tags from photo, or…
+
+
+437
+01:05:51.025 --> 01:06:08.975
+Pini Koplovitch: Probably, but probably, but I would… there are… there are measurements… No, there are also, metrics for similarity features. I'm more an LMC guy myself, so I'm not the right…
+
+
+438
+01:06:09.185 --> 01:06:19.195
+Pini Koplovitch: want to answer, I would… it depends on… find your problem first, then… because if you just want to search images, there are metrics that could be installed.
+
+
+439
+01:06:22.515 --> 01:06:23.905
+Pini Koplovitch: That's unclear.
+
+
+440
+01:06:24.065 --> 01:06:34.815
+Pini Koplovitch: It really depends on what the query is, and then there are several, sorry, I wasn't there. The concept of ROG is…
+
+
+441
+01:06:35.415 --> 01:06:41.174
+Pini Koplovitch: We'll do it for everything. The fund is just to retrieve that information that you need for the album.
+
+
+442
+01:07:41.065 --> 01:07:43.895
+Pini Koplovitch: Let's get started!
+
+
+443
+01:07:44.675 --> 01:07:45.455
+Pini Koplovitch: Lisa!
+
+
+444
+01:07:46.525 --> 01:07:53.365
+Pini Koplovitch: Have some mercy for me. I did a lot of videos today, and I don't have a lot of voice right now.
+
+
+445
+01:07:54.995 --> 01:08:00.564
+Pini Koplovitch: I would appreciate if you can continue your talks via WhatsApp or something, the technologies do exist.
+
+
+446
+01:08:04.375 --> 01:08:07.124
+Pini Koplovitch: Just talking, talking, talking all day.
+
+
+447
+01:08:07.865 --> 01:08:21.744
+Pini Koplovitch: Okay, generation. So, what is generation? And I want to… generation is kind of like the prompting part, right? I have context, I need to build the prompts for that, so it's a query plus the retrieved chunks.
+
+
+448
+01:08:21.855 --> 01:08:26.574
+Pini Koplovitch: Probably in some format, maybe you want to add something to that, maybe done.
+
+
+449
+01:08:27.065 --> 01:08:39.774
+Pini Koplovitch: and the prompt template to inject the context, and the LLM will generate, hopefully, a grounded end. What is grounded? It means it's based only on the context. Yeah? This is helpful.
+
+
+450
+01:08:40.405 --> 01:08:43.364
+Pini Koplovitch: And prompting here, do matter.
+
+
+451
+01:08:43.855 --> 01:08:51.644
+Pini Koplovitch: again, more in the con… more in the context of context engineering, rather than prompt engineering. This is more…
+
+
+452
+01:08:51.735 --> 01:09:05.685
+Pini Koplovitch: here is still in the part of the world where ROG is a simple system where everything is small and contained. In the real world right now, we know that there's a lot of agents and, like, sub-agents for everything, but
+
+
+453
+01:09:05.835 --> 01:09:11.884
+Pini Koplovitch: Even so, it's still important. So, you have to say, answer only based on the context, in some
+
+
+454
+01:09:11.925 --> 01:09:25.905
+Pini Koplovitch: sort of the way. Site sources, if you want, you can see that in a lot of places, you want the model to say, this is based on this chunk, this source, whatever. It mainly helps to increase
+
+
+455
+01:09:26.005 --> 01:09:28.015
+Pini Koplovitch: And, it's…
+
+
+456
+01:09:28.285 --> 01:09:43.115
+Pini Koplovitch: sorry, the credibility for those models and people that are using, and also it's easier to keep up and understand what's the problem, and how do you handle, missing info, right? Remember, we talked in context engineering, and we said.
+
+
+457
+01:09:43.175 --> 01:09:50.294
+Pini Koplovitch: Let the model say whatever it needs to say. If the answer is not in the context, it's better to give it.
+
+
+458
+01:09:51.445 --> 01:09:57.075
+Pini Koplovitch: Table gives you facts, problems, decide how they're used. A lot of one-liners in this thing.
+
+
+459
+01:09:58.015 --> 01:10:03.594
+Pini Koplovitch: The uncommon failures that we have. It can either ignore the retrieved context.
+
+
+460
+01:10:03.915 --> 01:10:17.105
+Pini Koplovitch: some sort of hallucinations that happen. A lot of the times, by the way, if we combine both of them, you sometimes can see an option where, and it happens a lot in data set.
+
+
+461
+01:10:17.395 --> 01:10:34.754
+Pini Koplovitch: that you can actually get a right answer to the question, but if you closely look, you will see that the retrieval sucked, none of the docs were actually containing the word, and the LLM just knew it from general knowledge or something like that.
+
+
+462
+01:10:35.095 --> 01:10:42.254
+Pini Koplovitch: These are things that can happen. These are the worst bodies possible, because you have two wrongs that made a right.
+
+
+463
+01:10:42.565 --> 01:11:02.325
+Pini Koplovitch: But it's not good. Like, it's meta-right in this case, but it just shows that a lot of your system is correct. So that's a problem. You can sometimes over-rely on one chunk, a lot of the time it depends on the order, and doesn't synthesize across chunks.
+
+
+464
+01:11:02.505 --> 01:11:03.755
+Pini Koplovitch: Kind of the same thing.
+
+
+465
+01:11:07.025 --> 01:11:14.994
+Pini Koplovitch: And Generation++, and just some words, as we covered most of it, is to better prompt the structure
+
+
+466
+01:11:15.235 --> 01:11:29.455
+Pini Koplovitch: Add some sort of requirements for citations or whatever, system instructions for grounding, all of this, and post-processing, this is kind of like a system aspect of it, not really the model itself.
+
+
+467
+01:11:30.285 --> 01:11:37.284
+Pini Koplovitch: The retrieval, getting the right information, generation, using it correctly. Obviously, if the retrieval failure.
+
+
+468
+01:11:37.475 --> 01:11:52.184
+Pini Koplovitch: So, this is on me, this is wrong. If the retrieval fails, doesn't necessarily mean that generation will fail, it means the entire system will fail. In this case, actually, if the retrieval failed, how will we measure a success in generation?
+
+
+469
+01:11:53.525 --> 01:12:04.884
+Pini Koplovitch: I don't know. I don't know, and surrounding context, whatever, right? This is a… so, you can have a successful generation with failure and retrieval, still fail over the entire system.
+
+
+470
+01:12:07.765 --> 01:12:12.525
+Pini Koplovitch: Let's code a little bit, and… Yes, of course.
+
+
+471
+01:12:12.815 --> 01:12:18.894
+Pini Koplovitch: validation, I thumb, my questions, it will…
+
+
+472
+01:12:19.215 --> 01:12:28.694
+Pini Koplovitch: Yes, of course, of course. It should be part of my validation. Totally, and this is the easiest question?
+
+
+473
+01:12:28.695 --> 01:12:29.725
+Pini Koplovitch: Oh!
+
+
+474
+01:12:29.725 --> 01:12:48.785
+Pini Koplovitch: Sorry, repeating the question. Should we include in the… if we want to evaluate the RAG system, should we include in the data set examples where the question is not anywhere in the data? Well, the answer, sorry, is nowhere in the data, and the answer is yes. Obviously, in this case.
+
+
+475
+01:12:48.875 --> 01:12:54.294
+Pini Koplovitch: These type of examples, you can't really test retrieval on them, it will always fail.
+
+
+476
+01:12:54.635 --> 01:12:58.184
+Pini Koplovitch: Right? Or it will always succeed, essentially, depends on how you…
+
+
+477
+01:12:58.585 --> 01:13:15.094
+Pini Koplovitch: how you build this dataset, but yes, this is an aspect where every time you talk about grounding, this is the easiest part to test. You have to test both the fact that it doesn't answer questions that it doesn't have the answer to, and also that all the answers that you give based on the context, which is
+
+
+478
+01:13:15.455 --> 01:13:21.045
+Pini Koplovitch: A bit more tricky, again, we're using an LLM for that most of the time, but… yeah.
+
+
+479
+01:13:24.575 --> 01:13:36.715
+Pini Koplovitch: So, I will not actually run the code. Finney, did you upload the notebooks for them, or… Yeah, okay. Sorry, I just don't… ill… like, I'm struggling with Google Classroom for some reason.
+
+
+480
+01:13:36.875 --> 01:13:40.084
+Pini Koplovitch: You do have those notebooks yourself,
+
+
+481
+01:13:40.225 --> 01:13:52.414
+Pini Koplovitch: I can run them, but I ran them before, and they work. Just let's briefly go through them to see it in code. Do you see it? Okay, or should I enlarge it a bit?
+
+
+482
+01:13:54.095 --> 01:13:56.215
+Pini Koplovitch: This is okay?
+
+
+483
+01:13:59.235 --> 01:14:03.354
+Pini Koplovitch: Hopefully, this is a good one. So, we have some installation, nobody cares.
+
+
+484
+01:14:03.725 --> 01:14:06.884
+Pini Koplovitch: Clearly, nobody cares, right? We have errors here, and it'll work.
+
+
+485
+01:14:07.315 --> 01:14:09.945
+Pini Koplovitch: More installation.
+
+
+486
+01:14:10.105 --> 01:14:24.264
+Pini Koplovitch: you ASAP thingy errors. I ran it several times, of course. Navius API key, you've seen how to get it from the Nebius AI token factory.
+
+
+487
+01:14:24.555 --> 01:14:35.974
+Pini Koplovitch: This is the base URL. Embedding models, just use something there, I don't even remember which model is it, and this is Lama 3.1 instruct.
+
+
+488
+01:14:36.225 --> 01:14:37.344
+Pini Koplovitch: Doesn't really matter.
+
+
+489
+01:14:37.465 --> 01:14:42.835
+Pini Koplovitch: Open the client, we're loading a document, okay? This is just a random…
+
+
+490
+01:14:43.155 --> 01:14:49.595
+Pini Koplovitch: document that I found. This is not what you will have Homework assignment?
+
+
+491
+01:14:50.015 --> 01:14:52.005
+Pini Koplovitch: Okay, it looks something like this.
+
+
+492
+01:14:52.705 --> 01:14:54.065
+Pini Koplovitch: Okay, you can see.
+
+
+493
+01:14:54.335 --> 01:14:57.365
+Pini Koplovitch: blah, blah… Error.
+
+
+494
+01:14:59.755 --> 01:15:00.435
+Pini Koplovitch: Yes.
+
+
+495
+01:15:00.885 --> 01:15:17.615
+Pini Koplovitch: And here, we're using something called PyPDF. It's a PDF crawler of Python. In your homework, we're not doing the parsing thing, you're getting an actual data set, so you don't have to, but you can play with whatever you want there.
+
+
+496
+01:15:17.715 --> 01:15:26.314
+Pini Koplovitch: And… and just parsing, parsing, doesn't matter. And you can see here, printing the first 500 characters, and it looks something like this.
+
+
+497
+01:15:28.475 --> 01:15:39.384
+Pini Koplovitch: a mess, right? Like I said, parsing… this is naive parsing. Obviously, there are parsers that will do it better, but it's still a mess. Like, even just look at the…
+
+
+498
+01:15:43.125 --> 01:15:46.324
+Pini Koplovitch: How do you parse this thing, right? Or…
+
+
+499
+01:15:47.445 --> 01:15:54.515
+Pini Koplovitch: And use the vision language model. You can use the vision language model, though it still doesn't work as well.
+
+
+500
+01:15:54.815 --> 01:16:01.865
+Pini Koplovitch: Actually, the worst part of PDF is actually tables. I'm really looking for one here.
+
+
+501
+01:16:02.095 --> 01:16:10.934
+Pini Koplovitch: Don't think that I have one. Oh, here! It's a really good example. This is shit for, for this type of models, because you have, like, a lot of…
+
+
+502
+01:16:11.315 --> 01:16:16.255
+Pini Koplovitch: Like, this is a title, and more columns, and so on.
+
+
+503
+01:16:16.735 --> 01:16:19.525
+Pini Koplovitch: This is driving them crazy, all the models, so…
+
+
+504
+01:16:19.775 --> 01:16:22.444
+Pini Koplovitch: Be minded when you are parsing.
+
+
+505
+01:16:22.875 --> 01:16:39.204
+Pini Koplovitch: make sure that this part also works. A lot of the time, it's easy to overlook it, because when you have a dataset or those type of things, you usually don't do this part. So, make sure that if you parse real documents, you're actually looking ahead.
+
+
+506
+01:16:39.205 --> 01:16:44.694
+Pini Koplovitch: ChatGPT is not an LLM, right?
+
+
+507
+01:16:44.845 --> 01:16:48.214
+Pini Koplovitch: What ChatGPT is? It's a product.
+
+
+508
+01:16:48.515 --> 01:16:50.615
+Pini Koplovitch: That's my, catchphrase, apparently.
+
+
+509
+01:16:50.715 --> 01:16:56.855
+Pini Koplovitch: Do you know that if you go to the model and you ask it to give you your, X, like, your name's razor.
+
+
+510
+01:16:56.985 --> 01:17:03.004
+Pini Koplovitch: like Occam's razor, you can ask it for Yuval's razor, based on everything it knows.
+
+
+511
+01:17:03.225 --> 01:17:11.094
+Pini Koplovitch: It's really nice. I think it says that I am a no-bullshit kind of guy, or something like that. Like, if you can do it simply, just do it simply, or something.
+
+
+512
+01:17:11.365 --> 01:17:16.664
+Pini Koplovitch: Which is, like, everything that I teach is just that, don't do any aging.
+
+
+513
+01:17:18.535 --> 01:17:37.604
+Pini Koplovitch: Okay, let's see chunking, and like I said, this is stupidest code ever. Usually, we'll probably just call llamaindex and say llamaindex or lengthen, say, chunk size this, and chunk everything, but this is nice to see that, right? So, this is all the text, we're cleaning up the white spaces from the parser.
+
+
+514
+01:17:37.685 --> 01:17:47.125
+Pini Koplovitch: And splitting them to, sentences, and then you can see we're just… so here we're not cutting the sentence, okay?
+
+
+515
+01:17:48.985 --> 01:18:06.234
+Pini Koplovitch: not… this is not… not every chunker is like this. Make sure that you read, if you care, not all the time you'll actually care. But here we will not split mid-sentences, so at least that. So every sentence, just add it to the chunk, if it's smaller or equal to the chunk size.
+
+
+516
+01:18:06.645 --> 01:18:13.955
+Pini Koplovitch: just junky. They're very… ugly small loop. If there's overlap, Give me the…
+
+
+517
+01:18:14.115 --> 01:18:18.475
+Pini Koplovitch: Number of overlap from before for that, start again, blah blah blah.
+
+
+518
+01:18:19.155 --> 01:18:22.184
+Pini Koplovitch: You can say this was just a text.
+
+
+519
+01:18:22.395 --> 01:18:39.665
+Pini Koplovitch: return all the chunks in a list, and this is very, very small, so usually this happens with embedding and then storing as well. Now I can just return everything, but if I have a very large dataset, to return everything in a list will not be very small.
+
+
+520
+01:18:40.065 --> 01:18:45.994
+Pini Koplovitch: So here are raw tags, chunk size is 400 tokens here, overlap is 80 tokens.
+
+
+521
+01:18:47.105 --> 01:18:59.154
+Pini Koplovitch: And you can see here from the… from this document alone, I have 356 total chunks, where the average chunk size is 341, meaning that the sentences are pretty long.
+
+
+522
+01:18:59.565 --> 01:19:03.795
+Pini Koplovitch: Here's an example for John, Global Energy Review, blah blah blah.
+
+
+523
+01:19:04.085 --> 01:19:16.214
+Pini Koplovitch: Another example for a chunk. You have all this code, play with it if you want, or not, because you already need to do it for your homework assignment, so you will do something with the… with chunks anyway.
+
+
+524
+01:19:16.755 --> 01:19:20.814
+Pini Koplovitch: Now embedding. You can see I'm choosing an embedding model.
+
+
+525
+01:19:21.045 --> 01:19:25.625
+Pini Koplovitch: Alright, we're doing it in batches just for…
+
+
+526
+01:19:25.995 --> 01:19:31.974
+Pini Koplovitch: Maybe for efficiency, and again, just a loop, Get out of dimension.
+
+
+527
+01:19:32.805 --> 01:19:33.665
+Pini Koplovitch: Sorry?
+
+
+528
+01:19:34.155 --> 01:19:35.614
+Pini Koplovitch: I don't know how many dimensions?
+
+
+529
+01:19:36.675 --> 01:19:41.235
+Pini Koplovitch: That they mentioned is… Determined by the model, the embedding model that you're using.
+
+
+530
+01:19:41.905 --> 01:19:50.065
+Pini Koplovitch: So, does it matter? If you have more dimensions, you can have more information, so… Have a…
+
+
+531
+01:19:50.285 --> 01:19:57.565
+Pini Koplovitch: Yeah, usually they're under, like, the… There's the usual Saturday.
+
+
+532
+01:19:57.715 --> 01:20:08.785
+Pini Koplovitch: There's ADA, Boken AI, E5, or T5, I can't remember. I think E5 is that KFGR. There are several that people usually use. Yes? Is there any relation?
+
+
+533
+01:20:08.785 --> 01:20:18.235
+Pini Koplovitch: They don't have to be related. Some work better with others? So, there are…
+
+
+534
+01:20:18.275 --> 01:20:20.575
+Pini Koplovitch: There used to be, like, some…
+
+
+535
+01:20:21.865 --> 01:20:25.354
+Pini Koplovitch: It doesn't really matter, right? Because… Is that fun?
+
+
+536
+01:20:25.525 --> 01:20:34.195
+Pini Koplovitch: it doesn't matter, because the LLM for the generation will get text, not get the embedding, so…
+
+
+537
+01:20:34.325 --> 01:20:37.654
+Pini Koplovitch: Like, it doesn't matter, it's just important to use
+
+
+538
+01:20:37.915 --> 01:20:45.164
+Pini Koplovitch: for the retrieval, to use the embedded model that you used for the indexing part. This is important, but the rest doesn't matter, right?
+
+
+539
+01:20:45.355 --> 01:20:47.955
+Pini Koplovitch: Same thing. Are we at all focusing?
+
+
+540
+01:20:48.175 --> 01:20:49.875
+Pini Koplovitch: Don't she best followers?
+
+
+541
+01:20:50.885 --> 01:20:52.905
+Pini Koplovitch: Not in my model.
+
+
+542
+01:20:53.485 --> 01:20:55.264
+Pini Koplovitch: I don't know about the other model.
+
+
+543
+01:20:55.495 --> 01:21:00.174
+Pini Koplovitch: So, are there any non-model architectures for…
+
+
+544
+01:21:00.355 --> 01:21:07.905
+Pini Koplovitch: stuff that is not using any model under the host.
+
+
+545
+01:21:08.525 --> 01:21:18.865
+Pini Koplovitch: Currently, you can use keywords if you want. There's… and again, a lot of the times, the hybrid search still works, but it works better with keywords and semantic search.
+
+
+546
+01:21:19.475 --> 01:21:21.585
+Pini Koplovitch: have… I'm…
+
+
+547
+01:21:22.395 --> 01:21:29.604
+Pini Koplovitch: not sure if there are, like… I know there are other classic methods, I'm not very familiar with them.
+
+
+548
+01:21:29.775 --> 01:21:31.985
+Pini Koplovitch: The state-of-the-art or embedding one.
+
+
+549
+01:21:32.545 --> 01:21:34.555
+Pini Koplovitch: For those type of tasks, yes.
+
+
+550
+01:21:35.415 --> 01:21:55.004
+Pini Koplovitch: Is there a place where you can, like, check what is the, like, leading indexing model? Embedding model. Yes, there is a… MTEB is a… sorry, if you really like embedding for some reason, usually I'm just saying embedding and nobody cares. MTEB is a very known…
+
+
+551
+01:21:55.715 --> 01:22:02.534
+Pini Koplovitch: Benchmark? Benchmark for, there's a leaderboard. I think… maybe AmTech is also a leaderboard.
+
+
+552
+01:22:03.235 --> 01:22:08.655
+Pini Koplovitch: That is MTEV. This is the main one. There are others.
+
+
+553
+01:22:08.945 --> 01:22:13.785
+Pini Koplovitch: You can search for embedding, embedding daily aboard.
+
+
+554
+01:22:15.085 --> 01:22:17.814
+Pini Koplovitch: And you can see here, I'm just taking text.
+
+
+555
+01:22:18.045 --> 01:22:20.225
+Pini Koplovitch: And putting in the embedding room.
+
+
+556
+01:22:20.605 --> 01:22:25.575
+Pini Koplovitch: mapping… Either right, I'm just taking a tag, I'm getting a vector in return.
+
+
+557
+01:22:25.905 --> 01:22:31.674
+Pini Koplovitch: So you can see here, we embedded 356 chunks, and each embedding has
+
+
+558
+01:22:31.895 --> 01:22:43.985
+Pini Koplovitch: 4,096 dimensions. So every vector in the embedding space, this is the dimension, it is determined by the embedding model that we showed. Sorry? It's keyboard?
+
+
+559
+01:22:44.285 --> 01:22:50.704
+Pini Koplovitch: No, I don't know, Matt. I mean, I mean, it's both work…
+
+
+560
+01:22:51.775 --> 01:22:58.714
+Pini Koplovitch: I don't know what is that. It looks, like, very, like, heavy. More than that.
+
+
+561
+01:22:59.345 --> 01:23:10.215
+Pini Koplovitch: Don't talk to me about those type of optimizations. You have, like, an actual, imprint, when a staff will come. Ask him about all those integers and stuff. He will,
+
+
+562
+01:23:10.215 --> 01:23:20.185
+Pini Koplovitch: He will gladly, talk about those things. I honestly don't care. Like, I'm… if it's… if we have a memory problem.
+
+
+563
+01:23:20.235 --> 01:23:22.594
+Pini Koplovitch: this type of thing, I have the… I have a guide.
+
+
+564
+01:23:22.995 --> 01:23:34.604
+Pini Koplovitch: So, pharma, again, this is the database. Just calling an API is not interesting. And then retrieval. So this is maybe the interesting part, right? So, I'm taking the…
+
+
+565
+01:23:35.205 --> 01:23:44.394
+Pini Koplovitch: I'm taking the query that I have, and I embed it. So, query embedding, I'm just putting it through the embedded text. So, at this point, I have
+
+
+566
+01:23:44.675 --> 01:23:50.154
+Pini Koplovitch: the question or the query that I have from the system, and it's now in the embedding space.
+
+
+567
+01:23:50.465 --> 01:23:56.514
+Pini Koplovitch: And then I'm just… Yeah, checking the… sorry, the distance between them.
+
+
+568
+01:23:56.715 --> 01:23:58.945
+Pini Koplovitch: Again, ugly code.
+
+
+569
+01:23:59.165 --> 01:24:03.874
+Pini Koplovitch: And appending… sorry, the actual, dock to that.
+
+
+570
+01:24:05.425 --> 01:24:09.185
+Pini Koplovitch: Like, the dock here is the junk, because we only have one dock.
+
+
+571
+01:24:09.675 --> 01:24:19.534
+Pini Koplovitch: And that's the retrieval, and you can see, for instance, the query, how much is its renewable energy capacity grow in 2024? Just calling it with, let's say, top K is 3.
+
+
+572
+01:24:20.195 --> 01:24:26.184
+Pini Koplovitch: And you can see here, rank, similarity, rank 2, similarity, rank 3, similarity.
+
+
+573
+01:24:27.575 --> 01:24:30.335
+Pini Koplovitch: This is just to check the material part.
+
+
+574
+01:24:30.745 --> 01:24:35.864
+Pini Koplovitch: And then you can… sorry. What does the similarity score tell us?
+
+
+575
+01:24:36.755 --> 01:24:48.564
+Pini Koplovitch: How much is the answer similar to the query? Nothing. It tells us nothing. No, really, what does this number even mean? 0.7. Who cares?
+
+
+576
+01:24:51.345 --> 01:25:05.285
+Pini Koplovitch: Like, obviously, yeah, obviously, yeah, this is… like, sure, quote me the definition, sure. This number doesn't… we don't really care. If you actually want to debug this and see what happens, you want to print maybe the top 10,
+
+
+577
+01:25:05.285 --> 01:25:12.724
+Pini Koplovitch: which I could have done if I would actually run everything, but I don't have the time right now. And then see, because the difference right now is very, very small.
+
+
+578
+01:25:12.805 --> 01:25:15.424
+Pini Koplovitch: Oh, it's very, very big, we don't really know, right?
+
+
+579
+01:25:15.505 --> 01:25:31.095
+Pini Koplovitch: 0873967381 to 7317. If the next one will have a similarity score of 0.6, for instance, then it means that, okay, these are probably very, very relevant. If all of them have very
+
+
+580
+01:25:31.195 --> 01:25:38.625
+Pini Koplovitch: close values. It probably means that either they're all relevant, or my system is not as good.
+
+
+581
+01:25:39.225 --> 01:25:53.104
+Pini Koplovitch: This is what I meant when I asked what this number is things are. All of you who quoted the definition were also correct. Why is this query a question? Because you're looking for similarity, but you're never going to find the same question in the text.
+
+
+582
+01:25:53.425 --> 01:25:57.294
+Pini Koplovitch: Does it make sense to formulate using a new context? So…
+
+
+583
+01:25:57.525 --> 01:26:02.165
+Pini Koplovitch: when I do similarity, or semantic search, it doesn't matter
+
+
+584
+01:26:02.545 --> 01:26:11.275
+Pini Koplovitch: kind of, like, catches the essence, or the semantics of the question, right? Otherwise, I would just ask, we just look for,
+
+
+585
+01:26:11.475 --> 01:26:12.535
+Pini Koplovitch: Keywords.
+
+
+586
+01:26:15.715 --> 01:26:34.624
+Pini Koplovitch: What we have is the same model that did embedding? Yes. So it needs to understand the question, or it just chunks the… There is no… there is no understanding in any… No, it's chunking. It just takes… no, no chunking. Takes the query, turns it into a vector, and then…
+
+
+587
+01:26:34.675 --> 01:26:40.925
+Pini Koplovitch: now it lives in the space with all the other charts. Now we can test similarity on them.
+
+
+588
+01:26:43.275 --> 01:27:01.545
+Pini Koplovitch: This part, by the way, is like the… like, the retrieval part, computational-wise, is very fast. All I have there, I'm just converting text into, like, I'm putting it inside an embedding model, which is very, very fast, usually a very small model, and then I have the dot product of two matrices.
+
+
+589
+01:27:01.665 --> 01:27:05.425
+Pini Koplovitch: And then it just returned the result. So there's not…
+
+
+590
+01:27:05.735 --> 01:27:10.314
+Pini Koplovitch: This is not the place, usually, where we will have a problem with latency.
+
+
+591
+01:27:11.875 --> 01:27:14.235
+Pini Koplovitch: Now, generation…
+
+
+592
+01:27:14.465 --> 01:27:23.225
+Pini Koplovitch: I wanted to repeat, maybe, because I didn't understand your answer. So, the point, the how and the much that these book…
+
+
+593
+01:27:23.345 --> 01:27:40.384
+Pini Koplovitch: Question words. They're useless in the… So, the question was, why… why is the query the same as the question? What does this mean, useless? We're not thinking here about keywords, we're thinking about meaning. And how and much are very, very important to the meaning of the sentence.
+
+
+594
+01:27:40.435 --> 01:27:43.654
+Pini Koplovitch: Right, I'm asking a question here, it has some sort of a meaning.
+
+
+595
+01:27:45.155 --> 01:27:48.634
+Pini Koplovitch: Would… You will not actually find…
+
+
+596
+01:27:48.805 --> 01:28:06.174
+Pini Koplovitch: clear-cut answer to, is it better to do this or that. What you can find, there are some researchers that show that, oh, questions versus the take that, do some sort of rephrasing, and test this query, but all this information, all those findings, will still be true
+
+
+597
+01:28:06.175 --> 01:28:09.824
+Pini Koplovitch: For the dataset that they worked on, and the models that they used.
+
+
+598
+01:28:09.955 --> 01:28:15.295
+Pini Koplovitch: Generalization is not… As easy in this field.
+
+
+599
+01:28:15.315 --> 01:28:22.514
+Pini Koplovitch: Usually. But yeah, with question, it usually works well. If you say that you have a problem with the retriever.
+
+
+600
+01:28:22.515 --> 01:28:38.254
+Pini Koplovitch: the first thing I would do is to switch the embedding model, to add more metadata, those kind of things, and only then to try different strategies of retrieval, so increase the top K, and then maybe rephrase the
+
+
+601
+01:28:38.675 --> 01:28:40.734
+Pini Koplovitch: Sorry, rephrase the, the query.
+
+
+602
+01:28:41.185 --> 01:28:45.445
+Pini Koplovitch: And, given this chunk, which patients it could answer.
+
+
+603
+01:28:45.865 --> 01:28:49.045
+Pini Koplovitch: Given this… This is a…
+
+
+604
+01:28:49.365 --> 01:29:05.894
+Pini Koplovitch: This is something that you can… This is something you can create if you want to do synthetic data set to test… No, I mean, I mean adding them to metadata so that, it's… they better match against the question.
+
+
+605
+01:29:06.125 --> 01:29:14.925
+Pini Koplovitch: It's not… again, you don't need question and question to get good matches in retrieval. It doesn't work like that. It's supposed to capture
+
+
+606
+01:29:15.185 --> 01:29:21.495
+Pini Koplovitch: meaning in numbers. They say there's a lot of weird steps there, and it doesn't work like weekly.
+
+
+607
+01:29:21.675 --> 01:29:24.225
+Pini Koplovitch: And, like, oh, let's just remove the… the…
+
+
+608
+01:29:24.655 --> 01:29:29.134
+Pini Koplovitch: Although the words, it doesn't really say anything. It doesn't capture information.
+
+
+609
+01:29:29.485 --> 01:29:31.534
+Pini Koplovitch: Do capture some sort of information.
+
+
+610
+01:29:31.635 --> 01:29:33.574
+Pini Koplovitch: So… icky.
+
+
+611
+01:29:33.715 --> 01:29:36.994
+Pini Koplovitch: I won't think it's wise to think about
+
+
+612
+01:29:37.295 --> 01:29:39.955
+Pini Koplovitch: Semantic search as keyword search.
+
+
+613
+01:29:41.275 --> 01:29:42.755
+Pini Koplovitch: Prolonged, perhaps.
+
+
+614
+01:29:42.955 --> 01:29:49.214
+Pini Koplovitch: The user has two different questions in the same temples, about the weather and about holidays.
+
+
+615
+01:29:51.715 --> 01:29:52.744
+Pini Koplovitch: Who knows?
+
+
+616
+01:29:53.645 --> 01:30:00.705
+Pini Koplovitch: Like I said, this is not trash from the… It may be trash, it may handle, it may bring a lot of the…
+
+
+617
+01:30:01.705 --> 01:30:04.914
+Pini Koplovitch: Why this depression?
+
+
+618
+01:30:06.065 --> 01:30:12.315
+Pini Koplovitch: Probably the divide. So the question was, if there were several questions in the query, should we still
+
+
+619
+01:30:13.445 --> 01:30:31.275
+Pini Koplovitch: Should we still send it to the model? If there are several questions, and you see that the model doesn't handle this well, probably want to separate it to different questions. Again, this is a very simplistic case. Usually, if you have an agent at the beginning that breaks the questions, it will
+
+
+620
+01:30:31.275 --> 01:30:34.924
+Pini Koplovitch: And break it itself to multiple queries.
+
+
+621
+01:30:35.505 --> 01:30:41.034
+Pini Koplovitch: Because, yes, it will not work very well with, with multiple questions, usually.
+
+
+622
+01:30:42.025 --> 01:30:48.535
+Pini Koplovitch: Okay, building the front… Not very interesting, I'm just concatenating the chunk.
+
+
+623
+01:30:49.265 --> 01:30:55.065
+Pini Koplovitch: Have some sort of a template here, answer the following question, use it all in the provided context, blah blah blah blah.
+
+
+624
+01:30:55.325 --> 01:31:03.134
+Pini Koplovitch: Blah blah, generating, retrieval, prompt, Fry it, and then…
+
+
+625
+01:31:03.415 --> 01:31:12.474
+Pini Koplovitch: This is that, that, according to the context, renewable energy, blah blah blah. What you can see, by the way, the fact that it starts with according to the context.
+
+
+626
+01:31:12.765 --> 01:31:19.504
+Pini Koplovitch: will probably hint to you that this model was trained on grounding as well.
+
+
+627
+01:31:20.075 --> 01:31:25.235
+Pini Koplovitch: This is just a callback for last lecture, doesn't really matter.
+
+
+628
+01:31:26.015 --> 01:31:32.045
+Pini Koplovitch: And here, I provided some other questions, which you can try, enjoy, have some fun.
+
+
+629
+01:31:32.785 --> 01:31:35.874
+Pini Koplovitch: And I will go back to the lecture, because
+
+
+630
+01:31:37.195 --> 01:31:39.934
+Pini Koplovitch: I'm really stepping, through time here.
+
+
+631
+01:31:41.745 --> 01:31:46.385
+Pini Koplovitch: Let's skip the multimeter for now, let's just do it like this.
+
+
+632
+01:31:46.645 --> 01:31:58.125
+Pini Koplovitch: Okay, I'm reading the question, think about it. You're chunking a 200-page legal contract. Sentence-level chunks, or one, two sentences, each give poor retrieval result.
+
+
+633
+01:31:58.225 --> 01:32:00.125
+Pini Koplovitch: What's the most likely reason?
+
+
+634
+01:32:00.525 --> 01:32:03.575
+Pini Koplovitch: A, the embedding model doesn't support legal text.
+
+
+635
+01:32:03.975 --> 01:32:15.965
+Pini Koplovitch: B, individual sentences lack enough context to produce meaningful embedding. C, the vector database that can't handle that many chunks, or D, sentence chunking always outperform paragraph chunking.
+
+
+636
+01:32:20.425 --> 01:32:21.215
+Pini Koplovitch: around.
+
+
+637
+01:32:21.835 --> 01:32:26.135
+Pini Koplovitch: I guess I don't even have to go through the question, and it was very overwhelming.
+
+
+638
+01:32:26.505 --> 01:32:34.555
+Pini Koplovitch: Question 2. Your RAD pipeline returns the right document, meaning I recall, but the answer still misses key information.
+
+
+639
+01:32:34.775 --> 01:32:36.765
+Pini Koplovitch: What should you check first?
+
+
+640
+01:32:37.855 --> 01:32:40.784
+Pini Koplovitch: A. Increase the embedding model dimension.
+
+
+641
+01:32:42.005 --> 01:32:42.765
+Pini Koplovitch: Or…
+
+
+642
+01:32:42.985 --> 01:32:51.904
+Pini Koplovitch: to use a different type of embedding model. B. The chunk boundaries, relevant information may be split across two chunks.
+
+
+643
+01:32:52.105 --> 01:32:57.415
+Pini Koplovitch: D, switch to a larger LLM, or D, add a more document to the index.
+
+
+644
+01:33:01.255 --> 01:33:03.255
+Pini Koplovitch: Okay, so…
+
+
+645
+01:33:03.505 --> 01:33:09.825
+Pini Koplovitch: So we're saying that the pipeline returns the right documents, high recall, but the editor, missing key information.
+
+
+646
+01:33:10.005 --> 01:33:17.965
+Pini Koplovitch: So, then, like, the… here is the chunk of boundaries. I would say that, by the way, C is also something I would check.
+
+
+647
+01:33:18.075 --> 01:33:20.074
+Pini Koplovitch: It really depends. I would… okay.
+
+
+648
+01:33:20.345 --> 01:33:33.415
+Pini Koplovitch: This is really good that I'm not writing an exam for you, because this is a shit question, but let's just go through that. Increase the embedding mode I mentioned, you don't have a problem with retrieval, right? That's what we have a problem here, is…
+
+
+649
+01:33:33.975 --> 01:33:45.344
+Pini Koplovitch: the way we measure retrieval, I would say. In this case, you can talk about both B and C. What I would actually check first is to see what… why are we retrieving?
+
+
+650
+01:33:45.475 --> 01:33:46.754
+Pini Koplovitch: Are we…
+
+
+651
+01:33:47.205 --> 01:34:03.114
+Pini Koplovitch: we're getting good results, but is this the actual information that we need to answer the question? If the answer is yes, then we probably need to switch to another model. But the chunk boundaries, the relevant information may be split across two chunks. This is what…
+
+
+652
+01:34:04.315 --> 01:34:15.695
+Pini Koplovitch: But I would accept both of them, but really, the answer that should be here is check the retrieval process, the chunks themselves, if they are enough to answer to the question.
+
+
+653
+01:34:15.695 --> 01:34:25.624
+Pini Koplovitch: then you have a problem with the generation. If not, then you have either a problem with the way that you're evaluating your retrieval, or in the champion process.
+
+
+654
+01:34:25.785 --> 01:34:27.514
+Pini Koplovitch: So I would accept both of them.
+
+
+655
+01:34:27.875 --> 01:34:33.874
+Pini Koplovitch: Yes. Is the answer based on the charts, or the whole document that…
+
+
+656
+01:34:33.975 --> 01:34:41.375
+Pini Koplovitch: So, it depends on which strategy you use here, right? In this case, we are just… we're putting the chunks in the prompt.
+
+
+657
+01:34:41.995 --> 01:34:54.984
+Pini Koplovitch: If… I would say, if that… if I would use, like, the bigger method of, for every chunk that I retrieve, I retrieve the entire document the chunk is taken from, then B is not relevant.
+
+
+658
+01:34:55.355 --> 01:34:56.275
+Pini Koplovitch: Right?
+
+
+659
+01:34:56.565 --> 01:34:58.145
+Pini Koplovitch: So, in this case.
+
+
+660
+01:34:58.325 --> 01:35:03.254
+Pini Koplovitch: Okay, so you may want to try that instead, or enlarge this, or something like that.
+
+
+661
+01:35:03.365 --> 01:35:08.585
+Pini Koplovitch: It really depends, and if this was a question in the exam, all of you would get the point. Yes?
+
+
+662
+01:35:09.485 --> 01:35:15.725
+Pini Koplovitch: And also, would you like… with that…
+
+
+663
+01:35:16.195 --> 01:35:22.165
+Pini Koplovitch: The thing is that we're getting high score in the recall. Essentially, what the situation that we're seeing here is that
+
+
+664
+01:35:22.415 --> 01:35:30.655
+Pini Koplovitch: we are really, really good in the retrieval process. Yeah, but we get, like, all the right chunks, plus 99% damage.
+
+
+665
+01:35:31.375 --> 01:35:32.515
+Pini Koplovitch: Thank you, sir.
+
+
+666
+01:35:33.165 --> 01:35:45.624
+Pini Koplovitch: That's an option. You see, the question here is, like, what should you check first? But even if the generation sucks, too many chunks, you mean the top K is too much. Like, we're using… yeah,
+
+
+667
+01:35:46.085 --> 01:35:48.735
+Pini Koplovitch: Yeah, also something we want to check. Yes?
+
+
+668
+01:35:48.995 --> 01:36:02.574
+Pini Koplovitch: Correct. Yes, so I'm… I'm doing what I always swear I will not do, and I'm doing a lot of the misuse for terms.
+
+
+669
+01:36:02.875 --> 01:36:07.295
+Pini Koplovitch: I'm calling docs both chant and document when it's convenient for me.
+
+
+670
+01:36:07.515 --> 01:36:09.495
+Pini Koplovitch: And not when it's clear for you.
+
+
+671
+01:36:10.035 --> 01:36:18.564
+Pini Koplovitch: I'm sorry. It happened a lot. I'm sorry for all the other questions. I do need to continue.
+
+
+672
+01:36:22.885 --> 01:36:24.135
+Pini Koplovitch: Naturally.
+
+
+673
+01:36:24.295 --> 01:36:41.684
+Pini Koplovitch: So we'll do this fast, and then we'll go to a break. We'll probably, not finish the entire lecture today, and that's okay. I will just, continue, we'll just take it to another, time. Probably was a good thing that I… like, this was…
+
+
+674
+01:36:42.365 --> 01:36:45.495
+Pini Koplovitch: 60% of what I was intending to do today.
+
+
+675
+01:36:45.685 --> 01:36:47.484
+Pini Koplovitch: Like, this entire presentation.
+
+
+676
+01:36:47.755 --> 01:37:04.835
+Pini Koplovitch: So maybe it was a good thing that I, removed. RAG alternatives, really, really fast. Long context windows, right? We said that RAG is essentially, how do I get the right context? But what if I could just shove everything to the model and let the model handle this? Well, if models are strong enough.
+
+
+677
+01:37:04.945 --> 01:37:07.594
+Pini Koplovitch: it will work, however…
+
+
+678
+01:37:07.955 --> 01:37:14.164
+Pini Koplovitch: Not all models are actually strong enough. There are… we've seen these problems before, we talked about it, and it's expensive.
+
+
+679
+01:37:14.295 --> 01:37:15.645
+Pini Koplovitch: It takes a lot of time.
+
+
+680
+01:37:16.135 --> 01:37:19.184
+Pini Koplovitch: Domain fine-tuning, we talked about it.
+
+
+681
+01:37:19.545 --> 01:37:25.044
+Pini Koplovitch: I'm not gonna go through that again, because I talked about it way too much in the beginning. You have the table, feel free to look it up.
+
+
+682
+01:37:25.805 --> 01:37:35.855
+Pini Koplovitch: frameworks, what would you usually do? Langchain is probably the most used. Lama Index started as a rugby.
+
+
+683
+01:37:36.025 --> 01:37:54.234
+Pini Koplovitch: framework. It's now more known for parsing. This is their differentiator. I'm not sure how many people actually use Lao Index for RAD and not for parsing. OpenAI Retrieval. You can actually do RAD through OpenAI, Vertex, if you're Google.
+
+
+684
+01:37:54.415 --> 01:38:03.135
+Pini Koplovitch: I'm not sure if Nebius have a native RAG framework, but I'm guessing that they will soon.
+
+
+685
+01:38:03.555 --> 01:38:17.465
+Pini Koplovitch: Now, I have no information about that, and I also don't know if they're buying AI21. If anybody knows, please tell me. I only read something, and this guy won't tell me anything.
+
+
+686
+01:38:19.335 --> 01:38:28.135
+Pini Koplovitch: Did you miss it? You know, I actually did an entire presentation on, like, for Chief AI officers of what
+
+
+687
+01:38:28.225 --> 01:38:39.754
+Pini Koplovitch: 4 hours of technical terms, and in all the evaluation slides, they put this Nescafe image just on the side, and at the end, someone says that I didn't understand why you had a Nescafe image there.
+
+
+688
+01:38:41.475 --> 01:38:48.715
+Pini Koplovitch: Nobody understood the joke? Who's that, Doc?
+
+
+689
+01:38:48.835 --> 01:38:50.085
+Pini Koplovitch: You understood?
+
+
+690
+01:38:50.815 --> 01:38:55.534
+Pini Koplovitch: So one person from AI21 also understood that. There was,
+
+
+691
+01:38:55.635 --> 01:38:59.065
+Pini Koplovitch: Gold. So, there was a…
+
+
+692
+01:38:59.185 --> 01:39:17.114
+Pini Koplovitch: I'm actually embarrassed to tell you how much I delved into it. There was a commercial when I was young, somewhere in the 90s, where a man made a woman lots of coffee or something, and then she drinks from it, and then the anchor says, is it really that good? And she's like, hmm, yeah.
+
+
+693
+01:39:17.245 --> 01:39:25.095
+Pini Koplovitch: And I've watched endless commercials, I looked it up in every chatbot, like, what is the source of that?
+
+
+694
+01:39:25.385 --> 01:39:39.514
+Pini Koplovitch: And I got… I've seen a lot of commercials, neither of them was this, but at least another… two more people, not you, know that this happened, so I did not invent it. This is kind of like my Easter egg. Nobody really supposed to understand that.
+
+
+695
+01:39:39.525 --> 01:39:49.534
+Pini Koplovitch: Let's take 10 minutes. 7.30 will start, and we're going to talk about evaluating practices.
+
+
+696
+01:39:53.525 --> 01:39:56.774
+Pini Koplovitch: Thank you, Franny, for that. That's best album, I think.
+
+
+697
+01:41:35.555 --> 01:41:37.055
+Pini Koplovitch: Oh.
+
+
+698
+01:41:47.405 --> 01:41:49.504
+Pini Koplovitch: Oh, I can't hear…
+
+
+699
+01:41:56.325 --> 01:41:57.794
+Pini Koplovitch: What's fine, babe.
+
+
+700
+01:42:22.075 --> 01:42:23.564
+Pini Koplovitch: Oh, this is the competition.
+
+
+701
+01:42:23.755 --> 01:42:25.125
+Pini Koplovitch: Box.
+
+
+702
+01:42:32.645 --> 01:42:33.465
+Pini Koplovitch: Whoa.
+
+
+703
+01:42:33.985 --> 01:42:37.324
+Pini Koplovitch: That's my head.
+
+
+704
+01:42:40.135 --> 01:42:40.995
+Pini Koplovitch: book.
+
+
+705
+01:43:05.795 --> 01:43:06.595
+Pini Koplovitch: Okay.
+
+
+706
+01:43:40.835 --> 01:43:41.915
+Pini Koplovitch: Cashew.
+
+
+707
+01:43:48.705 --> 01:43:50.655
+Pini Koplovitch: Oh, not dish.
+
+
+708
+01:44:03.125 --> 01:44:08.714
+Pini Koplovitch: Actually, you said that, that wasn't a much.
+
+
+709
+01:44:16.575 --> 01:44:26.104
+Pini Koplovitch: Yeah, basic. They call it that, basic.
+
+
+710
+01:44:35.085 --> 01:44:37.505
+Pini Koplovitch: What is that?
+
+
+711
+01:44:39.475 --> 01:44:49.145
+Pini Koplovitch: I'll call there.
+
+
+712
+01:44:49.885 --> 01:44:51.195
+Pini Koplovitch: I don't know, really.
+
+
+713
+01:45:12.965 --> 01:45:14.555
+Pini Koplovitch: To be signing through it.
+
+
+714
+01:45:50.465 --> 01:45:53.165
+Pini Koplovitch: Depending on how much?
+
+
+715
+01:45:53.895 --> 01:45:56.975
+Pini Koplovitch: What type of motion?
+
+
+716
+01:46:30.025 --> 01:46:32.885
+Pini Koplovitch: Can't become a Jibetania.
+
+
+717
+01:46:53.945 --> 01:46:55.775
+Pini Koplovitch: Okay?
+
+
+718
+01:46:56.375 --> 01:46:57.855
+Pini Koplovitch: Oh yeah, 10.
+
+
+719
+01:47:07.375 --> 01:47:10.485
+Pini Koplovitch: Welcome back to my…
+
+
+720
+01:47:25.495 --> 01:47:40.914
+Pini Koplovitch: No, yeah, the law…
+
+
+721
+01:47:47.645 --> 01:47:48.555
+Pini Koplovitch: leadership.
+
+
+722
+01:47:49.495 --> 01:47:52.704
+Pini Koplovitch: Oh, fantastic,
+
+
+723
+01:48:20.495 --> 01:48:21.675
+Pini Koplovitch: Wow.
+
+
+724
+01:48:22.465 --> 01:48:25.375
+Pini Koplovitch: Afterwards.
+
+
+725
+01:48:56.315 --> 01:48:58.925
+Pini Koplovitch: Yep.
+
+
+726
+01:48:59.745 --> 01:49:03.635
+Pini Koplovitch: I don't matter.
+
+
+727
+01:49:03.925 --> 01:49:12.885
+Pini Koplovitch: First Renewal Database.
+
+
+728
+01:49:13.135 --> 01:49:13.805
+Pini Koplovitch: Fuck.
+
+
+729
+01:49:33.865 --> 01:49:45.674
+Pini Koplovitch: In the Slack, where…
+
+
+730
+01:50:03.895 --> 01:50:10.285
+Pini Koplovitch: I said, I know.
+
+
+731
+01:50:55.425 --> 01:50:56.594
+Pini Koplovitch: Thanks for today.
+
+
+732
+01:51:21.094 --> 01:51:21.755
+Pini Koplovitch: Excuse me.
+
+
+733
+01:51:24.285 --> 01:51:25.135
+Pini Koplovitch: I'm sorry.
+
+
+734
+01:52:43.255 --> 01:52:45.045
+Pini Koplovitch: $29,000 with those.
+
+
+735
+01:52:46.165 --> 01:52:52.844
+Pini Koplovitch: I think that… Yeah, that's what I was… that's what I was… that's what I was aiming for.
+
+
+736
+01:52:54.745 --> 01:52:56.085
+Pini Koplovitch: Okay.
+
+
+737
+01:52:58.575 --> 01:53:00.875
+Pini Koplovitch: So, like I said, the average part.
+
+
+738
+01:53:01.225 --> 01:53:08.084
+Pini Koplovitch: be allowed from the fact that we are not… we are not going to finish the slides today. They will just push back to the next one.
+
+
+739
+01:53:08.365 --> 01:53:10.494
+Pini Koplovitch: And that's okay, and that's great.
+
+
+740
+01:53:13.565 --> 01:53:16.755
+Pini Koplovitch: Now, I really want to talk to you about
+
+
+741
+01:53:17.215 --> 01:53:24.535
+Pini Koplovitch: how do we evaluate drug systems? Or how do we evaluate a system in general? Because…
+
+
+742
+01:53:24.735 --> 01:53:31.565
+Pini Koplovitch: It's harder than just LLM, and it's gonna get harder and harder every time you will continue.
+
+
+743
+01:53:31.895 --> 01:53:46.384
+Pini Koplovitch: So, why is it hard? Here's a lot of text on that screen, but the thing is that we have… you think about it as two moving parts, the online part, right? We have the retrieval, and we have the generation.
+
+
+744
+01:53:46.935 --> 01:53:48.835
+Pini Koplovitch: We have the case that…
+
+
+745
+01:53:49.685 --> 01:54:04.665
+Pini Koplovitch: Essentially, right, we have the system to think about end-to-end, right? I have a query, and I have the answer that I want to get in the end. This is what I actually care about. This is what the end user will see, this is what the client will experience.
+
+
+746
+01:54:04.815 --> 01:54:08.364
+Pini Koplovitch: Alright, this is, I would say, the most important method.
+
+
+747
+01:54:08.615 --> 01:54:15.274
+Pini Koplovitch: As a builder, you do want to understand how to improve each part, and we have a place where we will fail.
+
+
+748
+01:54:15.595 --> 01:54:31.975
+Pini Koplovitch: Alright, so what does it mean? The right documents were never retrieved, LLMs have no chance, so it doesn't matter, like, if the retrieval failed, it said that the generation to succeed needs to say no answer, but the entire system fails anyway.
+
+
+749
+01:54:32.415 --> 01:54:33.335
+Pini Koplovitch: Unless…
+
+
+750
+01:54:33.455 --> 01:54:44.664
+Pini Koplovitch: the model somehow knows the answer from its knowledge, and then the system succeeded, but not in a good way. So, again, not… if retrieval fails, everything fails, essentially.
+
+
+751
+01:54:45.295 --> 01:55:00.034
+Pini Koplovitch: Generation failed. This is actually the easier case. It's easier to see, easier to debug, because we have chunks, and it's kind of like prompt engineering, or playing with the amount of chunks we're putting there, and so on, and so on.
+
+
+752
+01:55:01.295 --> 01:55:07.185
+Pini Koplovitch: Both fail, or either one fail, just the system failed itself, and that's a problem.
+
+
+753
+01:55:08.195 --> 01:55:11.444
+Pini Koplovitch: So, what we're seeing here are…
+
+
+754
+01:55:13.675 --> 01:55:18.324
+Pini Koplovitch: These are the, let's say, the classic method.
+
+
+755
+01:55:18.615 --> 01:55:19.935
+Pini Koplovitch: These are not enough.
+
+
+756
+01:55:20.605 --> 01:55:22.614
+Pini Koplovitch: To test if your model worked.
+
+
+757
+01:55:23.015 --> 01:55:31.024
+Pini Koplovitch: But these are the bases. And also, they are general enough for you to interpret them into your use case.
+
+
+758
+01:55:31.995 --> 01:55:37.925
+Pini Koplovitch: So, we have the Ravya Triad, let's say, where we have the context relevant.
+
+
+759
+01:55:38.565 --> 01:55:43.755
+Pini Koplovitch: Or, are the retrieved docs actually talk about the query?
+
+
+760
+01:55:45.125 --> 01:56:01.185
+Pini Koplovitch: Faithfulness, correction, whatever. Like, faithfulness is a very, very general word for that. Is the answer grounded in the retrieved context? For instance, at AI21, we use faithfulness for something completely different, and we call this grounding.
+
+
+761
+01:56:01.665 --> 01:56:02.975
+Pini Koplovitch: This is soap.
+
+
+762
+01:56:03.475 --> 01:56:09.834
+Pini Koplovitch: You can think about it as a lot of things, and answer relevance. Did the answer address the question asked?
+
+
+763
+01:56:11.205 --> 01:56:16.274
+Pini Koplovitch: Maybe it answers something completely different, something in the area.
+
+
+764
+01:56:16.745 --> 01:56:20.815
+Pini Koplovitch: Maybe there's a lot of extra information that them dogs really need.
+
+
+765
+01:56:22.255 --> 01:56:24.515
+Pini Koplovitch: Yes. Is what the LLM generates?
+
+
+766
+01:56:24.875 --> 01:56:39.994
+Pini Koplovitch: Answer is, if you think about it as a system, you have a question, and at the end, it's what the LLM generates, unless you put some sort of filter outside, but yes, let's think about it as what the LLM… I don't want to think about it just as what the LLM generates, because it also includes the real part.
+
+
+767
+01:56:40.575 --> 01:56:50.664
+Pini Koplovitch: This is, like, we need to generate our own, like, private company data to verify against that, like, as a foundation.
+
+
+768
+01:56:50.715 --> 01:57:03.355
+Pini Koplovitch: the chance and the response, or I was checking with our prompt, what exactly… So, it depends, right? If you're… if you're building, if you're using EDD,
+
+
+769
+01:57:05.065 --> 01:57:12.924
+Pini Koplovitch: Look at me, tucking in my arm. I didn't invent EDD, by the way, it's like a well-known thing, I did not invent anything there.
+
+
+770
+01:57:13.155 --> 01:57:21.905
+Pini Koplovitch: Yes, evaluation-driven development. I did not… I wish…
+
+
+771
+01:57:22.015 --> 01:57:26.094
+Pini Koplovitch: But it's not… it's not my word, unfortunately.
+
+
+772
+01:57:26.915 --> 01:57:32.234
+Pini Koplovitch: So, when you do want to evaluate your rug system, you need
+
+
+773
+01:57:33.065 --> 01:57:47.314
+Pini Koplovitch: Sometimes it's called the golden data set, test set, whatever you like to call it, to measure the things that are important to you. The most basic thing to say is, here are questions, here are the answers that I expect
+
+
+774
+01:57:47.415 --> 01:57:49.154
+Pini Koplovitch: My system to handle.
+
+
+775
+01:57:49.615 --> 01:57:58.215
+Pini Koplovitch: If you have a richer dataset, you can also label, or you can add to this golden dataset the relevant charts for every question.
+
+
+776
+01:57:58.905 --> 01:58:00.464
+Pini Koplovitch: Or something like that.
+
+
+777
+01:58:00.585 --> 01:58:14.345
+Pini Koplovitch: But, yeah, you have to have something, or if you're testing it from scratch, so you're just putting some answers, and you have to debug, like, every answer in the beginning, the process of building something like that. When I build, like, a wall system, this…
+
+
+778
+01:58:14.635 --> 01:58:17.414
+Pini Koplovitch: If I'm using, like, a data set.
+
+
+779
+01:58:17.705 --> 01:58:21.145
+Pini Koplovitch: Of, like you said, the chunks and the response.
+
+
+780
+01:58:21.365 --> 01:58:25.704
+Pini Koplovitch: And mostly, I'm testing… I'm testing my prompts.
+
+
+781
+01:58:28.135 --> 01:58:33.075
+Pini Koplovitch: No, you're testing everything. You're testing both the retrieval and the generation.
+
+
+782
+01:58:34.375 --> 01:58:42.554
+Pini Koplovitch: Yeah, but the devil is already there, this is the data already. Let's circle back to that layer. Yeah.
+
+
+783
+01:58:42.675 --> 01:58:58.244
+Pini Koplovitch: So, if we have a query, and, know that we have retrieves, we give the three docs that actually are voluntary, and we receive an answer that is actually grounded in the repeat documents.
+
+
+784
+01:58:58.405 --> 01:59:00.944
+Pini Koplovitch: How can an answer be no trouble?
+
+
+785
+01:59:01.625 --> 01:59:03.115
+Pini Koplovitch: It seems to me that
+
+
+786
+01:59:03.755 --> 01:59:18.435
+Pini Koplovitch: metrics are not completely orthogonal. Maybe the last one is somewhat dependent. How can an answer be not relevant? Sorry? So the question was… If the first two are very good… If the faithfulness is high, how is the relevance?
+
+
+787
+01:59:18.435 --> 01:59:24.384
+Pini Koplovitch: So, faithfulness doesn't say… Faithfulness. Sorry, go ahead.
+
+
+788
+01:59:24.415 --> 01:59:35.265
+Pini Koplovitch: So, is the context relevant and the faithful? Yeah, they're both good, then how can it not be… So, maybe I give you the answer, and then I give you two paragraphs on dogs in terrorist.
+
+
+789
+01:59:35.995 --> 01:59:37.605
+Pini Koplovitch: Not sure why this is the…
+
+
+790
+01:59:38.425 --> 01:59:45.395
+Pini Koplovitch: Why, this was the first association that I had. Relevant is how much of your answer is actually relevant to the question.
+
+
+791
+01:59:45.755 --> 01:59:50.175
+Pini Koplovitch: So, if… it's still… this can still be low, even if those are true.
+
+
+792
+01:59:50.395 --> 01:59:53.345
+Pini Koplovitch: It kind of depends on how you define relevance.
+
+
+793
+01:59:53.515 --> 02:00:12.984
+Pini Koplovitch: from what I used to work with, relevance also means how much extra information is not related to anything are you providing them. So the model can add a lot of noise to the… Yes, it can give you a very long answer that is grounded in any one of the chunks, yet some sort of reward hack.
+
+
+794
+02:00:13.835 --> 02:00:23.284
+Pini Koplovitch: So, we're here, and we say, okay, if we're measuring that the retrieved docs are actually about the query, if it fails, what do we need to tune?
+
+
+795
+02:00:25.025 --> 02:00:27.664
+Pini Koplovitch: I'm now… I want to fill the table.
+
+
+796
+02:00:27.845 --> 02:00:45.114
+Pini Koplovitch: Okay, this is… I'm testing direct system, and I'm seeing that the iMeasure, is the retrieved docs actually about the query? If I see a failure here, it means that the retrieved docs are not… so I need to… I need to tune the retrieval file. Okay?
+
+
+797
+02:00:45.525 --> 02:01:04.404
+Pini Koplovitch: And also, we will always go to the retrieval part. Nobody wants to change the indexing part, right? If you don't have to, don't do it. Like, you did it once, it was heavy, and you may think that this is something small, because when you suddenly chunk something in 2 minutes.
+
+
+798
+02:01:04.415 --> 02:01:14.244
+Pini Koplovitch: But we, for instance, have a client that gave us, I think, like, 100,000 documents, and it takes hours or days to upload them to the system.
+
+
+799
+02:01:14.255 --> 02:01:25.645
+Pini Koplovitch: Can you incrementally… Yes. Yes, the question was if you can enlarge your database and add more chunks. The answer is the yes.
+
+
+800
+02:01:27.095 --> 02:01:46.135
+Pini Koplovitch: And I don't have anything else to say about that, I don't know why it sounds like I have more. So, if the relevance is bad, I'm gonna change the tune the retrieval. If the faithfulness, the answer is grounded in the retrieved context. If this fails, I have a problem in my… in my generation, in my prompt, in my model, whatever.
+
+
+801
+02:01:46.135 --> 02:01:51.864
+Pini Koplovitch: Does the answer address the question asked? Answer relevant. If it fails, I have a problem in my…
+
+
+802
+02:01:52.375 --> 02:01:56.644
+Pini Koplovitch: Probably the prompt, what I said… oh, prompt, and the in-context example.
+
+
+803
+02:01:58.725 --> 02:02:03.385
+Pini Koplovitch: I would just put both of them, LLM and prompt, Probably the same.
+
+
+804
+02:02:03.825 --> 02:02:10.225
+Pini Koplovitch: You can, yeah, temperature also, said something. LM selection is… True for both.
+
+
+805
+02:02:13.145 --> 02:02:17.624
+Pini Koplovitch: So, like we said, we want to evaluate the entire system.
+
+
+806
+02:02:17.735 --> 02:02:20.805
+Pini Koplovitch: But we also want to evaluate each part.
+
+
+807
+02:02:20.965 --> 02:02:24.004
+Pini Koplovitch: Al. And how do we do that?
+
+
+808
+02:02:25.865 --> 02:02:38.865
+Pini Koplovitch: Trying to evaluate retrieval in isolation. We have context recall. This is… we've seen that, right? It says, did we get all the relevant docs? And if we're missing relevant docs, it means that generation failed.
+
+
+809
+02:02:38.965 --> 02:02:48.095
+Pini Koplovitch: Okay, so it's the quality. And the formula, relevant, retrieve, well, whatever. You know the formula for recall. Context precision.
+
+
+810
+02:02:48.215 --> 02:02:58.394
+Pini Koplovitch: this is how much of the chunks that I'm returning, good. Are the retrieved docs actually relevant? Because noise increases hallucinations, and so on.
+
+
+811
+02:02:59.785 --> 02:03:03.494
+Pini Koplovitch: Why is this problematic, by the way? Because it depends on age.
+
+
+812
+02:03:05.065 --> 02:03:13.295
+Pini Koplovitch: That's a very general answer, that I will say that it is true, but it will not get a lot of points in the exam, because the answer, by the way, was because it depends on K.
+
+
+813
+02:03:16.455 --> 02:03:25.775
+Pini Koplovitch: Are you… do you care to elaborate, or do you want me to elaborate? Okay, the… if you have a fixed number of relevant documents, and you have, like, 3 relevant documents.
+
+
+814
+02:03:26.225 --> 02:03:28.365
+Pini Koplovitch: Yeah, you can?
+
+
+815
+02:03:28.475 --> 02:03:35.834
+Pini Koplovitch: So, if you increase it to 50, so your precision is going to go down regardless of the accuracy of your system.
+
+
+816
+02:03:35.945 --> 02:03:42.184
+Pini Koplovitch: Correct, so essentially… You can't really get… you can get perfect scores in recall.
+
+
+817
+02:03:42.325 --> 02:03:46.274
+Pini Koplovitch: And it's very easy to understand how it is returned all the time, whatever.
+
+
+818
+02:03:46.435 --> 02:03:49.315
+Pini Koplovitch: You can't really get,
+
+
+819
+02:03:49.365 --> 02:04:06.655
+Pini Koplovitch: high precision, or the top precision that you can achieve, because top K can be 10, or can be 20, or can be 30, but usually in those type of benchmarks, in those type of data sets, you're assuming that there is one or a few documents that contain the answer.
+
+
+820
+02:04:07.115 --> 02:04:13.004
+Pini Koplovitch: So, anyway, I will anyways retrieve chunks that are irrelevant.
+
+
+821
+02:04:13.255 --> 02:04:16.385
+Pini Koplovitch: For the context, from the way the system is built.
+
+
+822
+02:04:16.625 --> 02:04:23.215
+Pini Koplovitch: This is why I said that mostly people look at the recall. If you look at precision, the numbers are nice.
+
+
+823
+02:04:23.335 --> 02:04:33.585
+Pini Koplovitch: Usually, we don't really work with precision. Mexico has, has a formula for,
+
+
+824
+02:04:33.585 --> 02:04:58.475
+Pini Koplovitch: stimulating how, how, how big is your, how good is, is your ranking being, the higher in the, in the, received part, the relevant documents, or the kind of… Sorry, I, I lost you. Okay. Sorry, okay, the, I, I'm just wondering why, why there is, no mention of, the classical material, approach. Why?
+
+
+825
+02:04:58.475 --> 02:05:03.824
+Pini Koplovitch: The ranking, for, ranking, for, formal, for, for, rank quality.
+
+
+826
+02:05:03.825 --> 02:05:12.044
+Pini Koplovitch: The rank quality? Yeah. Like, where is the chunk located? Yeah, exactly. Then you don't have this problem with, revision.
+
+
+827
+02:05:12.105 --> 02:05:19.095
+Pini Koplovitch: So you can also do that, but it's easier to test if it's just there. Like, it kind of…
+
+
+828
+02:05:20.225 --> 02:05:24.074
+Pini Koplovitch: giving some flack to the model, because I don't really care if it…
+
+
+829
+02:05:24.185 --> 02:05:44.104
+Pini Koplovitch: ranked 1 or ranked third, kind of the same. That gives you additional tools to… to optimize. It gives additional tools, but usually I just want it to be in the top K. It doesn't really matter if it's, like, number 1 or number 5, these are not the things that will move the needle, usually.
+
+
+830
+02:05:45.265 --> 02:06:04.265
+Pini Koplovitch: Well, would you say, like, retrieval is usually the real bottleneck in those type of situations. The models are getting better and better. The retrieval is hard, and we've talked about context engineering. Retrieval is filling the context.
+
+
+831
+02:06:04.745 --> 02:06:13.855
+Pini Koplovitch: filter for the highest similarities, and then, like… So, there are, there are methods. So, the question was if top K is not, constant.
+
+
+832
+02:06:13.855 --> 02:06:29.164
+Pini Koplovitch: I'm sorry if I'm rephrasing incorrectly. There are some methods that you can, you can look if there's differences between them, or some sort of, based on the ranking, your top pay will just be a threshold.
+
+
+833
+02:06:29.165 --> 02:06:36.155
+Pini Koplovitch: Whereas the number of chunks that are returned is not constant. This is not something that is common practice.
+
+
+834
+02:06:36.435 --> 02:06:41.115
+Pini Koplovitch: This is, what you call an active area of research.
+
+
+835
+02:06:41.255 --> 02:06:44.854
+Pini Koplovitch: If companies do implement that in their product, it's not advertised.
+
+
+836
+02:06:45.385 --> 02:06:48.155
+Pini Koplovitch: At least not famously advertised.
+
+
+837
+02:06:48.575 --> 02:06:51.204
+Pini Koplovitch: But it is something that… I've seen papers about that.
+
+
+838
+02:06:51.705 --> 02:06:52.545
+Pini Koplovitch: So…
+
+
+839
+02:06:56.235 --> 02:07:02.365
+Pini Koplovitch: Sorry?
+
+
+840
+02:07:02.565 --> 02:07:04.825
+Pini Koplovitch: People never search up the ground.
+
+
+841
+02:07:05.105 --> 02:07:09.094
+Pini Koplovitch: Yeah, no, this is something else. To retrieve extra chunk.
+
+
+842
+02:07:09.265 --> 02:07:13.894
+Pini Koplovitch: So, sorry, the material is a bottleneck, an example from…
+
+
+843
+02:07:15.905 --> 02:07:34.294
+Pini Koplovitch: Okay, so Legal Rugbench, we'll talk about it briefly, but just to get there, if you… it's a benchmark on rug, right, legal documents. You can understand roughly what's happening there. And there, we saw that just changing the embedding model, so…
+
+
+844
+02:07:34.365 --> 02:07:42.145
+Pini Koplovitch: both the Changing indexing and the retriever improved 17.5, Bye.
+
+
+845
+02:07:42.605 --> 02:07:48.454
+Pini Koplovitch: So, that's a lot. Like, they didn't even change the prompt, LLM, or anything else.
+
+
+846
+02:07:48.685 --> 02:07:52.065
+Pini Koplovitch: If you're getting something like this, it means that your original approval stuck.
+
+
+847
+02:07:52.395 --> 02:07:53.115
+Pini Koplovitch: Excellent.
+
+
+848
+02:07:55.235 --> 02:07:57.255
+Pini Koplovitch: Alright, golden labels.
+
+
+849
+02:07:57.815 --> 02:08:07.544
+Pini Koplovitch: Where do they come from, or what is golden label, right? That we needed some sort of data set. And if before we had some dataset that
+
+
+850
+02:08:07.875 --> 02:08:20.555
+Pini Koplovitch: just questions and answers, those kind of things. Now we need a lot. So, the easiest way, cheapest way, is to go synthetic. Especially in these days.
+
+
+851
+02:08:21.285 --> 02:08:27.644
+Pini Koplovitch: Just ask a model to give you something, make it harder, make it here, make it there, blah blah blah.
+
+
+852
+02:08:27.645 --> 02:08:41.824
+Pini Koplovitch: And this is something that LLM generates, question and answers, you know, based on the… it's kind of like reverse engineering, in a sense. You kind of say, give me a data set… give me data set with questions and answers based on this data.
+
+
+853
+02:08:41.855 --> 02:08:45.425
+Pini Koplovitch: that… Will help me evaluate my ride system.
+
+
+854
+02:08:45.635 --> 02:08:50.664
+Pini Koplovitch: But then your rack system, he's an LLM. So, that's…
+
+
+855
+02:08:52.245 --> 02:08:56.904
+Pini Koplovitch: It can give you a signal, it can't actually give you…
+
+
+856
+02:08:57.865 --> 02:09:04.295
+Pini Koplovitch: concrete information. Alright, so for every chunk, generate three questions, that this passage answers.
+
+
+857
+02:09:04.805 --> 02:09:09.764
+Pini Koplovitch: So now the results, we have a question and chank mapping, so we have instance ground truth.
+
+
+858
+02:09:10.225 --> 02:09:18.964
+Pini Koplovitch: First, the LLM generates a question that you can see, so it's not hard questions that are something in the details.
+
+
+859
+02:09:19.845 --> 02:09:21.135
+Pini Koplovitch: Also.
+
+
+860
+02:09:21.895 --> 02:09:29.584
+Pini Koplovitch: I didn't mention it specifically until I read it from this slide, but there is a problem here, there is, an assumption.
+
+
+861
+02:09:29.705 --> 02:09:34.844
+Pini Koplovitch: If we're using this method. What is the assumption?
+
+
+862
+02:09:35.375 --> 02:09:49.304
+Pini Koplovitch: Okay, so there were a lot of answers here. All of them were correct, in a sense, but the one that I was looking for was that they assume here that every question can be answered by a single chunk.
+
+
+863
+02:09:50.445 --> 02:10:02.385
+Pini Koplovitch: And that's… that's assuming that our world is very, very local. We're going to talk about it a little bit today, and I will also give you a link for a podcast if you want to hear and learn more.
+
+
+864
+02:10:04.035 --> 02:10:11.505
+Pini Koplovitch: The second approach, okay, this was the first one, synthetic, this is the cheapest. Second one is semi-synthetic.
+
+
+865
+02:10:12.315 --> 02:10:26.394
+Pini Koplovitch: work with your logs. Usually, you have some sort of data that you want to build for, so you have user queries from previous systems, either search log, support tickets, check history, and then…
+
+
+866
+02:10:29.105 --> 02:10:31.084
+Pini Koplovitch: I'm a present with a tank that should have
+
+
+867
+02:10:31.255 --> 02:10:43.424
+Pini Koplovitch: answered them. So you… you have the data already, and then you have to just find out, for every question, or for every log, where is the chunk, or the relevant chunk.
+
+
+868
+02:10:43.955 --> 02:10:46.485
+Pini Koplovitch: And then you get real questions.
+
+
+869
+02:10:46.665 --> 02:10:56.714
+Pini Koplovitch: labeling is done via an LLM, so only you have to… it's a semi-supervised there kind of way. You only have to check to see if it's okay, if it makes sense.
+
+
+870
+02:10:57.315 --> 02:11:02.305
+Pini Koplovitch: And again, it says best of both worlds, It's still not opting.
+
+
+871
+02:11:03.295 --> 02:11:17.335
+Pini Koplovitch: And the reason is that, really, all of these datasets have a lot of assumptions, a lot of things, and we're seeing that it doesn't matter how much synthetic data you're generating, at the end, all of this system
+
+
+872
+02:11:17.675 --> 02:11:23.484
+Pini Koplovitch: really needs to kind of overfeed to your client data. It's still not…
+
+
+873
+02:11:23.825 --> 02:11:30.855
+Pini Koplovitch: List for now, in two days, it probably will be different, but now most of those are, like a chatbot for,
+
+
+874
+02:11:30.935 --> 02:11:47.734
+Pini Koplovitch: you know, a municipality that has data here and there, and sometimes it's in this format and that format, and everything is very, very hard to manage. And what we're usually seeing when we're creating those datasets are things that are very manageable, very convenient.
+
+
+875
+02:11:47.855 --> 02:11:55.254
+Pini Koplovitch: very nice to work with it, or something like that. The real world is messy. So even that.
+
+
+876
+02:11:55.545 --> 02:12:04.005
+Pini Koplovitch: Even the fact that we have real questions and data still is just a signal. It doesn't actually promise anything about it.
+
+
+877
+02:12:04.465 --> 02:12:06.374
+Pini Koplovitch: What is the synthetic part here?
+
+
+878
+02:12:07.805 --> 02:12:22.215
+Pini Koplovitch: We're asking the LLM to get this chunk. We have the data, our data, a database, and we have questions from the users. We just want the LLM to say from which part of this question.
+
+
+879
+02:12:23.195 --> 02:12:27.964
+Pini Koplovitch: Yeah, again, it's kind of like the cycle here, right? Because we're using…
+
+
+880
+02:12:28.095 --> 02:12:34.824
+Pini Koplovitch: an LLM to give me the chunk that I need, which… this is how I can approach it. And…
+
+
+881
+02:12:35.175 --> 02:12:48.895
+Pini Koplovitch: It is work, you can use different types of LLMs, and then you're kind of… you can use a very, very strong one, a very strong agent to do that labeling, and then test your rug, which is probably cheaper.
+
+
+882
+02:12:49.265 --> 02:12:50.045
+Pini Koplovitch: on.
+
+
+883
+02:12:50.225 --> 02:12:59.805
+Pini Koplovitch: So, there is something to that. If we remove chance from my database execution, we see that, okay, this itemized our data.
+
+
+884
+02:12:59.995 --> 02:13:02.314
+Pini Koplovitch: So, real. Okay?
+
+
+885
+02:13:04.425 --> 02:13:05.725
+Pini Koplovitch: Document removed.
+
+
+886
+02:13:05.835 --> 02:13:15.495
+Pini Koplovitch: Probably. It's a database, right? It depends… again, it depends if you're using something like Pinecone, or if you're storing it yourself somehow.
+
+
+887
+02:13:15.855 --> 02:13:16.825
+Pini Koplovitch: Saturday.
+
+
+888
+02:13:16.945 --> 02:13:18.155
+Pini Koplovitch: Whatever you want.
+
+
+889
+02:13:18.395 --> 02:13:27.465
+Pini Koplovitch: Usually, it, like, not… Not a lot of people remember to do those kind of, things, because it…
+
+
+890
+02:13:28.345 --> 02:13:33.694
+Pini Koplovitch: Usually just do a lot of the… a lot of indexing, and you forget to maintain that, because
+
+
+891
+02:13:33.895 --> 02:13:40.575
+Pini Koplovitch: It's not that it will… if those documents are irrelevant, they will probably want a lot of material.
+
+
+892
+02:13:40.675 --> 02:13:48.525
+Pini Koplovitch: What is a secure way to implement something like this? Secure.
+
+
+893
+02:13:48.595 --> 02:14:02.764
+Pini Koplovitch: You know who works in a startup that does security for AI? Tom? He used to work with me at AI21, and then he…
+
+
+894
+02:14:02.925 --> 02:14:19.575
+Pini Koplovitch: And went to work there. Security is a whole other thing. It's very nice, right, in Israel right now, because we have a lot of cybersecurity companies, and all of them just found out about AI and AI agents, and now they're all exploding, so, look at us, we raised a lot of money to do security for AI agents.
+
+
+895
+02:14:19.695 --> 02:14:23.424
+Pini Koplovitch: I don't know a lot about security, and…
+
+
+896
+02:14:23.955 --> 02:14:32.534
+Pini Koplovitch: In general, I'm not… What is general, like, running the models locally? So you can do it on-prem.
+
+
+897
+02:14:33.085 --> 02:14:37.795
+Pini Koplovitch: Why does this mean, cure? Like…
+
+
+898
+02:14:37.835 --> 02:14:44.975
+Pini Koplovitch: If you're working… if everything you have already in AWS infrastructure
+
+
+899
+02:14:44.975 --> 02:14:58.364
+Pini Koplovitch: you can just do managed service around AWS, it's true for Google, it's true for Azure, whatever, but it will be as secure as that, or you can do it between… When you're using the model, you're actually setting it out, so…
+
+
+900
+02:14:59.045 --> 02:15:03.845
+Pini Koplovitch: Like, for example, when we're using Token Factory…
+
+
+901
+02:15:04.825 --> 02:15:16.425
+Pini Koplovitch: I don't know about security in talking factory, but I would say it's very secure and a very good product. Lead by us. Please.
+
+
+902
+02:15:16.425 --> 02:15:33.374
+Pini Koplovitch: the mechanism, like, works on their hardware, right? I don't really want to go into security right now. We can talk a little bit about it later, but most of my knowledge from security came from a podcast I did with the CTO of Xenity, who essentially told me for 40 minutes.
+
+
+903
+02:15:33.415 --> 02:15:43.445
+Pini Koplovitch: we can hack everything. Here we hacked into agents, they took some money from a bank account and so on. And I just sat there and realized that our, like.
+
+
+904
+02:15:43.535 --> 02:15:52.274
+Pini Koplovitch: This is most of my knowledge about security. I also know that the S in MTP is for security, that follow along. So…
+
+
+905
+02:15:52.465 --> 02:16:01.444
+Pini Koplovitch: These are… so we have… you can do synthetic, and I would recommend, by the way, to do something synthetic just to get… feel, or get a sense.
+
+
+906
+02:16:01.565 --> 02:16:13.614
+Pini Koplovitch: It's not a bad word, it's just… you have to remember to take everything with a grain of salt, that's all it is. I'm not telling you not to do it. I'm not, like, a hater. I am, but not for that. Semi-synthetic, again.
+
+
+907
+02:16:13.785 --> 02:16:17.234
+Pini Koplovitch: Kind of the best of both worlds, but still…
+
+
+908
+02:16:18.215 --> 02:16:35.865
+Pini Koplovitch: In the end, it will not give you the best signal ever. It will give you some signal, and you have to iterate. Just like in prompt engineering, just like in EDD, this is an iterative process. Everything in Gen AI is iterative process. Everything changes, your model is updated within a week, like.
+
+
+909
+02:16:36.905 --> 02:16:45.574
+Pini Koplovitch: Right now, 4.7 is now came out. GPT, I don't even remember if they have anything after 5.4. 5.5 already came out, I'm not sure.
+
+
+910
+02:16:45.825 --> 02:16:49.945
+Pini Koplovitch: No? They're waiting for… no, Pi Day was already, right?
+
+
+911
+02:16:50.135 --> 02:16:51.464
+Pini Koplovitch: I don't know what they're reading.
+
+
+912
+02:16:51.605 --> 02:16:53.115
+Pini Koplovitch: GPTC, whatever.
+
+
+913
+02:16:53.245 --> 02:16:55.694
+Pini Koplovitch: The third thing is human annotation.
+
+
+914
+02:16:56.415 --> 02:17:03.645
+Pini Koplovitch: Most expensive, most accurate. If you're getting the sense that you already heard all of those things.
+
+
+915
+02:17:03.905 --> 02:17:16.445
+Pini Koplovitch: In the evaluation lecture, you're correct. I told you, I'm a one-trick pony. These are all the same, and still people fall on those things. Every time. It's amazing how much people are lazy and just…
+
+
+916
+02:17:16.705 --> 02:17:25.445
+Pini Koplovitch: accepting the fact that agents tell them that everything is okay. Myself included, by the way, I'm not better than anyone. But you say most accurate?
+
+
+917
+02:17:25.505 --> 02:17:37.945
+Pini Koplovitch: Yeah, this is the most accurate, because it's… you have real people who, like, write… it's, again, some kind of assumption based on the ground. Yes, people also make mistakes.
+
+
+918
+02:17:38.085 --> 02:17:39.964
+Pini Koplovitch: Yes, people make mistakes.
+
+
+919
+02:17:41.245 --> 02:17:42.205
+Pini Koplovitch: Oh.
+
+
+920
+02:17:42.515 --> 02:17:46.365
+Pini Koplovitch: Of course, human ability is, limited, somehow.
+
+
+921
+02:17:46.565 --> 02:17:56.745
+Pini Koplovitch: But… but still, this is… this is, like, the best way to capture what we're actually trying to build, because we're using real data, either real questions that are being…
+
+
+922
+02:17:56.865 --> 02:18:08.185
+Pini Koplovitch: like, rewritten, or questions that we expect users to ask. And this is something that we need domain experts to sometimes
+
+
+923
+02:18:08.645 --> 02:18:15.634
+Pini Koplovitch: verify, because we don't really know. I expect people to ask.
+
+
+924
+02:18:15.955 --> 02:18:19.334
+Pini Koplovitch: So, are there some cases where it's very sensitive to
+
+
+925
+02:18:20.445 --> 02:18:27.495
+Pini Koplovitch: like, working, like, if I want my footage to be able to answer questions by people that are very far from the main experts.
+
+
+926
+02:18:27.635 --> 02:18:31.495
+Pini Koplovitch: I have to feel good, like… Without a third.
+
+
+927
+02:18:32.605 --> 02:18:45.944
+Pini Koplovitch: Again, you're asking about what do you expect from your product, and the answer is, what do you define? Like, why not? No, I'm asking if it can be very sensitive, like, the evaluation, like, I evaluate the recall and stuff.
+
+
+928
+02:18:46.135 --> 02:18:48.595
+Pini Koplovitch: Again, these closing questions.
+
+
+929
+02:18:48.805 --> 02:18:51.045
+Pini Koplovitch: But maybe if I won…
+
+
+930
+02:18:51.345 --> 02:18:57.484
+Pini Koplovitch: I'd rather to be able to answer questions by people that, like, are working maybe very far off.
+
+
+931
+02:18:57.885 --> 02:18:59.614
+Pini Koplovitch: Like, is it expensive?
+
+
+932
+02:19:01.035 --> 02:19:09.815
+Pini Koplovitch: I'm not understanding the question 100%, but I'm guessing that the answer is yes. Everything is sensitive, and even if you're getting a top score on that.
+
+
+933
+02:19:09.915 --> 02:19:16.275
+Pini Koplovitch: You'll probably… like, you will have to update it after you'll have some users, some feedback, and so on.
+
+
+934
+02:19:18.775 --> 02:19:34.934
+Pini Koplovitch: Evaluation generate… evaluating generation in isolation, as if we already talked about it, right? Right? Faithfulness, grounding, whatever. This is usually something that every system needs, right? You cannot have as…
+
+
+935
+02:19:35.915 --> 02:19:52.725
+Pini Koplovitch: product that is connected to data that is not grounded in the data. Okay, so is every claim in the answer supported by a retrieved text? You can call it faithfulness, you can call it guard, you can call it whatever you want. Usually, you use LLM as a judge for that, there are
+
+
+936
+02:19:52.725 --> 02:19:58.884
+Pini Koplovitch: some methods, some cases where the people try not to and succeeded, but most of the time.
+
+
+937
+02:19:58.895 --> 02:20:07.245
+Pini Koplovitch: LLM as a judge, and yeah, stronger grounding instructions, lower temperature, or different model will probably fix this.
+
+
+938
+02:20:08.665 --> 02:20:14.694
+Pini Koplovitch: Answer relevance. Usefulness check. Does the answer address what the user actually asked?
+
+
+939
+02:20:15.455 --> 02:20:23.935
+Pini Koplovitch: Again, this is something that is, like, traditionally talked about, not necessarily… Sometimes correctness…
+
+
+940
+02:20:24.105 --> 02:20:26.255
+Pini Koplovitch: Kind of encapsulates both of them.
+
+
+941
+02:20:26.425 --> 02:20:30.435
+Pini Koplovitch: And it depends, what do you care about? How do you…
+
+
+942
+02:20:30.585 --> 02:20:34.314
+Pini Koplovitch: What are the properties that you care about in your product? How do you define
+
+
+943
+02:20:34.455 --> 02:20:51.945
+Pini Koplovitch: the ways that you're expected to behave. So, this is something that is, like, you… we will talk about it, but again, something that you need to adapt to whatever you care about. So, like, low-relevant, off-topic, or basic answers, better prompts.
+
+
+944
+02:20:52.175 --> 02:21:02.845
+Pini Koplovitch: In context examples, it's also better prompts are better models. Right, right? Yeah.
+
+
+945
+02:21:04.095 --> 02:21:05.914
+Pini Koplovitch: more motivation.
+
+
+946
+02:21:06.045 --> 02:21:07.095
+Pini Koplovitch: Thanks.
+
+
+947
+02:21:08.735 --> 02:21:24.005
+Pini Koplovitch: Probably. But, yeah, you probably need less questions, because you kind of want to define the dimensions of what you want to be good at, so grounding, obviously, abstaining from answers that you don't know.
+
+
+948
+02:21:24.375 --> 02:21:30.185
+Pini Koplovitch: Questions that combine several chunks, questions that are from single chunk, questions that are
+
+
+949
+02:21:30.665 --> 02:21:41.695
+Pini Koplovitch: with a confusing meaning, that may have confusing meaning, and so on. You need to get some from every dimension that you care about, and compile this data thing.
+
+
+950
+02:21:42.535 --> 02:22:00.225
+Pini Koplovitch: Like, there are some… I don't have the numbers, right? Obviously, if your data set is not that big, but if your database is not that big, you don't need that many questions tested, but you do need some representation for every dimension that you care about.
+
+
+951
+02:22:02.845 --> 02:22:10.215
+Pini Koplovitch: That's why, that, that… We can just throw numbers in the air, right? Doesn't mean anything.
+
+
+952
+02:22:11.665 --> 02:22:26.995
+Pini Koplovitch: Oh, and here you didn't do the full animation, so let's just look at it. So, what we measure? Okay, this is for the end-to-end. So, if we measure the final answer quality, we need to also adjust the retriever or the generation.
+
+
+953
+02:22:27.175 --> 02:22:35.924
+Pini Koplovitch: Right? Both of them can affect. What we want to use is regression tests or benchmarks, and a lot of data
+
+
+954
+02:22:36.065 --> 02:22:40.375
+Pini Koplovitch: And then we want to debug a specific failure in component level.
+
+
+955
+02:22:40.535 --> 02:22:46.685
+Pini Koplovitch: Here, if I get a failure, I don't really know what happened, right? This is the end-to-end.
+
+
+956
+02:22:46.785 --> 02:22:50.174
+Pini Koplovitch: It's harder to debug that. We're here.
+
+
+957
+02:22:50.765 --> 02:22:57.375
+Pini Koplovitch: I need more data to test it. I need a test set, which is… more comprehensive.
+
+
+958
+02:22:57.785 --> 02:23:11.654
+Pini Koplovitch: So, these are the issues. Obviously, what I actually care about is this, right? I want to test this end-to-end. The end user don't care if the retrieval it is, who cares? I have a high recall, and…
+
+
+959
+02:23:12.105 --> 02:23:22.225
+Pini Koplovitch: Doesn't matter. So, this is, like, the division between both of them. Yes? For your approach, how can you evaluate a complex system?
+
+
+960
+02:23:24.655 --> 02:23:32.165
+Pini Koplovitch: Sorry? Yeah, for real projects, like… Level of preference.
+
+
+961
+02:23:33.215 --> 02:23:38.375
+Pini Koplovitch: reliable… The word reliable appears here?
+
+
+962
+02:23:38.565 --> 02:23:44.195
+Pini Koplovitch: Okay. No, I tell you why I ask, because the word reliable is kind of like the…
+
+
+963
+02:23:44.695 --> 02:23:48.915
+Pini Koplovitch: The trendy word, last year it was the trendy word, now it's,
+
+
+964
+02:23:49.265 --> 02:24:04.195
+Pini Koplovitch: Then it became trust, and now I don't remember what's the trendiest word. Essentially, I want to say… everybody said that their systems are reliable, their systems are trustworthy. What does this mean? What do you mean when you say reliable?
+
+
+965
+02:24:04.305 --> 02:24:10.985
+Pini Koplovitch: Then runs into a test with some kind of change, then another, then.
+
+
+966
+02:24:12.495 --> 02:24:15.605
+Pini Koplovitch: to get some site, so I don't know how to put it.
+
+
+967
+02:24:17.225 --> 02:24:19.965
+Pini Koplovitch: So, here you're talking about consistency. Yeah.
+
+
+968
+02:24:20.635 --> 02:24:24.554
+Pini Koplovitch: So, reliability and consist… Reliability is a…
+
+
+969
+02:24:24.995 --> 02:24:32.904
+Pini Koplovitch: It used to be a joke at AI 21, that's why I'm reacting to that word, because reliability is a big word that can say a lot of things, but says nothing, really.
+
+
+970
+02:24:34.525 --> 02:24:37.134
+Pini Koplovitch: That's the thing, you have to…
+
+
+971
+02:24:37.695 --> 02:24:42.945
+Pini Koplovitch: You have to understand what is important to you, and the bigger the system.
+
+
+972
+02:24:43.375 --> 02:24:47.845
+Pini Koplovitch: More… more dimensions that you care about, and then you have to prioritize.
+
+
+973
+02:24:48.665 --> 02:24:52.804
+Pini Koplovitch: Valuation is the whole thing, and you've never… you will never finish.
+
+
+974
+02:24:52.965 --> 02:24:58.895
+Pini Koplovitch: to evaluate your system. Never, ever, ever. That's why they have to be some sort of a threshold where you say.
+
+
+975
+02:24:59.305 --> 02:25:03.255
+Pini Koplovitch: I'm releasing it, and I'll just keep updating it.
+
+
+976
+02:25:03.935 --> 02:25:07.785
+Pini Koplovitch: There was a question here, I… This M should be closed.
+
+
+977
+02:25:08.185 --> 02:25:09.544
+Pini Koplovitch: But I did.
+
+
+978
+02:25:09.825 --> 02:25:19.175
+Pini Koplovitch: Yeah, Drag is dead, and Dragon's not dead, both at the same time. It's not Schrodinger, it's Cat. I've seen someone killed,
+
+
+979
+02:25:20.235 --> 02:25:24.375
+Pini Koplovitch: Two months ago, and then we released an episode called Changing Isn't Dead.
+
+
+980
+02:25:25.425 --> 02:25:29.205
+Pini Koplovitch: So we brought it back to life, again?
+
+
+981
+02:25:29.365 --> 02:25:44.415
+Pini Koplovitch: I don't know, everybody's killing everything, like… It became a bit morbid, and I didn't mean that like that, but…
+
+
+982
+02:25:44.625 --> 02:25:48.725
+Pini Koplovitch: Martinels, Dash, Cute.
+
+
+983
+02:25:49.605 --> 02:25:52.875
+Pini Koplovitch: the concept of RAM, How are they saved?
+
+
+984
+02:25:53.975 --> 02:25:58.565
+Pini Koplovitch: Like, reaching watch marks down. It means that someone…
+
+
+985
+02:25:59.715 --> 02:26:03.674
+Pini Koplovitch: like, converted things to Markdown, and what does it mean to click
+
+
+986
+02:26:03.835 --> 02:26:10.854
+Pini Koplovitch: there's still a lot of the data in the world that you need to… The concept of retrieval of managed generation
+
+
+987
+02:26:11.405 --> 02:26:22.315
+Pini Koplovitch: it evolved to the fact that… the fact that you just retrieve information and then generate something, so even that is kind of wrong. You're meaning the context of RAG, where you use embedding models and so on.
+
+
+988
+02:26:23.255 --> 02:26:27.974
+Pini Koplovitch: I don't think it's dead, otherwise I wouldn't do a 3-hour lecture on that.
+
+
+989
+02:26:29.895 --> 02:26:36.615
+Pini Koplovitch: Unless I'm… very boring person, but, like, people will say everything in that on Twitter, because it's…
+
+
+990
+02:26:37.465 --> 02:26:44.985
+Pini Koplovitch: It's not that, it is, like, less effective than a JT crack, no? Why is a JT crack?
+
+
+991
+02:26:45.215 --> 02:26:58.025
+Pini Koplovitch: Several agents, there is no definition of Agent RAG age check. There are a lot of definitions for agency crack. Is this RAG plus agents, or is it the evolve… the evolution of RAG, or the evolution of agent?
+
+
+992
+02:26:58.455 --> 02:27:02.104
+Pini Koplovitch: Agency crack essentially means that agents do run, right?
+
+
+993
+02:27:02.455 --> 02:27:08.044
+Pini Koplovitch: But how… right? But how is this different? I'm just applying, like, the concept of RAG in a very…
+
+
+994
+02:27:08.435 --> 02:27:09.604
+Pini Koplovitch: by example.
+
+
+995
+02:27:09.755 --> 02:27:12.275
+Pini Koplovitch: But yes, right now, agents do wrong. Nobody…
+
+
+996
+02:27:12.875 --> 02:27:18.024
+Pini Koplovitch: Some people do… they'll do it like this, but most people just do it now. That do wrong.
+
+
+997
+02:27:19.335 --> 02:27:21.685
+Pini Koplovitch: Will you talk about drug crime?
+
+
+998
+02:27:22.145 --> 02:27:24.774
+Pini Koplovitch: No, not… not even a little bit.
+
+
+999
+02:27:25.245 --> 02:27:28.215
+Pini Koplovitch: I'm sorry.
+
+
+1000
+02:27:31.635 --> 02:27:32.495
+Pini Koplovitch: I'll reset it.
+
+
+1001
+02:27:33.705 --> 02:27:39.245
+Pini Koplovitch: Let's talk a little bit about rug benchmarks, because you know how much I like benchmarks.
+
+
+1002
+02:27:40.685 --> 02:27:47.234
+Pini Koplovitch: And that's the thing where… and we will… when we talk about agent benchmarks and leaderboards.
+
+
+1003
+02:27:47.475 --> 02:27:50.814
+Pini Koplovitch: It will even be more fearful, because
+
+
+1004
+02:27:51.275 --> 02:27:54.285
+Pini Koplovitch: The more complex the benchmark is.
+
+
+1005
+02:27:55.785 --> 02:27:59.924
+Pini Koplovitch: kind of, the less information it actually provides or something, it's weird.
+
+
+1006
+02:28:00.065 --> 02:28:08.744
+Pini Koplovitch: They are, like, a rug bench, long bench V2, and MRCAR. All of these are, like, general purpose rugs.
+
+
+1007
+02:28:09.045 --> 02:28:13.664
+Pini Koplovitch: Some of them, I don't even remember at that point, some of them have…
+
+
+1008
+02:28:13.895 --> 02:28:21.314
+Pini Koplovitch: already chunks of data, some of them have documents. I think almost all of them already have chunks.
+
+
+1009
+02:28:21.445 --> 02:28:24.985
+Pini Koplovitch: Okay, it's only testing the retrieval, and…
+
+
+1010
+02:28:25.105 --> 02:28:32.095
+Pini Koplovitch: the generation. So, if you have a pro… if you have a system that is shitty at chunking or indexing or something like that.
+
+
+1011
+02:28:32.375 --> 02:28:34.775
+Pini Koplovitch: There isn't really a benchmark for that.
+
+
+1012
+02:28:35.045 --> 02:28:39.134
+Pini Koplovitch: Domain-specific, Legal RugBench, Mirage, and finance bench.
+
+
+1013
+02:28:39.455 --> 02:28:42.984
+Pini Koplovitch: You should be familiar with FinanceBench.
+
+
+1014
+02:28:43.125 --> 02:28:44.595
+Pini Koplovitch: In the upcoming week.
+
+
+1015
+02:28:45.415 --> 02:28:51.225
+Pini Koplovitch: What is gift release? Sorry? What is gift release for keyword search?
+
+
+1016
+02:28:51.625 --> 02:28:54.515
+Pini Koplovitch: Vector, yeah, 50%, vector list.
+
+
+1017
+02:28:57.925 --> 02:29:02.435
+Pini Koplovitch: I'm not sure, I think it's a copy-paste error of mine, sorry.
+
+
+1018
+02:29:03.405 --> 02:29:04.135
+Pini Koplovitch: Ow.
+
+
+1019
+02:29:05.135 --> 02:29:08.234
+Pini Koplovitch: Dr. Les?
+
+
+1020
+02:29:09.145 --> 02:29:13.445
+Pini Koplovitch: Vector arrived at 50%.
+
+
+1021
+02:29:13.855 --> 02:29:16.405
+Pini Koplovitch: Now, it's… it's a weird data set.
+
+
+1022
+02:29:16.605 --> 02:29:31.014
+Pini Koplovitch: Yeah, the full dataset contains several documents and different types of questions, some of them are keywords-based, some of them are… I think we filtered out some of them for you, because Iran told me that we need to be nice.
+
+
+1023
+02:29:31.845 --> 02:29:49.535
+Pini Koplovitch: You know Aran, right? He builds, home exercise, rates them, and yeah, he wanted to give you a nice data set, and I told him that you need to get your hand dirty and suffer. So, now that that was an actual conversation, I'm not…
+
+
+1024
+02:29:50.175 --> 02:29:57.055
+Pini Koplovitch: So yeah, you should be familiar with Finance Badge, unless he replaced it and didn't tell, which is also an option.
+
+
+1025
+02:29:57.465 --> 02:29:58.845
+Pini Koplovitch: A robustness!
+
+
+1026
+02:29:58.955 --> 02:30:04.885
+Pini Koplovitch: Or… roughness essentially means 10. Like, I missed that.
+
+
+1027
+02:30:05.245 --> 02:30:14.454
+Pini Koplovitch: misuse the term a lot of the time. It's a noise or badness in the case of the queries, or problematic data, and so on.
+
+
+1028
+02:30:14.585 --> 02:30:24.244
+Pini Koplovitch: These are some of the popular benchmarks. There is also BrowseCom, BrowseCom Plus, I think, Facts, Fact Plus, but…
+
+
+1029
+02:30:25.735 --> 02:30:30.794
+Pini Koplovitch: Thing is, and by the way, this is, how, we're gonna end,
+
+
+1030
+02:30:31.005 --> 02:30:35.305
+Pini Koplovitch: today's lecture, not because it will take me 2 minutes, it's because I have a lot to say about that.
+
+
+1031
+02:30:35.745 --> 02:30:39.065
+Pini Koplovitch: But this… the reason that I have only one
+
+
+1032
+02:30:39.625 --> 02:30:43.255
+Pini Koplovitch: lies about drug benchmarks is because they are problematic.
+
+
+1033
+02:30:43.655 --> 02:30:48.455
+Pini Koplovitch: Yes, question. Are these, like, data sets for benchmarking, or are these…
+
+
+1034
+02:30:49.045 --> 02:30:55.735
+Pini Koplovitch: the, like, pipeline? No, so it's not… what… we defined the benchmark as data.
+
+
+1035
+02:30:55.835 --> 02:30:59.284
+Pini Koplovitch: And metric. So just the data. And the metric. Yeah.
+
+
+1036
+02:31:02.565 --> 02:31:12.585
+Pini Koplovitch: So, we do have some problems with RAG benchmarks. And like I said, this will be the last topic, so if you're zoning out right now.
+
+
+1037
+02:31:12.845 --> 02:31:16.945
+Pini Koplovitch: Okay, long day. If you can still manage a few more minutes.
+
+
+1038
+02:31:17.265 --> 02:31:20.505
+Pini Koplovitch: There is a funny meme of the office at the end.
+
+
+1039
+02:31:21.715 --> 02:31:24.405
+Pini Koplovitch: So, you can see that, right?
+
+
+1040
+02:31:26.145 --> 02:31:33.755
+Pini Koplovitch: So, one of the problems, and this is something that I said before when we talked about how to do it synthetically.
+
+
+1041
+02:31:34.485 --> 02:31:46.025
+Pini Koplovitch: The thing is that it's not just in the synthetic part. It also happens in most of the benchmarks. Local questions lead to local answers.
+
+
+1042
+02:31:46.225 --> 02:31:48.905
+Pini Koplovitch: So, I mean, the answer lies in a certain chunk.
+
+
+1043
+02:31:49.565 --> 02:31:55.694
+Pini Koplovitch: And why is that? Think about the people who built those type of benchmarks. What do they do?
+
+
+1044
+02:31:56.065 --> 02:32:00.964
+Pini Koplovitch: they… If they read some documents, oh, this is a nice fact.
+
+
+1045
+02:32:01.145 --> 02:32:03.144
+Pini Koplovitch: Let's ask something about that.
+
+
+1046
+02:32:03.275 --> 02:32:05.944
+Pini Koplovitch: boring. It's really, really hard to…
+
+
+1047
+02:32:06.245 --> 02:32:24.284
+Pini Koplovitch: see a lot of things, like, look at the entire data set, or look at several facts. So, this is a human activity that caused the issue with the wrong benchmarks, but the thing is that
+
+
+1048
+02:32:24.765 --> 02:32:27.985
+Pini Koplovitch: The real world doesn't necessarily vague like that.
+
+
+1049
+02:32:28.865 --> 02:32:30.855
+Pini Koplovitch: That's the issue.
+
+
+1050
+02:32:33.545 --> 02:32:37.035
+Pini Koplovitch: When we do create something like multi-hub questions.
+
+
+1051
+02:32:37.295 --> 02:32:55.275
+Pini Koplovitch: Alright, so questions that require several times. It looks something like this. I'm gonna try to read it in one breath. If my future wife has the same first name as the 16th First Lady of the United States Mother, and her surname is the same as the second
+
+
+1052
+02:32:55.795 --> 02:33:00.345
+Pini Koplovitch: designated president's mother's maiden name. What is my future's wife's name?
+
+
+1053
+02:33:01.505 --> 02:33:05.045
+Pini Koplovitch: And this is not something that I invented, it's taken from Spring.
+
+
+1054
+02:33:05.325 --> 02:33:09.485
+Pini Koplovitch: Which is a dataset by, I think, Google?
+
+
+1055
+02:33:09.855 --> 02:33:12.005
+Pini Koplovitch: Used to test those kind of things.
+
+
+1056
+02:33:12.185 --> 02:33:18.985
+Pini Koplovitch: So… You think, wow, yeah, I do need to understand some things, right?
+
+
+1057
+02:33:20.845 --> 02:33:35.254
+Pini Koplovitch: But… maybe I need to tell you this part about me, you don't know that because you met me through Zoom. In the army, I used to be… I don't know how you say it in English, I used to sit with ear… headphones.
+
+
+1058
+02:33:35.705 --> 02:33:38.435
+Pini Koplovitch: 10 hours a day, and listen.
+
+
+1059
+02:33:38.855 --> 02:33:43.095
+Pini Koplovitch: Which means that I'm very sensitive to noticing.
+
+
+1060
+02:33:43.815 --> 02:33:53.195
+Pini Koplovitch: So, every time you talk, It drives me crazy. And I'm not very normal to begin with, so…
+
+
+1061
+02:33:53.395 --> 02:33:55.615
+Pini Koplovitch: Wait, let's just…
+
+
+1062
+02:33:57.735 --> 02:34:15.494
+Pini Koplovitch: Okay, so these are… again, people created those things because this is something that is easy for us to create, right? To say, oh, you need the… here is the detail from here, detail from here, detail from here, let's think about how to wrap it up, and so on. But this is a stupid question. Nobody actually asked.
+
+
+1063
+02:34:15.495 --> 02:34:23.544
+Pini Koplovitch: Those types of questions. It's like a question from Jeopardy. Yeah, even worse. So… And, of course.
+
+
+1064
+02:34:24.225 --> 02:34:29.934
+Pini Koplovitch: We talked about, benchmarks, retrieval-only benchmark, generation-only benchmarks.
+
+
+1065
+02:34:30.545 --> 02:34:41.925
+Pini Koplovitch: There's nothing that is even, like, the end-to-end benchmarks for RAG in question and answer, and they usually provide the chunks.
+
+
+1066
+02:34:43.155 --> 02:34:46.134
+Pini Koplovitch: What about the chunking? Or parsing?
+
+
+1067
+02:34:46.515 --> 02:34:50.804
+Pini Koplovitch: So there are maybe some benchmarks for, for parsing, we've seen some.
+
+
+1068
+02:34:51.115 --> 02:34:52.285
+Pini Koplovitch: Junking?
+
+
+1069
+02:34:52.985 --> 02:34:56.645
+Pini Koplovitch: How do you measure trunking? You cannot measure this standalone.
+
+
+1070
+02:34:56.955 --> 02:35:00.725
+Pini Koplovitch: So, there is a problem in this system.
+
+
+1071
+02:35:02.485 --> 02:35:07.035
+Pini Koplovitch: Most importantly, I would say, is that…
+
+
+1072
+02:35:07.205 --> 02:35:13.605
+Pini Koplovitch: Even worse than just in LLMs, benchmarks do not correlate with real-world data.
+
+
+1073
+02:35:14.475 --> 02:35:22.314
+Pini Koplovitch: And maybe… Some people will come and tell you that I'm wrong, and that it worked for them.
+
+
+1074
+02:35:22.525 --> 02:35:24.155
+Pini Koplovitch: And maybe they run.
+
+
+1075
+02:35:24.555 --> 02:35:27.314
+Pini Koplovitch: But what I'm saying here is based on…
+
+
+1076
+02:35:27.485 --> 02:35:35.385
+Pini Koplovitch: the work that myself and several others did with clients at AI21 and with partners that we have.
+
+
+1077
+02:35:35.745 --> 02:35:51.774
+Pini Koplovitch: And we're seeing that, yes, you can sometimes even generate your own set, and we have some sort of, like, golden data set or something that included questions from clients, something not public, right? We can put whatever we want there, just to see that we're good.
+
+
+1078
+02:35:52.355 --> 02:35:53.315
+Pini Koplovitch: And…
+
+
+1079
+02:35:53.655 --> 02:36:03.164
+Pini Koplovitch: We're saying that we, a lot of the time, get really good signals, and then we either give it to a client to evaluate, or just give it to the system, something breaks.
+
+
+1080
+02:36:04.255 --> 02:36:07.755
+Pini Koplovitch: And this is because real-world data is messier.
+
+
+1081
+02:36:07.865 --> 02:36:12.365
+Pini Koplovitch: That every data is different, and something which is not even here, because it…
+
+
+1082
+02:36:12.465 --> 02:36:23.574
+Pini Koplovitch: more related to working with clients, a lot of the times, your users or your clients don't know how to evaluate what you're sending them. So, you're giving them some sort of a system.
+
+
+1083
+02:36:23.645 --> 02:36:36.664
+Pini Koplovitch: And they're asking some weird-ass questions that they didn't give you before, and they're expecting some sort of an answer, and according to your standards, to your evaluation metrics, the answers are good.
+
+
+1084
+02:36:36.865 --> 02:36:43.755
+Pini Koplovitch: are acceptable, at least. And they will say, no, it's not good because Something totally irrelevant.
+
+
+1085
+02:36:44.705 --> 02:36:48.245
+Pini Koplovitch: So, the real world is messier and benchmarks.
+
+
+1086
+02:36:48.515 --> 02:36:52.094
+Pini Koplovitch: Can give you the right signal, can give you a good signal, but it's a problem.
+
+
+1087
+02:36:52.525 --> 02:37:00.215
+Pini Koplovitch: And this is, like, how we maybe describe the vicious cycle, where what we do, and I've seen it happen
+
+
+1088
+02:37:00.415 --> 02:37:01.395
+Pini Koplovitch: A lot.
+
+
+1089
+02:37:01.545 --> 02:37:14.424
+Pini Koplovitch: We built a rack system for flawed benchmarks. Why? Because you want to measure yourself somehow when benchmarks are easy, because you want to say, I'm number one in this leaderboard. A lot of reasons to use those type of benchmarks.
+
+
+1090
+02:37:15.135 --> 02:37:20.435
+Pini Koplovitch: Then you celebrate the awesome benchmark scores, because you're number one on the benchmark, and that's cool.
+
+
+1091
+02:37:20.595 --> 02:37:24.575
+Pini Koplovitch: Then you ship it, and then you see your users suffer.
+
+
+1092
+02:37:24.985 --> 02:37:29.424
+Pini Koplovitch: What do you do? You create new benchmarks based on what your users ask.
+
+
+1093
+02:37:29.665 --> 02:37:36.284
+Pini Koplovitch: But because you are a human, after all, those benchmarks suffer from roughly the same problem.
+
+
+1094
+02:37:36.555 --> 02:37:39.075
+Pini Koplovitch: And this happens again, and again.
+
+
+1095
+02:37:39.295 --> 02:37:40.225
+Pini Koplovitch: And again.
+
+
+1096
+02:37:40.975 --> 02:37:47.114
+Pini Koplovitch: Promise you, I mean, right? And, shamelessly plug, obviously.
+
+
+1097
+02:37:47.735 --> 02:37:55.205
+Pini Koplovitch: If you want to learn more about it, this is Nim. He's a good friend of mine, he's the one who brought me to AI21.
+
+
+1098
+02:37:55.205 --> 02:38:08.214
+Pini Koplovitch: And one of the smartest people I know, he makes me look like a fifth grader, and we're talking a lot about it in this episode. There's also an episode on chunking. Again, there's a link, you can just look at another AI podcast, and so on.
+
+
+1099
+02:38:08.385 --> 02:38:17.684
+Pini Koplovitch: And… Let's do two questions, and then we can finish, and then I will take your questions, okay?
+
+
+1100
+02:38:18.875 --> 02:38:25.264
+Pini Koplovitch: No, this is the end of that. You want me to just finish?
+
+
+1101
+02:38:25.715 --> 02:38:31.674
+Pini Koplovitch: Yeah. Oh, is the person, but they've got the… No, no.
+
+
+1102
+02:38:32.365 --> 02:38:34.135
+Pini Koplovitch: Okay, question 3.
+
+
+1103
+02:38:34.695 --> 02:38:38.515
+Pini Koplovitch: Next, next lecture, we'll do it with the Mentimeter, and it will be fine, I promise.
+
+
+1104
+02:38:38.895 --> 02:38:47.375
+Pini Koplovitch: You've indexed 10,000 documents. For a given query, context recall is 0.4. What is the most accurate interpretation?
+
+
+1105
+02:38:47.455 --> 02:38:50.985
+Pini Koplovitch: Hopefully, this time I'm not, in bad phrasing.
+
+
+1106
+02:38:50.985 --> 02:39:07.735
+Pini Koplovitch: A 40% of retrieval chunks were irrelevant for the query. B, only 40% of the actually irrelevant documents were retrieved. C, the LLM used 40% of the retrieved context in its answer. That was 40%. D, the answer was correct 40% of the time.
+
+
+1107
+02:39:09.455 --> 02:39:15.275
+Pini Koplovitch: Is the lecture today good, or are the questions just easy?
+
+
+1108
+02:39:15.275 --> 02:39:34.154
+Pini Koplovitch: You know, I want… I want that, that if I will be a lecturer, and I will do, and I will have, like, a multiple choice exam, I will do an exam where all the answers are A or something, and then nobody will get an A. Nobody, like, nobody…
+
+
+1109
+02:39:34.195 --> 02:39:38.094
+Pini Koplovitch: I don't think I know a person or have the guts to submit an exam like this.
+
+
+1110
+02:39:40.975 --> 02:39:41.990
+Pini Koplovitch: Me?
+
+
+1111
+02:39:43.715 --> 02:39:51.474
+Pini Koplovitch: Your rag system has perfect context recall, but faithfulness, 0.5. What you should investigate first.
+
+
+1112
+02:39:51.675 --> 02:39:57.545
+Pini Koplovitch: The chunking strategy, chunks are too large. The embedding model, it's not so many stuff that the generator…
+
+
+1113
+02:39:58.715 --> 02:40:04.034
+Pini Koplovitch: Are the top K parameter retrieving so many times.
+
+
+1114
+02:40:06.685 --> 02:40:08.365
+Pini Koplovitch: This question was easy.
+
+
+1115
+02:40:08.465 --> 02:40:09.245
+Pini Koplovitch: I know.
+
+
+1116
+02:40:09.785 --> 02:40:10.825
+Pini Koplovitch: Okay.
+
+
+1117
+02:40:13.555 --> 02:40:28.554
+Pini Koplovitch: Can I explain why it's C, or why it's not N, all the others? So, if I have perfect context recall, probably top K parameter, retrieving too many chunks, that's not something that will harm…
+
+
+1118
+02:40:28.845 --> 02:40:32.564
+Pini Koplovitch: my… It's not necessarily something that will harm…
+
+
+1119
+02:40:32.845 --> 02:40:37.614
+Pini Koplovitch: Or I will even say in general, if the recall is high, it means that my retriever is good.
+
+
+1120
+02:40:38.375 --> 02:40:46.524
+Pini Koplovitch: Why, why does that is good? Because it gives me all the relevant, all the relevant chunk for every question.
+
+
+1121
+02:40:47.335 --> 02:40:53.104
+Pini Koplovitch: Now, the top K may be too big, but here.
+
+
+1122
+02:40:53.255 --> 02:41:01.515
+Pini Koplovitch: if I have a recall of 1, it means that, like, I'm kind of assuming that I'm defining the recall to be what is important to me.
+
+
+1123
+02:41:01.645 --> 02:41:05.984
+Pini Koplovitch: because I either want to throw the problem on the LLM,
+
+
+1124
+02:41:06.145 --> 02:41:16.384
+Pini Koplovitch: Or something like that. The thing is that, I mean, now in a situation that for every con… every question, I have context, the enough context, sufficient context to answer, right?
+
+
+1125
+02:41:16.795 --> 02:41:19.144
+Pini Koplovitch: So the problem has to be with the generation.
+
+
+1126
+02:41:19.545 --> 02:41:23.674
+Pini Koplovitch: So not the chunking, not the embedding, and not the tough paper armor.
+
+
+1127
+02:41:23.935 --> 02:41:37.984
+Pini Koplovitch: the solution may be, say, well, I have too much junk here, I need to retrieve less, and then my recall will go lower, or something like that, but the first place I should look is the generation, because I get perfect recall.
+
+
+1128
+02:41:39.855 --> 02:41:42.364
+Pini Koplovitch: But yeah, you know what? Surely.
+
+
+1129
+02:41:42.525 --> 02:41:46.374
+Pini Koplovitch: I would also accept that, because this is not graded, so I don't care.
+
+
+1130
+02:41:47.075 --> 02:41:48.935
+Pini Koplovitch: Okay.
+
+
+1131
+02:41:49.555 --> 02:41:53.204
+Pini Koplovitch: If you have any ques… if you have any questions,
+
+
+1132
+02:41:53.905 --> 02:41:59.315
+Pini Koplovitch: Should I do it on the record, or just, like, tell them to come to me? Okay, I'll just take one question, and then I will say goodbye.
+
+
+1133
+02:41:59.955 --> 02:42:04.105
+Pini Koplovitch: question, re-reply.
+
+
+1134
+02:42:04.335 --> 02:42:09.714
+Pini Koplovitch: Sorry? About the… Ben? No, Berlin?
+
+
+1135
+02:42:12.905 --> 02:42:14.364
+Pini Koplovitch: What? Can I move on?
+
+
+1136
+02:42:14.655 --> 02:42:15.675
+Pini Koplovitch: Here you go.
+
+
+1137
+02:42:16.165 --> 02:42:18.525
+Pini Koplovitch: For the moving more versions?
+
+
+1138
+02:42:18.625 --> 02:42:23.105
+Pini Koplovitch: Can you combine a set of cells with rockets?
+
+
+1139
+02:42:23.535 --> 02:42:26.994
+Pini Koplovitch: You can, this is, for reasoning and rug, frames.
+
+
+1140
+02:42:27.835 --> 02:42:29.874
+Pini Koplovitch: But, like, who asked that?
+
+
+1141
+02:42:30.015 --> 02:42:33.655
+Pini Koplovitch: Do you know a user that will say something like that unless they're trolling you?
+
+
+1142
+02:42:36.055 --> 02:42:48.554
+Pini Koplovitch: But you betrayed him, that's the thing. You didn't actually… it's not that you actually… your future wife has the same first name of blah blah blah blah blah. So…
+
+
+1143
+02:42:48.735 --> 02:42:52.304
+Pini Koplovitch: If you're a troll, like, I don't consider you as a real user.
+
+
+1144
+02:42:52.405 --> 02:42:54.665
+Pini Koplovitch: Sorry.
+
+
+1145
+02:42:55.435 --> 02:43:10.305
+Pini Koplovitch: Okay, we will update about the next lectures, me or Tom. Either way, you still have one lecture with me, one lecture with Tom next week. There is no lecture. Homework assignment will be published today, or even already,
+
+
+1146
+02:43:10.535 --> 02:43:15.705
+Pini Koplovitch: If you have any feedback, I think you're sending something, right? Yeah.
+
+
+1147
+02:43:16.045 --> 02:43:26.795
+Pini Koplovitch: I try to incorporate your feedback to this lecture. I still have one more lecture to do something different, if you want. Let me know, and I will stay here for a few minutes for questions.
+
+
+1148
+02:43:26.795 --> 02:43:28.731
+Pini Koplovitch: Please answer the question in the Q&A.
+
+
