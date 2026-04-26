@@ -19,7 +19,7 @@
   --paper-dark:#ece3cf;
   --ink:#1d1914;
   --ink-soft:#4a4236;
-  --accent:#a43a2f;      /* burnt sienna */
+  --accent:#a43a2f;
   --accent-soft:#c56a58;
   --rule:#cbbe9e;
   --highlight:#f2d98a;
@@ -41,7 +41,6 @@ body{
 .rule{height:1px;background:var(--rule);margin:40px 0;}
 .rule.short{width:80px;height:2px;background:var(--accent);margin:30px auto;}
 
-/* Hero */
 .hero{text-align:center;padding:30px 0 20px;border-bottom:1px solid var(--rule);}
 .kicker{font-family:'Fraunces',serif;font-weight:500;letter-spacing:.3em;text-transform:uppercase;font-size:12px;color:var(--accent);margin-bottom:18px;}
 h1.title{font-family:'Fraunces',serif;font-weight:300;font-size:62px;line-height:1.05;letter-spacing:-.02em;margin:0 0 12px;}
@@ -50,7 +49,6 @@ h1.title em{font-style:italic;font-weight:400;color:var(--accent);}
 .meta{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin:8px 0 22px;}
 .meta b{font-family:'Fraunces',serif;font-weight:600;color:var(--ink);}
 
-/* TOC */
 .toc{background:var(--paper-dark);border:1px solid var(--rule);padding:24px 30px;margin:40px auto;max-width:640px;}
 .toc h3{font-family:'Fraunces',serif;font-weight:500;font-size:14px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
 .toc ol{list-style:none;padding:0;margin:0;column-count:2;column-gap:24px;font-size:15px;}
@@ -59,14 +57,12 @@ h1.title em{font-style:italic;font-weight:400;color:var(--accent);}
 .toc a:hover{color:var(--accent);border-color:var(--accent);}
 .toc .num{font-family:'Fraunces',serif;color:var(--accent);font-weight:500;display:inline-block;width:28px;}
 
-/* Headings */
 h2{font-family:'Fraunces',serif;font-weight:400;font-size:38px;line-height:1.1;letter-spacing:-.015em;margin:68px 0 8px;padding-top:10px;}
 h2 .section-num{color:var(--accent);font-family:'Fraunces',serif;font-weight:300;font-size:28px;margin-right:12px;letter-spacing:.02em;}
 h3{font-family:'Fraunces',serif;font-weight:500;font-size:24px;margin:38px 0 8px;line-height:1.25;}
 h4{font-family:'Fraunces',serif;font-weight:600;font-size:17px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin:28px 0 6px;}
 .lede{font-family:'Newsreader',serif;font-style:italic;font-weight:300;font-size:22px;color:var(--ink-soft);line-height:1.45;margin:0 0 28px;border-left:3px solid var(--accent);padding-left:18px;}
 
-/* Body */
 p{margin:0 0 18px;}
 p.first-para::first-letter{
   font-family:'Fraunces',serif;
@@ -81,12 +77,10 @@ a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;te
 strong{font-weight:600;color:var(--ink);}
 em{font-style:italic;}
 
-/* Code */
 code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(164,58,47,.08);padding:1px 6px;border-radius:3px;color:var(--plum);}
 pre{background:#2b2822;color:#e9dfc7;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.55;padding:18px 20px;border-radius:4px;overflow-x:auto;margin:18px 0;border-left:3px solid var(--accent);}
 pre code{background:none;padding:0;color:inherit;}
 
-/* Callouts */
 .callout{background:var(--paper-dark);border-left:3px solid var(--accent);padding:16px 22px;margin:22px 0;font-size:17px;line-height:1.5;}
 .callout.blue{border-color:var(--blue);}
 .callout.green{border-color:var(--green);}
@@ -94,27 +88,22 @@ pre code{background:none;padding:0;color:inherit;}
 .callout.blue b{color:var(--blue);}
 .callout.green b{color:var(--green);}
 
-/* Sidenote */
 .sidenote{display:block;background:transparent;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:10px 0;margin:18px 0;font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.4;}
 .sidenote b{font-style:normal;color:var(--accent);font-family:'Fraunces',serif;font-weight:600;letter-spacing:.1em;font-size:11px;text-transform:uppercase;margin-right:8px;}
 
-/* Pull quote */
 .pullquote{font-family:'Fraunces',serif;font-weight:300;font-size:28px;line-height:1.2;font-style:italic;color:var(--ink);text-align:center;margin:38px auto;max-width:560px;padding:20px 30px;border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);}
 .pullquote b{color:var(--accent);font-weight:500;}
 
-/* Tables */
 table{width:100%;border-collapse:collapse;margin:22px 0;font-size:15px;}
 th,td{border-bottom:1px solid var(--rule);padding:9px 10px;text-align:left;vertical-align:top;}
 th{font-family:'Fraunces',serif;font-weight:600;background:var(--paper-dark);font-size:13px;letter-spacing:.05em;text-transform:uppercase;}
 td code{font-size:.9em;}
 
-/* Figures / SVG */
 .figure{margin:32px -10px;padding:22px 20px;background:var(--paper-dark);border:1px solid var(--rule);}
 .figure svg{display:block;margin:0 auto;max-width:100%;height:auto;}
 .figcaption{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:14px;color:var(--ink-soft);text-align:center;margin-top:10px;letter-spacing:.02em;}
 .figcaption b{font-style:normal;color:var(--accent);font-family:'Fraunces',serif;font-weight:600;letter-spacing:.1em;font-size:11px;text-transform:uppercase;margin-right:6px;}
 
-/* Interactive */
 .interactive{background:var(--paper-dark);border:2px dashed var(--accent-soft);padding:22px;margin:28px 0;}
 .interactive h4{margin-top:0;color:var(--accent);}
 .interactive label{display:inline-block;min-width:140px;font-size:14px;color:var(--ink-soft);font-family:'Fraunces',serif;font-weight:500;}
@@ -122,10 +111,7 @@ td code{font-size:.9em;}
 .interactive .val{display:inline-block;min-width:60px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:600;font-size:14px;}
 .interactive .chart{margin-top:16px;}
 .interactive .out{background:#fff8ec;border:1px solid var(--rule);padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;white-space:pre-wrap;}
-.bar{height:16px;background:var(--accent);border-radius:2px;margin:3px 0;transition:width .3s;}
-.bar.muted{background:var(--rule);}
 
-/* Task card */
 .task-card{background:#fff8ec;border:1px solid var(--rule);border-left:5px solid var(--accent);padding:22px 26px;margin:22px 0;page-break-inside:avoid;}
 .task-card .tag{display:inline-block;font-family:'Fraunces',serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;background:var(--accent);color:var(--paper);padding:3px 10px;border-radius:2px;margin-bottom:10px;font-weight:600;}
 .task-card h3{margin:0 0 8px;font-size:22px;}
@@ -135,21 +121,32 @@ td code{font-size:.9em;}
 .task-card .concepts{background:rgba(164,58,47,.05);padding:10px 14px;border-radius:3px;margin-top:12px;font-size:15px;}
 .task-card .concepts b{font-family:'Fraunces',serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:4px;}
 
-/* Footer */
 footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-align:center;font-size:13px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;font-family:'Fraunces',serif;font-weight:500;}
 
-/* Columns for small concept grid */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:22px 0;}
 .grid2 .box{background:var(--paper-dark);padding:16px 18px;border-top:3px solid var(--accent);}
 .grid2 .box h5{font-family:'Fraunces',serif;font-weight:600;font-size:15px;margin:0 0 8px;color:var(--accent);}
 .grid2 .box p{font-size:15px;margin:0;line-height:1.45;}
 
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:22px 0;}
+.grid3 .stat{background:var(--paper-dark);padding:18px 14px;text-align:center;border-top:3px solid var(--accent);}
+.grid3 .stat .big{font-family:'Fraunces',serif;font-weight:500;font-size:34px;color:var(--accent);line-height:1;margin-bottom:6px;}
+.grid3 .stat .lab{font-size:13px;color:var(--ink-soft);font-family:'Fraunces',serif;font-weight:500;letter-spacing:.05em;text-transform:uppercase;}
+
+.resultsbar{display:flex;align-items:center;margin:6px 0;font-size:14px;}
+.resultsbar .name{flex:0 0 220px;color:var(--ink-soft);font-family:'Fraunces',serif;font-weight:500;}
+.resultsbar .bar{flex:1;height:18px;background:var(--paper-dark);border:1px solid var(--rule);position:relative;}
+.resultsbar .bar .fill{height:100%;background:var(--accent);}
+.resultsbar .bar .fill.soft{background:var(--accent-soft);}
+.resultsbar .val{flex:0 0 50px;text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent);font-size:13px;margin-left:8px;}
+
 @media(max-width:720px){
   .page{padding:40px 20px 80px}
   h1.title{font-size:42px;}
   .toc ol{column-count:1;}
-  .grid2{grid-template-columns:1fr;}
+  .grid2,.grid3{grid-template-columns:1fr;}
   h2{font-size:30px;}
+  .resultsbar .name{flex:0 0 150px;font-size:12px;}
 }
 </style>
 </head>
@@ -174,15 +171,15 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
   <h3>Contents</h3>
   <ol>
     <li><span class="num">§1</span><a href="#why">Why RAG exists</a></li>
-    <li><span class="num">§2</span><a href="#recipe">The four-step recipe</a></li>
-    <li><span class="num">§3</span><a href="#chunking">Chunking, in practice</a></li>
-    <li><span class="num">§4</span><a href="#embed">Embeddings &amp; vector space</a></li>
-    <li><span class="num">§5</span><a href="#faiss">FAISS &amp; the index</a></li>
-    <li><span class="num">§6</span><a href="#retrieve">Retrieval &amp; top-k</a></li>
-    <li><span class="num">§7</span><a href="#generate">Prompting the generator</a></li>
-    <li><span class="num">§8</span><a href="#eval">Evaluating a RAG pipeline</a></li>
-    <li><span class="num">§9</span><a href="#ragas">Ragas wiring for Nebius</a></li>
-    <li><span class="num">§10</span><a href="#fb">The FinanceBench dataset</a></li>
+    <li><span class="num">§2</span><a href="#fb">The FinanceBench dataset</a></li>
+    <li><span class="num">§3</span><a href="#recipe">The four-step recipe</a></li>
+    <li><span class="num">§4</span><a href="#chunking">Chunking, in practice</a></li>
+    <li><span class="num">§5</span><a href="#embed">Embeddings &amp; vector space</a></li>
+    <li><span class="num">§6</span><a href="#faiss">FAISS &amp; the index</a></li>
+    <li><span class="num">§7</span><a href="#retrieve">Retrieval &amp; top-k</a></li>
+    <li><span class="num">§8</span><a href="#generate">Prompting the generator</a></li>
+    <li><span class="num">§9</span><a href="#eval">Evaluating a RAG pipeline</a></li>
+    <li><span class="num">§10</span><a href="#ragas">Ragas wiring for Nebius</a></li>
     <li><span class="num">§11</span><a href="#improve">Improvement experiments</a></li>
     <li><span class="num">§12</span><a href="#rerank">Rerankers (cross-encoders)</a></li>
     <li><span class="num">§13</span><a href="#multi">Multi-scale chunking (bonus)</a></li>
@@ -207,14 +204,127 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
 <aside class="sidenote"><b>Course</b> Yuval's analogy: fine-tune = parrot who read many books in a subject. RAG = parrot with a really good search engine.</aside>
 </section>
 
-<!-- ============== §2 RECIPE ============== -->
+<!-- ============== §2 FINANCEBENCH ============== -->
+<section id="fb">
+<h2><span class="section-num">§2</span>The FinanceBench dataset</h2>
+<p class="lede">Before you build anything: understand the thing you're being evaluated on. FinanceBench was created by Patronus AI, Contextual AI, and Stanford in late 2023 as a first-of-its-kind test suite for <em>open-book</em> financial QA. It's deliberately hard — the benchmark's own paper showed GPT-4-Turbo + shared vector store incorrectly answered or refused <strong>81% of questions</strong>.</p>
+
+<h3>At a glance</h3>
+<div class="grid3">
+  <div class="stat"><div class="big">10,231</div><div class="lab">question–answer–evidence triplets</div></div>
+  <div class="stat"><div class="big">40</div><div class="lab">US public companies</div></div>
+  <div class="stat"><div class="big">360</div><div class="lab">public filings, 2015–2023</div></div>
+  <div class="stat"><div class="big">150</div><div class="lab">questions in the open-source eval sample</div></div>
+  <div class="stat"><div class="big">9</div><div class="lab">of 11 GICS sectors represented</div></div>
+  <div class="stat"><div class="big">20</div><div class="lab">domain-expert annotators (finance background)</div></div>
+</div>
+
+<h3>What's in each filing</h3>
+<p>The knowledge base is dense: <strong>10-Ks</strong> (270 of the 360 documents, ~75%, and <em>93% of all questions</em>), plus 10-Qs (27), 8-Ks (29), earnings reports (29), and annual reports (5). A single 10-K runs 100–300 pages of mostly narrative prose with some tables — exactly the regime where plain keyword search fails and semantic retrieval has to earn its keep.</p>
+
+<aside class="sidenote"><b>Why so many 10-Ks</b> 10-Ks are comprehensive annual reports containing the most technical detail — income statement, balance sheet, cash flow, risk factors, management discussion. They're the canonical document financial analysts reach for.</aside>
+
+<h3>The three question types</h3>
+<p>Every question is labelled with one of three types. Each came from a different process and has very different properties. The assignment <strong>drops <code>metrics-generated</code></strong> and keeps the other two.</p>
+
+<table>
+<thead><tr><th>Type</th><th>Count</th><th>How generated</th><th>Difficulty</th></tr></thead>
+<tbody>
+<tr><td><b>domain-relevant</b></td><td>925</td><td>25 generic analyst questions asked against 37 companies ("did they pay a dividend in the last year?", "are operating margins consistent?"). Developed with financial analysts and refined by reviewing filings.</td><td>Medium. Some could be answered from general world knowledge (what industry is this company in?).</td></tr>
+<tr><td><b>novel-generated</b></td><td>1,323</td><td>Annotator-written questions specific to the company + report + industry. Brief: "realistic, varied, challenging" — not purely extractive, must involve reasoning.</td><td>Variable. May require synthesis across multiple passages.</td></tr>
+<tr><td><b>metrics-generated</b> <em>(dropped)</em></td><td>7,983</td><td>Templated from 18 base metrics × 8 years (2015–2022) × 32 companies, then augmented with derivative metrics like net-income margin. 11 "vanilla" + 11 "creative" intros and 7+7 endings, for phrasing diversity.</td><td>Mostly numerical reasoning. Often needs multiple financial statements.</td></tr>
+</tbody>
+</table>
+
+<h3>Reasoning taxonomy</h3>
+<p>The paper also labelled <em>what kind of reasoning</em> each question requires. This is useful when Task 5 asks you to diagnose RAG-help vs RAG-hurt patterns:</p>
+
+<div class="grid3">
+  <div class="stat"><div class="big">28%</div><div class="lab">information extraction</div></div>
+  <div class="stat"><div class="big">66%</div><div class="lab">numerical reasoning</div></div>
+  <div class="stat"><div class="big">6%</div><div class="lab">logical reasoning</div></div>
+</div>
+
+<p>The vast majority (66%) require the model to <em>do maths on numbers it just retrieved</em> — a known LLM weakness. Information-extraction questions, by contrast, are mostly "find the sentence, copy it out" and should behave best under RAG.</p>
+
+<h3>Why it's hard — the paper's own numbers</h3>
+<p>The FinanceBench paper tested 16 model configurations on the 150-question eval sample. The headline results establish the ceiling and the difficulty:</p>
+
+<div class="figure">
+<div style="padding:8px 0 4px 0">
+<div class="resultsbar"><div class="name">GPT-4-Turbo · Closed Book</div><div class="bar"><div class="fill" style="width:9%"></div></div><div class="val">9%</div></div>
+<div class="resultsbar"><div class="name">GPT-4-Turbo · Shared Store</div><div class="bar"><div class="fill" style="width:19%"></div></div><div class="val">19%</div></div>
+<div class="resultsbar"><div class="name">Llama2 · Shared Store</div><div class="bar"><div class="fill" style="width:19%"></div></div><div class="val">19%</div></div>
+<div class="resultsbar"><div class="name">Llama2 · Single Store</div><div class="bar"><div class="fill" style="width:41%"></div></div><div class="val">41%</div></div>
+<div class="resultsbar"><div class="name">GPT-4-Turbo · Single Store</div><div class="bar"><div class="fill" style="width:50%"></div></div><div class="val">50%</div></div>
+<div class="resultsbar"><div class="name">Claude 2 · Long Context</div><div class="bar"><div class="fill soft" style="width:76%"></div></div><div class="val">76%</div></div>
+<div class="resultsbar"><div class="name">GPT-4-Turbo · Long Context</div><div class="bar"><div class="fill soft" style="width:79%"></div></div><div class="val">79%</div></div>
+<div class="resultsbar"><div class="name">GPT-4-Turbo · Oracle*</div><div class="bar"><div class="fill soft" style="width:85%"></div></div><div class="val">85%</div></div>
+</div>
+<div class="figcaption"><b>Fig 1</b>FinanceBench paper results — % correct on the 150-question eval sample. *Oracle = the model is handed the evidence page directly (no retrieval).</div>
+</div>
+
+<p>Three things to take away:</p>
+<ul>
+<li><strong>Retrieval is the bottleneck.</strong> The gap between "shared vector store" (19%) and "single store per document" (50%) is 31 points — the <em>only</em> thing that changed is how narrowly the retriever had to search. Better retrieval → much better answers.</li>
+<li><strong>Hallucination, not refusal, is the main failure.</strong> Llama2 with a shared store answered wrong on 70% of questions but refused only 11%. Models would rather confidently lie than admit ignorance.</li>
+<li><strong>Oracle is ~85%, not 100%.</strong> Even when the model is handed the exact evidence page, ~15% of questions are still wrong — numerical reasoning and multi-statement synthesis are genuine generation failures.</li>
+</ul>
+
+<div class="callout">
+  <b>What this means for your targets</b>
+  If your end-to-end correctness lands near 20–50% on the full filtered set, you're in the range the paper reported for vector-RAG — not a disaster, it's the benchmark's difficulty. The assignment isn't graded on absolute score; it's graded on whether you can explain <em>which component</em> is failing.
+</div>
+
+<h3>Qualitative failure modes (from the paper)</h3>
+<p>The paper's authors manually reviewed every response. They identified five recurring themes — bring these to Task 1 and Task 5 discussion:</p>
+
+<div class="grid2">
+  <div class="box"><h5>Hallucinations</h5><p>Superficially coherent, fully-justified, with reasoning steps — but wrong. These are the most dangerous because they're hardest to catch.</p></div>
+  <div class="box"><h5>Helpful refusals</h5><p>Model refuses but tells the user where to find the info. Useful, but still a failure by the metric.</p></div>
+  <div class="box"><h5>Different but valid</h5><p>Model answers differently from the gold label and is still correct — especially for qualitative questions. The paper's authors allowed these as correct.</p></div>
+  <div class="box"><h5>Irrelevant comments</h5><p>Model doesn't understand the task and "guesses" in a generic direction. Rare but indicates prompt trouble.</p></div>
+  <div class="box"><h5>High-quality correct</h5><p>Better than the gold answer — with multiple evidence points, absolute + percentage diffs, full calculation steps.</p></div>
+  <div class="box"><h5>Unit / rounding confusion</h5><p>Correct logic, wrong units (millions vs billions), or tiny rounding error. Paper's judges allowed <em>minor</em> deviations.</p></div>
+</div>
+
+<h3>Dataset fields you'll touch</h3>
+<table>
+<thead><tr><th>Column</th><th>Meaning</th><th>How you'll use it</th></tr></thead>
+<tbody>
+<tr><td><code>financebench_id</code></td><td>unique id (<code>financebench_id_0000</code> style)</td><td>sort key for "first 5 per type"; xlsx row key</td></tr>
+<tr><td><code>question</code></td><td>the question text</td><td>input to naive + RAG</td></tr>
+<tr><td><code>answer</code></td><td>human-annotated gold answer</td><td>ground truth for correctness</td></tr>
+<tr><td><code>question_type</code></td><td><code>metrics-generated</code> / <code>domain-relevant</code> / <code>novel-generated</code></td><td>drop <code>metrics-generated</code>; stratify Task 1/5 selection</td></tr>
+<tr><td><code>justification</code></td><td>annotator's reasoning (where relevant)</td><td>useful when sanity-checking a "wrong" RAG answer that might be right</td></tr>
+<tr><td><code>doc_name</code></td><td>the specific filing</td><td>metadata on every chunk; spot-check retrieval</td></tr>
+<tr><td><code>company</code> / <code>gics_sector</code> / <code>doc_period</code> / <code>doc_type</code></td><td>filing context</td><td>stratification; optional metadata filtering</td></tr>
+<tr><td><code>doc_link</code></td><td>PDF URL</td><td>some are dead — replace with course repo link</td></tr>
+<tr><td><code>evidence</code> → <code>evidence_page_num</code></td><td>page(s) containing the answer</td><td>ground truth for page-hit@k</td></tr>
+<tr><td><code>evidence</code> → <code>evidence_text</code></td><td>exact annotator-chosen snippet</td><td>sanity-check chunking + retrieval</td></tr>
+<tr><td><code>evidence</code> → <code>evidence_text_full_page</code></td><td>entire page around the evidence text</td><td>extra context for the spot-check</td></tr>
+<tr><td><code>dataset_subset_label</code></td><td>subset flag</td><td><strong>ignore</strong> (per the assignment PDF)</td></tr>
+</tbody>
+</table>
+
+<div class="callout blue">
+  <b>The 0-indexed vs 1-indexed trap</b>
+  The FinanceBench paper notes "all page numbers are 1-indexed" in the raw GitHub JSONL. But the HuggingFace <code>PatronusAI/financebench</code> dataset lists <code>evidence_page_num</code> as 0-indexed, and the assignment explicitly says "keep <code>page_number</code> 0-indexed to match <code>evidence_page_num</code>." Bottom line: after loading the dataset, <em>print one row and one PyPDFLoader page to verify they align.</em> Mis-alignment by one silently wrecks page-hit@k.
+</div>
+
+<h3>What the assignment keeps vs drops</h3>
+<p>After dropping <code>metrics-generated</code>, you're left with <strong>~2,248 questions</strong> (925 + 1,323). The open-source eval sample splits 50/50/50 across types, so when you filter it, you'll have roughly <em>100 questions</em> (50 domain-relevant + 50 novel-generated) to run — a practical size for Tasks 1, 5, 6, 7.</p>
+
+<aside class="sidenote"><b>Companies you'll likely see</b> The paper's open-source sample draws heavily from 3M, Boeing, CVS Health, Coca-Cola, MGM Resorts, Netflix, Pfizer, Salesforce, Ulta Beauty, and Verizon — but the filtered set can include others. The "more documents in the folder than referenced in the dataset" note in the assignment means: don't index the whole folder, only the filings actually referenced after filtering.</aside>
+</section>
+
+<!-- ============== §3 RECIPE ============== -->
 <section id="recipe">
-<h2><span class="section-num">§2</span>The four-step recipe</h2>
+<h2><span class="section-num">§3</span>The four-step recipe</h2>
 <p class="lede">Every RAG system — yours, OpenAI's, the one behind your coworker's dissertation demo — is four boxes. Two happen offline. Two happen every time a user hits enter.</p>
 
 <div class="figure">
 <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" font-family="Fraunces, serif">
-  <!-- Indexing row -->
   <text x="360" y="28" text-anchor="middle" font-size="12" letter-spacing="3" fill="#a43a2f" font-weight="600">INDEXING · OFFLINE (ONCE)</text>
   <rect x="30" y="50" width="140" height="70" fill="#ece3cf" stroke="#cbbe9e"/>
   <text x="100" y="82" text-anchor="middle" font-size="14" font-weight="600">1 · Chunk</text>
@@ -227,9 +337,7 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
   <text x="440" y="102" text-anchor="middle" font-size="11" fill="#4a4236" font-style="italic">FAISS index</text>
   <path d="M170 85 L200 85" stroke="#a43a2f" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
   <path d="M340 85 L370 85" stroke="#a43a2f" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-  <!-- dashed bridge -->
   <path d="M440 120 L440 160" stroke="#a43a2f" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>
-  <!-- Inference row -->
   <text x="360" y="190" text-anchor="middle" font-size="12" letter-spacing="3" fill="#a43a2f" font-weight="600">INFERENCE · ONLINE (PER QUERY)</text>
   <rect x="30" y="210" width="140" height="70" fill="#ece3cf" stroke="#cbbe9e"/>
   <text x="100" y="242" text-anchor="middle" font-size="14" font-weight="600">Query</text>
@@ -242,7 +350,6 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
   <text x="440" y="262" text-anchor="middle" font-size="11" fill="#f6efe1" font-style="italic">grounded answer</text>
   <path d="M170 245 L200 245" stroke="#a43a2f" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
   <path d="M340 245 L370 245" stroke="#a43a2f" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-  <!-- from index into retrieve -->
   <path d="M510 160 L540 160 L540 245 L510 245" stroke="#a43a2f" stroke-width="1.5" fill="none" marker-end="url(#arr)" stroke-dasharray="4 4"/>
   <text x="620" y="200" font-size="11" fill="#4a4236" font-style="italic">the stored<br/>vectors</text>
   <defs>
@@ -251,7 +358,7 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
     </marker>
   </defs>
 </svg>
-<div class="figcaption"><b>Fig 1</b>Indexing happens once when you build or update the knowledge base. Retrieval + generation happen every time a user asks something.</div>
+<div class="figcaption"><b>Fig 2</b>Indexing happens once when you build or update the knowledge base. Retrieval + generation happen every time a user asks something.</div>
 </div>
 
 <table>
@@ -267,9 +374,9 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
 <aside class="sidenote"><b>Task 2</b> The question asks you to separate <em>indexing</em>, <em>retrieval</em>, and <em>generation</em>. Use this split as your scaffolding — and remember that <b>retrieval</b> and <b>generation</b> are the ones that run per-query.</aside>
 </section>
 
-<!-- ============== §3 CHUNKING ============== -->
+<!-- ============== §4 CHUNKING ============== -->
 <section id="chunking">
-<h2><span class="section-num">§3</span>Chunking, in practice</h2>
+<h2><span class="section-num">§4</span>Chunking, in practice</h2>
 <p class="lede">A chunk is the smallest unit you can possibly retrieve. Too small and it's meaningless ("this shall not apply in cases described above"). Too large and a single 8-topic embedding dilutes all 8 topics into mush.</p>
 
 <h3>The three levers</h3>
@@ -295,15 +402,14 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
   <text x="30" y="121" font-size="12" font-family="JetBrains Mono, monospace">chunk A · 0 – 999 chars</text>
   <rect x="370" y="134" width="270" height="22" fill="#f6efe1" stroke="#a43a2f"/>
   <text x="378" y="150" font-size="12" font-family="JetBrains Mono, monospace">chunk B · 850 – 1500</text>
-  <!-- overlap indicator -->
   <rect x="370" y="102" width="55" height="28" fill="#f2d98a" fill-opacity="0.6" stroke="none"/>
   <text x="398" y="100" text-anchor="middle" font-size="10" font-style="italic" fill="#a43a2f">overlap 150</text>
 </svg>
-<div class="figcaption"><b>Fig 2</b>Chunks inherit page metadata from the Document. The yellow strip is repeated across both chunks so nothing gets severed at a boundary.</div>
+<div class="figcaption"><b>Fig 3</b>Chunks inherit page metadata from the Document. The yellow strip is repeated across both chunks so nothing gets severed at a boundary.</div>
 </div>
 
 <h3>Why metadata matters <em>before</em> splitting</h3>
-<p>If you attach <code>{doc_name, page_number}</code> to the Document <em>before</em> calling the splitter, every child chunk carries it. If you try to do it after splitting you have to recompute it. The assignment insists on <code>page_number</code> as a 0-indexed field so it can be compared directly to the dataset's <code>evidence_page_num</code> (also 0-indexed in FinanceBench).</p>
+<p>If you attach <code>{doc_name, page_number}</code> to the Document <em>before</em> calling the splitter, every child chunk carries it. If you try to do it after splitting you have to recompute it. The assignment insists on <code>page_number</code> as a 0-indexed field so it can be compared directly to the dataset's <code>evidence_page_num</code>.</p>
 
 <aside class="sidenote"><b>Gotcha</b> <code>PyPDFLoader</code> already attaches a default <code>page</code> field. You'll either rename it or add a new <code>page_number</code>. Pick one — inconsistency here will haunt Task 6.</aside>
 
@@ -320,9 +426,9 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
   const cs=document.getElementById('cs'),v=document.getElementById('csv'),o=document.getElementById('csout');
   const update=()=>{
     const n=+cs.value; v.textContent=n;
-    const pagesPerFiling=500, charsPerPage=2800; // rough 10-K scale
+    const pagesPerFiling=500, charsPerPage=2800;
     const totalChars=pagesPerFiling*charsPerPage;
-    const effective=n-150; // overlap steals from effective stride
+    const effective=n-150;
     const chunks=Math.round(totalChars/effective);
     let verdict;
     if(n<400) verdict="⚠ tiny — embeddings lose surrounding context; lots of noise hits";
@@ -337,9 +443,9 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
 </script>
 </section>
 
-<!-- ============== §4 EMBEDDINGS ============== -->
+<!-- ============== §5 EMBEDDINGS ============== -->
 <section id="embed">
-<h2><span class="section-num">§4</span>Embeddings &amp; vector space</h2>
+<h2><span class="section-num">§5</span>Embeddings &amp; vector space</h2>
 <p class="lede">An embedding model is a function that maps a string into a point in a high-dimensional space, such that strings with similar meaning land near each other.</p>
 
 <p>For this assignment we use <code>BAAI/bge-small-en-v1.5</code>. Three numbers to remember:</p>
@@ -358,7 +464,6 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
 
 <div class="figure">
 <svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg" font-family="Fraunces, serif">
-  <!-- Good space -->
   <text x="130" y="20" text-anchor="middle" font-size="12" letter-spacing="3" fill="#4a6b3a" font-weight="600">GOOD SPACE</text>
   <circle cx="80" cy="90" r="60" fill="#d9e4cc" fill-opacity=".6" stroke="#4a6b3a"/>
   <text x="80" y="74" text-anchor="middle" font-size="13">king</text>
@@ -368,7 +473,6 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
   <text x="210" y="160" text-anchor="middle" font-size="13">apple</text>
   <text x="190" y="178" text-anchor="middle" font-size="13">fruit</text>
   <text x="225" y="195" text-anchor="middle" font-size="13">banana</text>
-  <!-- Bad space -->
   <text x="400" y="20" text-anchor="middle" font-size="12" letter-spacing="3" fill="#a43a2f" font-weight="600">BAD SPACE</text>
   <circle cx="350" cy="80" r="30" fill="#eee" stroke="#888"/>
   <text x="350" y="85" text-anchor="middle" font-size="13">king</text>
@@ -379,16 +483,16 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
   <circle cx="460" cy="200" r="30" fill="#eee" stroke="#888"/>
   <text x="460" y="205" text-anchor="middle" font-size="13">prince</text>
 </svg>
-<div class="figcaption"><b>Fig 3</b>A good embedding clusters semantically similar words. A bad one scatters them — which is exactly what retrieval builds on top of.</div>
+<div class="figcaption"><b>Fig 4</b>A good embedding clusters semantically similar words. A bad one scatters them — which is exactly what retrieval builds on top of.</div>
 </div>
 
 <h3>Query vs passage symmetry</h3>
 <p>The bge models are trained so a query embedding and a chunk embedding can be compared directly with cosine. Some embedding families need a query prefix (<code>"query: ..."</code>) to work well; bge-small-en-v1.5 recommends it for asymmetric tasks. For FinanceBench — question versus filing prose — the difference is small and LangChain's default behaviour is fine unless you see retrieval doing poorly.</p>
 </section>
 
-<!-- ============== §5 FAISS ============== -->
+<!-- ============== §6 FAISS ============== -->
 <section id="faiss">
-<h2><span class="section-num">§5</span>FAISS &amp; the index</h2>
+<h2><span class="section-num">§6</span>FAISS &amp; the index</h2>
 <p class="lede">A vector store is a database tuned for one operation: "given a query vector, give me the k closest stored vectors, fast." FAISS is the one Meta built; it's fast, local, and what LangChain's helper wraps.</p>
 
 <p>At build time you hand FAISS:</p>
@@ -408,13 +512,13 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
   <code>vectorstore.save_local(path)</code> persists the FAISS index + the docstore with metadata. Reloading with <code>FAISS.load_local</code> needs <code>allow_dangerous_deserialization=True</code>. Save it once, reuse it across Tasks 4–7 — re-embedding every notebook restart burns time and API calls.
 </div>
 
-<aside class="sidenote"><b>Numeric scale</b> For FinanceBench's ~40 filings (each ~200–300 pages), chunk_size=1000 gives you roughly 15–25k chunks. Entirely fine for a local FAISS index on a laptop.</aside>
+<aside class="sidenote"><b>Numeric scale</b> For the filtered FinanceBench subset (~40 filings × ~200–300 pages), chunk_size=1000 gives you roughly 15–25k chunks. Entirely fine for a local FAISS index on a laptop.</aside>
 </section>
 
-<!-- ============== §6 RETRIEVAL ============== -->
+<!-- ============== §7 RETRIEVAL ============== -->
 <section id="retrieve">
-<h2><span class="section-num">§6</span>Retrieval &amp; top-k</h2>
-<p class="lede">Retrieval is the step most RAG pipelines lose on. Get this wrong and it doesn't matter how good your LLM is — it's answering from bad inputs.</p>
+<h2><span class="section-num">§7</span>Retrieval &amp; top-k</h2>
+<p class="lede">Retrieval is the step most RAG pipelines lose on. Get this wrong and it doesn't matter how good your LLM is — it's answering from bad inputs. The FinanceBench paper showed this: going from shared-store to single-store retrieval alone moved GPT-4-Turbo from 19% to 50% correct.</p>
 
 <h3>The k knob</h3>
 <p>Top-k is how many chunks you return. Change k and watch two numbers move in opposite directions:</p>
@@ -452,11 +556,11 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
 </script>
 
 <h3>page-hit@k — how the assignment measures retrieval</h3>
-<p>For each question, FinanceBench tells you the <em>exact</em> page the evidence is on (<code>evidence_page_num</code>, 0-indexed). The metric is binary, per-question:</p>
+<p>For each question, FinanceBench tells you the <em>exact</em> page the evidence is on (<code>evidence_page_num</code>). The metric is binary, per-question:</p>
 <p style="text-align:center">$$\text{page-hit@}k = \begin{cases}1 & \text{if any of the top-}k\text{ chunks has matching }\texttt{page\_number}\\0 & \text{otherwise}\end{cases}$$</p>
 <p>Average across the dataset and you get a single number. Multi-evidence questions (multiple pages) count as a hit if <em>any</em> of those pages is retrieved.</p>
 
-<aside class="sidenote"><b>Common bug</b> 0-indexed vs 1-indexed. PyPDFLoader gives 0-indexed. FinanceBench's <code>evidence_page_num</code> is 0-indexed. If you compare 1-indexed to 0-indexed, every hit becomes a near-hit and your number looks mysteriously awful.</aside>
+<aside class="sidenote"><b>Common bug</b> 0-indexed vs 1-indexed page numbers. See the warning in §2 — verify by printing one dataset row side by side with a PyPDFLoader page before trusting any page-hit number.</aside>
 
 <h3>Retrieval failure modes, and what to do about each</h3>
 <table>
@@ -470,10 +574,10 @@ footer{margin-top:80px;padding-top:30px;border-top:1px solid var(--rule);text-al
 </table>
 </section>
 
-<!-- ============== §7 GENERATION ============== -->
+<!-- ============== §8 GENERATION ============== -->
 <section id="generate">
-<h2><span class="section-num">§7</span>Prompting the generator</h2>
-<p class="lede">Retrieval gives you facts; prompting decides how they're used. The exact same chunks fed through two different prompts can give completely different answers.</p>
+<h2><span class="section-num">§8</span>Prompting the generator</h2>
+<p class="lede">Retrieval gives you facts; prompting decides how they're used. The exact same chunks fed through two different prompts can give completely different answers. The FinanceBench paper found a 50-point swing from prompt-order alone (Context-First: 78%, Context-Last: 25%).</p>
 
 <h3>What a well-formed RAG prompt contains</h3>
 <ol>
@@ -516,9 +620,9 @@ If the answer is not present, say so explicitly.</code></pre>
 <p class="pullquote">"<b>Garbage retrieval → garbage generation.</b> The best grounding prompt in the world cannot rescue a retriever that missed the page."</p>
 </section>
 
-<!-- ============== §8 EVALUATION ============== -->
+<!-- ============== §9 EVALUATION ============== -->
 <section id="eval">
-<h2><span class="section-num">§8</span>Evaluating a RAG pipeline</h2>
+<h2><span class="section-num">§9</span>Evaluating a RAG pipeline</h2>
 <p class="lede">A single end-to-end accuracy number tells you the pipeline is broken but not where. Component-level metrics let you point to retrieval vs. generation and tune the guilty piece.</p>
 
 <div class="figure">
@@ -545,14 +649,14 @@ If the answer is not present, say so explicitly.</code></pre>
   <rect x="440" y="130" width="160" height="28" fill="#6a3a54"/>
   <text x="520" y="149" text-anchor="middle" fill="#f6efe1" font-size="12">LLM-as-judge correctness</text>
 </svg>
-<div class="figcaption"><b>Fig 4</b>The three evaluation families. Task 6 asks you to run one metric from each column so you can triangulate where failures happen.</div>
+<div class="figcaption"><b>Fig 5</b>The three evaluation families. Task 6 asks you to run one metric from each column so you can triangulate where failures happen.</div>
 </div>
 
 <h3>The three metrics Task 6 wants</h3>
 
 <h4>1 · Correctness — LLM as judge</h4>
 <p>Compare the final RAG answer to the gold answer, using a <em>different</em> model as judge (DeepSeek-V3-0324). The judge returns a binary <code>{correct / incorrect}</code> plus a one-sentence justification. Using a different model than the generator avoids the model "marking its own homework."</p>
-<p>Average across the dataset = overall correctness. Simple, but brittle on numeric answers — the judge has to recognise "4.2 billion" and "$4,200,000,000" as the same thing, so the judge prompt matters.</p>
+<p>Average across the dataset = overall correctness. Simple, but brittle on numeric answers — the judge has to recognise "4.2 billion" and "$4,200,000,000" as the same thing, so the judge prompt matters. The FinanceBench paper's human judges explicitly allowed small rounding and unit conversions as correct; your judge prompt should too.</p>
 
 <h4>2 · Faithfulness — Ragas</h4>
 <p>Faithfulness asks a narrower question: <em>is every claim in the answer supported by the context that was actually retrieved?</em> A correct-sounding answer can still be unfaithful if the model pulled the answer from its training data instead of the retrieved chunks.</p>
@@ -561,19 +665,19 @@ If the answer is not present, say so explicitly.</code></pre>
 <p>Because this is many LLM calls per example, the assignment restricts it to the first 20 questions only.</p>
 
 <h4>3 · page-hit@k — retrieval in isolation</h4>
-<p>Already covered in §6. It's cheap: binary check, no LLM call, run at k ∈ {1, 3, 5}.</p>
+<p>Already covered in §7. It's cheap: binary check, no LLM call, run at k ∈ {1, 3, 5}.</p>
 
 <div class="callout">
   <b>Why three metrics, not one</b>
   High correctness + low faithfulness = model is right by accident (from memory, not from retrieval). High faithfulness + low correctness = model is dutifully quoting the wrong chunks. High page-hit@k + low correctness = retriever did its job, generator dropped the ball. Each combination points to a different fix.
 </div>
 
-<aside class="sidenote"><b>Expect disappointment</b> FinanceBench is <em>hard</em>. Vector-RAG numbers in the literature hover around 19–50% correctness on the full set. Don't chase a benchmark you won't hit — chase <em>insights</em> about which component is failing.</aside>
+<aside class="sidenote"><b>Expect disappointment</b> See §2 for the paper's own numbers — vector-RAG clusters around 19–50% correctness. Don't chase a benchmark you won't hit. Chase <em>insights</em> about which component is failing.</aside>
 </section>
 
-<!-- ============== §9 RAGAS ============== -->
+<!-- ============== §10 RAGAS ============== -->
 <section id="ragas">
-<h2><span class="section-num">§9</span>Ragas wiring for Nebius</h2>
+<h2><span class="section-num">§10</span>Ragas wiring for Nebius</h2>
 <p class="lede">Ragas is a library. Nebius is an OpenAI-compatible API. The assignment wants them glued together with a specific wrench: the collections API + an AsyncOpenAI client + <code>llm_factory</code>. Here's how those pieces relate.</p>
 
 <h3>The four pieces you need</h3>
@@ -599,34 +703,6 @@ score = faith.score(
 )</code></pre>
 
 <aside class="sidenote"><b>Watch out for</b> Ragas version skew — the <code>.metrics.collections</code> namespace is new. If your import fails, check the installed version (<code>pip show ragas</code>) — you may need to upgrade.</aside>
-</section>
-
-<!-- ============== §10 FINANCEBENCH ============== -->
-<section id="fb">
-<h2><span class="section-num">§10</span>The FinanceBench dataset</h2>
-<p class="lede">150 expert-written questions over real US public-company filings (10-Ks, 10-Qs, earnings releases). Designed to be genuinely hard — the benchmark's own paper reports ~19% vector-RAG accuracy.</p>
-
-<h3>Fields you'll touch</h3>
-<table>
-<thead><tr><th>Column</th><th>Meaning</th><th>How you'll use it</th></tr></thead>
-<tbody>
-<tr><td><code>financebench_id</code></td><td>unique question id</td><td>sort key for "first 5 per type"; row key in xlsx</td></tr>
-<tr><td><code>question</code></td><td>the question</td><td>input to naive + RAG</td></tr>
-<tr><td><code>answer</code></td><td>gold answer</td><td>ground truth for correctness</td></tr>
-<tr><td><code>question_type</code></td><td><code>metrics-generated</code> / <code>domain-relevant</code> / <code>novel-generated</code></td><td>drop <code>metrics-generated</code>; stratify Task 1/5 selection</td></tr>
-<tr><td><code>doc_name</code></td><td>which filing</td><td>used for metadata + spot-checking retrieval</td></tr>
-<tr><td><code>doc_link</code></td><td>PDF URL</td><td>some are dead — replace with course repo link</td></tr>
-<tr><td><code>evidence</code> → <code>evidence_page_num</code></td><td>page(s) containing the answer, <strong>0-indexed</strong></td><td>ground truth for page-hit@k</td></tr>
-<tr><td><code>evidence</code> → <code>evidence_text</code></td><td>exact snippet annotators pointed at</td><td>sanity-check your chunking / retrieval</td></tr>
-</tbody>
-</table>
-
-<h3>Question types, in plain English</h3>
-<div class="grid2">
-  <div class="box"><h5>metrics-generated <em>(dropped)</em></h5><p>Templated financial-ratio questions. Large and repetitive — the assignment drops them.</p></div>
-  <div class="box"><h5>domain-relevant</h5><p>Questions a finance analyst would plausibly ask. "What was Apple's operating margin in FY2023?" RAG tends to help here.</p></div>
-  <div class="box"><h5>novel-generated</h5><p>LLM-authored questions that may combine facts in unusual ways. Harder — may require multi-page synthesis.</p></div>
-</div>
 </section>
 
 <!-- ============== §11 IMPROVEMENT ============== -->
@@ -668,17 +744,14 @@ score = faith.score(
 
 <div class="figure">
 <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" font-family="Fraunces, serif">
-  <!-- Stage 1 -->
   <text x="130" y="25" text-anchor="middle" font-size="12" letter-spacing="3" fill="#a43a2f" font-weight="600">STAGE 1 · BI-ENCODER</text>
   <rect x="30" y="40" width="200" height="60" fill="#ece3cf" stroke="#cbbe9e"/>
   <text x="130" y="66" text-anchor="middle" font-size="14" font-weight="600">FAISS · top-20</text>
   <text x="130" y="88" text-anchor="middle" font-size="11" fill="#4a4236" font-style="italic">fast, approximate, cheap</text>
 
-  <!-- arrow -->
   <path d="M230 70 L280 70" stroke="#a43a2f" stroke-width="1.5" fill="none" marker-end="url(#arr2)"/>
   <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#a43a2f"/></marker></defs>
 
-  <!-- Stage 2 -->
   <text x="400" y="25" text-anchor="middle" font-size="12" letter-spacing="3" fill="#a43a2f" font-weight="600">STAGE 2 · CROSS-ENCODER</text>
   <rect x="290" y="40" width="220" height="60" fill="#ece3cf" stroke="#cbbe9e"/>
   <text x="400" y="66" text-anchor="middle" font-size="14" font-weight="600">bge-reranker-base · top-4</text>
@@ -686,23 +759,21 @@ score = faith.score(
 
   <path d="M510 70 L570 70" stroke="#a43a2f" stroke-width="1.5" fill="none" marker-end="url(#arr2)"/>
 
-  <!-- Output -->
   <rect x="570" y="40" width="90" height="60" fill="#a43a2f" stroke="#a43a2f"/>
   <text x="615" y="66" text-anchor="middle" font-size="13" fill="#f6efe1" font-weight="600">to LLM</text>
   <text x="615" y="86" text-anchor="middle" font-size="10" fill="#f6efe1" font-style="italic">grounded</text>
 
-  <!-- Caption row -->
   <text x="40" y="145" font-size="12" fill="#4a4236" font-style="italic">The bi-encoder embeds query and chunk separately → you can compare to all chunks in &lt;1s.</text>
   <text x="40" y="163" font-size="12" fill="#4a4236" font-style="italic">The cross-encoder reads (query, chunk) pairs together → precise score but O(top-20) calls.</text>
   <text x="40" y="181" font-size="12" fill="#4a4236" font-style="italic">Two-stage retrieval gets the best of both: cheap recall first, accurate precision second.</text>
 </svg>
-<div class="figcaption"><b>Fig 5</b>Retrieve-then-rerank is the industrial default when bare bi-encoder retrieval is too noisy for the top of the list.</div>
+<div class="figcaption"><b>Fig 6</b>Retrieve-then-rerank is the industrial default when bare bi-encoder retrieval is too noisy for the top of the list.</div>
 </div>
 
 <h3>Why keep k the same at the generator?</h3>
 <p>The assignment is emphatic: when varying k in an experiment, keep <em>the k reaching the generator</em> as your variable; don't also change the retrieve-width. So with a reranker, retrieve top-20 → rerank → keep the top-4 for the generator. The comparison is "4 chunks chosen by bi-encoder alone" vs "4 chunks chosen by bi-encoder-then-cross-encoder."</p>
 
-<aside class="sidenote"><b>Cost</b> bge-reranker-base runs on CPU but adds ~100ms per query. For a ~130-question eval run, that's manageable. For production at QPS, you'd GPU it.</aside>
+<aside class="sidenote"><b>Cost</b> bge-reranker-base runs on CPU but adds ~100ms per query. For a ~100-question eval run, that's manageable. For production at QPS, you'd GPU it.</aside>
 </section>
 
 <!-- ============== §13 MULTI-SCALE ============== -->
@@ -737,9 +808,9 @@ score = faith.score(
     <li>Sort by <code>financebench_id</code>, take first 5 per remaining type.</li>
     <li>Call the chat-completions endpoint once per question — nothing else in the prompt.</li>
     <li>Record verdict manually: <code>{correct, partially correct, wrong, refused}</code>. Refusals are their own category, not a "wrong."</li>
-    <li>Discussion: patterns by type, confident-but-wrong (hallucinations), refusals — <em>why</em>?</li>
+    <li>Discussion: patterns by type, confident-but-wrong (hallucinations), refusals — <em>why</em>? Use the failure-mode vocabulary from §2.</li>
   </ul>
-  <div class="concepts"><b>Concepts</b>§1 Why RAG (this is the "without RAG" baseline that motivates it) · §10 FinanceBench fields</div>
+  <div class="concepts"><b>Concepts</b>§1 Why RAG (this is the "without RAG" baseline that motivates it) · §2 FinanceBench types + failure modes</div>
 </div>
 
 <div class="task-card">
@@ -747,11 +818,11 @@ score = faith.score(
   <h3>RAG reminder</h3>
   <p>Write ~2–4 sentences per component (indexing / retrieval / generation) answering: what does it contribute? where can it fail? per-query or offline?</p>
   <ul>
-    <li>Cover offline vs online (§2).</li>
-    <li>Name concrete failure modes (§3 chunking, §6 retrieval failures, §7 generation failures).</li>
+    <li>Cover offline vs online (§3).</li>
+    <li>Name concrete failure modes (§4 chunking, §7 retrieval failures, §8 generation failures).</li>
     <li>Bonus: explicitly note the coupling — retrieval failure <em>causes</em> generation failure.</li>
   </ul>
-  <div class="concepts"><b>Concepts</b>§2 · §3 · §6 · §7</div>
+  <div class="concepts"><b>Concepts</b>§3 · §4 · §7 · §8</div>
 </div>
 
 <div class="task-card">
@@ -759,14 +830,14 @@ score = faith.score(
   <h3>Embed documents &amp; build FAISS</h3>
   <p>Load filtered PDFs, attach metadata, chunk (1000/150), embed with bge-small, store FAISS, spot-check retrieval.</p>
   <ul>
-    <li>Load only PDFs whose <code>doc_name</code> is in the filtered dataset.</li>
-    <li><strong>Attach metadata before splitting</strong> — <code>doc_name</code>, <code>company</code>, <code>doc_period</code>, <code>page_number</code> (0-indexed).</li>
+    <li>Load only PDFs whose <code>doc_name</code> is in the filtered dataset. (Don't index the whole folder — it has more PDFs than you need.)</li>
+    <li><strong>Attach metadata before splitting</strong> — <code>doc_name</code>, <code>company</code>, <code>doc_period</code>, <code>page_number</code> (0-indexed; verify against the dataset — see §2).</li>
     <li><code>RecursiveCharacterTextSplitter</code> with <code>chunk_size=1000, chunk_overlap=150</code>.</li>
     <li>Embed with <code>BAAI/bge-small-en-v1.5</code> from HuggingFace.</li>
     <li>Save FAISS to disk — you will reuse this for Tasks 4–7.</li>
     <li>Spot-check: 2–3 questions; verify right doc, right page, chunks near evidence text.</li>
   </ul>
-  <div class="concepts"><b>Concepts</b>§3 chunking · §4 embeddings · §5 FAISS · §6 retrieval spot-check</div>
+  <div class="concepts"><b>Concepts</b>§4 chunking · §5 embeddings · §6 FAISS · §7 retrieval spot-check</div>
 </div>
 
 <div class="task-card">
@@ -775,11 +846,11 @@ score = faith.score(
   <p>One function: <code>answer_with_rag(query, k=4) -> dict</code> returning <code>{answer, retrieved_chunks}</code>.</p>
   <ul>
     <li>System prompt with the three commandments: context-only, say-IDK, cite-source.</li>
-    <li>Context block with clear separators + <code>doc_name</code> per chunk (§7).</li>
+    <li>Context block with clear separators + <code>doc_name</code> per chunk (§8).</li>
     <li>Handle empty retrieval explicitly (don't hand over an empty CONTEXT).</li>
     <li>Return the raw chunks alongside the answer — later tasks need them.</li>
   </ul>
-  <div class="concepts"><b>Concepts</b>§7 prompt construction · §6 retrieval</div>
+  <div class="concepts"><b>Concepts</b>§8 prompt construction · §7 retrieval</div>
 </div>
 
 <div class="task-card">
@@ -789,9 +860,9 @@ score = faith.score(
   <ul>
     <li>Reuse Task 1 answers — don't recompute; you want apples-to-apples.</li>
     <li>For "RAG hurt" cases: check <em>why</em> — wrong filing retrieved, or right filing + confusing chunks?</li>
-    <li>Patterns by type: hypothesis on why domain-relevant might benefit differently than novel-generated.</li>
+    <li>Patterns by type: hypothesis on why domain-relevant might benefit differently than novel-generated. Lean on §2's reasoning taxonomy — extraction-heavy questions should benefit most from RAG.</li>
   </ul>
-  <div class="concepts"><b>Concepts</b>§1 (RAG's theoretical advantages vs baseline) · §6 (retrieval failure modes)</div>
+  <div class="concepts"><b>Concepts</b>§1 RAG's theoretical advantages · §2 question types · §7 retrieval failure modes</div>
 </div>
 
 <div class="task-card">
@@ -799,12 +870,12 @@ score = faith.score(
   <h3>Evaluation — 3 metrics, full dataset</h3>
   <p>Run every filtered question through RAG, score with correctness + faithfulness (first 20 only) + page-hit@k for k ∈ {1, 3, 5}.</p>
   <ul>
-    <li>Judge prompt for correctness: short, binary, with one-sentence justification.</li>
+    <li>Judge prompt for correctness: short, binary, with one-sentence justification. Allow minor unit / rounding drift (§2 paper practice).</li>
     <li>Ragas Faithfulness via the collections API, <code>.score()</code> (sync), first 20 sorted by <code>financebench_id</code>.</li>
     <li>page-hit@k: compare retrieved chunks' <code>page_number</code> to <code>evidence_page_num</code>; multi-evidence = hit if any page matches.</li>
     <li>Report per-question xlsx + aggregate numbers (averages + page-hit at each k).</li>
   </ul>
-  <div class="concepts"><b>Concepts</b>§8 the three metrics · §9 Ragas wiring</div>
+  <div class="concepts"><b>Concepts</b>§9 the three metrics · §10 Ragas wiring</div>
 </div>
 
 <div class="task-card">
@@ -829,7 +900,7 @@ score = faith.score(
     <li>Save each index under a distinct name so you can reload and compare.</li>
     <li>Summary table + disagreement rate + a short discussion of whether the article's claim holds.</li>
   </ul>
-  <div class="concepts"><b>Concepts</b>§3 chunking · §13 multi-scale</div>
+  <div class="concepts"><b>Concepts</b>§4 chunking · §13 multi-scale</div>
 </div>
 </section>
 
