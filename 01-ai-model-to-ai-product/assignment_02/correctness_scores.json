@@ -1,0 +1,402 @@
+{
+  "financebench_id_00005": {
+    "verdict": "incorrect",
+    "justification": "The model incorrectly refused to answer, claiming the context lacked the data, but the ground truth provides the specific working capital figure, proving the information was available."
+  },
+  "financebench_id_00070": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth provides the specific working capital figure, indicating the information is available."
+  },
+  "financebench_id_00080": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer by stating the context does not contain the answer, which is incorrect as the ground truth provides the required information."
+  },
+  "financebench_id_00206": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth provides the correct answer: gross margin is not a relevant metric for a financial institution."
+  },
+  "financebench_id_00215": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies Verizon as capital intensive based on FY 2022 data, using capital expenditure figures as supporting evidence, which aligns with the ground truth's conclusion."
+  },
+  "financebench_id_00216": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth provides the quick ratio and a conclusion, which the model should have been able to provide."
+  },
+  "financebench_id_00222": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, while the ground truth provides a specific quick ratio and calculation."
+  },
+  "financebench_id_00283": {
+    "verdict": "incorrect",
+    "justification": "The model incorrectly calculates the remaining cost as 10% of $700 million, resulting in $70 million, which does not match the ground truth of 77.78 million."
+  },
+  "financebench_id_00288": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies a drop in cash and cash equivalents, matching the ground truth's claim of a decline, with specific figures from the provided documents."
+  },
+  "financebench_id_00299": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth provides the correct information, indicating the model's answer is wrong."
+  },
+  "financebench_id_00302": {
+    "verdict": "incorrect",
+    "justification": "The model's answer is a refusal, which is not correct for a question with a clear answer in the ground truth."
+  },
+  "financebench_id_00382": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies the Las Vegas Strip Resorts as the region with the highest EBITDAR contribution, which aligns with the ground truth that Las Vegas resorts contributed the vast majority of EBITDAR."
+  },
+  "financebench_id_00394": {
+    "verdict": "incorrect",
+    "justification": "The model's answer is a refusal, which is not correct when the ground truth provides a specific answer."
+  },
+  "financebench_id_00407": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies corporate bonds as the largest short-term investment, matching the ground truth."
+  },
+  "financebench_id_00438": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the operating margin, while the ground truth provides a specific figure for the decline, indicating the information was available."
+  },
+  "financebench_id_00460": {
+    "verdict": "incorrect",
+    "justification": "The model's answer (907 and 930) is factually incorrect according to the ground truth (969 and 982), and it cites a different, incorrect data source."
+  },
+  "financebench_id_00464": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies the cyclicality and supports it with a source, matching the ground truth."
+  },
+  "financebench_id_00476": {
+    "verdict": "incorrect",
+    "justification": "The model's refusal to answer is incorrect because the ground truth states there are no such securities, and the model should have provided that answer."
+  },
+  "financebench_id_00494": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states Boeing expects to return to a 737 production rate of 5 per month in 2023, which is a specific and incomplete subset of the forecasted production rate changes, failing to mention the 777X and 787."
+  },
+  "financebench_id_00499": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer despite the answer being present in the ground truth."
+  },
+  "financebench_id_00517": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies that Commercial Airplanes, Defense, and Services each represent more than 20% of Boeing's FY2022 revenue, which matches the ground truth."
+  },
+  "financebench_id_00521": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, but the correct answer was available in the ground truth."
+  },
+  "financebench_id_00540": {
+    "verdict": "incorrect",
+    "justification": "The model answer is incorrect because it refuses to answer, while the ground truth provides a specific numerical answer, indicating the information was available."
+  },
+  "financebench_id_00552": {
+    "verdict": "incorrect",
+    "justification": "The model's refusal to answer, despite the ground truth containing the answer, makes its response incorrect."
+  },
+  "financebench_id_00563": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies the Data Center segment as having the largest proportional increase, citing the 64% growth, which matches the ground truth."
+  },
+  "financebench_id_00566": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states that Verizon's debt increased based on average debt outstanding, but the ground truth states that Verizon's debt decreased by $229 million, making the model's answer factually incorrect."
+  },
+  "financebench_id_00585": {
+    "verdict": "incorrect",
+    "justification": "The model incorrectly refused to answer, but the ground truth provides the specific tax rates for FY2022 and FY2021, which are the requested comparison."
+  },
+  "financebench_id_00591": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, which is not correct as the ground truth provides a clear answer."
+  },
+  "financebench_id_00601": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, while the ground truth provides the specific reasons for the SG&A expense reduction."
+  },
+  "financebench_id_00603": {
+    "verdict": "incorrect",
+    "justification": "The model answer is a refusal to answer, while the ground truth provides a specific reason for the increase."
+  },
+  "financebench_id_00605": {
+    "verdict": "incorrect",
+    "justification": "The model's refusal to answer, when the ground truth provides a clear answer, is incorrect."
+  },
+  "financebench_id_00606": {
+    "verdict": "incorrect",
+    "justification": "The model's answer is a refusal, which is not correct for a question that has a clear answer in the ground truth."
+  },
+  "financebench_id_00651": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly claims the context lacks the necessary information, but the provided context contains the 2023 guidance and the 2022 growth rate can be derived, allowing a comparison."
+  },
+  "financebench_id_00669": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth provides a specific and detailed answer about the drivers of gross margin change for JnJ in FY2022."
+  },
+  "financebench_id_00678": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth shows the required data is present."
+  },
+  "financebench_id_00684": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer by stating the context did not contain the answer, but the ground truth provides a specific answer, indicating the model should have been able to deduce the answer from the provided context."
+  },
+  "financebench_id_00685": {
+    "verdict": "incorrect",
+    "justification": "The model incorrectly refused to answer, while the ground truth provides a specific answer about gross margin consistency."
+  },
+  "financebench_id_00702": {
+    "verdict": "correct",
+    "justification": "The model correctly identifies the gain on the Consumer Healthcare JV Transaction as the event, which matches the ground truth."
+  },
+  "financebench_id_00705": {
+    "verdict": "correct",
+    "justification": "The model answer correctly states the increase amount of $400,000,000, which matches the ground truth."
+  },
+  "financebench_id_00711": {
+    "verdict": "incorrect",
+    "justification": "The model answer is a refusal to answer, which is not correct when the ground truth provides a specific numerical answer."
+  },
+  "financebench_id_00720": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, while the correct answer was that gross margin is not a useful metric for American Express."
+  },
+  "financebench_id_00723": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, which is incorrect when a correct answer was available in the ground truth."
+  },
+  "financebench_id_00724": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, which is not correct, as the question is answerable from the provided context."
+  },
+  "financebench_id_00735": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer by stating the context does not contain the answer, which is incorrect as the ground truth provides a definitive answer."
+  },
+  "financebench_id_00746": {
+    "verdict": "incorrect",
+    "justification": "The model's answer is a refusal, which is not correct when the ground truth states there are no such securities."
+  },
+  "financebench_id_00757": {
+    "verdict": "correct",
+    "justification": "The model answer correctly states that AMD reported customer concentration, specifying the 16% figure and the source, which matches the ground truth."
+  },
+  "financebench_id_00790": {
+    "verdict": "incorrect",
+    "justification": "The model's answer is a refusal, which is not correct when the ground truth provides a clear answer."
+  },
+  "financebench_id_00799": {
+    "verdict": "incorrect",
+    "justification": "The model's answer incorrectly states the context does not contain the answer, but the ground truth provides a specific, correct answer about the quick ratio's change."
+  },
+  "financebench_id_00807": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth shows the quick ratio value was available."
+  },
+  "financebench_id_00822": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies Richard A. Johnson as the nominee with substantially more votes against, matching the ground truth."
+  },
+  "financebench_id_00839": {
+    "verdict": "incorrect",
+    "justification": "The model answer is a refusal, which is not correct for this question."
+  },
+  "financebench_id_00859": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies cross currency swaps as the derivative with the highest notional value, matching the ground truth."
+  },
+  "financebench_id_00882": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies the total borrowable amount as $8.4 billion, which matches the ground truth, and correctly notes the potential for increase."
+  },
+  "financebench_id_00917": {
+    "verdict": "incorrect",
+    "justification": "The model answer is a refusal, which is not correct for this question."
+  },
+  "financebench_id_00941": {
+    "verdict": "incorrect",
+    "justification": "The model answer is a refusal, which is not correct when the ground truth provides the specific debt securities registered to trade on a national exchange."
+  },
+  "financebench_id_00956": {
+    "verdict": "correct",
+    "justification": "The model answer correctly states the 1.3% sales growth and implies it is not indicative of high growth, which aligns with the ground truth's conclusion."
+  },
+  "financebench_id_00995": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies AMD's major product categories as of FY22, including client, server, embedded, and data center products, aligning with the ground truth despite using different but semantically equivalent phrasing and specific product names."
+  },
+  "financebench_id_01009": {
+    "verdict": "incorrect",
+    "justification": "The model answer fails to list the specific geographies from the ground truth, providing only a general statement and a few examples."
+  },
+  "financebench_id_01028": {
+    "verdict": "incorrect",
+    "justification": "The model answer lists specific countries and a country count, while the ground truth specifies the high-level geographic segments (United States, EMEA, APAC, LACC) used in American Express's financial reporting."
+  },
+  "financebench_id_01077": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states that the context does not contain the answer, but the ground truth provides the specific acquisitions made by Best Buy in FY 2022."
+  },
+  "financebench_id_01079": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth provides specific acquisitions for FY2023."
+  },
+  "financebench_id_01091": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies the existence of ongoing legal battles related to the 737 MAX accidents as reported in the 10-K, which matches the ground truth."
+  },
+  "financebench_id_01107": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies ongoing legal battles for CVS Health, aligning with the ground truth's mention of opioid and controlled substance litigation, and provides specific details and years as required."
+  },
+  "financebench_id_01148": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies the packaging industry, which matches the ground truth's description of Amcor as a leader in packaging production."
+  },
+  "financebench_id_01163": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context lacks explicit cash from operations, but the ground truth states it is the highest, and the model's own inference contradicts its refusal, making the answer incorrect."
+  },
+  "financebench_id_01198": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies the revenue drivers as growth in the Data Center, Gaming, and Embedded segments, which correspond to the server, gaming, and embedded product sales mentioned in the ground truth, despite using more specific segment names and financial terminology."
+  },
+  "financebench_id_01226": {
+    "verdict": "incorrect",
+    "justification": "The model answer is a refusal, while the ground truth provides a specific and correct answer about the drivers of 3M's operating margin change."
+  },
+  "financebench_id_01244": {
+    "verdict": "correct",
+    "justification": "The model answer correctly confirms the payment of dividends in Q2 of FY2022, aligning with the ground truth that CVS paid a $0.55 dividend per share each quarter, including Q2."
+  },
+  "financebench_id_01254": {
+    "verdict": "incorrect",
+    "justification": "The model's answer incorrectly states there is no mention of dividends for FY2022, but the ground truth confirms a $0.01 per share dividend was paid."
+  },
+  "financebench_id_01275": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth shows the cash flow from operations is stated as $1.8 billion, which is a key figure from the cash flow statement."
+  },
+  "financebench_id_01279": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, but the ground truth states that AMD brought in the most cash flow from operations, which is the correct answer."
+  },
+  "financebench_id_01290": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states that the US government is not mentioned, while the ground truth explicitly states the US government accounted for 40% of revenues."
+  },
+  "financebench_id_01319": {
+    "verdict": "incorrect",
+    "justification": "The model answer is a refusal, which is not correct for this question."
+  },
+  "financebench_id_01328": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies the restructuring costs as $411 million, matching the ground truth."
+  },
+  "financebench_id_01346": {
+    "verdict": "correct",
+    "justification": "The model answer correctly states the tax rates for FY2021 (20%) and FY2022 (23%) and calculates the correct increase of 3 percentage points, matching the ground truth."
+  },
+  "financebench_id_01351": {
+    "verdict": "correct",
+    "justification": "The model answer correctly states the tax rates for 2021 and 2022, and the change, which matches the ground truth."
+  },
+  "financebench_id_01474": {
+    "verdict": "correct",
+    "justification": "The model answer correctly states that the strong start to the year was the reason for the guidance raise, matching the ground truth."
+  },
+  "financebench_id_01476": {
+    "verdict": "correct",
+    "justification": "The model's answer correctly identifies the increase as 1 percentage point, matching the ground truth."
+  },
+  "financebench_id_01482": {
+    "verdict": "incorrect",
+    "justification": "The model's answer is a refusal, which is not correct for a question with a clear answer in the ground truth."
+  },
+  "financebench_id_01484": {
+    "verdict": "correct",
+    "justification": "The model answer correctly states the US sales growth of 3.0% and the international sales decline of 0.6%, matching the ground truth."
+  },
+  "financebench_id_01487": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, but the correct answer was available in the ground truth."
+  },
+  "financebench_id_01488": {
+    "verdict": "incorrect",
+    "justification": "The model answer is a refusal, which is not correct for this question."
+  },
+  "financebench_id_01490": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, while the ground truth provides a specific monetary figure for the gain."
+  },
+  "financebench_id_01491": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer by stating the context does not contain the answer, which is incorrect as the correct answer is provided in the ground truth."
+  },
+  "financebench_id_01858": {
+    "verdict": "correct",
+    "justification": "The model answer correctly states that 3M has increased its dividend for 65 consecutive years, which directly supports the ground truth's claim of a stable and increasing dividend trend."
+  },
+  "financebench_id_01865": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, but the ground truth provides a clear answer: the consumer segment."
+  },
+  "financebench_id_01902": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context lacks the answer, but the ground truth indicates the entertainment segment had the highest growth, which is present in the context."
+  },
+  "financebench_id_01911": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer and did not provide a numerical answer or the correct conclusion from the ground truth, which is that the coverage ratio is zero."
+  },
+  "financebench_id_01912": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies MGM China as the region with the worst topline performance, matching the ground truth in both the entity and the specific 44% revenue decline."
+  },
+  "financebench_id_01928": {
+    "verdict": "incorrect",
+    "justification": "The model incorrectly states the context does not contain the answer, but the ground truth provides the specific Adj. EBITDA figure of $2,018 million."
+  },
+  "financebench_id_01930": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth states the real growth was flat, which is a direct answer to the question."
+  },
+  "financebench_id_01935": {
+    "verdict": "incorrect",
+    "justification": "The model answer is a refusal, stating the context does not contain the answer, while the ground truth provides a specific and correct agenda, making the model's answer incorrect."
+  },
+  "financebench_id_01936": {
+    "verdict": "incorrect",
+    "justification": "The model answer describes the composition and timing of the liability, but fails to state the specific nature and purpose as described in the ground truth, which is that 87% of the liability is for employee costs."
+  },
+  "financebench_id_01964": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, while the ground truth states the correct answer is 'Customer deposits'."
+  },
+  "financebench_id_01981": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, which is incorrect as the ground truth provides a clear answer."
+  },
+  "financebench_id_02024": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, but the ground truth provides the specific amounts for pension and health care benefits."
+  },
+  "financebench_id_02049": {
+    "verdict": "correct",
+    "justification": "The model answer correctly identifies a decrease in risk as indicated by the VaR data, matching the ground truth."
+  },
+  "financebench_id_02119": {
+    "verdict": "incorrect",
+    "justification": "The model refused to answer, while the ground truth provides a specific answer."
+  },
+  "financebench_id_02416": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context does not contain the answer, but the ground truth provides the specific company names."
+  },
+  "financebench_id_02419": {
+    "verdict": "incorrect",
+    "justification": "The model answer incorrectly states the context contains no information, while the ground truth confirms a spinoff (Upjohn) occurred, which is a major business segment."
+  }
+}
