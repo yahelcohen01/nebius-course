@@ -1,0 +1,402 @@
+{
+  "financebench_id_00005": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00070": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00080": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00206": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00215": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00216": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00222": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00283": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00288": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00299": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00302": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00382": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00394": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00407": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00438": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00460": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00464": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00476": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00494": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00499": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00517": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00521": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00540": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00552": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00563": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00566": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00585": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00591": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00601": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00603": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00605": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00606": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00651": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00669": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00678": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00684": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00685": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00702": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00705": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00711": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00720": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00723": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00724": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00735": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00746": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00757": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00790": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00799": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00807": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00822": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00839": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00859": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00882": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00917": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00941": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00956": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_00995": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01009": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01028": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01077": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01079": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01091": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01107": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01148": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01163": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01198": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01226": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01244": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01254": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01275": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01279": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01290": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01319": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01328": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01346": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01351": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01474": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01476": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01482": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01484": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01487": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01488": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01490": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01491": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01858": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01865": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01902": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01911": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01912": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01928": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01930": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01935": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01936": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01964": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_01981": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_02024": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_02049": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_02119": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_02416": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  },
+  "financebench_id_02419": {
+    "verdict": "incorrect",
+    "justification": "ERROR: name 'judge_correctness' is not defined"
+  }
+}
