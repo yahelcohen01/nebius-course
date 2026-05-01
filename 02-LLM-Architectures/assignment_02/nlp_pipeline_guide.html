@@ -1,0 +1,2535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Field Guide to NLP Pipelines & Char-RNNs — for the LLM Architectures Hometask 2</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[
+          {left:'$$',right:'$$',display:true},
+          {left:'$',right:'$',display:false},
+          {left:'\\[',right:'\\]',display:true},
+          {left:'\\(',right:'\\)',display:false}
+        ], throwOnError:false});"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper:        #F4ECD6;
+  --paper-deep:   #ECE1BD;
+  --paper-card:   #FAF3DD;
+  --ink:          #1A2438;
+  --ink-soft:     #2E3A5C;
+  --ink-faint:    #6B7388;
+  --vermillion:   #B83A1F;
+  --vermillion-2: #D14E2E;
+  --sage:         #4F6B57;
+  --ochre:        #C68A1F;
+  --indigo:       #314E7E;
+  --rule:         rgba(26, 36, 56, 0.16);
+  --rule-strong:  rgba(26, 36, 56, 0.45);
+
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-body:    'Newsreader', Georgia, serif;
+  --font-mono:    'IBM Plex Mono', 'Menlo', monospace;
+}
+
+html { scroll-behavior: smooth; background: var(--paper); }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 19px;
+  line-height: 1.66;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.40   0 0 0 0 0.30   0 0 0 0 0.10   0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse 110% 80% at 50% 30%, transparent 40%, rgba(98, 60, 10, 0.08) 100%);
+}
+
+.page { max-width: 1200px; margin: 0 auto; padding: 80px 64px 40px; position: relative; z-index: 2; }
+
+/* ───────── HERO ───────── */
+.hero { margin-bottom: 96px; position: relative; }
+
+.hero .preface {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-bottom: 36px;
+  display: flex; gap: 18px; align-items: center;
+}
+.hero .preface span.dot { width: 4px; height: 4px; background: var(--vermillion); border-radius: 50%; }
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(48px, 7.6vw, 124px);
+  line-height: 0.88;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+  margin-bottom: 38px;
+  font-variation-settings: "SOFT" 60, "WONK" 1, "opsz" 144;
+}
+.hero h1 em { font-style: italic; color: var(--vermillion); font-weight: 400; display: inline-block; }
+
+.hero .deck {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 23px;
+  max-width: 720px;
+  color: var(--ink-soft);
+  line-height: 1.42;
+  font-weight: 350;
+}
+
+.hero .meta {
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.hero .meta div span {
+  display: block; color: var(--ink); font-size: 14px;
+  text-transform: none; letter-spacing: 0; margin-top: 6px;
+  font-family: var(--font-body);
+}
+
+/* ───────── TOC ───────── */
+.toc {
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 36px 0;
+  margin: 64px 0 120px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+}
+.toc h3 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--vermillion);
+  font-weight: 500;
+}
+.toc ol {
+  list-style: none;
+  columns: 2;
+  column-gap: 56px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 350;
+  font-variation-settings: "SOFT" 30;
+}
+.toc ol li {
+  break-inside: avoid;
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.toc ol li:last-child { border-bottom: 0; }
+.toc ol li a { color: var(--ink); text-decoration: none; flex: 1; transition: color 0.18s; }
+.toc ol li a:hover { color: var(--vermillion); }
+.toc ol li::before {
+  content: counter(toc, decimal-leading-zero);
+  counter-increment: toc;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--vermillion);
+  letter-spacing: 0.06em;
+}
+.toc ol { counter-reset: toc; }
+
+/* ───────── SECTIONS ───────── */
+.section {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 720px);
+  gap: 60px;
+  margin: 96px 0;
+  position: relative;
+}
+.section .gutter {
+  text-align: right; padding-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.12em;
+  color: var(--vermillion); text-transform: uppercase;
+  position: sticky; top: 32px;
+  align-self: flex-start; height: fit-content;
+}
+.section .gutter .num::before { content: '§ '; }
+.section .gutter .num { display: block; font-size: 13px; color: var(--vermillion); font-weight: 500; }
+.section .gutter .tag { display: block; margin-top: 6px; color: var(--ink-faint); font-size: 10px; }
+
+.section h2 {
+  font-family: var(--font-display);
+  font-weight: 350;
+  font-size: clamp(36px, 4.4vw, 60px);
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  margin-bottom: 32px;
+  font-variation-settings: "SOFT" 40, "opsz" 60;
+}
+.section h2 em { font-style: italic; color: var(--vermillion); }
+
+.section .body { max-width: 720px; }
+.section .body p { margin-bottom: 22px; }
+
+.section .body h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 22px;
+  margin: 36px 0 14px;
+  letter-spacing: -0.01em;
+  font-variation-settings: "SOFT" 50;
+  color: var(--ink);
+}
+.section .body h3 .marker { color: var(--vermillion); font-weight: 400; margin-right: 10px; }
+
+/* drop cap */
+.section .body > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 0.82;
+  float: left;
+  margin: 10px 14px -6px 0;
+  color: var(--vermillion);
+  font-variation-settings: "SOFT" 100, "opsz" 144;
+}
+
+/* sidenote */
+.sidenote {
+  font-size: 14px;
+  line-height: 1.52;
+  color: var(--ink-soft);
+  font-style: italic;
+  border-left: 2px solid var(--vermillion);
+  padding: 4px 0 4px 16px;
+  margin: 26px 0;
+  font-weight: 350;
+}
+.sidenote strong {
+  font-style: normal;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--vermillion);
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* pull quote */
+blockquote.pull {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 30px;
+  line-height: 1.22;
+  color: var(--vermillion);
+  margin: 44px -20px;
+  padding: 0 0 0 28px;
+  font-weight: 300;
+  border-left: 3px solid var(--vermillion);
+  font-variation-settings: "SOFT" 50, "opsz" 90;
+}
+
+/* lists */
+.body ul, .body ol { margin: 8px 0 24px 0; padding-left: 0; list-style: none; }
+.body ul li, .body ol li { padding-left: 28px; margin-bottom: 10px; position: relative; }
+.body ul li::before { content: '—'; position: absolute; left: 0; color: var(--vermillion); font-weight: 600; }
+
+.body ol { counter-reset: ord; }
+.body ol li { counter-increment: ord; }
+.body ol li::before {
+  content: counter(ord) ".";
+  position: absolute; left: 0;
+  color: var(--vermillion);
+  font-family: var(--font-mono);
+  font-size: 13px; top: 4px; font-weight: 500;
+}
+
+/* code */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--paper-deep);
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.6;
+  background: var(--paper-deep);
+  border-left: 3px solid var(--ink);
+  padding: 22px 26px;
+  margin: 28px 0;
+  overflow-x: auto;
+  color: var(--ink);
+  position: relative;
+}
+pre::before {
+  content: attr(data-label);
+  position: absolute; top: 8px; right: 14px;
+  font-size: 9px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+pre code { background: none; padding: 0; border: 0; }
+
+/* figures */
+figure {
+  margin: 40px -10px;
+  padding: 30px 26px 22px;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  position: relative;
+}
+figure::after {
+  content: '';
+  position: absolute; inset: 6px;
+  border: 1px dashed var(--rule); pointer-events: none;
+}
+figure svg { display: block; width: 100%; height: auto; position: relative; z-index: 1; }
+figcaption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-faint);
+  margin-top: 18px;
+  text-align: center;
+  position: relative; z-index: 1;
+}
+figcaption .num { color: var(--vermillion); margin-right: 6px; }
+
+/* katex */
+.katex-display {
+  margin: 26px 0 !important;
+  padding: 18px 20px;
+  border-left: 2px solid var(--ochre);
+  background: rgba(198, 138, 31, 0.06);
+}
+.katex { font-size: 1.02em !important; }
+
+/* tables */
+.body table {
+  width: calc(100% + 20px);
+  margin: 28px -10px;
+  border-collapse: collapse;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  font-size: 14.5px;
+}
+.body table th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--vermillion);
+  font-weight: 600;
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper-deep);
+}
+.body table td {
+  padding: 12px 16px;
+  border-bottom: 1px dotted var(--rule);
+  vertical-align: top;
+  line-height: 1.45;
+}
+.body table tr:last-child td { border-bottom: 0; }
+.body table code { font-size: 12.5px; }
+
+/* generic interactive widget container */
+.widget {
+  background: var(--paper-card);
+  border: 1px solid var(--ink);
+  padding: 0;
+  margin: 44px -10px;
+  position: relative;
+}
+.widget::before {
+  content: '';
+  position: absolute; inset: 0;
+  border: 1px solid var(--ink);
+  transform: translate(7px, 7px);
+  z-index: -1;
+  background: var(--paper);
+}
+.widget .header {
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper-deep);
+}
+.widget .header h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--vermillion);
+  font-weight: 600;
+}
+.widget .header .tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+.widget .body-pad { padding: 24px 28px; }
+.widget .body-pad p { font-size: 16px; }
+.widget .control-row {
+  padding: 20px 28px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-deep);
+}
+.widget label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  margin-bottom: 12px;
+}
+.widget label .val {
+  font-size: 22px;
+  color: var(--vermillion);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.widget input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: var(--ink);
+  outline: none;
+}
+.widget input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px;
+  background: var(--vermillion);
+  border: 3px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--ink);
+  border-radius: 50%;
+  cursor: grab;
+  transition: transform 0.15s;
+}
+.widget input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.18); }
+.widget input[type="range"]::-moz-range-thumb {
+  width: 22px; height: 22px;
+  background: var(--vermillion);
+  border: 3px solid var(--paper);
+  border-radius: 50%; cursor: grab;
+}
+.widget select, .widget input[type="text"] {
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 6px 10px;
+  color: var(--ink);
+}
+
+/* Tokenization widget */
+.tok-output {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.tok-output .tok {
+  padding: 4px 9px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  border-radius: 2px;
+  color: var(--ink);
+}
+.tok-output .tok.bpe { background: rgba(184, 58, 31, 0.10); border-color: var(--vermillion); }
+.tok-output .tok.wp  { background: rgba(49, 78, 126, 0.10);  border-color: var(--indigo); }
+.tok-output .tok.cont { color: var(--vermillion); }
+.tok-row {
+  margin-bottom: 18px;
+}
+.tok-row .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+/* Bar widget for distributions (top-k / temperature) */
+.dist-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  align-items: end;
+  height: 220px;
+  padding: 24px 28px 8px;
+}
+.dist-bar {
+  background: var(--ink);
+  position: relative;
+  transition: height 0.28s ease, background 0.2s, opacity 0.2s;
+  min-height: 1px;
+  border-radius: 2px 2px 0 0;
+}
+.dist-bar.cut { background: var(--ink-faint); opacity: 0.25; }
+.dist-bar.keep { background: var(--vermillion); }
+.dist-bar .lab {
+  position: absolute;
+  bottom: -22px; left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+.dist-bar .pct {
+  position: absolute;
+  top: -16px; left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink);
+}
+
+/* Pipeline diagram block-style */
+.pipe-flow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  margin: 28px -10px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: center;
+}
+.pipe-flow .step {
+  background: var(--paper-card);
+  border: 1px solid var(--ink);
+  padding: 14px 6px;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+.pipe-flow .step .sub {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 4px;
+  font-style: italic;
+}
+.pipe-flow .arrow {
+  align-self: center;
+  font-size: 18px;
+  color: var(--vermillion);
+}
+
+/* ───────── TASK CARDS ───────── */
+.tasks { margin: 80px 0; }
+
+.task-card {
+  border: 1px solid var(--ink);
+  padding: 36px 40px;
+  margin: 32px 0;
+  background: var(--paper-card);
+  position: relative;
+}
+.task-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  border: 1px solid var(--ink);
+  transform: translate(8px, 8px);
+  z-index: -1;
+  background: var(--paper);
+}
+.task-card .num {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  margin-bottom: 8px;
+}
+.task-card h3 {
+  font-family: var(--font-display);
+  font-weight: 350;
+  font-size: 30px;
+  margin-bottom: 8px;
+  font-variation-settings: "SOFT" 50, "opsz" 60;
+  letter-spacing: -0.01em;
+}
+.task-card .points {
+  font-family: var(--font-mono);
+  font-size: 10px; color: var(--ink-faint);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  margin-bottom: 22px;
+}
+.task-card .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  margin-top: 24px;
+}
+.task-card .col h4 {
+  font-family: var(--font-mono);
+  font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.16em; color: var(--vermillion);
+  margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.task-card .col ul li {
+  font-size: 16px; line-height: 1.5; margin-bottom: 10px;
+}
+.task-card .col ul li::before { content: '▸'; color: var(--vermillion); }
+
+/* ornament & footer */
+.ornament { text-align: center; margin: 90px 0; color: var(--vermillion); }
+.ornament svg { display: inline-block; }
+
+footer {
+  text-align: center;
+  padding: 100px 40px 80px;
+  border-top: 1px solid var(--rule);
+  margin-top: 120px;
+}
+footer .colophon {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink-soft);
+  font-weight: 300;
+  margin-bottom: 28px;
+  font-variation-settings: "SOFT" 50;
+}
+footer .signature {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero > * { animation: fade-up 1s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+.hero .preface { animation-delay: 0s; }
+.hero h1       { animation-delay: 0.18s; }
+.hero .deck    { animation-delay: 0.42s; }
+.hero .meta    { animation-delay: 0.64s; }
+
+/* mobile */
+@media (max-width: 980px) {
+  .page { padding: 48px 24px; }
+  .section { grid-template-columns: 1fr; gap: 16px; }
+  .section .gutter { position: static; text-align: left; }
+  .toc { grid-template-columns: 1fr; gap: 24px; }
+  .toc ol { columns: 1; }
+  .hero .meta { grid-template-columns: 1fr 1fr; }
+  body { font-size: 17px; }
+  .task-card .grid { grid-template-columns: 1fr; gap: 22px; }
+  .pipe-flow { grid-template-columns: 1fr; }
+  .pipe-flow .arrow { display: none; }
+  .dist-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+::selection { background: var(--vermillion); color: var(--paper); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ╭──────────── HERO ────────────╮ -->
+  <header class="hero">
+    <div class="preface">
+      <span>Vol. 02 · No. 02</span>
+      <span class="dot"></span>
+      <span>Field Guide</span>
+      <span class="dot"></span>
+      <span>For solving alone</span>
+    </div>
+
+    <h1>From <em>tokens</em><br>to <em>dinosaurs.</em></h1>
+
+    <p class="deck">
+      A study companion for Hometask 2 — covering the AG News classification pipeline
+      (BPE → Word2Vec → MLP) and the character-level LSTM that hallucinates fake dinosaur
+      names. Written so that after reading you can write the code yourself.
+    </p>
+
+    <div class="meta">
+      <div>For<span>LLM Architectures, Hometask 02</span></div>
+      <div>Covers<span>Parts 1 &amp; 2 — all 100 pts</span></div>
+      <div>Reading time<span>≈ 55 minutes, slow</span></div>
+      <div>Promise<span>Concepts only — no solutions</span></div>
+    </div>
+  </header>
+
+  <!-- ╭──────────── TOC ────────────╮ -->
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#s1">The pipeline, end to end</a></li>
+      <li><a href="#s2">Why subword tokenization exists</a></li>
+      <li><a href="#s3">BPE — by frequency, greedily</a></li>
+      <li><a href="#s4">WordPiece — by likelihood</a></li>
+      <li><a href="#s5">Word embeddings — the geometry of meaning</a></li>
+      <li><a href="#s6">Word2Vec: CBOW &amp; Skip-gram</a></li>
+      <li><a href="#s7">Choosing dimension &amp; window</a></li>
+      <li><a href="#s8">From tokens to a sentence vector</a></li>
+      <li><a href="#s9">The MLP — a tiny universal approximator</a></li>
+      <li><a href="#s10">Loss, optimizer, batches, epochs</a></li>
+      <li><a href="#s11">Reading a confusion matrix</a></li>
+      <li><a href="#s12">Error analysis &amp; interpretability</a></li>
+      <li><a href="#s13">Char-level language modeling</a></li>
+      <li><a href="#s14">A PyTorch Dataset for sliding windows</a></li>
+      <li><a href="#s15">One-hot encoding, slowly</a></li>
+      <li><a href="#s16">LSTMs — why a gate fixes a memory</a></li>
+      <li><a href="#s17">Generation: greedy, random, top-k</a></li>
+      <li><a href="#s18">Temperature — the variance dial</a></li>
+      <li><a href="#tasks">The ten tasks, distilled</a></li>
+    </ol>
+  </nav>
+
+  <!-- ═══════════════════ §1 ═══════════════════ -->
+  <section class="section" id="s1">
+    <div class="gutter">
+      <span class="num">01</span>
+      <span class="tag">Overview</span>
+    </div>
+    <div class="body">
+      <h2>The pipeline, <em>end to end.</em></h2>
+
+      <p>
+        Before any of this makes sense, hold the whole shape of Part 1 in your head. A neural
+        network does not eat sentences. It eats numbers. The job of an NLP pipeline is to
+        translate "the dollar fell against the yen" into a fixed-size float vector that a
+        classifier can score, while losing as little meaning as possible along the way.
+      </p>
+
+      <div class="pipe-flow">
+        <div class="step">Text<span class="sub">"oil rises sharply"</span></div>
+        <div class="arrow">→</div>
+        <div class="step">Tokens<span class="sub">["oil","rises","sharp","ly"]</span></div>
+        <div class="arrow">→</div>
+        <div class="step">Embeddings<span class="sub">4 vectors of size d</span></div>
+      </div>
+      <div class="pipe-flow" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr; margin-top: 0;">
+        <div class="step">Pooled vec<span class="sub">one vector of size d</span></div>
+        <div class="arrow">→</div>
+        <div class="step">MLP<span class="sub">d → h → 4 logits</span></div>
+        <div class="arrow">→</div>
+        <div class="step">Class<span class="sub">"Business"</span></div>
+      </div>
+
+      <p>
+        Five transformations, four arrows. Each box is a homework task. Tokenization is Task 1.1,
+        embeddings are Task 1.2, pooling and the MLP are Task 1.3, evaluation of the final
+        prediction is Task 1.4. If something feels confusing, ask which arrow you're on.
+      </p>
+
+      <p>
+        Part 2 is a different shape. Instead of taking text in and emitting a label, the char-RNN
+        takes a string and emits the <em>next character</em>. Roll that arrow forward 30 times,
+        feeding each prediction back in, and you get a generated dinosaur name. The model learned
+        the spelling rules of the dinosaur language without ever being told what those rules are.
+      </p>
+
+      <blockquote class="pull">
+        Every model in this homework is a translator. Text → number → text.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §2 ═══════════════════ -->
+  <section class="section" id="s2">
+    <div class="gutter">
+      <span class="num">02</span>
+      <span class="tag">Tokenization</span>
+    </div>
+    <div class="body">
+      <h2>Why subword tokenization <em>exists.</em></h2>
+
+      <p>
+        The naive way to split text is by whitespace. The vocabulary becomes the set of unique
+        words seen in training. This works until you meet a word you've never seen — every
+        misspelling, every proper noun, every made-up dinosaur name becomes <code>[UNK]</code> and
+        all its meaning is gone. AG News has hundreds of thousands of unique words; storing one
+        weight per word would need a 200,000 × 100 embedding table — twenty million parameters of
+        which most are useless one-time celebrity surnames.
+      </p>
+
+      <p>
+        The opposite extreme is character-level: vocabulary of ~30 symbols, no <code>[UNK]</code>
+        ever, but each token carries almost no meaning by itself. The model has to learn that
+        <code>['c','a','t']</code> and <code>['c','a','t','s']</code> share a meaning, which is a
+        lot of work for a small model.
+      </p>
+
+      <p>
+        <strong>Subword tokenization is the compromise.</strong> Common words stay whole
+        (<code>the</code>, <code>movie</code>). Rare words get split into recognizable pieces
+        (<code>unbelievable</code> → <code>un</code> + <code>believ</code> + <code>able</code>).
+        Truly novel words get split into their constituent characters as a fallback. The
+        vocabulary size is fixed (you choose it — typically 8k-50k) and you never produce
+        <code>[UNK]</code>. The model gets to share weights between morphologically related words
+        because they share subword tokens.
+      </p>
+
+      <div class="sidenote">
+        <strong>The morphology bonus</strong>
+        Once the tokenizer learns the suffix <code>##able</code>, every adjective ending in -able
+        shares the embedding for that suffix. The model never had to see <code>belibably</code>
+        to suspect it might be an adjective.
+      </div>
+
+      <h3><span class="marker">§2.1</span>The two algorithms you'll use</h3>
+
+      <p>
+        Both BPE and WordPiece start from the same place: split the corpus into individual
+        characters, then merge pieces back together iteratively until the vocabulary reaches the
+        target size. The difference is <em>which pair to merge next</em>.
+      </p>
+
+      <table>
+        <thead>
+          <tr><th>Property</th><th>BPE</th><th>WordPiece</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Merge criterion</td><td>Most frequent adjacent pair</td><td>Pair that most increases corpus likelihood</td></tr>
+          <tr><td>Score</td><td><code>count(A,B)</code></td><td><code>count(A,B) / (count(A) × count(B))</code></td></tr>
+          <tr><td>Continuation marker</td><td>None — pieces are independent</td><td><code>##</code> prefix on non-first pieces</td></tr>
+          <tr><td>Used by</td><td>GPT-2/3/4, Llama, RoBERTa</td><td>BERT, DistilBERT, Electra</td></tr>
+          <tr><td>Tends to produce</td><td>Slightly longer pieces</td><td>Slightly shorter, more linguistically motivated pieces</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §3 ═══════════════════ -->
+  <section class="section" id="s3">
+    <div class="gutter">
+      <span class="num">03</span>
+      <span class="tag">Tokenization</span>
+    </div>
+    <div class="body">
+      <h2>BPE — <em>by frequency,</em> greedily.</h2>
+
+      <p>
+        Walk through the algorithm with a tiny toy corpus of three repeated words:
+        <code>low low low low low lower lower newest newest newest</code>. We start by splitting
+        every word into characters and counting:
+      </p>
+
+      <pre data-label="step 0 — initial vocabulary">l o w           ×5    (was "low")
+l o w e r       ×2    (was "lower")
+n e w e s t     ×3    (was "newest")</pre>
+
+      <p>
+        Now count every adjacent character pair across the whole corpus.
+        <code>(l, o)</code> appears 5+2 = 7 times. <code>(o, w)</code> appears 5+2 = 7 times.
+        <code>(e, w)</code> appears 3 times. The most frequent pair (a tie at 7) is something
+        like <code>(l, o)</code>. Merge it into a single token <code>lo</code>:
+      </p>
+
+      <pre data-label="step 1 — after merging (l,o) → lo">lo w        ×5
+lo w e r    ×2
+n e w e s t ×3
+vocab adds: "lo"</pre>
+
+      <p>
+        Recount. Now <code>(lo, w)</code> appears 7 times — the new most frequent pair. Merge.
+        Repeat until the vocabulary hits its target size. Each merge becomes a permanent rule
+        in the tokenizer. At inference, tokenization just replays those rules in order.
+      </p>
+
+      <h3><span class="marker">§3.1</span>What this gives you</h3>
+
+      <p>
+        BPE has no notion of "where in the word am I". Tokens are whole subwords with no marker.
+        The reconstructed sentence is just <code>" ".join(tokens)</code> after some
+        post-processing — but be careful: the original spacing is gone. BPE is also
+        <em>language-agnostic</em>; it works on any byte stream, which is why GPT models use a
+        byte-level variant for handling emojis and non-Latin scripts.
+      </p>
+
+      <div class="sidenote">
+        <strong>Why "byte"</strong>
+        Pure character BPE breaks on UTF-8 because a single emoji can be 4 bytes. Byte-level BPE
+        treats the input as raw bytes and lets merges cross the UTF-8 boundary, so any unicode
+        sequence is representable. The HF default is character-level when you pass
+        <code>BPE(unk_token="[UNK]")</code>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §4 ═══════════════════ -->
+  <section class="section" id="s4">
+    <div class="gutter">
+      <span class="num">04</span>
+      <span class="tag">Tokenization</span>
+    </div>
+    <div class="body">
+      <h2>WordPiece — by <em>likelihood.</em></h2>
+
+      <p>
+        WordPiece is BPE's more probabilistic cousin. Same merge-pairs procedure, but instead of
+        picking the most-frequent pair, it picks the pair whose merge most increases the
+        likelihood of the corpus. In practice this means scoring each candidate pair
+        <code>(A, B)</code> by:
+      </p>
+
+      $$\text{score}(A, B) \;=\; \frac{\text{count}(A, B)}{\text{count}(A)\,\cdot\,\text{count}(B)}$$
+
+      <p>
+        This penalizes pairs whose pieces are individually very common. <code>(t, h)</code> might
+        appear 100,000 times, but <code>t</code> and <code>h</code> are each so common that the
+        score is small. <code>(##ing, well)</code> might appear only 200 times, but if
+        <code>##ing</code> is rare and <code>well</code> is rare, the score is large. WordPiece
+        prefers merges that "explain" something — pieces that mostly only appear together.
+      </p>
+
+      <h3><span class="marker">§4.1</span>The ## marker</h3>
+
+      <p>
+        WordPiece marks every piece that is <em>not</em> the start of a word with <code>##</code>.
+        So <code>unbelievable</code> tokenizes as <code>['un', '##bel', '##ie', '##va',
+        '##ble']</code>. This gives the model an explicit signal: "I am in the middle of a word".
+        The reconstructed sentence is unambiguous — strip <code>##</code> and concatenate; if no
+        <code>##</code>, add a space.
+      </p>
+
+      <h3><span class="marker">§4.2</span>Try them side by side</h3>
+
+      <p>
+        Type a sentence and watch each tokenizer chop it. The "BPE" splits are heuristic
+        approximations of what a real trained-on-English tokenizer would produce; the WordPiece
+        column shows the <code>##</code> markers explicitly so you see the morphology.
+      </p>
+
+      <!-- INTERACTIVE: TOKENIZATION PLAYGROUND -->
+      <div class="widget" id="tok-demo">
+        <div class="header">
+          <h4>Interactive · Tokenizer Comparison</h4>
+          <span class="tag">type a sentence</span>
+        </div>
+        <div class="body-pad">
+          <div class="tok-row">
+            <div class="label">Input</div>
+            <input type="text" id="tok-input" value="the unbelievably tokenizers tokenize subwords" style="width:100%;font-size:14px;padding:10px;">
+          </div>
+          <div class="tok-row">
+            <div class="label">Word-level (no subword) — vocab miss = [UNK]</div>
+            <div class="tok-output" id="tok-word"></div>
+          </div>
+          <div class="tok-row">
+            <div class="label">BPE (no markers, frequency-based merges)</div>
+            <div class="tok-output" id="tok-bpe"></div>
+          </div>
+          <div class="tok-row">
+            <div class="label">WordPiece (## marks continuations)</div>
+            <div class="tok-output" id="tok-wp"></div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The takeaway for the question in Task 1.1: BPE is simpler, faster to train, and
+        ubiquitous in autoregressive LLMs because it produces clean concatenable pieces.
+        WordPiece's likelihood criterion produces slightly more "morphologically tidy" splits,
+        which is why bidirectional models (BERT) used it. <strong>Both crush word-level
+        tokenization</strong> on rare-word handling: a word-level tokenizer with a 10k vocab will
+        have hundreds of <code>[UNK]</code>s on AG News. A subword tokenizer with the same vocab
+        will have zero, because every novel word can be expressed as a sequence of pieces.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §5 ═══════════════════ -->
+  <section class="section" id="s5">
+    <div class="gutter">
+      <span class="num">05</span>
+      <span class="tag">Embeddings</span>
+    </div>
+    <div class="body">
+      <h2>Word embeddings — the <em>geometry</em> of meaning.</h2>
+
+      <p>
+        After tokenizing, each token is just an integer ID — say, "movie" is 4137. To do anything
+        useful, the model needs a continuous representation. The naive choice is a one-hot vector
+        of size <code>vocab_size</code>: a 10,000-long vector of zeros with a single 1 at index
+        4137. Two problems: it's huge, and it's dumb. Every pair of words is exactly the same
+        distance apart. "king" is no closer to "queen" than to "asparagus".
+      </p>
+
+      <p>
+        An <strong>embedding</strong> replaces each token's one-hot with a dense vector of size
+        <code>d</code> — typically 50, 100, or 300. The values are real numbers, learned from
+        data. After training, <code>king</code> and <code>queen</code> end up close in
+        embedding space, while <code>king</code> and <code>asparagus</code> are far apart. This
+        is not magic; it's a direct consequence of <strong>the distributional hypothesis</strong>:
+        words that appear in similar contexts tend to have similar meanings. If we force the
+        model to predict context from word (or word from context), it has no choice but to map
+        contextually-similar words to nearby vectors.
+      </p>
+
+      <blockquote class="pull">
+        You shall know a word by the company it keeps. — J. R. Firth, 1957.
+      </blockquote>
+
+      <h3><span class="marker">§5.1</span>What "close" means</h3>
+
+      <p>
+        The standard distance for embeddings is <strong>cosine similarity</strong>: the cosine of
+        the angle between the two vectors. Magnitude is ignored; only direction matters.
+      </p>
+
+      $$\cos(u, v) \;=\; \frac{u \cdot v}{\|u\|\,\|v\|}$$
+
+      <p>
+        Two vectors pointing the same direction have cosine 1; perpendicular ones have cosine 0;
+        opposite ones have cosine -1. <code>model.wv.most_similar("movie")</code> just computes
+        cosine similarity between "movie"'s vector and every other vector in the vocab, then
+        returns the top 10.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §6 ═══════════════════ -->
+  <section class="section" id="s6">
+    <div class="gutter">
+      <span class="num">06</span>
+      <span class="tag">Embeddings</span>
+    </div>
+    <div class="body">
+      <h2>Word2Vec: <em>CBOW</em> &amp; <em>Skip-gram.</em></h2>
+
+      <p>
+        Word2Vec is the original embedding-learning algorithm that made "king − man + woman ≈
+        queen" famous. It comes in two flavors that differ only in <em>which way the prediction
+        runs.</em>
+      </p>
+
+      <h3><span class="marker">§6.1</span>The window</h3>
+
+      <p>
+        Both flavors slide a window across the corpus. With <code>window=2</code>, around the
+        target word "fell" in <code>"the dollar fell against the yen"</code>:
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- words -->
+          <g font-family="IBM Plex Mono" font-size="16" fill="#1A2438">
+            <rect x="20"  y="80" width="100" height="40" fill="none" stroke="#1A2438" stroke-width="1"/>
+            <text x="70"  y="105" text-anchor="middle">the</text>
+
+            <rect x="130" y="80" width="100" height="40" fill="rgba(198,138,31,0.18)" stroke="#C68A1F" stroke-width="1"/>
+            <text x="180" y="105" text-anchor="middle">dollar</text>
+
+            <rect x="240" y="80" width="100" height="40" fill="rgba(198,138,31,0.18)" stroke="#C68A1F" stroke-width="1"/>
+            <text x="290" y="105" text-anchor="middle">fell</text>
+            <!-- Wait - 'fell' is the target, mark it differently -->
+          </g>
+          <g>
+            <rect x="240" y="80" width="100" height="40" fill="rgba(184,58,31,0.18)" stroke="#B83A1F" stroke-width="2"/>
+            <text x="290" y="105" font-family="IBM Plex Mono" font-size="16" fill="#1A2438" text-anchor="middle" font-weight="600">fell</text>
+            <text x="290" y="62" font-family="IBM Plex Mono" font-size="9" fill="#B83A1F" text-anchor="middle" letter-spacing="1.5">TARGET</text>
+          </g>
+          <g>
+            <rect x="130" y="80" width="100" height="40" fill="rgba(198,138,31,0.18)" stroke="#C68A1F" stroke-width="1"/>
+            <text x="180" y="105" font-family="IBM Plex Mono" font-size="16" fill="#1A2438" text-anchor="middle">dollar</text>
+            <text x="180" y="62" font-family="IBM Plex Mono" font-size="9" fill="#C68A1F" text-anchor="middle" letter-spacing="1.5">CONTEXT</text>
+
+            <rect x="350" y="80" width="100" height="40" fill="rgba(198,138,31,0.18)" stroke="#C68A1F" stroke-width="1"/>
+            <text x="400" y="105" font-family="IBM Plex Mono" font-size="16" fill="#1A2438" text-anchor="middle">against</text>
+            <text x="400" y="62" font-family="IBM Plex Mono" font-size="9" fill="#C68A1F" text-anchor="middle" letter-spacing="1.5">CONTEXT</text>
+
+            <rect x="460" y="80" width="100" height="40" fill="rgba(198,138,31,0.18)" stroke="#C68A1F" stroke-width="1"/>
+            <text x="510" y="105" font-family="IBM Plex Mono" font-size="16" fill="#1A2438" text-anchor="middle">the</text>
+            <text x="510" y="62" font-family="IBM Plex Mono" font-size="9" fill="#C68A1F" text-anchor="middle" letter-spacing="1.5">CONTEXT</text>
+
+            <rect x="20"  y="80" width="100" height="40" fill="rgba(198,138,31,0.10)" stroke="#1A2438" stroke-width="1" stroke-dasharray="3,3"/>
+            <text x="70"  y="105" font-family="IBM Plex Mono" font-size="16" fill="#6B7388" text-anchor="middle">the</text>
+            <text x="70"  y="62" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle" letter-spacing="1.5">OUTSIDE</text>
+
+            <rect x="570" y="80" width="100" height="40" fill="rgba(198,138,31,0.10)" stroke="#1A2438" stroke-width="1" stroke-dasharray="3,3"/>
+            <text x="620" y="105" font-family="IBM Plex Mono" font-size="16" fill="#6B7388" text-anchor="middle">yen</text>
+            <text x="620" y="62" font-family="IBM Plex Mono" font-size="9" fill="#6B7388" text-anchor="middle" letter-spacing="1.5">OUTSIDE</text>
+          </g>
+
+          <!-- arrows below depending on direction -->
+          <g font-family="IBM Plex Mono" font-size="11" fill="#1A2438">
+            <text x="70"  y="160" text-anchor="middle" fill="#B83A1F">CBOW: 4 contexts → predict "fell"</text>
+            <text x="500" y="180" text-anchor="middle" fill="#B83A1F">Skip-gram: "fell" → predict each of the 4 contexts</text>
+          </g>
+        </svg>
+        <figcaption><span class="num">Fig. 6.1</span>The window of size 2. Two flavours, two arrow directions.</figcaption>
+      </figure>
+
+      <h3><span class="marker">§6.2</span>CBOW — context predicts word</h3>
+
+      <p>
+        Continuous Bag-of-Words takes the four context vectors, averages them into one vector,
+        and uses that vector to predict the target word. The training signal is the same softmax
+        cross-entropy you saw in Hometask 1: "given this context, what is the probability over
+        every word in the vocab that the next word is X?"
+      </p>
+
+      <p>
+        Because we average four contexts into one prediction, every training sample is one
+        update. <strong>CBOW is fast.</strong> It also smooths over rare words — the target's
+        embedding is updated using the smoothed signal of its averaged contexts, so very rare
+        targets get a noisy signal but a well-defined one.
+      </p>
+
+      <h3><span class="marker">§6.3</span>Skip-gram — word predicts context</h3>
+
+      <p>
+        Skip-gram flips the arrow. Given the word "fell", predict each of the four context words
+        independently. So one occurrence of "fell" generates <em>four</em> training samples
+        instead of one. Skip-gram is slower per epoch but extracts more signal from each word
+        occurrence, which makes it shine on rare words and small datasets.
+      </p>
+
+      <table>
+        <thead><tr><th></th><th>CBOW</th><th>Skip-gram</th></tr></thead>
+        <tbody>
+          <tr><td>Predicts</td><td>target from context</td><td>context from target</td></tr>
+          <tr><td>Speed</td><td>~3-5× faster</td><td>slower (more updates per token)</td></tr>
+          <tr><td>Best for</td><td>large corpora, frequent words</td><td>small corpora, rare words</td></tr>
+          <tr><td>Quality on infrequent tokens</td><td>poor</td><td>strong</td></tr>
+          <tr><td><code>sg</code> flag in gensim</td><td><code>0</code></td><td><code>1</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="sidenote">
+        <strong>Why this matters for AG News</strong>
+        AG News has ~120k news headlines. After BPE tokenization with vocab=10k, you have a
+        decent-sized training set with a vocabulary that has been forced into the right size by
+        the tokenizer. This is a regime where both should work, but Skip-gram tends to produce
+        slightly higher-quality embeddings for downstream classification; CBOW will train faster.
+        Run both and report.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §7 ═══════════════════ -->
+  <section class="section" id="s7">
+    <div class="gutter">
+      <span class="num">07</span>
+      <span class="tag">Embeddings</span>
+    </div>
+    <div class="body">
+      <h2>Choosing dimension <em>&amp; window.</em></h2>
+
+      <p>
+        The two free knobs you have to set: <code>vector_size</code> (the embedding dimension)
+        and <code>window</code> (the context radius). The assignment asks you to sweep
+        <code>{50, 100, 200}</code> for the dimension. Why those numbers?
+      </p>
+
+      <h3><span class="marker">§7.1</span>The embedding dimension</h3>
+
+      <p>
+        Higher dimension = more capacity to distinguish concepts, but also more parameters to
+        train, more risk of overfitting if the data is small, and longer training. There's no
+        universal best — it depends on corpus size and downstream task. Some intuitions:
+      </p>
+
+      <ul>
+        <li><code>d = 50</code>: enough for very basic semantic clusters. Cheap. Good when corpus is &lt;1M tokens.</li>
+        <li><code>d = 100</code>: the sweet spot for medium corpora (10M-100M tokens). What you'd use by default.</li>
+        <li><code>d = 200-300</code>: standard for large corpora (Wikipedia-scale). Often plateaus around 300.</li>
+      </ul>
+
+      <p>
+        Watch what happens to your downstream accuracy as you sweep. If 200 is barely better
+        than 100, the bottleneck is data, not dimension.
+      </p>
+
+      <h3><span class="marker">§7.2</span>The window size</h3>
+
+      <p>
+        The assignment hints <code>window=5</code>, which is the gensim default. Smaller windows
+        (2-3) capture <em>syntactic</em> similarity — words with the same role tend to cluster
+        (verbs with verbs, nouns with nouns). Larger windows (8-15) capture <em>topical</em>
+        similarity — words about the same general subject cluster together. For news
+        classification, somewhere in the middle (5-10) is a good compromise.
+      </p>
+
+      <h3><span class="marker">§7.3</span>min_count, and the actual learned vocab</h3>
+
+      <p>
+        <code>min_count=2</code> means: drop any token that appeared fewer than 2 times in the
+        corpus. This is the source of one of the questions in Task 1.2 — your tokenizer vocab is
+        10,000, but your Word2Vec vocab will be smaller, possibly considerably so. Why? Because
+        <strong>the tokenizer has seen every token at least once</strong> (it built the vocab
+        from the corpus), but Word2Vec drops tokens that are too rare to learn anything reliable
+        from. With <code>min_count=2</code>, every singleton token is excluded.
+      </p>
+
+      <div class="sidenote">
+        <strong>The OOV problem you've just created</strong>
+        At inference, when you tokenize the test sentence, some BPE tokens may not be in the
+        Word2Vec vocab. This is why the skeleton has <code>if tok in model.wv:</code> guards.
+        The fallback (zero vector for empty sentences) is your last line of defense.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §8 ═══════════════════ -->
+  <section class="section" id="s8">
+    <div class="gutter">
+      <span class="num">08</span>
+      <span class="tag">Pooling</span>
+    </div>
+    <div class="body">
+      <h2>From tokens to <em>a sentence vector.</em></h2>
+
+      <p>
+        After tokenizing, each sentence is a list of token IDs of variable length: 8 tokens for
+        a short headline, 40 for a long one. After embedding, that becomes 8 or 40 vectors of
+        size <code>d</code>. But an MLP needs <em>fixed-size</em> input. So you have to compress
+        a variable-length sequence of d-dimensional vectors into one d-dimensional vector. This
+        compression is called <strong>pooling</strong>.
+      </p>
+
+      <h3><span class="marker">§8.1</span>Three pooling choices</h3>
+
+      <table>
+        <thead><tr><th>Pool</th><th>Formula</th><th>What it captures</th><th>Failure mode</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Mean</td>
+            <td>$\bar{v} = \frac{1}{n}\sum_i v_i$</td>
+            <td>Average direction. Robust default.</td>
+            <td>Long sentences with one strong topic word get diluted.</td>
+          </tr>
+          <tr>
+            <td>Sum</td>
+            <td>$s = \sum_i v_i$</td>
+            <td>Total mass. Magnitude grows with length.</td>
+            <td>Sentence length leaks into the vector — the model may learn "long = X".</td>
+          </tr>
+          <tr>
+            <td>Max</td>
+            <td>$m_j = \max_i v_{i,j}$</td>
+            <td>Strongest activation per dimension.</td>
+            <td>Loses count information ("good good good" same as "good").</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        For news classification, <strong>mean pooling</strong> is the strongest default — it
+        gives every token equal weight, doesn't leak length, and the embedding average usually
+        ends up in the right semantic neighborhood. If you suspect length is informative (it
+        rarely is for headlines), sum is worth trying.
+      </p>
+
+      <h3><span class="marker">§8.2</span>The unspoken assumption</h3>
+
+      <p>
+        Pooling throws away word order. <em>"Dog bites man"</em> and <em>"Man bites dog"</em>
+        produce identical pooled vectors. For headline classification this is fine — topic words
+        ("market", "election", "championship") usually carry the signal. For tasks where order
+        matters — sentiment, NLI, translation — pooled bag-of-embeddings is too weak and you'd
+        reach for an RNN, CNN, or Transformer. This is exactly the limitation Task 1.3 asks you
+        to articulate.
+      </p>
+
+      <blockquote class="pull">
+        Pooling is to text what averaging your monthly weather is to climate. Useful summary, lost story.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §9 ═══════════════════ -->
+  <section class="section" id="s9">
+    <div class="gutter">
+      <span class="num">09</span>
+      <span class="tag">MLP</span>
+    </div>
+    <div class="body">
+      <h2>The MLP — a tiny <em>universal approximator.</em></h2>
+
+      <p>
+        A Multi-Layer Perceptron is just stacked logistic regressions with non-linearities glued
+        between them. Each layer is a <code>nn.Linear</code> (a matrix multiply + bias). Each
+        non-linearity is something like ReLU. Stack two or three and you have, in principle, a
+        function that can approximate anything (the universal approximation theorem).
+      </p>
+
+      <p>
+        The minimal architecture for AG News:
+      </p>
+
+      <pre data-label="architecture, in plain English">input  : (batch, 100)            ← pooled embedding, dim = 100
+linear : 100 → 256
+relu
+linear : 256 → 4                 ← one logit per class
+softmax (inside the loss)</pre>
+
+      <p>
+        Three things to choose: <em>how many hidden layers</em>, <em>how wide</em>, and <em>what
+        activation</em>.
+      </p>
+
+      <h3><span class="marker">§9.1</span>Depth and width</h3>
+
+      <p>
+        With pooled bag-of-embeddings as input, you've already lost most of the structural
+        information. A deep MLP cannot recover it. <strong>One or two hidden layers is plenty</strong>
+        — past that you mostly memorize. Width is more forgiving: 128, 256, 512 are all reasonable.
+        A safe rule of thumb: hidden_dim ≈ input_dim, possibly 2× input_dim.
+      </p>
+
+      <h3><span class="marker">§9.2</span>ReLU and friends</h3>
+
+      <p>
+        ReLU is $\max(0, x)$ — let positive signals through, zero out negatives. It's simple,
+        fast, and gradient-friendly. Alternatives like GELU and SiLU are smoother and used in
+        Transformers, but for an MLP this small, ReLU is the right default. The reason
+        non-linearity matters at all: without it, a stack of <code>nn.Linear</code> layers is
+        mathematically identical to a single <code>nn.Linear</code>. You'd just be computing
+        $W_2(W_1 x + b_1) + b_2 = (W_2 W_1) x + (W_2 b_1 + b_2)$. The non-linearity is the only
+        thing that buys you "deep".
+      </p>
+
+      <h3><span class="marker">§9.3</span>Dropout, optionally</h3>
+
+      <p>
+        If you see big gaps between training and test accuracy, add a <code>nn.Dropout(0.3)</code>
+        between layers. It zeros out 30 % of activations randomly during training, forcing the
+        model not to rely on any single feature. Don't add it preemptively — measure first.
+      </p>
+
+      <div class="sidenote">
+        <strong>What an MLP cannot do here</strong>
+        It cannot model word order. It cannot model long-range dependencies. It treats the
+        sentence as a single point in a 100-d cloud. RNNs, CNNs, and Transformers all process
+        the sequence token by token (in different ways), preserving structural information that
+        pooling threw away. That is the limitation Task 1.3 asks you to name.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §10 ═══════════════════ -->
+  <section class="section" id="s10">
+    <div class="gutter">
+      <span class="num">10</span>
+      <span class="tag">Training</span>
+    </div>
+    <div class="body">
+      <h2>Loss, optimizer, batches, <em>epochs.</em></h2>
+
+      <p>
+        Training the MLP is mechanically the same as Hometask 1, just with a multi-class twist
+        and a better dataset. The four knobs you set:
+      </p>
+
+      <h3><span class="marker">§10.1</span>The loss</h3>
+
+      <p>
+        AG News has 4 classes. The right loss is <strong>cross-entropy</strong>, which is the
+        multi-class generalization of binary cross-entropy. PyTorch's
+        <code>nn.CrossEntropyLoss</code> takes raw logits (no softmax) and integer labels, and
+        does the softmax + log + negative-log-likelihood internally — numerically stable, fast.
+      </p>
+
+      $$L = -\frac{1}{N}\sum_i \log\!\left(\frac{e^{z_{i,y_i}}}{\sum_k e^{z_{i,k}}}\right)$$
+
+      <h3><span class="marker">§10.2</span>The optimizer</h3>
+
+      <p>
+        Adam is the default and rarely wrong. Learning rate <code>1e-3</code> is its happy
+        place. If your training loss isn't dropping after a few epochs, lr is probably too low;
+        if it explodes (NaN), too high.
+      </p>
+
+      <h3><span class="marker">§10.3</span>Batch size and epochs</h3>
+
+      <p>
+        Batch size 32 to 128 is the standard range. Larger batches → smoother gradient
+        estimate but fewer updates per epoch and more memory. Smaller batches → noisier but more
+        updates. <code>batch_size=64</code> is a fine starting point.
+      </p>
+
+      <p>
+        Number of epochs: AG News with this pipeline tends to converge in 5-20 epochs.
+        Watch the loss — when it stops dropping for a couple epochs, stop. Or set
+        <code>epochs=10</code> and call it a day if the loss curve looks healthy.
+      </p>
+
+      <h3><span class="marker">§10.4</span>The five-line training loop</h3>
+
+      <p>
+        The skeleton in Cell 17 already has the loop. Read it once and burn the order into your
+        retina, because if you ever swap two lines the model breaks silently:
+      </p>
+
+      <pre data-label="the canonical PyTorch four-step">optimizer.zero_grad()        # 1. clear stale grads from last step
+outputs = model(X_batch)     # 2. forward pass
+loss = criterion(outputs, y_batch)   # 3. compute loss
+loss.backward()              # 4. backprop — fill .grad on every parameter
+optimizer.step()             # 5. apply the update</pre>
+
+      <p>
+        If <code>zero_grad</code> is missing, gradients accumulate from previous batches and
+        training diverges. If <code>backward</code> comes after <code>step</code>, you're
+        applying the update before computing what to update. Order is law.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §11 ═══════════════════ -->
+  <section class="section" id="s11">
+    <div class="gutter">
+      <span class="num">11</span>
+      <span class="tag">Evaluation</span>
+    </div>
+    <div class="body">
+      <h2>Reading a <em>confusion matrix.</em></h2>
+
+      <p>
+        Accuracy alone is a single number. It tells you "the model got 87 % right" but not
+        which mistakes it made. The <strong>confusion matrix</strong> is the next level of
+        detail. Rows are true labels; columns are predicted labels. The diagonal is correct
+        predictions. Everything off-diagonal is an error, and the error tells a story.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>True ↓ / Pred →</th>
+            <th>World</th>
+            <th>Sports</th>
+            <th>Business</th>
+            <th>Sci/Tech</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>World</strong></td><td>1820</td><td>15</td><td><span style="color:var(--vermillion)">85</span></td><td>30</td></tr>
+          <tr><td><strong>Sports</strong></td><td>10</td><td>1885</td><td>5</td><td>0</td></tr>
+          <tr><td><strong>Business</strong></td><td><span style="color:var(--vermillion)">110</span></td><td>4</td><td>1750</td><td>36</td></tr>
+          <tr><td><strong>Sci/Tech</strong></td><td>40</td><td>2</td><td>50</td><td>1808</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        Read the off-diagonals. The big numbers in red: <strong>World ↔ Business</strong>. Both
+        110 and 85. The model can't reliably tell them apart — and it shouldn't surprise you,
+        because financial news is often international news. The "G7 summit" might be either.
+        That's a real-world pattern your model has discovered, not a bug. The 50 Sci/Tech →
+        Business confusions are similar: tech earnings are both. The 36 Business → Sci/Tech are
+        likely "Apple unveils new iPhone" headlines — Business by category, but full of tech
+        vocabulary.
+      </p>
+
+      <h3><span class="marker">§11.1</span>Three statistics from one matrix</h3>
+
+      <p>
+        From the confusion matrix you can compute three numbers per class:
+      </p>
+
+      <ul>
+        <li><strong>Precision</strong> = TP / (TP + FP) = "of everything I called X, how much was X?"</li>
+        <li><strong>Recall</strong> = TP / (TP + FN) = "of everything that was X, how much did I find?"</li>
+        <li><strong>F1</strong> = harmonic mean of precision and recall = a single number that punishes asymmetry.</li>
+      </ul>
+
+      <p>
+        For AG News (balanced classes, 4 of them), accuracy and macro-F1 are usually close. If
+        they diverge, you have one bad class dragging the average — investigate.
+      </p>
+
+      <div class="sidenote">
+        <strong>Quick sanity check</strong>
+        For a 4-class balanced problem, random chance is 25 %. Always-predict-the-majority is
+        also 25 % (because classes are balanced). If your accuracy is below 60 % something is
+        wrong with the pipeline (probably embedding mismatch or pooling bug). Above 85 % is
+        good for this setup. State of the art (BERT-fine-tuned) is ~95 %.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §12 ═══════════════════ -->
+  <section class="section" id="s12">
+    <div class="gutter">
+      <span class="num">12</span>
+      <span class="tag">Evaluation</span>
+    </div>
+    <div class="body">
+      <h2>Error analysis &amp; <em>interpretability.</em></h2>
+
+      <p>
+        Task 1.4 asks for two things beyond the metrics. First: <strong>look at three errors</strong>
+        and find the pattern. Second: <strong>name a method</strong> for figuring out which words
+        in the input the model paid attention to.
+      </p>
+
+      <h3><span class="marker">§12.1</span>Reading the errors</h3>
+
+      <p>
+        Print headlines where <code>predicted ≠ true</code>. Look for these patterns:
+      </p>
+
+      <ul>
+        <li><em>Genuinely ambiguous</em> — "Microsoft posts Q3 earnings" could be Business or Sci/Tech.</li>
+        <li><em>Tokenization noise</em> — proper nouns split into nonsense pieces, losing signal.</li>
+        <li><em>Short headlines</em> — 4-5 tokens after BPE may not have enough information for the pooled vector to point anywhere meaningful.</li>
+        <li><em>Class-vocabulary overlap</em> — a Business headline that uses unusual sports metaphors ("market rebound", "comeback rally").</li>
+      </ul>
+
+      <h3><span class="marker">§12.2</span>How to find which words mattered</h3>
+
+      <p>
+        You don't have to implement this for Task 1.4 — you just have to <em>name a method and
+        explain the idea</em>. There are several reasonable choices:
+      </p>
+
+      <table>
+        <thead><tr><th>Method</th><th>Idea, in one sentence</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Token ablation</strong></td>
+            <td>Remove one token at a time and re-run; the drop in the predicted-class probability is that token's "importance".</td>
+          </tr>
+          <tr>
+            <td><strong>Gradient × input</strong></td>
+            <td>Compute $\partial \text{logit}_{\text{class}} / \partial v_i$ for each token vector; tokens with large gradient magnitude were influential.</td>
+          </tr>
+          <tr>
+            <td><strong>Integrated gradients</strong></td>
+            <td>Average gradient × input along a path from a "neutral" baseline (zero vector) to the actual input. More robust than raw gradients.</td>
+          </tr>
+          <tr>
+            <td><strong>LIME</strong></td>
+            <td>Train a tiny linear classifier locally around the input by perturbing words and observing predictions; report its weights as importances.</td>
+          </tr>
+          <tr>
+            <td><strong>Attention weights</strong></td>
+            <td>If you swapped pooling for an attention layer, the attention scores themselves are token importances. (Not applicable to mean-pooled MLPs without rearchitecting.)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        For a mean-pooled MLP, <strong>token ablation</strong> is the easiest and most honest:
+        rebuild the sentence vector without one token at a time and watch how the output
+        probabilities shift. Whichever token's removal changes the prediction most was the one
+        the model leaned on. State that as your answer if you're unsure.
+      </p>
+
+      <blockquote class="pull">
+        A confusion matrix tells you what; an ablation tells you why.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §13 ═══════════════════ -->
+  <section class="section" id="s13">
+    <div class="gutter">
+      <span class="num">13</span>
+      <span class="tag">Char-RNN</span>
+    </div>
+    <div class="body">
+      <h2>Character-level <em>language modeling.</em></h2>
+
+      <p>
+        Part 2 swaps the goal from "classify the document" to "predict the next character".
+        It's still cross-entropy. It's still gradient descent. The only new piece is that the
+        model has memory: a hidden state that travels from one character to the next, carrying
+        whatever the model has learned so far about this name in progress.
+      </p>
+
+      <p>
+        The training task — formally — is autoregressive next-token prediction. Take the string
+        <code>"&lt;triceratops&gt;"</code>. After seeing <code>&lt;</code>, predict
+        <code>t</code>. After <code>&lt;t</code>, predict <code>r</code>. After <code>&lt;tr</code>,
+        predict <code>i</code>. And so on. The model learns the spelling and rhythm of the
+        dinosaur language without ever being told the rules.
+      </p>
+
+      <h3><span class="marker">§13.1</span>The start &amp; end tokens</h3>
+
+      <p>
+        Real words don't have natural boundaries when concatenated. To teach the model where one
+        name starts and ends, every name is wrapped in special tokens — the assignment uses
+        <code>&lt;</code> for start and <code>&gt;</code> for end. After preprocessing,
+        <code>"anna"</code> becomes <code>"&lt;anna&gt;"</code>. After concatenating the whole
+        dataset, the long string looks like:
+      </p>
+
+      <pre data-label="the corpus, after preprocessing">&lt;allosaurus&gt;&lt;ankylosaurus&gt;&lt;anatotitan&gt;&lt;archaeopteryx&gt;...</pre>
+
+      <p>
+        At generation time, you feed <code>&lt;</code> as the seed and stop sampling when the
+        model emits <code>&gt;</code>. The angle brackets are how the model says "I'm done".
+      </p>
+
+      <h3><span class="marker">§13.2</span>Why a sliding window</h3>
+
+      <p>
+        A 600-name concatenated string is too long to pass through an LSTM in one go (memory
+        and gradient stability). Instead, you slide a window of length <code>seq_len</code>
+        (e.g. 30) over the string. Each window is one training example. The target for window
+        at position <code>i</code> is the same window shifted right by one character — so the
+        model learns to predict the next character at every position.
+      </p>
+
+      <pre data-label="window of length 4 over '&lt;anna&gt;&lt;raven&gt;'">i=0:  x = &lt;ann   y = anna
+i=1:  x = anna   y = nna&gt;
+i=2:  x = nna&gt;   y = na&gt;&lt;
+i=3:  x = a&gt;&lt;r   y = &gt;&lt;ra
+...</pre>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §14 ═══════════════════ -->
+  <section class="section" id="s14">
+    <div class="gutter">
+      <span class="num">14</span>
+      <span class="tag">Char-RNN</span>
+    </div>
+    <div class="body">
+      <h2>A PyTorch Dataset for <em>sliding windows.</em></h2>
+
+      <p>
+        A custom <code>torch.utils.data.Dataset</code> needs three methods: <code>__init__</code>,
+        <code>__len__</code>, and <code>__getitem__</code>. For Task 2.1, the constructor does
+        all the heavy lifting; the other two are one-liners.
+      </p>
+
+      <h3><span class="marker">§14.1</span>Step by step</h3>
+
+      <ol>
+        <li>Read the file into a list of names (one per line).</li>
+        <li>Lowercase if you want a smaller vocab (optional, but helpful).</li>
+        <li>Wrap each name in <code>&lt;</code> and <code>&gt;</code>.</li>
+        <li>Concatenate everything into one long string <code>self.text</code>.</li>
+        <li>Build the vocab: <code>set(self.text)</code> — this gives every unique char including the brackets.</li>
+        <li>Build <code>token_to_id</code> (char → int) and <code>id_to_token</code> (int → char).</li>
+        <li>Convert the whole text to a long list/tensor of integer IDs (<code>self.data</code>).</li>
+      </ol>
+
+      <h3><span class="marker">§14.2</span><code>__len__</code> and <code>__getitem__</code></h3>
+
+      <p>
+        How many windows of length <code>seq_len</code> fit into a string of length <code>L</code>?
+        You need <code>seq_len + 1</code> consecutive characters per window (because <code>y</code>
+        is shifted by 1). So:
+      </p>
+
+      $$|\text{Dataset}| = L - \text{seq\_len}$$
+
+      <p>
+        And <code>__getitem__(idx)</code> returns the slice
+        <code>(self.data[idx : idx+seq_len], self.data[idx+1 : idx+seq_len+1])</code> as
+        PyTorch <code>LongTensor</code>s.
+      </p>
+
+      <div class="sidenote">
+        <strong>Be careful with stride</strong>
+        The default sliding window with stride=1 generates overlapping windows. That's fine.
+        Some implementations use stride=seq_len for non-overlapping windows — fewer training
+        examples, but they don't share information. The assignment doesn't specify; stride=1
+        is a safe choice.
+      </div>
+
+      <h3><span class="marker">§14.3</span>Train/val split &amp; DataLoader</h3>
+
+      <p>
+        After the Dataset is built, the assignment asks for a train/val split using the
+        <code>datasets</code> library convention. The simplest path is
+        <code>torch.utils.data.random_split</code> with an 80/20 ratio, then wrap each in a
+        <code>DataLoader</code> with <code>shuffle=True</code> for train and
+        <code>shuffle=False</code> for val. Use a fixed batch size — 64 is the value that the
+        provided <code>train()</code> function defaults to.
+      </p>
+
+      <p>
+        One pitfall worth flagging early: the provided training loop uses
+        <code>batch_size*n_steps</code> when reshaping targets — so your DataLoader's batch_size
+        and the dataset's <code>seq_len</code> have to be exact, fixed numbers. If your last
+        batch is smaller than expected (because the dataset isn't divisible), the reshape will
+        crash. Pass <code>drop_last=True</code> to the DataLoader to skip the remainder.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §15 ═══════════════════ -->
+  <section class="section" id="s15">
+    <div class="gutter">
+      <span class="num">15</span>
+      <span class="tag">Char-RNN</span>
+    </div>
+    <div class="body">
+      <h2>One-hot encoding, <em>slowly.</em></h2>
+
+      <p>
+        The CharRNN doesn't have an embedding layer. Instead, each character ID is converted to
+        a one-hot vector before being fed to the LSTM. If the vocab has 30 unique characters and
+        the character is <code>'b'</code> with ID 2, the one-hot is a vector of 30 zeros with a
+        single 1 at index 2.
+      </p>
+
+      <pre data-label="one-hot of 'b' (id=2) with vocab_size=30">[0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</pre>
+
+      <p>
+        Why one-hot instead of an embedding? It works but is wasteful — every char is identical
+        distance from every other in the input space, leaving all the structural learning to the
+        LSTM. It's a deliberate teaching choice: this assignment wants you to feel the
+        information bottleneck before reaching for embeddings in the next homework.
+      </p>
+
+      <h3><span class="marker">§15.1</span>Shapes are everything</h3>
+
+      <p>
+        The function takes an array of shape <code>(initial_array_shape)</code> and returns one of
+        shape <code>(initial_array_shape, vocab_size)</code>. Concretely, your input from the
+        DataLoader is shape <code>(batch_size, seq_len)</code>, and the output you need is
+        <code>(batch_size, seq_len, vocab_size)</code>.
+      </p>
+
+      <p>
+        The cleanest implementations use NumPy's advanced indexing or
+        <code>np.eye(vocab_size)[ids]</code> — the identity matrix indexed by IDs is a one-hot
+        for each ID, and indexing broadcasts naturally over arbitrary shapes. Verify with a tiny
+        toy input first; getting shapes wrong here will produce confusing LSTM errors later.
+      </p>
+
+      <div class="sidenote">
+        <strong>The PyTorch alternative</strong>
+        <code>torch.nn.functional.one_hot</code> does this in one line. The assignment asks for
+        a custom NumPy implementation, presumably to make sure you understand what the operation
+        is doing. Both will work in <code>train()</code>, since it converts back to a tensor
+        with <code>torch.from_numpy</code>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §16 ═══════════════════ -->
+  <section class="section" id="s16">
+    <div class="gutter">
+      <span class="num">16</span>
+      <span class="tag">Char-RNN</span>
+    </div>
+    <div class="body">
+      <h2>LSTMs — why a <em>gate</em> fixes a memory.</h2>
+
+      <p>
+        A vanilla RNN updates its hidden state by smashing the old hidden state and the new
+        input together with a single matrix multiply: $h_t = \tanh(W h_{t-1} + U x_t + b)$. This
+        works for short sequences and falls apart for long ones, because the gradient of $h_T$
+        with respect to $h_1$ involves multiplying $W$ by itself $T$ times. If $\|W\| < 1$ the
+        gradient vanishes exponentially. If $\|W\| > 1$ it explodes. Either way you can't learn
+        long-range dependencies.
+      </p>
+
+      <p>
+        The <strong>LSTM</strong> fixes this with two ideas:
+      </p>
+
+      <ol>
+        <li>A separate <em>cell state</em> $c_t$ that carries memory along a "highway" with mostly additive updates (so gradients flow back without multiplying through tanh repeatedly).</li>
+        <li><em>Gates</em> — small sigmoid-output networks that decide, at every step, what fraction of old memory to keep, what fraction of new input to write, and what fraction to read out.</li>
+      </ol>
+
+      <h3><span class="marker">§16.1</span>The four gates</h3>
+
+      <table>
+        <thead><tr><th>Gate</th><th>Job</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><td>Forget $f_t$</td><td>How much of old cell state to keep?</td><td>$\sigma(W_f [h_{t-1}, x_t])$</td></tr>
+          <tr><td>Input $i_t$</td><td>How much new candidate to write?</td><td>$\sigma(W_i [h_{t-1}, x_t])$</td></tr>
+          <tr><td>Candidate $\tilde{c}_t$</td><td>What new info to consider writing</td><td>$\tanh(W_c [h_{t-1}, x_t])$</td></tr>
+          <tr><td>Output $o_t$</td><td>How much of cell state to expose as hidden</td><td>$\sigma(W_o [h_{t-1}, x_t])$</td></tr>
+        </tbody>
+      </table>
+
+      <p>The cell state and hidden state then update:</p>
+
+      $$c_t = f_t \odot c_{t-1} \;+\; i_t \odot \tilde{c}_t$$
+
+      $$h_t = o_t \odot \tanh(c_t)$$
+
+      <p>
+        Read this as: "Take the old memory, multiply elementwise by the forget gate (let some
+        of it through), then add the new candidate scaled by the input gate. The visible hidden
+        state is the cell state filtered by the output gate."
+      </p>
+
+      <h3><span class="marker">§16.2</span>What you actually pass to PyTorch</h3>
+
+      <p>
+        For your purposes, the gate machinery is hidden inside <code>nn.LSTM</code>. You pass:
+      </p>
+
+      <ul>
+        <li>Input <code>x</code>: shape <code>(batch, seq_len, vocab_size)</code> when <code>batch_first=True</code></li>
+        <li>Initial hidden state tuple <code>(h_0, c_0)</code>: shape <code>(n_layers, batch, n_hidden)</code> each</li>
+      </ul>
+
+      <p>And you get back:</p>
+
+      <ul>
+        <li>Output sequence: shape <code>(batch, seq_len, n_hidden)</code> — the hidden state at every timestep</li>
+        <li>Final hidden tuple <code>(h_T, c_T)</code>: shape same as input — the state after the last step</li>
+      </ul>
+
+      <h3><span class="marker">§16.3</span>The reshape trick before the FC layer</h3>
+
+      <p>
+        The provided model has this line that throws students off:
+      </p>
+
+      <pre data-label="from CharRNN.forward">x = x.contiguous().view(x.size()[0]*x.size()[1], self.n_hidden)</pre>
+
+      <p>
+        It collapses the batch and time dimensions: <code>(batch, seq_len, n_hidden)</code> →
+        <code>(batch*seq_len, n_hidden)</code>. This way the linear layer can be applied to
+        every timestep at once, producing a shape of <code>(batch*seq_len, vocab_size)</code>
+        logits. The matching target shape is <code>(batch*seq_len,)</code> after flattening
+        <code>y</code> with <code>.view(batch_size*n_steps)</code>.
+      </p>
+
+      <h3><span class="marker">§16.4</span>Detaching the hidden state</h3>
+
+      <p>
+        You'll see this in the training loop: <code>h = tuple([each.data for each in h])</code>.
+        It strips the gradient history from the hidden state between batches. Without this,
+        backpropagation would try to flow through the entire training history of the model and
+        fall over. With this, gradients only propagate within the current batch's
+        <code>seq_len</code>. This is called <strong>truncated backpropagation through
+        time</strong> and it's universal in RNN training.
+      </p>
+
+      <div class="sidenote">
+        <strong>For Task 2.3</strong>
+        Run a single batch through the model step by step and print the shape after each line
+        of <code>forward</code>. You should see: input <code>(64, 30, vocab_size)</code> →
+        LSTM output <code>(64, 30, 256)</code> → reshape <code>(1920, 256)</code> →
+        FC <code>(1920, vocab_size)</code> → softmax <code>(1920, vocab_size)</code>. If any
+        of these don't match, your one-hot or batch dimensions are off.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §17 ═══════════════════ -->
+  <section class="section" id="s17">
+    <div class="gutter">
+      <span class="num">17</span>
+      <span class="tag">Sampling</span>
+    </div>
+    <div class="body">
+      <h2>Generation: greedy, random, <em>top-k.</em></h2>
+
+      <p>
+        Once trained, the model produces a probability distribution over the vocab at every
+        step. The question is: how do we turn that distribution into a single chosen character?
+        The choice of strategy is the difference between a model that says "saurus" 100 % of
+        the time and one that occasionally invents "pterodactyl".
+      </p>
+
+      <h3><span class="marker">§17.1</span>Greedy: pick the max</h3>
+
+      <p>
+        Simplest possible: <code>argmax(probabilities)</code>. The same input always produces
+        the same output. Tends to produce repetitive and "safe" text — once the model is in a
+        common pattern it never escapes.
+      </p>
+
+      <h3><span class="marker">§17.2</span>Random: sample by probability</h3>
+
+      <p>
+        <code>np.random.choice(vocab, p=probs)</code>. The provided <code>predict</code>
+        function does this. The model can pick any character, weighted by its probability —
+        characters with 0.001 probability still get picked occasionally. This produces variety
+        but also occasional gibberish, because rare characters are usually rare for a reason.
+      </p>
+
+      <h3><span class="marker">§17.3</span>Top-k: random, but only among the top k</h3>
+
+      <p>
+        The compromise. Sort the probabilities, keep only the top <code>k</code>, renormalize so
+        they sum to 1, and sample from that smaller distribution. With <code>k=5</code>, the
+        model must choose from the 5 most likely characters at every step.
+      </p>
+
+      <p>
+        The effect: variety like random sampling, but no chance of catastrophic gibberish from
+        the long tail. Most modern generation uses some form of truncated sampling (top-k or
+        nucleus / top-p).
+      </p>
+
+      <!-- INTERACTIVE: TOP-K BAR CHART -->
+      <div class="widget" id="topk-demo">
+        <div class="header">
+          <h4>Interactive · Top-k Truncation</h4>
+          <span class="tag">drag k</span>
+        </div>
+        <div style="position: relative;">
+          <div class="dist-grid" id="topk-bars"></div>
+        </div>
+        <div class="control-row">
+          <label>k <span class="val" id="topk-val">5</span></label>
+          <input type="range" id="topk-slider" min="1" max="8" step="1" value="5">
+          <p style="font-size:13px;font-style:italic;color:var(--ink-soft);margin-top:14px;font-family:var(--font-body);">
+            Red bars are kept; grey bars are zeroed out. Notice how at k=1 you reduce to greedy;
+            at k=8 (full vocab) you reduce to plain random sampling.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ §18 ═══════════════════ -->
+  <section class="section" id="s18">
+    <div class="gutter">
+      <span class="num">18</span>
+      <span class="tag">Sampling</span>
+    </div>
+    <div class="body">
+      <h2>Temperature — the <em>variance dial.</em></h2>
+
+      <p>
+        Temperature is a single number $T$ that you divide the logits by before applying
+        softmax. It reshapes the probability distribution without changing the relative ordering.
+      </p>
+
+      $$p_i \;=\; \frac{e^{z_i / T}}{\sum_j e^{z_j / T}}$$
+
+      <p>
+        Three regimes to memorize:
+      </p>
+
+      <ul>
+        <li><strong>$T < 1$</strong> (e.g. 0.5): logits are amplified before softmax; the distribution becomes sharper; high-probability characters get even higher probability. Output becomes more "confident", more repetitive.</li>
+        <li><strong>$T = 1$</strong>: identity. The distribution is unchanged.</li>
+        <li><strong>$T > 1$</strong> (e.g. 1.5, 2.0): logits are squashed; the distribution becomes flatter; rare characters get a fairer shot. Output becomes more diverse, more surprising, and at high T, more chaotic.</li>
+      </ul>
+
+      <h3><span class="marker">§18.1</span>The math, with numbers</h3>
+
+      <p>
+        Suppose the model produces logits $z = [3.0,\, 2.0,\, 1.0]$ for three characters. At
+        $T = 1$ the softmax is roughly $[0.665,\, 0.244,\, 0.090]$ — the top character is
+        confidently the lead.
+      </p>
+
+      <p>
+        At $T = 0.5$ the logits become $[6.0,\, 4.0,\, 2.0]$ and the softmax sharpens to about
+        $[0.867,\, 0.117,\, 0.016]$ — the lead is now overwhelming.
+      </p>
+
+      <p>
+        At $T = 2.0$ the logits become $[1.5,\, 1.0,\, 0.5]$ and the softmax flattens to about
+        $[0.506,\, 0.307,\, 0.187]$ — the underdogs become realistic options.
+      </p>
+
+      <!-- INTERACTIVE: TEMPERATURE BARS -->
+      <div class="widget" id="temp-demo">
+        <div class="header">
+          <h4>Interactive · Temperature Reshaping</h4>
+          <span class="tag">drag T</span>
+        </div>
+        <div style="position: relative;">
+          <div class="dist-grid" id="temp-bars"></div>
+        </div>
+        <div class="control-row">
+          <label>Temperature T <span class="val" id="temp-val">1.00</span></label>
+          <input type="range" id="temp-slider" min="0.2" max="2.5" step="0.05" value="1.0">
+          <p style="font-size:13px;font-style:italic;color:var(--ink-soft);margin-top:14px;font-family:var(--font-body);">
+            Same fixed underlying logits. Watch the distribution sharpen (T → 0) or flatten (T → ∞).
+            At T = 0 it would be one-hot greedy; at T = ∞ it would be uniform random.
+          </p>
+        </div>
+      </div>
+
+      <h3><span class="marker">§18.2</span>Top-k and temperature together</h3>
+
+      <p>
+        Top-k and temperature compose. Apply temperature first to reshape the distribution,
+        then top-k to truncate the long tail. Common settings for creative text:
+        <code>T = 0.8, k = 40</code>. For factual / safer outputs: <code>T = 0.5, k = 5</code>.
+        For your dinosaur names, anything in <code>T ∈ [0.6, 1.2], k ∈ [3, 10]</code> is worth
+        comparing.
+      </p>
+
+      <h3><span class="marker">§18.3</span>What to write up for Task 2.6</h3>
+
+      <p>
+        Generate ~10 names at each setting, by eye:
+      </p>
+
+      <ul>
+        <li><em>Random</em>: the noisy baseline. Some pronounceable, some odd.</li>
+        <li><em>Top-k = 3</em>: very repetitive, mostly looks like the most common dinosaur suffixes.</li>
+        <li><em>Top-k = 5, T = 1.0</em>: variety with structure. Sweet spot for plausibility.</li>
+        <li><em>Top-k = 5, T = 0.5</em>: extremely consistent, possibly memorized.</li>
+        <li><em>Top-k = 5, T = 1.8</em>: diverse and weird; some implausible.</li>
+      </ul>
+
+      <p>
+        Your insight should articulate the <strong>diversity ↔ plausibility tradeoff</strong>:
+        lower T and lower k produce more "real-looking" but more repetitive names; higher T
+        and larger k produce more original but less plausible names. The "creativity" of the
+        model is largely decided at sampling time, not training time.
+      </p>
+
+      <blockquote class="pull">
+        Temperature is the model's volume knob; top-k is its quality control.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ TASK CARDS ═══════════════════ -->
+  <section class="tasks" id="tasks">
+    <div class="ornament">
+      <svg width="120" height="20" viewBox="0 0 120 20">
+        <line x1="0" y1="10" x2="48" y2="10" stroke="currentColor" stroke-width="0.6"/>
+        <circle cx="60" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1"/>
+        <line x1="72" y1="10" x2="120" y2="10" stroke="currentColor" stroke-width="0.6"/>
+      </svg>
+    </div>
+
+    <h2 style="font-family:var(--font-display);font-weight:300;font-size:48px;text-align:center;margin-bottom:60px;font-variation-settings:'SOFT' 50,'opsz' 90;">
+      The ten tasks, <em style="font-style:italic;color:var(--vermillion);">distilled.</em>
+    </h2>
+
+    <!-- TASK 1.1 -->
+    <article class="task-card">
+      <div class="num">PART 1 · TASK 1</div>
+      <h3>Tokenization (BPE &amp; WordPiece)</h3>
+      <div class="points">10 points · code already provided · written answer required</div>
+      <p>
+        The tokenizers are already trained in the skeleton. Your job is to (a) review what's
+        happening, (b) inspect the example outputs, and (c) answer the conceptual question.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>What subword tokenization solves vs word-level (§2)</li>
+            <li>BPE merge rule: most frequent pair (§3)</li>
+            <li>WordPiece merge rule: highest likelihood ratio (§4)</li>
+            <li>The role of <code>##</code> as continuation marker</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>What to write</h4>
+          <ul>
+            <li>One paragraph: BPE = frequency-greedy, WordPiece = likelihood-based</li>
+            <li>When to prefer each (autoregressive vs bidirectional ecosystems)</li>
+            <li>Why both beat word-level: no <code>[UNK]</code>, smaller fixed vocab, morphology shared</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- TASK 1.2 -->
+    <article class="task-card">
+      <div class="num">PART 1 · TASK 2</div>
+      <h3>Train Word2Vec embeddings</h3>
+      <div class="points">10 points · skeleton has TODOs · written analysis required</div>
+      <p>
+        Train 6 Word2Vec models (CBOW × {50, 100, 200} and Skip-gram × {50, 100, 200}) on the
+        BPE-tokenized corpus. Inspect 3 example tokens and their nearest neighbors. Then write
+        the analysis.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>The distributional hypothesis (§5)</li>
+            <li>CBOW vs Skip-gram — direction of prediction (§6)</li>
+            <li>Cosine similarity as the natural distance metric</li>
+            <li>What <code>min_count</code> does to the learned vocab (§7.3)</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Thinking required</h4>
+          <ul>
+            <li>Build <code>tokenized_sentences</code> by encoding each <code>train_df.text</code></li>
+            <li>Pick one model as "best" — usually Skip-gram + 100d for this dataset size</li>
+            <li>Why does the W2V vocab differ from the tokenizer's 10k? (Answer: <code>min_count=2</code>)</li>
+            <li>Justify the dimension choice with a one-line corpus-size rule</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- TASK 1.3 -->
+    <article class="task-card">
+      <div class="num">PART 1 · TASK 3</div>
+      <h3>MLP architecture &amp; training</h3>
+      <div class="points">10 points · big skeleton · many design choices to justify</div>
+      <p>
+        The pipeline: tokenize both splits → average their embeddings → feed pooled vectors to
+        an MLP → cross-entropy → Adam → 5-20 epochs.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>Pooling strategies and what each loses (§8)</li>
+            <li>Why ReLU and why deep ≠ better here (§9)</li>
+            <li>The four-line training loop in canonical order (§10.4)</li>
+            <li>Why MLP works on pooled embeddings but cannot model order</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Thinking required</h4>
+          <ul>
+            <li>Choose pool: mean is the safe default; justify if you pick something else</li>
+            <li>1 hidden layer of size ~256, ReLU, output 4 — start there</li>
+            <li>Adam, lr=1e-3, batch=64, epochs=10 — defensible defaults</li>
+            <li>Articulate the limitation: bag-of-embeddings = no order; RNN/Transformer fixes that</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- TASK 1.4 -->
+    <article class="task-card">
+      <div class="num">PART 1 · TASK 4</div>
+      <h3>Evaluation &amp; error analysis</h3>
+      <div class="points">20 points · highest-value task in Part 1 — don't shortchange the analysis</div>
+      <p>
+        Run the trained MLP on the test set, build a confusion matrix, find three errors, and
+        propose an interpretability method.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>How to read a confusion matrix off-diagonal (§11)</li>
+            <li>Precision / Recall / F1 from one matrix</li>
+            <li>Common error patterns: ambiguity, short headlines, vocab overlap (§12.1)</li>
+            <li>One interpretability method — token ablation is the simplest (§12.2)</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Thinking required</h4>
+          <ul>
+            <li>Use <code>sklearn.metrics.confusion_matrix</code> and a heatmap</li>
+            <li>Print 3 misclassifications with full text + true + predicted</li>
+            <li>Identify a pattern (Business ↔ World is the classic AG News confusion)</li>
+            <li>Name token ablation, gradient × input, integrated gradients, or LIME — explain the idea in 2 lines</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- TASK 2.1 -->
+    <article class="task-card">
+      <div class="num">PART 2 · TASK 1</div>
+      <h3><code>DinosDataset</code> — sliding window</h3>
+      <div class="points">10 points · biggest implementation in Part 2</div>
+      <p>
+        Custom <code>torch.utils.data.Dataset</code> that loads the dinosaur names file, wraps
+        each name in <code>&lt;</code>/<code>&gt;</code>, builds a vocab, and yields fixed-length
+        sliding windows.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>Why &lt; / &gt; markers (§13.1)</li>
+            <li>Sliding window and why <code>y</code> is shifted by one (§13.2)</li>
+            <li>The 7-step constructor (§14.1)</li>
+            <li><code>__len__ = L − seq_len</code></li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Thinking required</h4>
+          <ul>
+            <li>Detect "is data a path" with <code>isinstance(data, str)</code> + <code>os.path.exists</code></li>
+            <li>Use <code>set(self.text)</code> for the vocab</li>
+            <li>Return <code>LongTensor</code>s, not numpy arrays, from <code>__getitem__</code></li>
+            <li>Pass <code>drop_last=True</code> to the DataLoader to avoid the ragged-batch crash</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- TASK 2.2 -->
+    <article class="task-card">
+      <div class="num">PART 2 · TASK 2</div>
+      <h3>One-hot encoding</h3>
+      <div class="points">5 points · five-line function · easy points</div>
+      <p>
+        Implement <code>one_hot_encode(array, vocab_size)</code> that broadcasts cleanly over
+        any input shape.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>One-hot is identity matrix indexed by IDs (§15)</li>
+            <li>Output shape: <code>(input_shape, vocab_size)</code></li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Thinking required</h4>
+          <ul>
+            <li><code>np.eye(vocab_size)[array]</code> is a one-line solution</li>
+            <li>Test on a small array first; verify shape</li>
+            <li>Return numpy (not tensor) — the train loop wraps it</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- TASK 2.3 -->
+    <article class="task-card">
+      <div class="num">PART 2 · TASK 3</div>
+      <h3>Forward-pass walkthrough</h3>
+      <div class="points">5 points · model is provided · just inspect &amp; print shapes</div>
+      <p>
+        Take one batch from the train loader. Manually run it through the LSTM, the dropout, the
+        reshape, and the FC layer, printing the shape after each.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>LSTM input shape: <code>(B, L, V)</code> with <code>batch_first=True</code> (§16.2)</li>
+            <li>The <code>(B, L, H)</code> → <code>(B*L, H)</code> reshape trick (§16.3)</li>
+            <li>Hidden state is initialized as zeros via <code>init_hidden</code></li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Thinking required</h4>
+          <ul>
+            <li>Get one batch with <code>next(iter(train_loader))</code></li>
+            <li>One-hot encode <code>batch[0]</code></li>
+            <li>Call <code>model.init_hidden(batch_size, 'cpu')</code> for the initial state</li>
+            <li>Print shapes; apply <code>F.softmax(out, dim=1)</code> for probabilities</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- TASK 2.4 -->
+    <article class="task-card">
+      <div class="num">PART 2 · TASK 4</div>
+      <h3>Run training</h3>
+      <div class="points">10 points · training function provided · pick hyperparams &amp; report loss</div>
+      <p>
+        Initialize a CharRNN, call the provided <code>train()</code> function with sensible
+        hyperparameters, and let it run.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>Truncated BPTT and why hidden state is detached (§16.4)</li>
+            <li>Gradient clipping (already in <code>train()</code>) prevents RNN explosions</li>
+            <li>What a healthy loss curve looks like (smooth decline, no NaNs)</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Thinking required</h4>
+          <ul>
+            <li>Pass <code>vocab_size = len(train_data.vocab)</code></li>
+            <li>Reasonable defaults: <code>n_hidden=256, n_layers=2, lr=0.001, epochs=20</code></li>
+            <li>Make sure your DataLoader batch_size matches what you pass to <code>train()</code></li>
+            <li>If loss goes NaN: check one-hot shape, check your seq_len</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- TASK 2.5 -->
+    <article class="task-card">
+      <div class="num">PART 2 · TASK 5</div>
+      <h3>Generate names</h3>
+      <div class="points">5 points · sample function provided · just call it with prefixes</div>
+      <p>
+        Call <code>sample(model, size=...)</code> with several different starting prefixes and
+        print the results.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>The default <code>predict</code> uses random sampling from softmax</li>
+            <li>The model stops naturally on <code>&gt;</code> or after <code>size</code> chars</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Thinking required</h4>
+          <ul>
+            <li>Try prefixes like <code>'&lt;a'</code>, <code>'&lt;d'</code>, <code>'&lt;ty'</code>, <code>'&lt;m'</code></li>
+            <li>Generate ~10 names; pick the most charming ones for the report</li>
+            <li>Note which prefixes produced more plausible-looking results</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- TASK 2.6 -->
+    <article class="task-card">
+      <div class="num">PART 2 · TASK 6</div>
+      <h3>Top-k sampling &amp; temperature</h3>
+      <div class="points">15 points · second-largest task · written insight required</div>
+      <p>
+        Modify <code>predict</code> and <code>sample</code> to add <code>top_k</code> and
+        <code>temperature</code> parameters. Compare generations across settings and write the
+        diversity-vs-plausibility analysis.
+      </p>
+      <div class="grid">
+        <div class="col">
+          <h4>Concepts you need</h4>
+          <ul>
+            <li>Top-k truncation: zero out everything outside the top k, renormalize (§17.3)</li>
+            <li>Temperature: divide logits by T before softmax (§18)</li>
+            <li>Three regimes: T &lt; 1 (sharper), T = 1 (identity), T &gt; 1 (flatter)</li>
+            <li>Top-k and temperature compose</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>Thinking required</h4>
+          <ul>
+            <li>Pass <code>top_k</code> and <code>temperature</code> through both functions</li>
+            <li>For top-k: sort, take indices, build a new probability vector with only those</li>
+            <li>For temperature: divide raw logits before softmax (apply in <code>predict</code>, not on the already-softmaxed output)</li>
+            <li>Run a 3×3 grid: <code>k ∈ {3, 5, ∞}</code> × <code>T ∈ {0.5, 1.0, 1.5}</code></li>
+            <li>Insight: low T + low k → repetitive but plausible; high T + large k → diverse but weird</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <div class="ornament">
+    <svg width="180" height="22" viewBox="0 0 180 22">
+      <line x1="0" y1="11" x2="74" y2="11" stroke="currentColor" stroke-width="0.6"/>
+      <circle cx="86" cy="11" r="3" fill="currentColor"/>
+      <circle cx="98" cy="11" r="5" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="110" cy="11" r="3" fill="currentColor"/>
+      <line x1="120" y1="11" x2="180" y2="11" stroke="currentColor" stroke-width="0.6"/>
+    </svg>
+  </div>
+
+  <footer>
+    <p class="colophon">
+      Set in Fraunces &amp; Newsreader. Math by KaTeX.<br>
+      Written for someone who learns by understanding, not by copying.
+    </p>
+    <p class="signature">Hometask 02 · Field Guide · Tel Aviv 2026</p>
+  </footer>
+
+</div>
+
+<script>
+// ─────────── TOKENIZATION DEMO ───────────
+(function(){
+  const input = document.getElementById('tok-input');
+  const wordOut = document.getElementById('tok-word');
+  const bpeOut = document.getElementById('tok-bpe');
+  const wpOut = document.getElementById('tok-wp');
+
+  // pretend "vocab" of common subwords for the demo
+  const COMMON_WORDS = new Set([
+    'the','of','a','and','is','was','to','in','it','this','that','on','for','with','an','as','at',
+    'be','are','by','or','from','but','not','have','they','tokenize','word','words'
+  ]);
+
+  // BPE-style splits (heuristic for demo)
+  function bpeSplit(word) {
+    if (COMMON_WORDS.has(word.toLowerCase())) return [word];
+    // Heuristic split common suffixes/prefixes
+    const suffixes = ['ably','able','ible','ing','tion','sion','ment','ness','ize','izes','ized','izing','izer','ized','ation','ize','ers','ed','ly','er','est','s'];
+    const prefixes = ['un','re','pre','dis','sub','inter','over','under','non'];
+    let pieces = [word];
+    // try prefix
+    for (const p of prefixes) {
+      if (word.toLowerCase().startsWith(p) && word.length > p.length + 2) {
+        pieces = [word.slice(0,p.length), word.slice(p.length)];
+        break;
+      }
+    }
+    // try suffix on each piece
+    const expanded = [];
+    for (const piece of pieces) {
+      let split = false;
+      for (const s of suffixes) {
+        if (piece.toLowerCase().endsWith(s) && piece.length > s.length + 2) {
+          expanded.push(piece.slice(0, piece.length - s.length));
+          expanded.push(piece.slice(piece.length - s.length));
+          split = true;
+          break;
+        }
+      }
+      if (!split) expanded.push(piece);
+    }
+    return expanded.filter(x => x.length > 0);
+  }
+
+  // WordPiece-style splits with ## markers
+  function wpSplit(word) {
+    const pieces = bpeSplit(word);
+    if (pieces.length === 1) return pieces;
+    return pieces.map((p, i) => i === 0 ? p : '##' + p);
+  }
+
+  function render() {
+    const text = input.value.trim();
+    const words = text.split(/\s+/).filter(w => w.length > 0);
+
+    // Word-level: any rare word becomes [UNK]
+    wordOut.innerHTML = words.map(w => {
+      const isUnk = !COMMON_WORDS.has(w.toLowerCase()) && w.length > 6;
+      return `<span class="tok ${isUnk ? 'cont' : ''}">${isUnk ? '[UNK]' : w}</span>`;
+    }).join('');
+
+    // BPE
+    bpeOut.innerHTML = words.flatMap(w => bpeSplit(w))
+      .map(t => `<span class="tok bpe">${t}</span>`).join('');
+
+    // WordPiece
+    wpOut.innerHTML = words.flatMap(w => wpSplit(w))
+      .map(t => `<span class="tok wp${t.startsWith('##') ? ' cont' : ''}">${t}</span>`).join('');
+  }
+
+  input.addEventListener('input', render);
+  render();
+})();
+
+// ─────────── TOP-K DEMO ───────────
+(function(){
+  const probs = [0.32, 0.22, 0.16, 0.10, 0.08, 0.06, 0.04, 0.02];
+  const labels = ['s','a','u','r','o','n','i','x'];
+  const slider = document.getElementById('topk-slider');
+  const val = document.getElementById('topk-val');
+  const grid = document.getElementById('topk-bars');
+
+  function render() {
+    const k = parseInt(slider.value);
+    val.textContent = k;
+    grid.innerHTML = '';
+    // sort probs descending with original indices to show highlight
+    const indexed = probs.map((p, i) => ({p, i, lab: labels[i]}));
+    const sorted = [...indexed].sort((a,b) => b.p - a.p);
+    const keepIndices = new Set(sorted.slice(0, k).map(x => x.i));
+
+    indexed.forEach(({p, i, lab}) => {
+      const keep = keepIndices.has(i);
+      const bar = document.createElement('div');
+      bar.className = 'dist-bar' + (keep ? ' keep' : ' cut');
+      bar.style.height = (p * 600) + 'px';
+      bar.innerHTML = `<span class="pct">${(p*100).toFixed(0)}</span><span class="lab">${lab}</span>`;
+      grid.appendChild(bar);
+    });
+  }
+
+  slider.addEventListener('input', render);
+  render();
+})();
+
+// ─────────── TEMPERATURE DEMO ───────────
+(function(){
+  const logits = [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0, -0.5];
+  const labels = ['s','a','u','r','o','n','i','x'];
+  const slider = document.getElementById('temp-slider');
+  const val = document.getElementById('temp-val');
+  const grid = document.getElementById('temp-bars');
+
+  function softmax(arr, T) {
+    const scaled = arr.map(x => x / T);
+    const max = Math.max(...scaled);
+    const exps = scaled.map(x => Math.exp(x - max));
+    const sum = exps.reduce((a,b) => a+b, 0);
+    return exps.map(x => x/sum);
+  }
+
+  function render() {
+    const T = parseFloat(slider.value);
+    val.textContent = T.toFixed(2);
+    const probs = softmax(logits, T);
+    grid.innerHTML = '';
+    probs.forEach((p, i) => {
+      const bar = document.createElement('div');
+      bar.className = 'dist-bar keep';
+      bar.style.height = (p * 280) + 'px';
+      bar.innerHTML = `<span class="pct">${(p*100).toFixed(0)}</span><span class="lab">${labels[i]}</span>`;
+      grid.appendChild(bar);
+    });
+  }
+
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
+
+</body>
+</html>
