@@ -1267,19 +1267,19 @@ vocab adds: "lo"</pre>
         <tbody>
           <tr>
             <td>Mean</td>
-            <td>$\bar{v} = \frac{1}{n}\sum_i v_i$</td>
+            <td><code>v̄ = (1/n) · Σᵢ vᵢ</code></td>
             <td>Average direction. Robust default.</td>
             <td>Long sentences with one strong topic word get diluted.</td>
           </tr>
           <tr>
             <td>Sum</td>
-            <td>$s = \sum_i v_i$</td>
+            <td><code>s = Σᵢ vᵢ</code></td>
             <td>Total mass. Magnitude grows with length.</td>
             <td>Sentence length leaks into the vector — the model may learn "long = X".</td>
           </tr>
           <tr>
             <td>Max</td>
-            <td>$m_j = \max_i v_{i,j}$</td>
+            <td><code>mⱼ = maxᵢ vᵢ,ⱼ</code></td>
             <td>Strongest activation per dimension.</td>
             <td>Loses count information ("good good good" same as "good").</td>
           </tr>
@@ -1403,7 +1403,7 @@ softmax (inside the loss)</pre>
         does the softmax + log + negative-log-likelihood internally — numerically stable, fast.
       </p>
 
-      $$L = -\frac{1}{N}\sum_i \log\!\left(\frac{e^{z_{i,y_i}}}{\sum_k e^{z_{i,k}}}\right)$$
+      $$L = -\frac{1}{N}\sum_{i} \log \frac{\exp(z_{i, y_i})}{\sum_k \exp(z_{i, k})}$$
 
       <h3><span class="marker">§10.2</span>The optimizer</h3>
 
@@ -1563,7 +1563,7 @@ optimizer.step()             # 5. apply the update</pre>
           </tr>
           <tr>
             <td><strong>Gradient × input</strong></td>
-            <td>Compute $\partial \text{logit}_{\text{class}} / \partial v_i$ for each token vector; tokens with large gradient magnitude were influential.</td>
+            <td>Compute <code>∂logit_class / ∂vᵢ</code> for each token vector; tokens with large gradient magnitude were influential.</td>
           </tr>
           <tr>
             <td><strong>Integrated gradients</strong></td>
@@ -1807,10 +1807,10 @@ i=3:  x = a&gt;&lt;r   y = &gt;&lt;ra
       <table>
         <thead><tr><th>Gate</th><th>Job</th><th>Output</th></tr></thead>
         <tbody>
-          <tr><td>Forget $f_t$</td><td>How much of old cell state to keep?</td><td>$\sigma(W_f [h_{t-1}, x_t])$</td></tr>
-          <tr><td>Input $i_t$</td><td>How much new candidate to write?</td><td>$\sigma(W_i [h_{t-1}, x_t])$</td></tr>
-          <tr><td>Candidate $\tilde{c}_t$</td><td>What new info to consider writing</td><td>$\tanh(W_c [h_{t-1}, x_t])$</td></tr>
-          <tr><td>Output $o_t$</td><td>How much of cell state to expose as hidden</td><td>$\sigma(W_o [h_{t-1}, x_t])$</td></tr>
+          <tr><td>Forget <code>fₜ</code></td><td>How much of old cell state to keep?</td><td><code>σ(W_f · [hₜ₋₁, xₜ])</code></td></tr>
+          <tr><td>Input <code>iₜ</code></td><td>How much new candidate to write?</td><td><code>σ(W_i · [hₜ₋₁, xₜ])</code></td></tr>
+          <tr><td>Candidate <code>c̃ₜ</code></td><td>What new info to consider writing</td><td><code>tanh(W_c · [hₜ₋₁, xₜ])</code></td></tr>
+          <tr><td>Output <code>oₜ</code></td><td>How much of cell state to expose as hidden</td><td><code>σ(W_o · [hₜ₋₁, xₜ])</code></td></tr>
         </tbody>
       </table>
 

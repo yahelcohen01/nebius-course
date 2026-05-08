@@ -73,7 +73,7 @@ The opposite extreme is character-level: vocabulary of ~30 symbols, no `[UNK]` e
 | Property | BPE | WordPiece |
 |---|---|---|
 | Merge criterion | Most frequent adjacent pair | Pair that most increases corpus likelihood |
-| Score | $\text{count}(A,B)$ | $\text{count}(A,B) / (\text{count}(A) \cdot \text{count}(B))$ |
+| Score | count(A, B) | count(A, B) / (count(A) · count(B)) |
 | Continuation marker | None — pieces are independent | `##` prefix on non-first pieces |
 | Used by | GPT-2/3/4, Llama, RoBERTa | BERT, DistilBERT, Electra |
 | Tends to produce | Slightly longer pieces | Slightly shorter, more linguistically motivated pieces |
@@ -228,9 +228,9 @@ After tokenizing, each sentence is a list of token IDs of variable length: 8 tok
 
 | Pool | Formula | What it captures | Failure mode |
 |------|---------|------------------|--------------|
-| Mean | $\bar{v} = \frac{1}{n}\sum_i v_i$ | Average direction. Robust default. | Long sentences with one strong topic word get diluted. |
-| Sum | $s = \sum_i v_i$ | Total mass. Magnitude grows with length. | Sentence length leaks into the vector — model may learn "long = X". |
-| Max | $m_j = \max_i v_{i,j}$ | Strongest activation per dimension. | Loses count information ("good good good" same as "good"). |
+| Mean | v̄ = (1/n) · Σᵢ vᵢ | Average direction. Robust default. | Long sentences with one strong topic word get diluted. |
+| Sum | s = Σᵢ vᵢ | Total mass. Magnitude grows with length. | Sentence length leaks into the vector — model may learn "long = X". |
+| Max | mⱼ = maxᵢ vᵢ,ⱼ | Strongest activation per dimension. | Loses count information ("good good good" same as "good"). |
 
 For news classification, **mean pooling** is the strongest default — it gives every token equal weight, doesn't leak length, and the embedding average usually ends up in the right semantic neighborhood.
 
@@ -279,7 +279,7 @@ If you see big gaps between training and test accuracy, add `nn.Dropout(0.3)` be
 
 AG News has 4 classes. The right loss is **cross-entropy** — multi-class generalization of binary cross-entropy. PyTorch's `nn.CrossEntropyLoss` takes raw logits (no softmax) and integer labels, and does the softmax + log + negative-log-likelihood internally — numerically stable, fast.
 
-$$L = -\frac{1}{N}\sum_i \log\!\left(\frac{e^{z_{i,y_i}}}{\sum_k e^{z_{i,k}}}\right)$$
+$$L = -\frac{1}{N}\sum_{i} \log \frac{\exp(z_{i, y_i})}{\sum_k \exp(z_{i, k})}$$
 
 ### The optimizer
 
@@ -353,7 +353,7 @@ You don't have to implement this for Task 1.4 — you just have to **name a meth
 | Method | Idea, in one sentence |
 |--------|----------------------|
 | **Token ablation** | Remove one token at a time and re-run; the drop in the predicted-class probability is that token's "importance". |
-| **Gradient × input** | Compute $\partial \text{logit}_{\text{class}} / \partial v_i$ for each token vector; tokens with large gradient magnitude were influential. |
+| **Gradient × input** | Compute ∂logit_class / ∂vᵢ for each token vector; tokens with large gradient magnitude were influential. |
 | **Integrated gradients** | Average gradient × input along a path from a "neutral" baseline (zero vector) to the actual input. More robust than raw gradients. |
 | **LIME** | Train a tiny linear classifier locally around the input by perturbing words and observing predictions; report its weights as importances. |
 | **Attention weights** | If you swapped pooling for an attention layer, the attention scores themselves are token importances. |
@@ -463,10 +463,10 @@ The **LSTM** fixes this with two ideas:
 
 | Gate | Job | Output |
 |------|-----|--------|
-| Forget $f_t$ | How much of old cell state to keep? | $\sigma(W_f [h_{t-1}, x_t])$ |
-| Input $i_t$ | How much new candidate to write? | $\sigma(W_i [h_{t-1}, x_t])$ |
-| Candidate $\tilde{c}_t$ | What new info to consider writing | $\tanh(W_c [h_{t-1}, x_t])$ |
-| Output $o_t$ | How much of cell state to expose as hidden | $\sigma(W_o [h_{t-1}, x_t])$ |
+| Forget fₜ | How much of old cell state to keep? | σ(W_f · [hₜ₋₁, xₜ]) |
+| Input iₜ | How much new candidate to write? | σ(W_i · [hₜ₋₁, xₜ]) |
+| Candidate c̃ₜ | What new info to consider writing | tanh(W_c · [hₜ₋₁, xₜ]) |
+| Output oₜ | How much of cell state to expose as hidden | σ(W_o · [hₜ₋₁, xₜ]) |
 
 The cell state and hidden state then update:
 
