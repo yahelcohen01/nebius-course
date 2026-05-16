@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Field Guide to Attention — for the LLM Architectures Hometask 3</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[
+          {left:'$$',right:'$$',display:true},
+          {left:'$',right:'$',display:false},
+          {left:'\\[',right:'\\]',display:true},
+          {left:'\\(',right:'\\)',display:false}
+        ], throwOnError:false});"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper:        #F4ECD6;
+  --paper-deep:   #ECE1BD;
+  --paper-card:   #FAF3DD;
+  --ink:          #1A2438;
+  --ink-soft:     #2E3A5C;
+  --ink-faint:    #6B7388;
+  --vermillion:   #B83A1F;
+  --vermillion-2: #D14E2E;
+  --sage:         #4F6B57;
+  --ochre:        #C68A1F;
+  --indigo:       #314E7E;
+  --rule:         rgba(26, 36, 56, 0.16);
+  --rule-strong:  rgba(26, 36, 56, 0.45);
+
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-body:    'Newsreader', Georgia, serif;
+  --font-mono:    'IBM Plex Mono', 'Menlo', monospace;
+}
+
+html { scroll-behavior: smooth; background: var(--paper); }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: 19px; line-height: 1.66;
+  font-weight: 400; font-optical-sizing: auto;
+  text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
+  position: relative; overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none;
+  z-index: 1; opacity: 0.55; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.40   0 0 0 0 0.30   0 0 0 0 0.10   0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse 110% 80% at 50% 30%, transparent 40%, rgba(98, 60, 10, 0.08) 100%);
+}
+
+.page { max-width: 1200px; margin: 0 auto; padding: 80px 64px 40px; position: relative; z-index: 2; }
+
+.hero { margin-bottom: 96px; position: relative; }
+.hero .preface {
+  font-family: var(--font-mono); text-transform: uppercase;
+  letter-spacing: 0.2em; font-size: 11px; color: var(--ink-faint);
+  margin-bottom: 36px; display: flex; gap: 18px; align-items: center;
+}
+.hero .preface span.dot { width: 4px; height: 4px; background: var(--vermillion); border-radius: 50%; }
+.hero h1 {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(48px, 7.6vw, 124px); line-height: 0.88;
+  letter-spacing: -0.028em; color: var(--ink); margin-bottom: 38px;
+  font-variation-settings: "SOFT" 60, "WONK" 1, "opsz" 144;
+}
+.hero h1 em { font-style: italic; color: var(--vermillion); font-weight: 400; display: inline-block; }
+.hero .deck {
+  font-family: var(--font-body); font-style: italic; font-size: 23px;
+  max-width: 720px; color: var(--ink-soft); line-height: 1.42; font-weight: 350;
+}
+.hero .meta {
+  margin-top: 56px; display: flex; gap: 40px; flex-wrap: wrap;
+  border-top: 1px solid var(--rule); padding-top: 24px;
+}
+.hero .meta dl { display: flex; gap: 12px; align-items: baseline; }
+.hero .meta dt {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+.hero .meta dd { font-family: var(--font-body); font-size: 15px; color: var(--ink-soft); font-style: italic; }
+
+.toc {
+  margin: 0 0 100px; padding: 36px 44px; background: var(--paper-card);
+  border: 1px solid var(--rule); border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 6px 24px -8px rgba(60, 38, 12, 0.18);
+  position: relative;
+}
+.toc::before {
+  content: 'CONTENTS'; position: absolute; top: -10px; left: 36px;
+  background: var(--paper); padding: 0 14px;
+  font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: 0.22em; color: var(--ink-faint);
+}
+.toc ol { list-style: none; columns: 2; column-gap: 60px; }
+.toc li {
+  padding: 7px 0; border-bottom: 1px dotted var(--rule);
+  break-inside: avoid; font-family: var(--font-body); font-size: 17px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+}
+.toc li a { color: var(--ink-soft); text-decoration: none; font-style: italic; flex: 1; }
+.toc li a:hover { color: var(--vermillion); }
+.toc li .num { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); letter-spacing: 0.1em; }
+
+section { margin: 0 0 110px; position: relative; scroll-margin-top: 40px; }
+section > h2 {
+  font-family: var(--font-display); font-weight: 350;
+  font-size: 52px; letter-spacing: -0.018em; line-height: 1.04;
+  color: var(--ink); margin-bottom: 12px;
+  font-variation-settings: "SOFT" 30, "opsz" 144;
+}
+section > h2 .sectnum {
+  font-family: var(--font-mono); font-size: 13px; color: var(--vermillion);
+  display: block; letter-spacing: 0.22em; margin-bottom: 14px; font-weight: 500;
+}
+section > .standfirst {
+  font-family: var(--font-body); font-style: italic; font-size: 22px;
+  color: var(--ink-soft); max-width: 720px; margin-bottom: 50px;
+  padding-bottom: 30px; border-bottom: 1px solid var(--rule); line-height: 1.42;
+}
+
+h3 {
+  font-family: var(--font-display); font-weight: 450; font-size: 26px;
+  letter-spacing: -0.005em; color: var(--ink); margin: 50px 0 18px;
+}
+h4 {
+  font-family: var(--font-mono); font-weight: 600; font-size: 11.5px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--vermillion);
+  margin: 32px 0 14px;
+}
+
+p { margin-bottom: 18px; max-width: 720px; }
+
+.dropcap::first-letter {
+  font-family: var(--font-display); font-weight: 400; float: left;
+  font-size: 78px; line-height: 0.86; padding: 6px 12px 0 0;
+  color: var(--vermillion); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+}
+
+em { font-style: italic; color: var(--ink-soft); }
+strong { font-weight: 600; color: var(--ink); }
+
+code, .mono { font-family: var(--font-mono); font-size: 0.84em; background: rgba(184, 58, 31, 0.07); padding: 1px 6px; border-radius: 3px; color: var(--vermillion); }
+
+pre {
+  font-family: var(--font-mono); font-size: 13.5px; line-height: 1.55;
+  background: #1B2334; color: #E5DBC0; padding: 22px 26px;
+  border-radius: 4px; overflow-x: auto; margin: 24px 0;
+  border-left: 3px solid var(--vermillion);
+}
+pre code { background: transparent; color: inherit; padding: 0; font-size: inherit; }
+pre .kw { color: #F2A65A; }
+pre .str { color: #9DBF8E; }
+pre .com { color: #6B7388; font-style: italic; }
+pre .num { color: #D6A77A; }
+
+ul, ol { margin: 18px 0 24px 24px; max-width: 720px; }
+li { margin-bottom: 8px; }
+ul li::marker { color: var(--vermillion); }
+
+.sidenote {
+  float: right; clear: right; width: 230px; margin: 6px -260px 14px 24px;
+  font-family: var(--font-body); font-style: italic; font-size: 14.5px;
+  line-height: 1.45; color: var(--ink-soft); padding-left: 14px;
+  border-left: 2px solid var(--ochre);
+}
+@media (max-width: 1100px) {
+  .sidenote { float: none; width: auto; margin: 14px 0; border-left: 2px solid var(--ochre); background: rgba(198, 138, 31, 0.06); padding: 10px 14px; }
+}
+
+.pullquote {
+  font-family: var(--font-display); font-weight: 300; font-style: italic;
+  font-size: 34px; line-height: 1.18; color: var(--vermillion);
+  max-width: 760px; margin: 44px auto; text-align: center;
+  font-variation-settings: "SOFT" 100, "opsz" 144; position: relative;
+}
+.pullquote::before, .pullquote::after {
+  content: ''; display: block; width: 80px; height: 1px;
+  background: var(--rule-strong); margin: 24px auto;
+}
+
+table {
+  border-collapse: collapse; margin: 28px 0;
+  font-family: var(--font-body); font-size: 15.5px;
+  width: 100%; max-width: 820px; background: var(--paper-card);
+}
+th {
+  text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--ink);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink);
+}
+td {
+  padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) td { background: rgba(184, 58, 31, 0.03); }
+
+.callout {
+  margin: 28px 0; padding: 22px 28px; border-left: 3px solid var(--sage);
+  background: rgba(79, 107, 87, 0.06); border-radius: 0 4px 4px 0; max-width: 820px;
+}
+.callout.warn { border-left-color: var(--vermillion); background: rgba(184, 58, 31, 0.06); }
+.callout.tip  { border-left-color: var(--ochre); background: rgba(198, 138, 31, 0.07); }
+.callout h5 {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--sage); margin-bottom: 10px; font-weight: 600;
+}
+.callout.warn h5 { color: var(--vermillion); }
+.callout.tip h5 { color: var(--ochre); }
+.callout p { margin-bottom: 8px; }
+.callout p:last-child { margin-bottom: 0; }
+
+figure {
+  margin: 36px 0; text-align: center; background: var(--paper-card);
+  padding: 28px; border: 1px solid var(--rule); border-radius: 4px;
+}
+figure svg { max-width: 100%; height: auto; }
+figcaption {
+  font-family: var(--font-body); font-style: italic; font-size: 14.5px;
+  color: var(--ink-faint); margin-top: 14px;
+  max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.45;
+}
+
+.taskcard {
+  margin: 28px 0; padding: 26px 32px; background: var(--paper-card);
+  border: 1px solid var(--rule); border-top: 4px solid var(--indigo);
+  border-radius: 4px; max-width: 820px;
+  box-shadow: 0 4px 14px -4px rgba(0,0,0,0.08);
+}
+.taskcard .tasknum {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.2em;
+  color: var(--indigo); text-transform: uppercase; font-weight: 600; margin-bottom: 6px;
+}
+.taskcard h4 {
+  font-family: var(--font-display); font-weight: 450; font-size: 22px;
+  color: var(--ink); letter-spacing: -0.005em; text-transform: none; margin: 0 0 16px;
+}
+.taskcard .pts {
+  display: inline-block; font-family: var(--font-mono); font-size: 11px;
+  background: var(--indigo); color: var(--paper);
+  padding: 2px 10px; border-radius: 2px; margin-left: 10px; vertical-align: middle;
+  letter-spacing: 0.1em;
+}
+.taskcard .concepts, .taskcard .thinking { margin: 14px 0; }
+.taskcard h5 {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; font-weight: 600;
+}
+.taskcard ul { margin: 6px 0 6px 22px; }
+.taskcard li { font-size: 16px; margin-bottom: 4px; color: var(--ink-soft); }
+
+.flourish {
+  text-align: center; margin: 80px auto; color: var(--vermillion);
+  font-size: 18px; font-family: var(--font-display); letter-spacing: 1em; font-style: italic;
+}
+
+footer {
+  margin-top: 100px; padding-top: 30px; border-top: 1px solid var(--rule);
+  font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint);
+  letter-spacing: 0.1em; text-align: center;
+}
+
+/* Heatmap grid */
+.heatmap-demo {
+  margin: 32px 0; padding: 24px 28px; background: var(--paper-card);
+  border: 1px solid var(--rule); border-radius: 4px;
+  max-width: 820px; display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;
+}
+.heatmap-demo .grid {
+  display: grid; gap: 1px; background: #1A2438; padding: 1px;
+  border-radius: 2px;
+}
+.heatmap-demo .cell {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 10px; color: #fff;
+}
+.heatmap-demo .row-label {
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft);
+  display: flex; align-items: center; height: 40px;
+  padding-right: 8px; justify-content: flex-end;
+}
+.heatmap-demo .col-label {
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft);
+  width: 40px; text-align: center;
+  transform: rotate(-30deg); transform-origin: center bottom;
+  margin-top: 4px;
+}
+.heatmap-demo .caption {
+  font-family: var(--font-body); font-style: italic; font-size: 14px;
+  color: var(--ink-faint); flex: 1; min-width: 200px;
+}
+
+/* Vector demo for Q · K */
+.vec-demo {
+  margin: 28px 0; padding: 22px 28px; background: var(--paper-card);
+  border: 1px solid var(--rule); border-radius: 4px;
+  max-width: 820px; font-family: var(--font-mono); font-size: 14px;
+}
+.vec-demo .row { display: flex; gap: 12px; align-items: center; margin: 8px 0; }
+.vec-demo .lbl { color: var(--ink-faint); width: 80px; }
+.vec-demo .vec { color: var(--vermillion); }
+.vec-demo .res { color: var(--sage); font-weight: 600; }
+
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<header class="hero">
+  <div class="preface">
+    <span>Guide № 03b</span>
+    <span class="dot"></span>
+    <span>LLM Architectures · Hometask 3</span>
+    <span class="dot"></span>
+    <span>Part 2 of 2</span>
+  </div>
+
+  <h1>A Field Guide to <em>Attention</em></h1>
+
+  <p class="deck">
+    On how a transformer decides which tokens belong together — three matrices, one division by √d, a softmax, and the entire reason any of this works.
+  </p>
+
+  <div class="meta">
+    <dl><dt>For</dt><dd>Hometask 3, Part 2 (25 pts)</dd></dl>
+    <dl><dt>Read</dt><dd>~25 minutes</dd></dl>
+    <dl><dt>Tools</dt><dd>PyTorch · matplotlib · seaborn</dd></dl>
+  </div>
+</header>
+
+<nav class="toc">
+  <ol>
+    <li><a href="#sec-1">The Problem Attention Solves</a><span class="num">§ 01</span></li>
+    <li><a href="#sec-2">Q, K, V — Three Roles for the Same Token</a><span class="num">§ 02</span></li>
+    <li><a href="#sec-3">The Scaled Dot-Product Formula</a><span class="num">§ 03</span></li>
+    <li><a href="#sec-4">Why Divide by √d_k</a><span class="num">§ 04</span></li>
+    <li><a href="#sec-5">Reading a Heatmap</a><span class="num">§ 05</span></li>
+    <li><a href="#sec-6">Multi-Head Attention</a><span class="num">§ 06</span></li>
+    <li><a href="#sec-7">Masking</a><span class="num">§ 07</span></li>
+    <li><a href="#sec-8">Task Cards</a><span class="num">§ 08</span></li>
+  </ol>
+</nav>
+
+<section id="sec-1">
+  <h2><span class="sectnum">§ 01 — MOTIVATION</span>The Problem Attention Solves</h2>
+  <p class="standfirst">A sentence is a graph of relationships pretending to be a sequence. Attention is how a model rebuilds the graph.</p>
+
+  <p class="dropcap">Consider the sentence "<em>the animal didn't cross the street because it was too tired</em>." The word <strong>it</strong> refers to <strong>the animal</strong>, not the street. You and I know this from semantics. A model needs to <em>discover</em> this — to look at "it" and decide that the most useful context for predicting its meaning lives back at position 2.</p>
+
+  <p>Older architectures (RNNs, LSTMs) carried information forward in a hidden state. By the time they reached "it," the signal from "animal" had passed through eight nonlinear gates and had been mostly forgotten. Attention takes a different approach: at every position, look at <em>every</em> other position directly, and weight them by relevance.</p>
+
+  <div class="pullquote">Attention is a soft, learned lookup table.</div>
+
+  <p>That sentence is the entire intuition. Attention is a weighted average — but the weights are not fixed; they are computed on the fly from the content of the tokens themselves.</p>
+</section>
+
+<section id="sec-2">
+  <h2><span class="sectnum">§ 02 — ROLES</span>Q, K, V — Three Roles for the Same Token</h2>
+  <p class="standfirst">Each token plays three parts in attention. Query: "what am I looking for?" Key: "what do I advertise?" Value: "what do I give to whoever picks me?"</p>
+
+  <p>Every token in your sequence is represented by a vector (an embedding). Attention projects each embedding into three new vectors via three learned matrices:</p>
+
+  <p>$$Q = X W^Q, \quad K = X W^K, \quad V = X W^V$$</p>
+
+  <p>where <code>X</code> is the matrix of input embeddings and <code>W^Q, W^K, W^V</code> are learnable projection matrices.</p>
+
+  <table>
+    <thead><tr><th style="width:14%">Vector</th><th style="width:34%">Role</th><th>Library analogy</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Q</strong> (Query)</td><td>"What is this token looking for in the rest of the sentence?"</td><td>The search term you type at the library counter.</td></tr>
+      <tr><td><strong>K</strong> (Key)</td><td>"What does this token advertise about itself, so others can find it?"</td><td>The label on each book's spine.</td></tr>
+      <tr><td><strong>V</strong> (Value)</td><td>"If someone picks me, what content do I hand over?"</td><td>The actual contents of the book.</td></tr>
+    </tbody>
+  </table>
+
+  <p>You match queries against keys (the dot product), then use the resulting weights to mix values together. Same token, three roles. The decoupling is what gives attention its expressive power.</p>
+
+  <div class="sidenote">
+    In <em>self</em>-attention, X is both the source and the target — every token attends to every other token in the same sequence (including itself). In <em>cross</em>-attention, Q comes from one sequence and K, V come from another (e.g., decoder queries the encoder).
+  </div>
+
+  <p>In Task 2.2 of the assignment, you initialize Q = K = V = embeddings (no projection matrices). That is still valid attention — it just means each token's query, key, and value are identical. The shapes work; the heatmap is meaningful. In Task 2.3 Experiment 2, you add the projection matrices and create multiple heads.</p>
+</section>
+
+<section id="sec-3">
+  <h2><span class="sectnum">§ 03 — THE FORMULA</span>The Scaled Dot-Product Formula</h2>
+  <p class="standfirst">One line of math, four operations. The most important equation in the transformer.</p>
+
+  <p>$$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{Q K^\top}{\sqrt{d_k}}\right) V$$</p>
+
+  <p>Reading it left to right:</p>
+
+  <ol>
+    <li><strong><code>Q K^T</code></strong> — Score every query against every key. The result is an <code>n × n</code> matrix of raw similarities.</li>
+    <li><strong>divide by <code>√d_k</code></strong> — Rescale so the softmax behaves nicely (next section).</li>
+    <li><strong><code>softmax</code></strong> — Convert scores into a probability distribution over keys, row by row. Now each row sums to 1.</li>
+    <li><strong>multiply by <code>V</code></strong> — Take a weighted average of value vectors using those probabilities as weights.</li>
+  </ol>
+
+  <figure>
+    <svg viewBox="0 0 740 320" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <!-- Q -->
+      <rect x="20" y="100" width="50" height="120" fill="#FAF3DD" stroke="#B83A1F" stroke-width="1.5"/>
+      <text x="45" y="160" text-anchor="middle" font-size="22" font-style="italic" font-family="serif" fill="#B83A1F">Q</text>
+      <text x="45" y="240" text-anchor="middle" font-size="10" fill="#6B7388">n × d_k</text>
+
+      <text x="92" y="158" font-size="22" fill="#1A2438">·</text>
+
+      <!-- Kᵀ -->
+      <rect x="105" y="135" width="120" height="50" fill="#FAF3DD" stroke="#B83A1F" stroke-width="1.5"/>
+      <text x="165" y="167" text-anchor="middle" font-size="22" font-style="italic" font-family="serif" fill="#B83A1F">K<tspan baseline-shift="super" font-size="14">T</tspan></text>
+      <text x="165" y="205" text-anchor="middle" font-size="10" fill="#6B7388">d_k × n</text>
+
+      <text x="245" y="158" font-size="22" fill="#1A2438">=</text>
+
+      <!-- scores -->
+      <rect x="260" y="100" width="120" height="120" fill="#FAF3DD" stroke="#1A2438" stroke-width="1.5"/>
+      <text x="320" y="155" text-anchor="middle" font-size="14" fill="#1A2438">scores</text>
+      <text x="320" y="180" text-anchor="middle" font-size="11" fill="#6B7388">n × n</text>
+
+      <!-- arrow down + scale -->
+      <line x1="320" y1="225" x2="320" y2="245" stroke="#6B7388" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="345" y="240" font-size="12" fill="#B83A1F">÷ √d_k</text>
+
+      <!-- softmax -->
+      <rect x="260" y="250" width="120" height="50" fill="#FAF3DD" stroke="#314E7E" stroke-width="1.5"/>
+      <text x="320" y="280" text-anchor="middle" font-size="13" fill="#314E7E">softmax(rows)</text>
+
+      <!-- arrow right -->
+      <line x1="385" y1="275" x2="425" y2="275" stroke="#6B7388" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+      <!-- weights -->
+      <rect x="430" y="250" width="100" height="50" fill="#FAF3DD" stroke="#4F6B57" stroke-width="1.5"/>
+      <text x="480" y="280" text-anchor="middle" font-size="13" fill="#4F6B57">attn weights</text>
+
+      <text x="545" y="278" font-size="22" fill="#1A2438">·</text>
+
+      <!-- V -->
+      <rect x="560" y="235" width="50" height="80" fill="#FAF3DD" stroke="#B83A1F" stroke-width="1.5"/>
+      <text x="585" y="280" text-anchor="middle" font-size="22" font-style="italic" font-family="serif" fill="#B83A1F">V</text>
+
+      <text x="625" y="278" font-size="22" fill="#1A2438">=</text>
+
+      <!-- output -->
+      <rect x="640" y="235" width="80" height="80" fill="#FAF3DD" stroke="#4F6B57" stroke-width="1.5"/>
+      <text x="680" y="278" text-anchor="middle" font-size="14" fill="#4F6B57">output</text>
+      <text x="680" y="295" text-anchor="middle" font-size="9" fill="#6B7388">n × d_v</text>
+
+      <defs>
+        <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#6B7388"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>The four operations of scaled dot-product attention, with shapes. The "scores" matrix is the dot products before scaling; the "weights" matrix is the probabilities after softmax — what you visualize as a heatmap.</figcaption>
+  </figure>
+
+  <h3>A tiny worked example</h3>
+  <p>Suppose seq_len = 2 and d_k = 2. The two tokens have embeddings:</p>
+
+  <div class="vec-demo">
+    <div class="row"><span class="lbl">token 1:</span><span class="vec">[1.0, 0.0]</span><span style="color: var(--ink-faint);">(call this <em>cat</em>)</span></div>
+    <div class="row"><span class="lbl">token 2:</span><span class="vec">[0.0, 1.0]</span><span style="color: var(--ink-faint);">(call this <em>mat</em>)</span></div>
+  </div>
+
+  <p>Q = K = V = these embeddings. Compute Q · K<sup>T</sup>:</p>
+
+  <div class="vec-demo">
+    <div class="row"><span class="lbl">scores =</span><span class="vec">[[1·1+0·0,  1·0+0·1],   [0·1+1·0,  0·0+1·1]]</span></div>
+    <div class="row"><span class="lbl"></span><span class="res">= [[1, 0], [0, 1]]</span></div>
+  </div>
+
+  <p>Each token's query has dot product 1 with itself (parallel vectors) and 0 with the other (orthogonal). Scale by √2:</p>
+
+  <div class="vec-demo">
+    <div class="row"><span class="lbl">scaled:</span><span class="vec">[[0.707, 0.000], [0.000, 0.707]]</span></div>
+  </div>
+
+  <p>Apply softmax row-wise — row 1 becomes [exp(0.707), exp(0)] normalized = [0.670, 0.330]:</p>
+
+  <div class="vec-demo">
+    <div class="row"><span class="lbl">weights:</span><span class="res">[[0.670, 0.330], [0.330, 0.670]]</span></div>
+  </div>
+
+  <p>Each token attends ~67% to itself, ~33% to the other. Multiply by V to get the output. With random embeddings (as in Task 2.2) the heatmap will look roughly like this — a strong diagonal because each token's Q matches its own K best.</p>
+
+  <p><em>Now imagine 6 tokens and d_k = 16. The structure is the same; you just have a 6 × 6 weight matrix to visualize.</em></p>
+</section>
+
+<section id="sec-4">
+  <h2><span class="sectnum">§ 04 — THE SCALING</span>Why Divide by √d_k</h2>
+  <p class="standfirst">A subtle but critical detail. Without it, training the transformer was impossible at scale.</p>
+
+  <p>Suppose Q and K vectors have entries with mean 0 and variance 1. Their dot product is a sum of d_k products:</p>
+
+  <p>$$q \cdot k = \sum_{i=1}^{d_k} q_i k_i$$</p>
+
+  <p>The expected value is 0, but the <strong>variance grows linearly with d_k</strong>. With d_k = 64, dot products will land somewhere in roughly [−8, +8]. With d_k = 256, they reach ±16. Without scaling, the softmax sees inputs that are far too peaked.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <!-- left: no scaling -->
+      <text x="180" y="25" text-anchor="middle" font-size="12" fill="#B83A1F" letter-spacing="2">SOFTMAX([8, 0, 0, 0])</text>
+
+      <rect x="60"  y="60" width="60" height="120" fill="#B83A1F"/>
+      <rect x="130" y="178" width="60" height="2" fill="#1A2438"/>
+      <rect x="200" y="178" width="60" height="2" fill="#1A2438"/>
+      <rect x="270" y="178" width="60" height="2" fill="#1A2438"/>
+
+      <text x="90" y="200" text-anchor="middle" font-size="11" fill="#1A2438">0.999</text>
+      <text x="160" y="200" text-anchor="middle" font-size="11" fill="#6B7388">~0</text>
+      <text x="230" y="200" text-anchor="middle" font-size="11" fill="#6B7388">~0</text>
+      <text x="300" y="200" text-anchor="middle" font-size="11" fill="#6B7388">~0</text>
+      <text x="195" y="217" text-anchor="middle" font-size="11" fill="#B83A1F" font-style="italic">all mass on one — gradient dies</text>
+
+      <!-- right: scaled -->
+      <text x="540" y="25" text-anchor="middle" font-size="12" fill="#4F6B57" letter-spacing="2">SOFTMAX([1, 0, 0, 0])</text>
+
+      <rect x="420" y="120" width="60" height="60" fill="#4F6B57"/>
+      <rect x="490" y="142" width="60" height="38" fill="#9DBF8E"/>
+      <rect x="560" y="142" width="60" height="38" fill="#9DBF8E"/>
+      <rect x="630" y="142" width="60" height="38" fill="#9DBF8E"/>
+
+      <text x="450" y="200" text-anchor="middle" font-size="11" fill="#1A2438">0.475</text>
+      <text x="520" y="200" text-anchor="middle" font-size="11" fill="#1A2438">0.175</text>
+      <text x="590" y="200" text-anchor="middle" font-size="11" fill="#1A2438">0.175</text>
+      <text x="660" y="200" text-anchor="middle" font-size="11" fill="#1A2438">0.175</text>
+      <text x="555" y="217" text-anchor="middle" font-size="11" fill="#4F6B57" font-style="italic">balanced — gradients flow</text>
+    </svg>
+    <figcaption>Without scaling (left), large dot products push the softmax into a near-one-hot regime where all gradient information is in a tiny slope. With √d_k scaling (right), the softmax stays in its expressive middle range.</figcaption>
+  </figure>
+
+  <p>Dividing by √d_k brings the variance back to 1 regardless of d_k. The softmax stays in the range where small changes in input produce meaningful changes in output — i.e., where the gradient is nonzero.</p>
+
+  <h3>The full picture</h3>
+
+  <table>
+    <thead><tr><th>Without scaling</th><th>With √d_k scaling</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Variance of scores grows with d_k</td>
+        <td>Variance ≈ 1 regardless of d_k</td>
+      </tr>
+      <tr>
+        <td>Softmax saturates → one-hot weights</td>
+        <td>Softmax stays soft, smooth gradients</td>
+      </tr>
+      <tr>
+        <td>Gradient through softmax ≈ 0</td>
+        <td>Gradient flows through all positions</td>
+      </tr>
+      <tr>
+        <td>Training stalls or never starts</td>
+        <td>Training proceeds normally</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <h5>The bug you can introduce here</h5>
+    <p>If you divide by <code>d_k</code> instead of <code>sqrt(d_k)</code>, you over-correct. Scores become too flat, attention weights become nearly uniform, and the model can't distinguish important from unimportant context. The <em>square root</em> is exactly what cancels the variance growth.</p>
+  </div>
+</section>
+
+<section id="sec-5">
+  <h2><span class="sectnum">§ 05 — READING HEATMAPS</span>Reading a Heatmap</h2>
+  <p class="standfirst">The attention weight matrix is a square heatmap with tokens on both axes. Rows are queries, columns are keys. Bright = "I'm paying attention here."</p>
+
+  <p>For a sentence like "the cat sat on the mat" with 6 tokens, you get a 6 × 6 heatmap. Read it row by row: <em>row 3 ("sat") with bright column 2 ("cat")</em> means the word "sat" is attending heavily to "cat."</p>
+
+  <div class="heatmap-demo">
+    <div>
+      <div style="display: grid; grid-template-columns: 60px repeat(6, 40px); gap: 2px;">
+        <!-- top-left empty -->
+        <div></div>
+        <!-- column headers -->
+        <div class="col-label">the</div>
+        <div class="col-label">cat</div>
+        <div class="col-label">sat</div>
+        <div class="col-label">on</div>
+        <div class="col-label">the</div>
+        <div class="col-label">mat</div>
+
+        <!-- row 1: the -->
+        <div class="row-label">the</div>
+        <div class="cell" style="background:#B83A1F;">.95</div>
+        <div class="cell" style="background:#3a4256;">.01</div>
+        <div class="cell" style="background:#3a4256;">.01</div>
+        <div class="cell" style="background:#3a4256;">.01</div>
+        <div class="cell" style="background:#5a4248;">.01</div>
+        <div class="cell" style="background:#3a4256;">.01</div>
+
+        <!-- row 2: cat -->
+        <div class="row-label">cat</div>
+        <div class="cell" style="background:#3a4256;">.03</div>
+        <div class="cell" style="background:#B83A1F;">.85</div>
+        <div class="cell" style="background:#a05530;">.07</div>
+        <div class="cell" style="background:#3a4256;">.02</div>
+        <div class="cell" style="background:#3a4256;">.01</div>
+        <div class="cell" style="background:#5a4248;">.02</div>
+
+        <!-- row 3: sat -->
+        <div class="row-label">sat</div>
+        <div class="cell" style="background:#3a4256;">.05</div>
+        <div class="cell" style="background:#a05530;">.40</div>
+        <div class="cell" style="background:#B83A1F;">.45</div>
+        <div class="cell" style="background:#5a4248;">.05</div>
+        <div class="cell" style="background:#3a4256;">.02</div>
+        <div class="cell" style="background:#3a4256;">.03</div>
+
+        <!-- row 4: on -->
+        <div class="row-label">on</div>
+        <div class="cell" style="background:#3a4256;">.02</div>
+        <div class="cell" style="background:#3a4256;">.05</div>
+        <div class="cell" style="background:#a05530;">.20</div>
+        <div class="cell" style="background:#B83A1F;">.60</div>
+        <div class="cell" style="background:#5a4248;">.08</div>
+        <div class="cell" style="background:#5a4248;">.05</div>
+
+        <!-- row 5: the -->
+        <div class="row-label">the</div>
+        <div class="cell" style="background:#5a4248;">.10</div>
+        <div class="cell" style="background:#3a4256;">.02</div>
+        <div class="cell" style="background:#3a4256;">.02</div>
+        <div class="cell" style="background:#5a4248;">.10</div>
+        <div class="cell" style="background:#B83A1F;">.70</div>
+        <div class="cell" style="background:#5a4248;">.06</div>
+
+        <!-- row 6: mat -->
+        <div class="row-label">mat</div>
+        <div class="cell" style="background:#3a4256;">.02</div>
+        <div class="cell" style="background:#5a4248;">.08</div>
+        <div class="cell" style="background:#3a4256;">.03</div>
+        <div class="cell" style="background:#5a4248;">.15</div>
+        <div class="cell" style="background:#a05530;">.22</div>
+        <div class="cell" style="background:#B83A1F;">.50</div>
+      </div>
+    </div>
+    <div class="caption">
+      Schematic of a typical attention pattern for "the cat sat on the mat." Each row is a query token, each column is a key token. Bright cells = strong attention. Notice the diagonal (each token attends to itself), and the off-diagonal smear at row 3 — "sat" splits attention between "cat" (the subject) and itself.
+    </div>
+  </div>
+
+  <h3>Patterns to look for</h3>
+  <ul>
+    <li><strong>Diagonal dominance</strong>: each token attends to itself. Universal in untrained or near-identity attention.</li>
+    <li><strong>Off-diagonal hotspots</strong>: meaningful relationships (subject-verb, adjective-noun, pronoun-referent).</li>
+    <li><strong>Vertical stripes</strong>: one token everyone attends to. Often the first token, or a special <code>[CLS]</code>-like token.</li>
+    <li><strong>Block structure</strong>: tokens cluster into phrases.</li>
+    <li><strong>Near-uniform</strong>: attention has not learned anything; weights are essentially flat across the row. Common with random initialization (which is what you'll see in Task 2.2 with random embeddings — the heatmap will be noisy with a faint diagonal).</li>
+  </ul>
+
+  <div class="sidenote">
+    With random embeddings (Task 2.2), don't expect interpretable patterns. The point is to verify your function runs and produces a valid probability matrix — rows summing to 1, all values in [0, 1].
+  </div>
+
+  <h3>Sanity checks</h3>
+  <ol>
+    <li>Each row sums to 1 (softmax property): <code>weights.sum(dim=-1)</code> should be all-ones.</li>
+    <li>All values are non-negative.</li>
+    <li>Shape is <code>(seq_len, seq_len)</code> for single-head, or <code>(heads, seq_len, seq_len)</code> for multi-head.</li>
+    <li>Changing a token's embedding changes the row and column corresponding to that token, but mostly leaves other rows alone.</li>
+  </ol>
+</section>
+
+<section id="sec-6">
+  <h2><span class="sectnum">§ 06 — MULTI-HEAD</span>Multi-Head Attention</h2>
+  <p class="standfirst">One attention pattern is fine. Eight in parallel, each specialising, is much better.</p>
+
+  <p>A single attention head computes one weighted average over the values. But sentences contain many <em>kinds</em> of relationships simultaneously: syntactic (subject-verb), semantic (synonyms), positional (adjacent words), referential (pronoun antecedents). A single head must compress all of these into one pattern.</p>
+
+  <p>Multi-head attention runs <em>h</em> attention computations in parallel, each with its own projection matrices:</p>
+
+  <p>$$\text{head}_i = \text{Attention}(X W^Q_i, X W^K_i, X W^V_i)$$</p>
+
+  <p>The outputs are concatenated and passed through a final projection. With h = 8 heads and d_model = 512, each head operates on a 64-dimensional slice: same compute as one big attention, but the representation is partitioned and each part is free to specialise.</p>
+
+  <figure>
+    <svg viewBox="0 0 740 320" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <!-- input X -->
+      <rect x="20" y="140" width="80" height="60" fill="#FAF3DD" stroke="#1A2438" stroke-width="1.5"/>
+      <text x="60" y="175" text-anchor="middle" font-size="16" font-style="italic" font-family="serif">X</text>
+
+      <!-- three heads -->
+      <g>
+        <rect x="160" y="60" width="160" height="60" fill="#FAF3DD" stroke="#B83A1F" stroke-width="1.5"/>
+        <text x="240" y="85" text-anchor="middle" font-size="11" fill="#B83A1F" font-weight="600">HEAD 1</text>
+        <text x="240" y="105" text-anchor="middle" font-size="10" fill="#6B7388">W^Q₁ · W^K₁ · W^V₁</text>
+
+        <rect x="160" y="140" width="160" height="60" fill="#FAF3DD" stroke="#314E7E" stroke-width="1.5"/>
+        <text x="240" y="165" text-anchor="middle" font-size="11" fill="#314E7E" font-weight="600">HEAD 2</text>
+        <text x="240" y="185" text-anchor="middle" font-size="10" fill="#6B7388">W^Q₂ · W^K₂ · W^V₂</text>
+
+        <rect x="160" y="220" width="160" height="60" fill="#FAF3DD" stroke="#4F6B57" stroke-width="1.5"/>
+        <text x="240" y="245" text-anchor="middle" font-size="11" fill="#4F6B57" font-weight="600">HEAD 3 …</text>
+        <text x="240" y="265" text-anchor="middle" font-size="10" fill="#6B7388">W^Q₃ · W^K₃ · W^V₃</text>
+      </g>
+
+      <!-- arrows from X -->
+      <line x1="100" y1="170" x2="158" y2="90" stroke="#6B7388" stroke-width="1"/>
+      <line x1="100" y1="170" x2="158" y2="170" stroke="#6B7388" stroke-width="1"/>
+      <line x1="100" y1="170" x2="158" y2="250" stroke="#6B7388" stroke-width="1"/>
+
+      <!-- concat -->
+      <rect x="380" y="140" width="100" height="60" fill="#FAF3DD" stroke="#1A2438" stroke-width="1.5"/>
+      <text x="430" y="170" text-anchor="middle" font-size="11" font-weight="600">CONCAT</text>
+      <text x="430" y="187" text-anchor="middle" font-size="10" fill="#6B7388">heads</text>
+
+      <line x1="320" y1="90"  x2="378" y2="160" stroke="#6B7388" stroke-width="1"/>
+      <line x1="320" y1="170" x2="378" y2="170" stroke="#6B7388" stroke-width="1"/>
+      <line x1="320" y1="250" x2="378" y2="180" stroke="#6B7388" stroke-width="1"/>
+
+      <!-- output projection -->
+      <rect x="540" y="140" width="100" height="60" fill="#FAF3DD" stroke="#C68A1F" stroke-width="1.5"/>
+      <text x="590" y="170" text-anchor="middle" font-size="11" font-weight="600">W^O</text>
+      <text x="590" y="187" text-anchor="middle" font-size="10" fill="#6B7388">project</text>
+
+      <line x1="480" y1="170" x2="538" y2="170" stroke="#6B7388" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+      <!-- output -->
+      <rect x="680" y="140" width="40" height="60" fill="#FAF3DD" stroke="#4F6B57" stroke-width="1.5"/>
+      <text x="700" y="175" text-anchor="middle" font-size="14" font-weight="600">Z</text>
+
+      <line x1="640" y1="170" x2="678" y2="170" stroke="#6B7388" stroke-width="1.5" marker-end="url(#arr3)"/>
+
+      <defs>
+        <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#6B7388"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>Multi-head attention. The same input X is fed through h parallel attention heads, each with its own projection matrices. Their outputs are concatenated and projected back to the model dimension.</figcaption>
+  </figure>
+
+  <h3>What different heads tend to learn</h3>
+
+  <p>Different heads specialize. In trained transformers, studies have found heads that attend to:</p>
+
+  <ul>
+    <li>The previous token (positional / sequential)</li>
+    <li>The next token (look-ahead, in encoders)</li>
+    <li>Words that match in part of speech</li>
+    <li>Subject-verb pairs (syntactic dependency)</li>
+    <li>Pronouns and their antecedents (coreference)</li>
+    <li>Tokens that share a topic or domain</li>
+  </ul>
+
+  <p>For Task 2.3 Experiment 2: even with random projection matrices, your two heads will produce <em>different</em> heatmaps. The differences are random — not meaningful — but the structure is what matters. With training, those differences would become specialised.</p>
+
+  <div class="callout">
+    <h5>Why multiple heads, not just one bigger head?</h5>
+    <p>You could increase d_k for one head and get the same compute. But with one head, you compute exactly one weighted average. With h heads on d_k/h dimensions each, you compute h <em>different</em> averages and concatenate. The expressive power of "look at different relationships in parallel" requires the separation. Empirically, h = 8 or h = 16 outperforms a single big head at equal compute.</p>
+  </div>
+</section>
+
+<section id="sec-7">
+  <h2><span class="sectnum">§ 07 — MASKING</span>Masking</h2>
+  <p class="standfirst">Sometimes you want a token to <em>not</em> see other tokens. The mask is how.</p>
+
+  <p>The mask argument in <code>scaled_dot_product_attention</code> is for two cases:</p>
+
+  <ol>
+    <li><strong>Causal masking</strong>: in a decoder, token <em>t</em> may attend only to tokens at positions ≤ <em>t</em>. We don't let the model peek at the future during training.</li>
+    <li><strong>Padding masking</strong>: when batches contain sequences of different lengths, shorter sequences are padded. The pad tokens should be ignored.</li>
+  </ol>
+
+  <h3>How masking works</h3>
+  <p>You don't multiply by the mask. You <em>add</em> a large negative number to the scores at the masked positions, <em>before</em> softmax:</p>
+
+  <p>$$\text{scores}_{ij} = \begin{cases} \text{scores}_{ij} & \text{if not masked} \\ -\infty & \text{if masked} \end{cases}$$</p>
+
+  <p>After softmax, <code>exp(−∞) = 0</code>, so those positions contribute zero weight. In code: <code>scores.masked_fill(mask == 0, float('-inf'))</code>.</p>
+
+  <div class="callout tip">
+    <h5>Why -inf, not zero?</h5>
+    <p>If you zeroed out the scores instead of pushing them to -∞, the softmax would still assign them <code>exp(0) = 1</code> of unnormalized mass — far from zero. You have to send the score below the softmax's effective range, and -∞ is the limit.</p>
+  </div>
+
+  <p>For Task 2.1, your skeleton has a mask argument with <code>pass</code>. Implement it — even if the experiments don't use it, a correct implementation should handle the mask path.</p>
+</section>
+
+<section id="sec-8">
+  <h2><span class="sectnum">§ 08 — TASK CARDS</span>What to Do, by Task</h2>
+  <p class="standfirst">Each task in Part 2, with the concepts and the thinking. No code — that's yours.</p>
+
+  <div class="taskcard">
+    <div class="tasknum">TASK 2.1<span class="pts">5 PTS</span></div>
+    <h4>Implement scaled dot-product attention</h4>
+    <div class="concepts">
+      <h5>Concepts needed</h5>
+      <ul>
+        <li>Matrix multiplication in PyTorch: <code>torch.matmul</code> or <code>@</code></li>
+        <li>Transpose of the last two dims of K: <code>K.transpose(-2, -1)</code></li>
+        <li><code>math.sqrt</code> for the scaling factor</li>
+        <li><code>F.softmax(..., dim=-1)</code> — softmax over the last axis (keys)</li>
+        <li><code>scores.masked_fill(mask == 0, float('-inf'))</code> for the mask</li>
+      </ul>
+    </div>
+    <div class="thinking">
+      <h5>Thinking</h5>
+      <ul>
+        <li>What shape is <code>Q @ K.transpose(-2, -1)</code>? Confirm it's <code>(batch, heads, seq_len_q, seq_len_k)</code>.</li>
+        <li>Do you scale before or after the mask is applied? (Convention: scale first, then mask, then softmax.)</li>
+        <li>What dimension does softmax run over? It must be the last — the keys dimension.</li>
+        <li>Verify: <code>output.shape == (batch, heads, seq_len_q, d_v)</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="taskcard">
+    <div class="tasknum">TASK 2.2<span class="pts">5 PTS</span></div>
+    <h4>Visualize attention as a heatmap</h4>
+    <div class="concepts">
+      <h5>Concepts needed</h5>
+      <ul>
+        <li><code>sentence.split()</code> for tokenization</li>
+        <li><code>torch.randn(seq_len, d_model)</code> for random embeddings</li>
+        <li>Your function from Task 2.1 — but note it expects 4D input. You need to <code>.unsqueeze(0).unsqueeze(0)</code> to add batch and head dims, then squeeze them back for plotting.</li>
+        <li><code>seaborn.heatmap</code> with <code>xticklabels=tokens, yticklabels=tokens</code></li>
+        <li><code>plt.xticks(rotation=45)</code> if labels overlap</li>
+      </ul>
+    </div>
+    <div class="thinking">
+      <h5>Thinking</h5>
+      <ul>
+        <li>The attention weights from Task 2.1 have shape <code>(1, 1, seq_len, seq_len)</code>. To plot, squeeze them: <code>weights.squeeze().detach().numpy()</code>.</li>
+        <li>With random embeddings, what do you expect to see? A faint diagonal (each token attends most to itself), noise elsewhere. Not interpretable language patterns — that requires training.</li>
+        <li>Choose a colormap with high contrast (<code>"viridis"</code>, <code>"magma"</code>) so weak signal is still visible.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="taskcard">
+    <div class="tasknum">TASK 2.3<span class="pts">15 PTS</span></div>
+    <h4>Experiments — change a word, compare heads</h4>
+    <div class="concepts">
+      <h5>Concepts needed for Experiment 1</h5>
+      <ul>
+        <li>Re-run your Task 2.2 pipeline with a different sentence</li>
+        <li>Plot two heatmaps side by side (<code>plt.subplots(1, 2)</code>)</li>
+        <li>Set the random seed (<code>torch.manual_seed(...)</code>) so the comparison is fair — otherwise different random embeddings will dominate the difference</li>
+      </ul>
+      <h5>Concepts needed for Experiment 2</h5>
+      <ul>
+        <li>Learned (here: randomly initialized) projection matrices: <code>W_Q = torch.randn(d_model, d_k)</code>, same for W_K, W_V</li>
+        <li>Q = X @ W_Q, K = X @ W_K, V = X @ W_V — these now differ from X</li>
+        <li>Two heads = two sets of independent W matrices, each producing a separate heatmap</li>
+      </ul>
+    </div>
+    <div class="thinking">
+      <h5>Thinking — for the three questions</h5>
+      <ul>
+        <li><strong>Q1: Did changing one word affect attention?</strong> If you change "cat" to "dog" with the same random seed, the embeddings for that position change — so the row and column for "cat"/"dog" change. Other tokens' embeddings are unchanged, but their attention <em>weights</em> change because the keys they see are different. Discuss this.</li>
+        <li><strong>Q2: Do different heads focus on different tokens?</strong> Yes — with different random W matrices, the projected Q, K, V are different, so the patterns differ. (Even with random matrices! With learned matrices, the differences become meaningful.)</li>
+        <li><strong>Q3: Why is multi-head useful in transformers?</strong> Capacity to capture different relationship types in parallel. Each head specializes. One pattern can't represent syntax, semantics, and position simultaneously.</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<div class="flourish">⁂</div>
+
+<footer>
+  GUIDE 03B · ATTENTION · LLM ARCHITECTURES HOMETASK 3 · PART 2
+</footer>
+
+</div>
+
+</body>
+</html>

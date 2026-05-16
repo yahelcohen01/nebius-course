@@ -1,0 +1,4570 @@
+WEBVTT
+WEBVTT
+
+1
+00:00:01.893 --> 00:00:05.363
+Nebius Academy | AI-PE: Good morning, everyone. Nice to see you.
+
+
+2
+00:00:05.973 --> 00:00:10.732
+Nebius Academy | AI-PE: M… So, thank you for joining me on a Friday.
+
+
+3
+00:00:10.902 --> 00:00:13.042
+Nebius Academy | AI-PE: Today, we will…
+
+
+4
+00:00:13.413 --> 00:00:20.202
+Nebius Academy | AI-PE: pick up to where we were left off last time. So, in our last lesson, we talked about transformers.
+
+
+5
+00:00:20.393 --> 00:00:39.012
+Nebius Academy | AI-PE: And then we kind of jump to what happens when we use an LLM at inference time, and we talked about sampling and all the different techniques. And I'll take you back to this mid-level that we kind of skipped last time. After we know the transformer architecture, how do we train an LLM?
+
+
+6
+00:00:39.303 --> 00:00:48.403
+Nebius Academy | AI-PE: And of course, we will use the concept that we previously saw when we talked about loss function and gradient descent, training set.
+
+
+7
+00:00:48.403 --> 00:00:59.513
+Nebius Academy | AI-PE: test set and all of this, but we'll now dive specifically to both the causal and autoregressive LLM architecture. Don't worry, I'll remind you which one is which.
+
+
+8
+00:00:59.613 --> 00:01:05.652
+Nebius Academy | AI-PE: And we'll mainly, mainly focus on also fine-tuning today.
+
+
+9
+00:01:05.993 --> 00:01:11.023
+Nebius Academy | AI-PE: So let's… Start…
+
+
+10
+00:01:11.223 --> 00:01:22.813
+Nebius Academy | AI-PE: So we'll start with the LLM training phases. We'll split it into three phases, and I'll explain to you the difference between each phase, and then we'll talk about pre-training, and
+
+
+11
+00:01:22.923 --> 00:01:27.142
+Nebius Academy | AI-PE: Mainly, most of the lecture today will talk about fine-tuning.
+
+
+12
+00:01:28.683 --> 00:01:36.583
+Nebius Academy | AI-PE: So, when we're talking about an LLM training, we normally divide it into 3 different steps.
+
+
+13
+00:01:36.973 --> 00:01:42.973
+Nebius Academy | AI-PE: The first step is what we called up until today, we called it training.
+
+
+14
+00:01:43.363 --> 00:01:51.392
+Nebius Academy | AI-PE: So, now we will call it under a new name in the context of LLMs, and we call it pre-training.
+
+
+15
+00:01:52.013 --> 00:01:57.612
+Nebius Academy | AI-PE: This phase is when we train the LLM from scratch.
+
+
+16
+00:01:57.723 --> 00:02:17.722
+Nebius Academy | AI-PE: And the reason that we call it pre-training is because most of us won't train an LLM from scratch, and we'll use an existing LLM, and therefore it got this name of pre-training. I know we use this in a different context up until now, but again, for the LLM sake, pre-training is…
+
+
+17
+00:02:18.062 --> 00:02:23.462
+Nebius Academy | AI-PE: is training on this huge dataset from scratch and building the LLM.
+
+
+18
+00:02:25.633 --> 00:02:38.413
+Nebius Academy | AI-PE: Once we have an existing LLM, so think about that you now have a downloadable LLM, so an open source one from Hugging Face, let's say.
+
+
+19
+00:02:38.543 --> 00:02:55.293
+Nebius Academy | AI-PE: We can reach now the next step, which is called fine-tuning. Fine-tuning, we'll dive much deeper into it today, but generally speaking, we're talking about task-specific improvement, or domain-specific improvement, so taking
+
+
+20
+00:02:55.423 --> 00:03:15.352
+Nebius Academy | AI-PE: an existing LLM, and making it so that the LLM fits now my purposes. If I'm a startup that's now in the healthcare domain, so to pivot it into the healthcare domain. If I'm now… I have a product which does a classification, so to train this LLM to do the
+
+
+21
+00:03:15.463 --> 00:03:30.303
+Nebius Academy | AI-PE: sentiment… we talked also always about sentiment analysis, so to do an LLM which is directed to sentiment analysis. So fine-tuning, again, is taking an existing LLM and adapting it to our own needs.
+
+
+22
+00:03:30.653 --> 00:03:34.523
+Nebius Academy | AI-PE: And the last phase of LLM training is called alignment.
+
+
+23
+00:03:34.643 --> 00:03:38.983
+Nebius Academy | AI-PE: And here you'll have a specific module for it, it's the fifth
+
+
+24
+00:03:39.123 --> 00:03:45.273
+Nebius Academy | AI-PE: course you will take in this AI engineering training.
+
+
+25
+00:03:45.403 --> 00:03:49.922
+Nebius Academy | AI-PE: Where we do, reinforcement learning with human feedback.
+
+
+26
+00:03:50.163 --> 00:04:05.313
+Nebius Academy | AI-PE: and align on safety policies and ethical behavior, and I won't go into it today, because, as I mentioned, you'll have, I think 5 weeks? 3 weeks? 3 weeks just on this, so I don't want to spoil anything.
+
+
+27
+00:04:05.433 --> 00:04:21.092
+Nebius Academy | AI-PE: But know that there is an additional step that we won't mention today. After we fine-tune an element, we have an existing one, how do we operate with it in an operational environment? And this is the alignment phase.
+
+
+28
+00:04:21.273 --> 00:04:27.992
+Nebius Academy | AI-PE: And today we'll focus on pre-training, which up until now we call training, and fine-tuning.
+
+
+29
+00:04:28.563 --> 00:04:37.602
+Nebius Academy | AI-PE: What else did I want to say here? Okay. When, for example, OpenAI launches GPT 5.5,
+
+
+30
+00:04:38.213 --> 00:04:45.993
+Nebius Academy | AI-PE: they probably repeat all of the steps, so when they launch a new model, it's not that they launch it just
+
+
+31
+00:04:46.273 --> 00:04:50.542
+Nebius Academy | AI-PE: using… The pre-training steps we'll see today.
+
+
+32
+00:04:50.643 --> 00:05:07.193
+Nebius Academy | AI-PE: They probably are taking… when they're building a new model, they're going over all of those three phases, from pre-training to fine-tuning, and finally alignment. Of course, their fine-tuning is not
+
+
+33
+00:05:07.193 --> 00:05:20.182
+Nebius Academy | AI-PE: to be specific in the medical domain, or a specific domain, or a specific task, but they still have some fine-tuning steps that we will… once I discuss, I will mention which one is relevant when we
+
+
+34
+00:05:20.263 --> 00:05:29.533
+Nebius Academy | AI-PE: Genera… generate a general language… large language model, and they definitely do alignment, to,
+
+
+35
+00:05:29.713 --> 00:05:42.413
+Nebius Academy | AI-PE: take into account the ethical and the safety policies. So, for those who came late, I'm just repeating because it's important. When we train an LLM, three phases, pre-training, fine-tuning, and alignment.
+
+
+36
+00:05:42.613 --> 00:05:46.352
+Nebius Academy | AI-PE: So… Let's start with the pre-training.
+
+
+37
+00:05:47.453 --> 00:05:56.443
+Nebius Academy | AI-PE: So, just a reminder from last time, we said that there are 3 different architectures for LLMs that are transformer-based.
+
+
+38
+00:05:56.743 --> 00:06:03.142
+Nebius Academy | AI-PE: One is decoder only, like GPT, Claude, Llama, and Mixtra.
+
+
+39
+00:06:03.353 --> 00:06:07.433
+Nebius Academy | AI-PE: The second one is encoder only, which is the best.
+
+
+************* continue after the stop ****************
+
+1
+00:00:03.121 --> 00:00:07.631
+Nebius Academy | AI-PE: Thank you. I don't know what happened, did the Zoom just… Stop.
+
+
+2
+00:00:08.701 --> 00:00:15.741
+Nebius Academy | AI-PE: Mmm… So I'll go back one side, because I don't know where I lost the people at all.
+
+
+3
+00:00:41.511 --> 00:00:43.121
+Nebius Academy | AI-PE: My mom, I understand.
+
+
+4
+00:00:43.901 --> 00:00:45.211
+Nebius Academy | AI-PE: 11 o'clock in Shannon.
+
+
+5
+00:00:45.601 --> 00:00:47.361
+Nebius Academy | AI-PE: And when there's on, she's good.
+
+
+6
+00:00:49.351 --> 00:00:50.281
+Nebius Academy | AI-PE: Awful.
+
+
+7
+00:00:54.281 --> 00:00:55.041
+Nebius Academy | AI-PE: Okay.
+
+
+8
+00:00:55.631 --> 00:01:03.820
+Nebius Academy | AI-PE: So, going back to our recap from last time…
+
+
+9
+00:01:04.101 --> 00:01:11.021
+Nebius Academy | AI-PE: We said that there are, three different, architectures for, LLMs.
+
+
+10
+00:01:11.231 --> 00:01:15.000
+Nebius Academy | AI-PE: The decoders, encoders, and encoder, decoders.
+
+
+11
+00:01:15.861 --> 00:01:21.520
+Nebius Academy | AI-PE: Emm… And we started talking about the Encodile family.
+
+
+12
+00:01:21.761 --> 00:01:34.060
+Nebius Academy | AI-PE: which are the masked language model, when we are training a word by predicting… we're masking it, and we're trying, based on the surrounding words, to predict the missing token.
+
+
+13
+00:01:34.501 --> 00:01:41.991
+Nebius Academy | AI-PE: And those are usually fine-tuned for classification tasks later on, we'll soon see how.
+
+
+14
+00:01:42.761 --> 00:02:01.130
+Nebius Academy | AI-PE: Encoder-decoders, they are a sequence-to-sequence model. They're very popular for machine translation, when we're trying to translate from one language to another, and also for speech recognition, from voice to text. We call them voice-to-text models.
+
+
+15
+00:02:01.511 --> 00:02:09.101
+Nebius Academy | AI-PE: And the decoder-only models that are very good at generating text.
+
+
+16
+00:02:09.381 --> 00:02:21.011
+Nebius Academy | AI-PE: that we also call them causal LLMs, autoregressive LLMs, left-to-right LLMs, they all mean the same thing. They predict one token at a time to continue the cycle.
+
+
+17
+00:02:22.551 --> 00:02:26.841
+Nebius Academy | AI-PE: So what is common to training all of those NMMs?
+
+
+18
+00:02:27.761 --> 00:02:38.300
+Nebius Academy | AI-PE: The big idea is that we give it as much data as we can, and our computational resources allow us.
+
+
+19
+00:02:38.841 --> 00:02:47.621
+Nebius Academy | AI-PE: And we want to pre-train those transformers on enormous amounts of data, and we'll soon talk about the numbers.
+
+
+20
+00:02:47.831 --> 00:02:52.201
+Nebius Academy | AI-PE: And then we can apply those LLMs on new tasks.
+
+
+21
+00:02:52.651 --> 00:02:59.490
+Nebius Academy | AI-PE: Mmm… So, you can ask yourself which data is used for training.
+
+
+22
+00:02:59.621 --> 00:03:15.560
+Nebius Academy | AI-PE: And this is an example of the data that is used for the training, and each rectangle here, the area of each rectangle represents the proportion of the type of data that is trained within LLMs today.
+
+
+23
+00:03:15.880 --> 00:03:25.880
+Nebius Academy | AI-PE: So you can see a lot of academical papers, and it also reflects, once you try to generate text, that the LLMs speak
+
+
+24
+00:03:25.881 --> 00:03:36.341
+Nebius Academy | AI-PE: the academics are gone, so PubMed, Archive, and more, those are the main, resources for academia.
+
+
+25
+00:03:36.751 --> 00:03:45.471
+Nebius Academy | AI-PE: The web itself, so, for example, PIRCC and Stock Exchange, OpenWeb Text, and Wikipedia.
+
+
+26
+00:03:45.841 --> 00:03:53.421
+Nebius Academy | AI-PE: Anything that we can scrape, and we'll see our limitations soon.
+
+
+27
+00:03:53.651 --> 00:04:05.671
+Nebius Academy | AI-PE: Books. Books, of course, that are found online, and that you can read, so you see that the Bibliotique is one of the main resources there.
+
+
+28
+00:04:05.971 --> 00:04:12.591
+Nebius Academy | AI-PE: Github and DM Math for coding and mathematics.
+
+
+29
+00:04:13.301 --> 00:04:25.161
+Nebius Academy | AI-PE: and dialogue conversations from those resources here. So, again, these… each area is relative to the proportion of the resource when training an LLM.
+
+
+30
+00:04:25.331 --> 00:04:32.310
+Nebius Academy | AI-PE: And of course, this has a huge impact on… the training data has a huge impact on the LM performance.
+
+
+31
+00:04:33.571 --> 00:04:39.441
+Nebius Academy | AI-PE: So, there are problems with scraping the web as is.
+
+
+32
+00:04:39.661 --> 00:04:41.641
+Nebius Academy | AI-PE: Such as copyright.
+
+
+33
+00:04:42.221 --> 00:04:58.090
+Nebius Academy | AI-PE: So, a lot of the data sets online have some copyright, and it remains an open legal problem. So, if you remember, there was, I think 2 years ago, the Ghibli trend that you generated yourself as a Ghibli character.
+
+
+34
+00:04:58.141 --> 00:05:13.020
+Nebius Academy | AI-PE: And then, Ghibli Studio, they sued OpenAI for, copywriting the Ghibli style of car… Of caricatures, and I think it's still an open, case, like, there is no,
+
+
+35
+00:05:13.811 --> 00:05:18.491
+Nebius Academy | AI-PE: a final call there, what was the right thing to do, and copyright remains
+
+
+36
+00:05:18.791 --> 00:05:30.121
+Nebius Academy | AI-PE: an issue when it comes to generative AI, and the general statement is that, if it's, Mmm.
+
+
+37
+00:05:30.241 --> 00:05:35.951
+Nebius Academy | AI-PE: First of all, if it's for personal use, there is no need for any copyright.
+
+
+38
+00:05:36.251 --> 00:05:40.251
+Nebius Academy | AI-PE: And, if you…
+
+
+39
+00:05:40.501 --> 00:05:55.850
+Nebius Academy | AI-PE: generated something from scratch and combined it into something larger than the specific image generated, then it's also off the hook. But again, it still remains an open legal question.
+
+
+40
+00:05:56.101 --> 00:06:10.911
+Nebius Academy | AI-PE: Data consent, so website owners can say they don't want their website to be crawled, and privacy, sometimes those websites contain private information, such as phone numbers, IP addresses.
+
+
+41
+00:06:10.911 --> 00:06:22.091
+Nebius Academy | AI-PE: emails, and once we scrape those webs, we can have this private information inside the LLM, meaning that anyone using the LLM, for example, I have
+
+
+42
+00:06:22.101 --> 00:06:30.921
+Nebius Academy | AI-PE: one of my emails in the website, so every LLM would know how to reach Noah's email, and it's something that
+
+
+43
+00:06:30.961 --> 00:06:34.710
+Nebius Academy | AI-PE: Maybe, should have been asked for consent.
+
+
+44
+00:06:38.701 --> 00:06:50.000
+Nebius Academy | AI-PE: Another question that we should ask ourselves when we look for data for training is to filter for quality and safety, and a lot of work is done there.
+
+
+45
+00:06:50.341 --> 00:06:56.900
+Nebius Academy | AI-PE: Quality, so, duplications. There's a lot of duplication, in the data.
+
+
+46
+00:06:57.051 --> 00:07:08.440
+Nebius Academy | AI-PE: For example, URLs, documents, even lines that are repeating themselves, and duplication would mean that we train on the same input
+
+
+47
+00:07:08.441 --> 00:07:17.361
+Nebius Academy | AI-PE: multiple times without us wanting necessarily this to happen. So we want the data to be deduplicated as much as possible.
+
+
+48
+00:07:17.741 --> 00:07:32.911
+Nebius Academy | AI-PE: Safety is a huge issue. Think about the internet and what you can find there. So, there's a lot of, in the… in this step of collecting the data, a lot of filtering of toxic content.
+
+
+49
+00:07:33.051 --> 00:07:49.531
+Nebius Academy | AI-PE: and a lot of filtering of adult content, because otherwise the LLMs or the visual language models will behave completely differently. And, biases, so there are a lot of biases in our data,
+
+
+50
+00:07:49.691 --> 00:07:56.750
+Nebius Academy | AI-PE: that is handled very much, at least with the American LLMs.
+
+
+51
+00:07:56.941 --> 00:08:10.960
+Nebius Academy | AI-PE: And notice that with this bias thing, it's a lot, so the ethical considerations are… of one country is very different than another country.
+
+
+52
+00:08:11.141 --> 00:08:12.051
+Nebius Academy | AI-PE: Emm…
+
+
+53
+00:08:12.311 --> 00:08:29.361
+Nebius Academy | AI-PE: The Equality Act of the European Union stated a few sensitive attributes that cannot be discriminated using technology, such as gender, race, disability, sexual orientation, and so on.
+
+
+54
+00:08:29.511 --> 00:08:43.161
+Nebius Academy | AI-PE: So, according to this Equality Act, the… any technology, LLMs are included, cannot discriminate against certain minorities or attributes.
+
+
+55
+00:08:43.361 --> 00:08:52.971
+Nebius Academy | AI-PE: And there's a lot, a lot of work here when collecting the data to make sure that the data represents
+
+
+56
+00:08:53.341 --> 00:09:05.690
+Nebius Academy | AI-PE: whatever ethical considerations you want to give to the LLM. And actually, in every company, Anthropic, OpenAI, and so on, there is an ethical person that sits every day and asks themselves.
+
+
+57
+00:09:06.121 --> 00:09:14.480
+Nebius Academy | AI-PE: what do I want this LLM to behave like? What are the important essences that I want this
+
+
+58
+00:09:14.771 --> 00:09:24.821
+Nebius Academy | AI-PE: persona to have, and it's very, very important. Like, think about, for example, an Israeli LLM denying the Holocaust. It's something that is…
+
+
+59
+00:09:25.021 --> 00:09:33.421
+Nebius Academy | AI-PE: is in our essence not to do. So, a lot of very interesting things when it comes to biases.
+
+
+60
+00:09:33.621 --> 00:09:37.221
+Nebius Academy | AI-PE: are being handled when we're training an LLM.
+
+
+61
+00:09:42.251 --> 00:09:54.990
+Nebius Academy | AI-PE: Okay, so this was about collecting the data, and really, each one of the topics here, this bullet here, I can give you a full lecture on bias, and on safety, and on quality, because it's a whole topic, and I want you to
+
+
+62
+00:09:55.021 --> 00:10:09.821
+Nebius Academy | AI-PE: you already understand, like, how important is the data you've put into a machine learning model in order for it to serve different purposes, but I will skip now for the actual loss function and how things are trained.
+
+
+63
+00:10:10.081 --> 00:10:17.780
+Nebius Academy | AI-PE: So, not surprisingly, it's the same loss function we used before, our beloved cross entropy.
+
+
+64
+00:10:18.081 --> 00:10:25.770
+Nebius Academy | AI-PE: And here we want to assign a high probability to a true token, or a true word.
+
+
+65
+00:10:25.961 --> 00:10:28.020
+Nebius Academy | AI-PE: And we want,
+
+
+66
+00:10:28.371 --> 00:10:37.711
+Nebius Academy | AI-PE: the loss to be high if we assigned too low probability to the actual word, so the same cost entropy we used before.
+
+
+67
+00:10:37.861 --> 00:10:41.190
+Nebius Academy | AI-PE: In a self-supervised setup, because
+
+
+68
+00:10:41.301 --> 00:10:49.090
+Nebius Academy | AI-PE: Maybe this is my next time, because it just uses the next, or the missing word as the label.
+
+
+69
+00:10:49.391 --> 00:11:00.271
+Nebius Academy | AI-PE: So we're still at the self-supervised setup with our cross entropy loss, and now let's see how it looks like for our encoder-based LMs and our decoder-based LMs.
+
+
+70
+00:11:00.811 --> 00:11:10.170
+Nebius Academy | AI-PE: So we'll start with our encoder-based language models, and specifically with the first build, because all the permutations later, they
+
+
+71
+00:11:10.401 --> 00:11:12.560
+Nebius Academy | AI-PE: They are more or less the same concept.
+
+
+72
+00:11:12.751 --> 00:11:24.771
+Nebius Academy | AI-PE: And we call it also the masked language model, and reminding you that the idea is to hide a token and try to predict this token. So let's look at the example here.
+
+
+73
+00:11:25.041 --> 00:11:32.141
+Nebius Academy | AI-PE: how are doing today? And notice the very two special tokens, for bear.
+
+
+74
+00:11:32.291 --> 00:11:38.871
+Nebius Academy | AI-PE: The first one is called CLS. We'll put it at the beginning of the document, or the sentence.
+
+
+75
+00:11:39.311 --> 00:11:46.700
+Nebius Academy | AI-PE: And the separator document will indicate that the sentence has ended.
+
+
+76
+00:11:47.161 --> 00:11:51.181
+Nebius Academy | AI-PE: And maybe a new one will come along, or we ended the sentence.
+
+
+77
+00:11:52.951 --> 00:11:56.671
+Nebius Academy | AI-PE: And, Ou…
+
+
+78
+00:11:57.141 --> 00:12:05.011
+Nebius Academy | AI-PE: This CLS token, we will use it later for specific tasks. For example, if we want
+
+
+79
+00:12:05.221 --> 00:12:12.270
+Nebius Academy | AI-PE: to classify later this sentence sentiment, for instance, I can use this CLS token
+
+
+80
+00:12:12.381 --> 00:12:17.491
+Nebius Academy | AI-PE: and put it inside an MLP, or what we call a field forward.
+
+
+81
+00:12:17.661 --> 00:12:26.841
+Nebius Academy | AI-PE: and classify based on the CLS token. So the CLS token is used a lot when we want to have a representation for the full sentence.
+
+
+82
+00:12:27.421 --> 00:12:35.530
+Nebius Academy | AI-PE: And the separator token is used for us to differentiate between two sentences.
+
+
+83
+00:12:35.931 --> 00:12:43.911
+Nebius Academy | AI-PE: So, again, we, we mask this token, the how I'm doing today, and,
+
+
+84
+00:12:44.121 --> 00:12:56.571
+Nebius Academy | AI-PE: U had the highest probability, so we had U, there, U, and you had the highest probability, and we were with temperature 1, and we sampled the token U,
+
+
+85
+00:12:57.241 --> 00:13:11.591
+Nebius Academy | AI-PE: And if the actual sentence had U, then the loss function won't backpropagate an error, and if the actual token was, for instance, day, it would backpropagate the error to
+
+
+86
+00:13:11.761 --> 00:13:16.591
+Nebius Academy | AI-PE: Fix the full transformer-encoder architecture we saw before.
+
+
+87
+00:13:16.931 --> 00:13:28.270
+Nebius Academy | AI-PE: Mmm… Okay… So… BERT has two loss functions at the same time. One is the mask
+
+
+88
+00:13:28.501 --> 00:13:32.011
+Nebius Academy | AI-PE: A language model, the masking of the token.
+
+
+89
+00:13:32.081 --> 00:13:36.261
+Nebius Academy | AI-PE: And at the same time, the loss function trains for something else.
+
+
+90
+00:13:36.331 --> 00:13:53.210
+Nebius Academy | AI-PE: which is next sentence prediction. It's a binary classification task that all it does is to say if the upcoming sentence is the next sentence or not. So think about the loss function as having
+
+
+91
+00:13:53.281 --> 00:14:13.271
+Nebius Academy | AI-PE: two mathematical functions with a plus between them. One accounts for the missing token, and the second one for next sentence prediction. So what does it mean? For example, I'm going outside, I will be back after 6, so here we had the separator token, and we put a new sentence afterwards.
+
+
+92
+00:14:13.361 --> 00:14:17.950
+Nebius Academy | AI-PE: And here in the binary classification, this was the next sentence.
+
+
+93
+00:14:18.171 --> 00:14:31.810
+Nebius Academy | AI-PE: And I'm going outside, you know nothing John Snow is not the next sentence, it's not in the same context, and there, the binary next sentence loss will be zero.
+
+
+94
+00:14:31.991 --> 00:14:45.761
+Nebius Academy | AI-PE: Why was Bert trained on both the math language model and the next sentence prediction? Because, looking at,
+
+
+95
+00:14:46.071 --> 00:14:59.781
+Nebius Academy | AI-PE: Just one sentence at a time did not… was not good enough to generate the next sentence that comes along, because we used the separator here, so we wanted that if we… we are in a generative space.
+
+
+96
+00:14:59.851 --> 00:15:18.661
+Nebius Academy | AI-PE: Or we have a task that has two sentences, such as entailment, that we said we compare two sentences, if they are related or not. So we want to have the model to have the ability to look at two sentences, and therefore, the next sentence prediction was also added as a part of our loss.
+
+
+97
+00:15:18.851 --> 00:15:23.140
+Nebius Academy | AI-PE: Something I forgot to tell you, this mask token, specifically for birth.
+
+
+98
+00:15:23.311 --> 00:15:31.031
+Nebius Academy | AI-PE: So they masked, most of the tokens, but in some cases, They,
+
+
+99
+00:15:31.541 --> 00:15:45.031
+Nebius Academy | AI-PE: didn't mask a token, but actually changed it, so they randomly sampled a different token, and this is very weird, but I think they did it kind of like the dropout mechanism.
+
+
+100
+00:15:45.211 --> 00:15:53.410
+Nebius Academy | AI-PE: To add noise so that the broader doesn't rely specifically on Some specific setup, but…
+
+
+101
+00:15:54.001 --> 00:16:03.140
+Nebius Academy | AI-PE: Just so you know, it's not 100% masking. They also sampled sometimes incorrect token And try to still predict
+
+
+102
+00:16:03.321 --> 00:16:05.431
+Nebius Academy | AI-PE: The missing token.
+
+
+103
+00:16:06.671 --> 00:16:20.600
+Nebius Academy | AI-PE: Okay, so this was… Bert is combining two of those losses, and this is how the model is trained. So, masked language model plus next sentence prediction.
+
+
+104
+00:16:20.701 --> 00:16:36.081
+Nebius Academy | AI-PE: And now we can use it for various purposes. So, remember, we have the positional embeddings, as before, with the transformer, and we have each of the token embeddings.
+
+
+105
+00:16:36.271 --> 00:16:42.780
+Nebius Academy | AI-PE: And, and as we said, we have those special tokens, such as CLS,
+
+
+106
+00:16:42.951 --> 00:16:58.001
+Nebius Academy | AI-PE: the separator, and those are the inputs. So, for example, if I now want to do a part of speech, or named entity recognition task, then it
+
+
+107
+00:16:58.351 --> 00:17:10.101
+Nebius Academy | AI-PE: for each one of those tokens here, at the end of my transformer layer, I will have a hidden representation for each one of the tokens, and I can apply a,
+
+
+108
+00:17:11.891 --> 00:17:25.361
+Nebius Academy | AI-PE: fine-tune… we didn't talk about fine-tuning yet, but I can apply a task where I compare the hidden layer of each one to the actual output Y, and train based on this.
+
+
+109
+00:17:25.361 --> 00:17:37.531
+Nebius Academy | AI-PE: When I have a classification task, I can use the CLS, as we said, as something that represents the full input, and when I have a task such as entailment.
+
+
+110
+00:17:37.531 --> 00:17:54.550
+Nebius Academy | AI-PE: I can have separator 1 here will have a representation of the first sentence, and separator 2 here will have a representation of the second sentence, and I can compare both of the separator tokens for the purpose of entailment, for example.
+
+
+111
+00:17:55.671 --> 00:18:01.911
+Nebius Academy | AI-PE: So this was Bert, and now I will pause for questions.
+
+
+112
+00:18:04.501 --> 00:18:05.221
+Nebius Academy | AI-PE: Yes.
+
+
+113
+00:18:07.251 --> 00:18:21.280
+Nebius Academy | AI-PE: Entailment is a task where you have two sentences, and you need to say if one contradicts the other, if one completes the other, or if one has nothing to do with the other.
+
+
+114
+00:18:22.191 --> 00:18:23.141
+Nebius Academy | AI-PE: Yes.
+
+
+115
+00:18:26.661 --> 00:18:29.211
+Nebius Academy | AI-PE: and, Nick.
+
+
+116
+00:18:30.741 --> 00:18:34.661
+Nebius Academy | AI-PE: So the question was, how do I train a model with multiple tasks?
+
+
+117
+00:18:34.791 --> 00:18:50.170
+Nebius Academy | AI-PE: Great question. So, when we have a loss that is composed of several components, all we need to do at the end is to add those two losses. So, think about our cross-entropy loss function that we already learned of the MLM.
+
+
+118
+00:18:50.251 --> 00:18:58.300
+Nebius Academy | AI-PE: And then I have a plus and another gause entropy function for the binary loss of next sentence prediction.
+
+
+119
+00:18:58.811 --> 00:19:03.951
+Nebius Academy | AI-PE: So it's just the addition of those two losses with
+
+
+120
+00:19:04.121 --> 00:19:09.671
+Nebius Academy | AI-PE: Sometimes a lambda between them, which is the facto that is,
+
+
+121
+00:19:10.041 --> 00:19:23.600
+Nebius Academy | AI-PE: scaling one compared to the other, so I can say that the first component maybe is more important, then the second one will have a half impact, but as simple as that.
+
+
+122
+00:19:25.051 --> 00:19:28.600
+Nebius Academy | AI-PE: Maybe from home, I'll look at the questions.
+
+
+123
+00:19:31.961 --> 00:19:38.711
+Nebius Academy | AI-PE: Is next sentence prediction? The next sentence is given as an input, and the model predicts
+
+
+124
+00:19:38.851 --> 00:19:41.080
+Nebius Academy | AI-PE: Whether it fits or not.
+
+
+125
+00:19:41.651 --> 00:19:44.211
+Nebius Academy | AI-PE: Yes, so in the next sentence, prediction?
+
+
+126
+00:19:44.401 --> 00:20:01.011
+Nebius Academy | AI-PE: we are giving the model two sentences. Sometimes we… they are the correct ones that we have in our training data, and then our label is yes, and sometimes we randomly sample another one, and then our label is no. This is how we build this dataset.
+
+
+127
+00:20:01.721 --> 00:20:06.621
+Nebius Academy | AI-PE: M… Okay, I think I will continue.
+
+
+128
+00:20:07.441 --> 00:20:18.030
+Nebius Academy | AI-PE: And now, let's speak about how we trained GPT, our causal language model, and I think here, nothing much will surprise you.
+
+
+129
+00:20:18.411 --> 00:20:34.281
+Nebius Academy | AI-PE: So, we know that at each token position T, the model sees the correct token up until T, and then we can compute the loss for the next token that comes along.
+
+
+130
+00:20:35.131 --> 00:20:41.431
+Nebius Academy | AI-PE: And what do we do at the next iteration? We ignore the actual prediction.
+
+
+131
+00:20:41.711 --> 00:20:46.091
+Nebius Academy | AI-PE: And we put the correct token that was at that place.
+
+
+132
+00:20:46.351 --> 00:20:57.341
+Nebius Academy | AI-PE: and add it to the context. So, if you remember, in our decoder architecture, there was always this arrow that took the actual prediction and put it back as an input to the next
+
+
+133
+00:20:57.481 --> 00:21:07.780
+Nebius Academy | AI-PE: step, and we call this method teacher forcing. So, why teacher forcing? Because every step, T,
+
+
+134
+00:21:07.951 --> 00:21:18.941
+Nebius Academy | AI-PE: I… whatever the model predicted before, I put the actual true label as an input for my next prediction. So you can think about this training as
+
+
+135
+00:21:19.351 --> 00:21:21.810
+Nebius Academy | AI-PE: If I have a sentence of length 4,
+
+
+136
+00:21:21.931 --> 00:21:28.180
+Nebius Academy | AI-PE: As four different training steps, 4 different training samples.
+
+
+137
+00:21:28.471 --> 00:21:34.591
+Nebius Academy | AI-PE: Where each one has the additional token that came the step before.
+
+
+138
+00:21:35.491 --> 00:21:36.751
+Nebius Academy | AI-PE: Emm…
+
+
+139
+00:21:39.241 --> 00:21:54.850
+Nebius Academy | AI-PE: So, yeah, I think it repeats what we talked about. We take the full text, then in each timestamp T, we ask the model to predict the next token, and then we train the model using gradient descent to minimize the error on the prediction.
+
+
+140
+00:21:55.021 --> 00:21:58.640
+Nebius Academy | AI-PE: so, how does it look like?
+
+
+141
+00:21:59.851 --> 00:22:05.221
+Nebius Academy | AI-PE: Let's say we want… we have the input token so long, and thanks for…
+
+
+142
+00:22:05.851 --> 00:22:16.191
+Nebius Academy | AI-PE: Here is all the architecture we talked about last time, with the input encoding, and the positional embeddings, and all the transformer blocks.
+
+
+143
+00:22:16.261 --> 00:22:27.071
+Nebius Academy | AI-PE: And, converting it to some logics, the actual raw probabilities of a token, and given the input, so we predicted,
+
+
+144
+00:22:27.161 --> 00:22:36.811
+Nebius Academy | AI-PE: the token long. And now, when I'm predicting the next token, whether I predicted here long or not, the next input will be the long token.
+
+
+145
+00:22:37.221 --> 00:22:39.691
+Nebius Academy | AI-PE: etc. And at the end, the loss…
+
+
+146
+00:22:39.931 --> 00:22:55.280
+Nebius Academy | AI-PE: is the sum on minus log the actual Ys of our token? So you can see the loss function here, and this is the cross entropy loss that we learned also in the logistic regression.
+
+
+147
+00:22:55.641 --> 00:23:08.461
+Nebius Academy | AI-PE: So… very simple, I mean, in terms of converting the transformer to an actual training, problem?
+
+
+148
+00:23:08.731 --> 00:23:14.761
+Nebius Academy | AI-PE: But… It takes a lot of computational effort.
+
+
+149
+00:23:15.221 --> 00:23:17.020
+Nebius Academy | AI-PE: So, fun fact…
+
+
+150
+00:23:17.291 --> 00:23:35.171
+Nebius Academy | AI-PE: And these are assumptions that I found online, it's nothing, really, I saw anywhere, but GPT 5.5, it was launched, I think, a week ago, or something like that. It involved training trillions of parameters, so,
+
+
+151
+00:23:36.501 --> 00:23:41.941
+Nebius Academy | AI-PE: really enormous amount of parameters with 50K GPUs.
+
+
+152
+00:23:42.591 --> 00:23:48.330
+Nebius Academy | AI-PE: Enormous amount of GPUs. So, Nebius, for example, now.
+
+
+153
+00:23:48.341 --> 00:24:06.420
+Nebius Academy | AI-PE: correct me if I'm wrong, if someone knows, but I think they have 1,000 GPUs, and they're going to extend to 6,000 GPUs in Israel. So, I don't know beyond the Israel. My word is as narrow as Israel, but something like that. So, 50,000 GPUs.
+
+
+154
+00:24:06.751 --> 00:24:23.581
+Nebius Academy | AI-PE: It's a lot of computational effort, it's hard to find, it's hard to build it, it costs a lot of money, and over 2 to 3 months, with the cost around of $100 million to $300 million.
+
+
+155
+00:24:24.061 --> 00:24:27.880
+Nebius Academy | AI-PE: So, this is what we talk about when we're launching,
+
+
+156
+00:24:27.981 --> 00:24:34.671
+Nebius Academy | AI-PE: A new model, and doing this simple cross-entropy that we just discussed of predicting next token, yeah?
+
+
+157
+00:24:34.901 --> 00:24:38.620
+Nebius Academy | AI-PE: This is what it looks like in numbers.
+
+
+158
+00:24:39.001 --> 00:24:48.170
+Nebius Academy | AI-PE: And obviously, most of us won't train in LLM from scratch, unless, again, you work with those giants.
+
+
+159
+00:24:48.851 --> 00:24:59.521
+Nebius Academy | AI-PE: I didn't… we didn't have time to put the… the bar, so I… I will skip this word for now.
+
+
+160
+00:25:00.771 --> 00:25:15.110
+Nebius Academy | AI-PE: And also, when we are trying to train a new model, we cannot, you know, at the first iteration, throw two to three months, spend 100 to 300 million dollars on these amount of GPUs.
+
+
+161
+00:25:15.281 --> 00:25:30.470
+Nebius Academy | AI-PE: So a very nice paper of OpenAI built some scaling laws that help us to anticipate if we add more computation, if we add more data, if we add more parameters, how will our model behave? Like, is it…
+
+
+162
+00:25:30.661 --> 00:25:36.241
+Nebius Academy | AI-PE: Worthwhile, training it once we go forward.
+
+
+163
+00:25:37.281 --> 00:25:42.871
+Nebius Academy | AI-PE: And this is how it looks like. So, they found out
+
+
+164
+00:25:43.751 --> 00:25:51.040
+Nebius Academy | AI-PE: That the loss as a function of the number of parameters, the dataset size, or the compute budget.
+
+
+165
+00:25:52.181 --> 00:26:04.100
+Nebius Academy | AI-PE: If the other two are held constant, so either we're changing just the number of parameters, or we're changing the dataset size, or we're changing the compute, and the rest are fixed.
+
+
+166
+00:26:04.311 --> 00:26:08.510
+Nebius Academy | AI-PE: Is in a relationship that is exponential.
+
+
+167
+00:26:08.671 --> 00:26:15.511
+Nebius Academy | AI-PE: with some constant. So, for example, the loss, given the number of parameters.
+
+
+168
+00:26:16.111 --> 00:26:23.041
+Nebius Academy | AI-PE: the more parameters I have, this is a fixed number, okay? So the more parameters I have.
+
+
+169
+00:26:23.201 --> 00:26:32.311
+Nebius Academy | AI-PE: the lower the loss will be with this relation. So this is a constant, and this alpha is another constant.
+
+
+170
+00:26:32.351 --> 00:26:50.931
+Nebius Academy | AI-PE: And the relationship will be of this form, and how did they find those constants? They did the regression, so they will soon see, they did experiments, and they regressed it to this formula, and they found those constants. But it's interesting to see that,
+
+
+171
+00:26:51.261 --> 00:26:59.650
+Nebius Academy | AI-PE: All of them behave in the same way, so that if the other two are held constant, we see an exponentially decaying,
+
+
+172
+00:26:59.841 --> 00:27:01.451
+Nebius Academy | AI-PE: loss.
+
+
+173
+00:27:01.621 --> 00:27:04.730
+Nebius Academy | AI-PE: So, this is how it looks like from the paper.
+
+
+174
+00:27:05.141 --> 00:27:08.731
+Nebius Academy | AI-PE: Compute dataset size and parameters.
+
+
+175
+00:27:08.841 --> 00:27:23.751
+Nebius Academy | AI-PE: The Y-axis that you see here is the loss, the X axis is each one of the compute datasette and params, but in a log space, so every jump is a magnitude larger.
+
+
+176
+00:27:24.211 --> 00:27:28.431
+Nebius Academy | AI-PE: And we see that, if…
+
+
+177
+00:27:28.581 --> 00:27:33.391
+Nebius Academy | AI-PE: They look at the behavior of models with less compute.
+
+
+178
+00:27:33.631 --> 00:27:40.640
+Nebius Academy | AI-PE: We see a linear relationship, but in this,
+
+
+179
+00:27:40.771 --> 00:28:00.061
+Nebius Academy | AI-PE: nonlinear space of X, right? Because this is not linear here. So we can regress the line here and find that the constants are this number and this number, and for the dataset size, we see also this relationship, and for parameters as well, and what do we learn from it?
+
+
+180
+00:28:00.061 --> 00:28:08.490
+Nebius Academy | AI-PE: We learned mainly that, first of all, the more compute I have, when they count compute, they count,
+
+
+181
+00:28:08.811 --> 00:28:14.330
+Nebius Academy | AI-PE: Floating point operations. So, how many multiplications can I have?
+
+
+182
+00:28:14.791 --> 00:28:16.721
+Nebius Academy | AI-PE: So the more compute I have.
+
+
+183
+00:28:16.751 --> 00:28:29.591
+Nebius Academy | AI-PE: the better my losses, the more data I have, the better my losses, and the more parameters I have, the better is my loss. When they look on parameters, they only count the non-embedding
+
+
+184
+00:28:29.591 --> 00:28:39.021
+Nebius Academy | AI-PE: parameters, so all of the attention, the metrics of attention, and the feed-forward, and all the components other than the initial
+
+
+185
+00:28:39.101 --> 00:28:40.551
+Nebius Academy | AI-PE: embedding?
+
+
+186
+00:28:40.951 --> 00:28:51.581
+Nebius Academy | AI-PE: And there is this diminishing return, because you see that we jumped a magnitude higher, for example, in dataset.
+
+
+187
+00:28:52.021 --> 00:29:06.141
+Nebius Academy | AI-PE: But, the loss, so, sorry, so maybe let's look at the parameters. So here, I jumped from two magnets higher in terms of parameters, and the loss changed from
+
+
+188
+00:29:06.361 --> 00:29:09.690
+Nebius Academy | AI-PE: fall to around, 2.5.
+
+
+189
+00:29:09.761 --> 00:29:15.801
+Nebius Academy | AI-PE: And then when I jumped another two magnitudes higher, from 2.5 to 2.3.
+
+
+190
+00:29:15.841 --> 00:29:35.281
+Nebius Academy | AI-PE: So, there is… you see it here, linear, because it's lying, because the x-axis is not linear, but it's actually a decaying exponent, and it's not that the more I add parameters or data set size, or compute, it's a linear growth in my performance.
+
+
+191
+00:29:35.301 --> 00:29:37.061
+Nebius Academy | AI-PE: And,
+
+
+192
+00:29:37.211 --> 00:29:50.371
+Nebius Academy | AI-PE: This is why maybe at some point the innovations won't come just from more data, more parameters, more compute, but it does do an amazing effect on performance still.
+
+
+193
+00:29:50.601 --> 00:29:56.901
+Nebius Academy | AI-PE: And we will learn next week about new architectures that try to
+
+
+194
+00:29:57.931 --> 00:30:13.021
+Nebius Academy | AI-PE: bypass only the scale thing. But again, mainly we see that the scale helps the loss function, and that it depends on the computed data size and the parameters.
+
+
+195
+00:30:14.521 --> 00:30:21.651
+Nebius Academy | AI-PE: Mmm… Okay, before we go to fine-tuning, I will stop for questions.
+
+
+196
+00:30:22.821 --> 00:30:23.581
+Nebius Academy | AI-PE: Yes.
+
+
+197
+00:30:45.551 --> 00:30:46.381
+Nebius Academy | AI-PE: Correct.
+
+
+198
+00:30:49.941 --> 00:30:51.211
+Nebius Academy | AI-PE: Okay, yeah.
+
+
+199
+00:30:54.711 --> 00:31:08.781
+Nebius Academy | AI-PE: So the… the question is, how come you show me that GPT-5.5 was trained on trillion parameters, and the graph stops here? So, first of all, this paper came way before GPT 5.5, it came, I think.
+
+
+200
+00:31:09.451 --> 00:31:13.931
+Nebius Academy | AI-PE: 3 years ago, or something like that, GPT-5.5 came a week ago.
+
+
+201
+00:31:14.231 --> 00:31:25.820
+Nebius Academy | AI-PE: But I… it's interesting to plug… they didn't do it, but if OpenAI were to plug in GPT-5.5, I will still see the same exponential decaying behavior.
+
+
+202
+00:31:25.881 --> 00:31:34.301
+Nebius Academy | AI-PE: But you can try to extrapolate to those trillions parameters and anticipate to see what the loss
+
+
+203
+00:31:34.851 --> 00:31:44.521
+Nebius Academy | AI-PE: came to. So, this, this tool, this, modeling, it's a modeling of the behavior of, GPTs.
+
+
+204
+00:31:44.751 --> 00:31:49.811
+Nebius Academy | AI-PE: So, it can help us extrapolate and try to guess
+
+
+205
+00:31:50.141 --> 00:31:59.031
+Nebius Academy | AI-PE: the loss based on the dataset side compute and parameters, and I think,
+
+
+206
+00:31:59.651 --> 00:32:11.261
+Nebius Academy | AI-PE: they will… I hope they will publish something at some point, like a new… a new, because the… the numbers here, they will change. It's only based on a few experiments.
+
+
+207
+00:32:11.421 --> 00:32:13.511
+Nebius Academy | AI-PE: So it will be interesting to see.
+
+
+208
+00:32:14.021 --> 00:32:14.761
+Nebius Academy | AI-PE: Yes.
+
+
+209
+00:32:19.471 --> 00:32:20.351
+Nebius Academy | AI-PE: How long?
+
+
+210
+00:32:22.111 --> 00:32:27.870
+Nebius Academy | AI-PE: No, good question. So, the question is, is compute just how long it's been training?
+
+
+211
+00:32:28.211 --> 00:32:31.951
+Nebius Academy | AI-PE: So not really, because if it was just a matter of time.
+
+
+212
+00:32:32.141 --> 00:32:48.411
+Nebius Academy | AI-PE: it wouldn't be a limiting resource. I could tell you, okay, so train it for a year, or for two years, or something like that, but compute is the actual number of float operations, so sometimes
+
+
+213
+00:32:48.821 --> 00:33:00.370
+Nebius Academy | AI-PE: Time is not… is not the only limiting factor, but think about your architecture, so the number of parameters and the dataset size, both of them.
+
+
+214
+00:33:00.561 --> 00:33:03.720
+Nebius Academy | AI-PE: They kind of require some minimal
+
+
+215
+00:33:03.891 --> 00:33:06.831
+Nebius Academy | AI-PE: Compute effort in order to even, like.
+
+
+216
+00:33:06.950 --> 00:33:10.610
+Nebius Academy | AI-PE: Do inference on, on, on, data.
+
+
+217
+00:33:10.740 --> 00:33:14.841
+Nebius Academy | AI-PE: So, not just a matter of time.
+
+
+218
+00:33:16.180 --> 00:33:16.961
+Nebius Academy | AI-PE: Yes.
+
+
+219
+00:33:36.450 --> 00:33:40.871
+Nebius Academy | AI-PE: Good question. So, actually, in the paper, They should…
+
+
+220
+00:33:41.081 --> 00:33:45.641
+Nebius Academy | AI-PE: Same question about compute,
+
+
+221
+00:33:46.151 --> 00:33:48.151
+Nebius Academy | AI-PE: I don't know how to repeat this question.
+
+
+222
+00:33:49.891 --> 00:33:59.260
+Nebius Academy | AI-PE: But anyways, I will tell you that, actually, in the paper, they did, show that,
+
+
+223
+00:34:00.091 --> 00:34:05.511
+Nebius Academy | AI-PE: The best training methodology is… to,
+
+
+224
+00:34:06.371 --> 00:34:13.190
+Nebius Academy | AI-PE: to stop early, remember the early stopping, so regardless of how much compute you have.
+
+
+225
+00:34:13.461 --> 00:34:20.871
+Nebius Academy | AI-PE: Still early stopping, if you remember the concept that we learned, is very important to achieve the best GPT's performance.
+
+
+226
+00:34:21.451 --> 00:34:26.391
+Nebius Academy | AI-PE: So, I don't know if that was the question, or…
+
+
+227
+00:34:28.311 --> 00:34:32.410
+Nebius Academy | AI-PE: Wait, he will give you the mic, because then I…
+
+
+228
+00:34:45.211 --> 00:34:54.111
+Nebius Academy | AI-PE: how does the model continue to improve with more computation, more iterations, when… I know, like, some models get to saturation, that's the…
+
+
+229
+00:34:55.011 --> 00:34:58.530
+Nebius Academy | AI-PE: So, like, how do we improve by doing more computation?
+
+
+230
+00:34:59.321 --> 00:35:14.690
+Nebius Academy | AI-PE: So it's the same answer, like, the computation in the end is a factor of the dataset size and the parameters, but still we will need an early stopping, and the paper shows it, that still, like, the early stopping and not necessarily using
+
+
+231
+00:35:14.911 --> 00:35:22.471
+Nebius Academy | AI-PE: All of the epochs on… all of the training data is something important.
+
+
+232
+00:35:23.911 --> 00:35:27.761
+Nebius Academy | AI-PE: And maybe I'll look if there are questions from Han.
+
+
+233
+00:35:33.361 --> 00:35:34.591
+Nebius Academy | AI-PE: M…
+
+
+234
+00:35:38.381 --> 00:35:45.030
+Nebius Academy | AI-PE: Why we don't… Consider, probably, the other layers, like attention and embeddings, in the law.
+
+
+235
+00:35:46.761 --> 00:35:53.240
+Nebius Academy | AI-PE: So, I think it goes back to the… to the loss of GPT.
+
+
+236
+00:35:53.391 --> 00:35:58.570
+Nebius Academy | AI-PE: And of course, we consider them. I just… it's important for me to emphasize.
+
+
+237
+00:35:59.941 --> 00:36:01.041
+Nebius Academy | AI-PE: Oops.
+
+
+238
+00:36:03.471 --> 00:36:20.201
+Nebius Academy | AI-PE: the predicted value at each one of those tokens is made up of… remember, it started with an embedding that was multiplied by an attention, that was aggregated with a value, that went through an MLP, that, you know, everything we discussed.
+
+
+239
+00:36:20.211 --> 00:36:35.611
+Nebius Academy | AI-PE: And this Y here will backpropagate to all of the layers of the transformer, so it's… the final loss is the cross entropy, but this cross entropy within it holds the full architecture that we discussed last time.
+
+
+240
+00:36:36.051 --> 00:36:40.051
+Nebius Academy | AI-PE: So, it's important for me to emphasize it, and I'll take another one.
+
+
+241
+00:36:42.691 --> 00:36:43.861
+Nebius Academy | AI-PE: Mmm…
+
+
+242
+00:36:44.621 --> 00:36:55.811
+Nebius Academy | AI-PE: Can you tell how types of data can affect the fine-tuning training, like if it's synthetic data, read data? Great question. So now, I'll go back to the data.
+
+
+243
+00:36:57.911 --> 00:37:02.441
+Nebius Academy | AI-PE: I'm still talking about training, because we didn't talk about fine-tuning here.
+
+
+244
+00:37:03.691 --> 00:37:11.341
+Nebius Academy | AI-PE: But now there is a trend that, for example, the Chinese LLMs, they use
+
+
+245
+00:37:11.551 --> 00:37:16.310
+Nebius Academy | AI-PE: synthetic data from OpenAI's or Anthropics LLMs.
+
+
+246
+00:37:16.941 --> 00:37:25.230
+Nebius Academy | AI-PE: they generate this data, and then they train their model based on the generated data of the LLM. So…
+
+
+247
+00:37:26.221 --> 00:37:30.981
+Nebius Academy | AI-PE: But there is this, approach that says that
+
+
+248
+00:37:31.231 --> 00:37:45.331
+Nebius Academy | AI-PE: In order to have the best model, you need original and non-synthetic data. This is one approach. It also talks about how creativity of people would still matter, because at some point.
+
+
+249
+00:37:45.891 --> 00:37:51.701
+Nebius Academy | AI-PE: The LLMs, if they won't see anything new, their creativity will be limited to what we are as humans.
+
+
+250
+00:37:51.821 --> 00:37:58.910
+Nebius Academy | AI-PE: today, and they need to see us evolving. So, this approach says you need
+
+
+251
+00:37:59.231 --> 00:38:03.521
+Nebius Academy | AI-PE: Real data, and you need real new data, and you need to train on this.
+
+
+252
+00:38:03.671 --> 00:38:06.791
+Nebius Academy | AI-PE: And the other approach of using the mock data
+
+
+253
+00:38:06.911 --> 00:38:23.301
+Nebius Academy | AI-PE: says, okay, but OpenAI and Topic, they worked so well to do, remember, to remove all the toxic content, and all the adult content, and to remove the biases, and they have already this ethical persona. They did all the work for me, let's generate synthetic data based on them, and train on this.
+
+
+254
+00:38:23.491 --> 00:38:35.091
+Nebius Academy | AI-PE: But then, you don't shape the ethics of the behavior, you don't shape its personality, so it depends on the use case, but
+
+
+255
+00:38:35.341 --> 00:38:37.601
+Nebius Academy | AI-PE: There is a lot of talk about
+
+
+256
+00:38:37.781 --> 00:38:40.870
+Nebius Academy | AI-PE: Actually using synthetic data for training.
+
+
+257
+00:38:41.061 --> 00:38:53.001
+Nebius Academy | AI-PE: interesting, like, if you would have asked me a few years ago, I would say never train on synthetic data, but things are changing, so I do see also training on synthetic data.
+
+
+258
+00:38:53.771 --> 00:39:02.721
+Nebius Academy | AI-PE: Okay, so we'll take a 10-minute break. Please be back here at 10.30, and we'll discuss fine-tuning.
+
+
+259
+00:39:07.601 --> 00:39:10.801
+Nebius Academy | AI-PE: Hi.
+
+
+260
+00:39:14.781 --> 00:39:18.121
+Nebius Academy | AI-PE: Ken, he was an organic founder.
+
+
+261
+00:51:06.741 --> 00:51:10.171
+Nebius Academy | AI-PE: Avsakaba?
+
+
+262
+00:51:10.371 --> 00:51:13.001
+Nebius Academy | AI-PE: Cavano.
+
+
+263
+00:51:15.601 --> 00:51:16.571
+Nebius Academy | AI-PE: Okay.
+
+
+264
+00:51:17.131 --> 00:51:20.530
+Nebius Academy | AI-PE: M… I feel like a lot of people are missing.
+
+
+265
+00:51:21.591 --> 00:51:25.141
+Nebius Academy | AI-PE: I'll wait 30 more seconds.
+
+
+266
+00:51:32.261 --> 00:51:32.991
+Nebius Academy | AI-PE: True.
+
+
+267
+00:51:45.871 --> 00:51:46.751
+Nebius Academy | AI-PE: Okay.
+
+
+268
+00:51:49.081 --> 00:51:56.861
+Nebius Academy | AI-PE: Mmm… So, welcome back. We will now discuss, fine-tuning, so…
+
+
+269
+00:51:59.031 --> 00:52:13.331
+Nebius Academy | AI-PE: Reminding you that we talked about the pre-training phase, and how we train, whether it's a decoder-only model or an encoder-only model. By the way, we didn't discuss encoder-decoder models, but
+
+
+270
+00:52:14.161 --> 00:52:23.250
+Nebius Academy | AI-PE: It's the same idea, but there we need a sequence-to-sequence dataset, so we need a translation data set, or voice-to-text data set.
+
+
+271
+00:52:23.631 --> 00:52:26.470
+Nebius Academy | AI-PE: And now we have this language model.
+
+
+272
+00:52:26.911 --> 00:52:32.081
+Nebius Academy | AI-PE: And we want to fine-tune it, so we are diving into the fine-tuning.
+
+
+273
+00:52:32.761 --> 00:52:40.250
+Nebius Academy | AI-PE: So why, even considering fine-tuning? Those pre-trained models, they are amazing.
+
+
+274
+00:52:40.661 --> 00:52:49.201
+Nebius Academy | AI-PE: And the more and more we continue with GPT… even with ChatGPT and GPT-4 and GPT-5,
+
+
+275
+00:52:49.571 --> 00:52:54.991
+Nebius Academy | AI-PE: The pre-training, models, they normally…
+
+
+276
+00:52:55.411 --> 00:53:01.961
+Nebius Academy | AI-PE: will be good enough, okay? But when do we… regga?
+
+
+277
+00:53:02.691 --> 00:53:04.511
+Nebius Academy | AI-PE: Please come in quickly.
+
+
+278
+00:53:12.781 --> 00:53:13.651
+Nebius Academy | AI-PE: Oh.
+
+
+279
+00:53:13.911 --> 00:53:14.781
+Nebius Academy | AI-PE: Whoever.
+
+
+280
+00:53:16.801 --> 00:53:26.710
+Nebius Academy | AI-PE: Okay, so… Shh, at least come in quietly.
+
+
+281
+00:53:26.831 --> 00:53:43.661
+Nebius Academy | AI-PE: So, those pre-trained models, they are amazing, but let's say, what if we want our LLM to work on a domain it didn't see in the pre-training? So, you saw which kind of text it is online, and it's really good at coding, so I wouldn't need
+
+
+282
+00:53:43.661 --> 00:53:47.720
+Nebius Academy | AI-PE: Accordingly, and it's really… it saw all the medical…
+
+
+283
+00:53:47.721 --> 00:53:59.650
+Nebius Academy | AI-PE: papers out there, so maybe I won't really need this on a medical data set. But what if now I have a very specific dataset? For example, I am a medical company.
+
+
+284
+00:53:59.911 --> 00:54:17.721
+Nebius Academy | AI-PE: that now translates text to medical code, okay? I want the insurance company to take the claims of the procedure of the patient and to translate into medical code. Maybe the LLNs haven't seen
+
+
+285
+00:54:17.921 --> 00:54:34.140
+Nebius Academy | AI-PE: medical codes that often. Or maybe I have a very specific domain of… how do you say it? Materials. So, material engineering. And the LMs are not specializing in material engineering.
+
+
+286
+00:54:34.141 --> 00:54:40.160
+Nebius Academy | AI-PE: So, sometimes, if I need a very specific domain, I would want to fine-tune.
+
+
+287
+00:54:40.611 --> 00:54:49.700
+Nebius Academy | AI-PE: Maybe I have a language that is not that frequent in the dataset, and I want to fine-tune it for that. Or maybe I have a specific task in hand.
+
+
+288
+00:54:49.821 --> 00:54:52.251
+Nebius Academy | AI-PE: that I want to fine-tune the model to.
+
+
+289
+00:54:52.521 --> 00:55:03.401
+Nebius Academy | AI-PE: But here, I want… Wait. So, the difference between pre-training and fine-tuning, in pre-training, we had huge amount of data, and we built a base model.
+
+
+290
+00:55:03.741 --> 00:55:16.530
+Nebius Academy | AI-PE: And in fine-tuning, we will have small amounts of data, and we'll kind of tweak the model a little bit to fit our new needs, and to achieve a fine-tuned model.
+
+
+291
+00:55:16.771 --> 00:55:20.441
+Nebius Academy | AI-PE: Okay.
+
+
+292
+00:55:20.731 --> 00:55:30.060
+Nebius Academy | AI-PE: So, the definition of fine-tuning is to take this pre-trained model that we just discussed, and adapt it
+
+
+293
+00:55:30.991 --> 00:55:45.581
+Nebius Academy | AI-PE: some or all the parameters, we'll soon see, to some new data, okay? So this is, like, the general definition. We're adapting some of the parameters to some new data, and we can divide it vaguely into two.
+
+
+294
+00:55:45.951 --> 00:55:53.461
+Nebius Academy | AI-PE: One is domain-specific fine-tuning, so if I have a special domain that is not represented well enough in my LLM,
+
+
+295
+00:55:53.871 --> 00:55:59.231
+Nebius Academy | AI-PE: I can fine-tune it into medical, finance, legal, whatever domain.
+
+
+296
+00:55:59.721 --> 00:56:08.520
+Nebius Academy | AI-PE: And the other one is task-specific part-tuning, so I want this LNM to be very good at summarization, classification, sentiment analysis.
+
+
+297
+00:56:08.591 --> 00:56:27.830
+Nebius Academy | AI-PE: This is often called supervised fine-tuning, although both of them are supervised. One is self-supervised, and the other one is supervised with a label at the end, but never mind, it's the same thing. So, a task at the end of the… of the end of the…
+
+
+298
+00:56:28.371 --> 00:56:29.091
+Nebius Academy | AI-PE: Cute.
+
+
+299
+00:56:30.261 --> 00:56:32.661
+Nebius Academy | AI-PE: Very, very important for me to sing.
+
+
+300
+00:56:33.751 --> 00:56:36.880
+Nebius Academy | AI-PE: RAG, so whatever you're learning with Yva.
+
+
+301
+00:56:37.401 --> 00:56:48.901
+Nebius Academy | AI-PE: can solve most of your problems, okay? So, the fact that the LLM is unaware of a certain domain, or a certain dataset, or a certain jargon.
+
+
+302
+00:56:49.201 --> 00:56:52.851
+Nebius Academy | AI-PE: Can mostly be sold with rag.
+
+
+303
+00:56:53.591 --> 00:56:57.690
+Nebius Academy | AI-PE: Because it will ground it to this external knowledge.
+
+
+304
+00:56:58.021 --> 00:57:07.401
+Nebius Academy | AI-PE: But… That being said, It's not necessarily slower, it's just a different… architecture.
+
+
+305
+00:57:07.411 --> 00:57:23.900
+Nebius Academy | AI-PE: it's true, it's true that if your inference time is very important, then you won't want to, every time, to find the matching query input to the query and put it as input to the prompt. It's slower, it's more expensive, because it's the context.
+
+
+306
+00:57:23.911 --> 00:57:32.420
+Nebius Academy | AI-PE: Every time with RAG gets much louder, you shove everything you extracted from the rug into the prompt and make it much more expensive.
+
+
+307
+00:57:32.831 --> 00:57:48.070
+Nebius Academy | AI-PE: And if you were to ask me, like, 4 years ago, even… no, even 2 years ago, the CTO of Hugging… COO, sorry, of Hugging Face said 99% of the problems I see can be solved with RUG. No need to fine-tune.
+
+
+308
+00:57:48.201 --> 00:57:53.001
+Nebius Academy | AI-PE: Why am I talking to you about fine-tuning, and why it became more and more relevant?
+
+
+309
+00:57:54.151 --> 00:58:04.760
+Nebius Academy | AI-PE: Because of the costs, so a lot of companies are now fine-tuning a model because of the cost issue, and the fact that RAG, really,
+
+
+310
+00:58:04.991 --> 00:58:24.790
+Nebius Academy | AI-PE: enlarges my context into very expensive numbers, the speed, as the audience mentioned here, and sometimes we want to really shape the core behavior of the language model, and not just rely on the rug to improve the consistency of the outputs.
+
+
+311
+00:58:24.971 --> 00:58:29.741
+Nebius Academy | AI-PE: So we do see this trend of companies
+
+
+312
+00:58:30.041 --> 00:58:34.810
+Nebius Academy | AI-PE: they call it training their LLMs, but what they're actually doing is fine-tuning LLM.
+
+
+313
+00:58:35.081 --> 00:58:46.891
+Nebius Academy | AI-PE: with their own special dataset. So, for example, if I'm booking.com, and I have these very specific conversations between the client and the…
+
+
+314
+00:58:47.181 --> 00:58:48.171
+Nebius Academy | AI-PE: Owner?
+
+
+315
+00:58:48.621 --> 00:58:57.921
+Nebius Academy | AI-PE: I want to translate those conversations into the LLM, and not just put them as a context to my rug every time, okay, this is how booking talks, do it that way.
+
+
+316
+00:58:58.061 --> 00:59:02.681
+Nebius Academy | AI-PE: So I can fine-tune a large language model to behave like
+
+
+317
+00:59:02.921 --> 00:59:10.821
+Nebius Academy | AI-PE: booking interaction. If I'm a financial company, and I have these, data sets of,
+
+
+318
+00:59:10.961 --> 00:59:26.230
+Nebius Academy | AI-PE: businesses, descriptions, and how they act in my system. I can also fine-tune on this. So you do see large companies starting to build their own language models for consistency, for reducing costs.
+
+
+319
+00:59:26.251 --> 00:59:32.020
+Nebius Academy | AI-PE: And for saying that they can do it. It's also a part of the game. Like, I have my own model.
+
+
+320
+00:59:32.141 --> 00:59:39.500
+Nebius Academy | AI-PE: So, fine-tuning does become more common than 2 years ago.
+
+
+321
+00:59:39.841 --> 00:59:44.251
+Nebius Academy | AI-PE: Although the pre-trained LLMs become much, much better.
+
+
+322
+00:59:44.431 --> 01:00:01.921
+Nebius Academy | AI-PE: And also, for example, for the medical domain, you will see once in a while, there are LLMs for the medical domain, so also those pre-trained models, they, they are… they sometimes are in domain-specific, and therefore you won't need to train them from scratch.
+
+
+323
+01:00:02.751 --> 01:00:09.441
+Nebius Academy | AI-PE: So, what is the difference between fine-tuning and in-context learning?
+
+
+324
+01:00:09.491 --> 01:00:18.980
+Nebius Academy | AI-PE: This is just to make sure that you're not confused. At the end, fine-tuning is a process that produces a new model.
+
+
+325
+01:00:18.981 --> 01:00:30.671
+Nebius Academy | AI-PE: It's true that we started with this very, very large model that was trained on huge amount of data, and we used this as our advantage, but at the end, the fine-tuning process produces a new model.
+
+
+326
+01:00:30.961 --> 01:00:37.090
+Nebius Academy | AI-PE: Emm… In the in-context learning, or we call it sometimes few-shot learning.
+
+
+327
+01:00:37.241 --> 01:00:41.301
+Nebius Academy | AI-PE: It's just a manipulation on an existing model, it doesn't produce
+
+
+328
+01:00:41.441 --> 01:00:51.311
+Nebius Academy | AI-PE: a new, model, so if you've learned about, in-context learning, maybe with Uval or someplace else, Emm…
+
+
+329
+01:00:51.441 --> 01:01:05.391
+Nebius Academy | AI-PE: at the end, this is not what I call fine-tuning, it's just prompt engineering, how to write the right prompt to produce the right answer. At the end, the RAG is a very sophisticated prompt engineering method, okay? So, you can think about it this way.
+
+
+330
+01:01:05.571 --> 01:01:14.070
+Nebius Academy | AI-PE: And fine-tuning is a process where a new model is generated with some labeled data set. So whether it's
+
+
+331
+01:01:14.341 --> 01:01:19.620
+Nebius Academy | AI-PE: Self-supervised setup, the data set is just free text.
+
+
+332
+01:01:19.791 --> 01:01:36.530
+Nebius Academy | AI-PE: Or it's actually a dataset with a label or with the full mechanism we want in place. I'll soon show you an example. And at the end, it does change the model parameters, okay? So we have a new weight, new model that is generated.
+
+
+333
+01:01:38.181 --> 01:01:46.721
+Nebius Academy | AI-PE: So now we'll dive into the different types of fine-tuning. We'll start with full parameter fine-tuning.
+
+
+334
+01:01:47.171 --> 01:01:52.160
+Nebius Academy | AI-PE: And then we'll talk about theft, and specifically LoRa and Q-LoRa.
+
+
+335
+01:01:53.021 --> 01:01:55.491
+Nebius Academy | AI-PE: Theft is parameter efficient fine-tuned.
+
+
+336
+01:01:56.491 --> 01:02:11.230
+Nebius Academy | AI-PE: So, a full parameter tuning, at the end, it requires either, we said, a new dataset, or if we want to do what we call supervised fine-tuning, like, for a specific task, we require the instruction data set.
+
+
+337
+01:02:11.581 --> 01:02:20.611
+Nebius Academy | AI-PE: And usually it will comprise of pairs of instructions, answers, sometimes context for fine-tuning. So this is an example.
+
+
+338
+01:02:20.771 --> 01:02:26.950
+Nebius Academy | AI-PE: suggest a good restaurant, the context will be Los Angeles, and the output we want it to be.
+
+
+339
+01:02:27.071 --> 01:02:31.600
+Nebius Academy | AI-PE: In Los Angeles, California, I suggest this restaurant.
+
+
+340
+01:02:32.121 --> 01:02:33.501
+Nebius Academy | AI-PE: costs
+
+
+341
+01:02:34.681 --> 01:02:48.091
+Nebius Academy | AI-PE: And rewrite the sentence with more descriptive words, the context, the game is fun, the game is exhilarating and enjoyable. Calculate the area of a triangle, base 5, height 6. The area of the triangle is 15 centimeters squared.
+
+
+342
+01:02:48.451 --> 01:02:59.740
+Nebius Academy | AI-PE: So, with the full parameter tuning, what's most important? That we need the input, and we need the final output. And sometimes we also want to manipulate the context, so the…
+
+
+343
+01:02:59.841 --> 01:03:05.030
+Nebius Academy | AI-PE: when you learned with Uval about agents, and how they have the context
+
+
+344
+01:03:05.351 --> 01:03:15.380
+Nebius Academy | AI-PE: From the conversation, so we can also, given the specific context, and then the input of the user, the new input of the user, what do we want the output to be?
+
+
+345
+01:03:15.831 --> 01:03:23.741
+Nebius Academy | AI-PE: So, this can help if we want answers in a specific format.
+
+
+346
+01:03:23.951 --> 01:03:29.531
+Nebius Academy | AI-PE: For example, maybe you've heard about the concept of reasoning language models.
+
+
+347
+01:03:29.661 --> 01:03:46.880
+Nebius Academy | AI-PE: So those are mainly manipulated at the third step we won't talk about today, but also you can do a fine-tuning instruction base that teaches the model to answer in a very explicit manner, where it describes all the steps it needs to take
+
+
+348
+01:03:46.881 --> 01:03:54.791
+Nebius Academy | AI-PE: before replying to the user. So this is another data set for a reasoning language model. Maybe you would want
+
+
+349
+01:03:54.811 --> 01:04:00.511
+Nebius Academy | AI-PE: Not just the final answer, but the full process that got you to this answer.
+
+
+350
+01:04:00.721 --> 01:04:09.951
+Nebius Academy | AI-PE: If you haven't heard about reasoning language models, forget the last sentence I said, and you will learn about it a lot in my… in the fifth module.
+
+
+351
+01:04:11.371 --> 01:04:12.631
+Nebius Academy | AI-PE: M…
+
+
+352
+01:04:13.841 --> 01:04:29.341
+Nebius Academy | AI-PE: So, task-specific fine-tuning, it involves training a model on a smaller, very specific task. So, think about now you're training a model, for example, just to summarize very well text.
+
+
+353
+01:04:29.701 --> 01:04:40.270
+Nebius Academy | AI-PE: Okay? And it does allow to learn the nuances and the special vocabulary for this task, and to focus on this specific task.
+
+
+354
+01:04:40.601 --> 01:04:46.930
+Nebius Academy | AI-PE: But we have to be very careful when we do it, because it can cause what we call catastrophic forgetting.
+
+
+355
+01:04:47.771 --> 01:05:01.521
+Nebius Academy | AI-PE: If we take the model to now train on a very specific task, it might forget all the general knowledge it obtained from the… predicting the next token, for instance.
+
+
+356
+01:05:02.071 --> 01:05:09.480
+Nebius Academy | AI-PE: M… So usually, what we do in this case, we do multitask fine-tuning, so we don't just focus
+
+
+357
+01:05:09.581 --> 01:05:28.851
+Nebius Academy | AI-PE: on one task, because then it will become very specific and will have this catastrophic forgetting, but rather multiple tasks. So not just summarization, but also translation, and part of speech tagging, and there, and everything.
+
+
+358
+01:05:29.261 --> 01:05:30.431
+Nebius Academy | AI-PE: M…
+
+
+359
+01:05:32.501 --> 01:05:47.191
+Nebius Academy | AI-PE: And, how does the full parameter tuning work? At the end, we will update all the parameters while we fine-tune. So think about, we downloaded this model from Hugging Face, it has the original weights
+
+
+360
+01:05:47.651 --> 01:05:53.941
+Nebius Academy | AI-PE: and everything for the transformer architecture. And now I'm adding a task upon this.
+
+
+361
+01:05:54.141 --> 01:05:58.080
+Nebius Academy | AI-PE: And I'm continuing to… with a new loss function.
+
+
+362
+01:05:58.261 --> 01:06:03.761
+Nebius Academy | AI-PE: And I'm continuing to train the model with this new task and this loss function.
+
+
+363
+01:06:03.871 --> 01:06:07.590
+Nebius Academy | AI-PE: And everything back-propagates to all my parameters.
+
+
+364
+01:06:07.731 --> 01:06:17.380
+Nebius Academy | AI-PE: And it's a very big problem with those huge LLMs, because it's an enormous amount of parameters to train.
+
+
+365
+01:06:17.461 --> 01:06:32.571
+Nebius Academy | AI-PE: Each batch, the gradient descent will propagate through those huge parameters, and it's very expensive, so we go back to the problem we had before of training in LLM from scratch, what we called pre-training.
+
+
+366
+01:06:33.081 --> 01:06:44.701
+Nebius Academy | AI-PE: And we're… Stuck again with this prior of processing the power and memory and time, and therefore, it's…
+
+
+367
+01:06:45.071 --> 01:06:49.891
+Nebius Academy | AI-PE: it's, again, becoming very, very expensive for us to do. I'll take questions later.
+
+
+368
+01:06:50.581 --> 01:06:52.571
+Nebius Academy | AI-PE: So, what can we do?
+
+
+369
+01:06:53.621 --> 01:07:00.721
+Nebius Academy | AI-PE: We use parameter-efficient fine-tuning. So most of the fine-tuning you will see, you won't update all the weights.
+
+
+370
+01:07:00.881 --> 01:07:04.090
+Nebius Academy | AI-PE: Of the network, given a task.
+
+
+371
+01:07:04.461 --> 01:07:11.250
+Nebius Academy | AI-PE: But you will… rather, will do parameter-efficient fine-tuning, and we'll soon see what it means.
+
+
+372
+01:07:12.231 --> 01:07:19.800
+Nebius Academy | AI-PE: Okay, before I go to parameter efficient fine-tuning, I'll pause for questions.
+
+
+373
+01:07:20.451 --> 01:07:21.381
+Nebius Academy | AI-PE: Yes.
+
+
+374
+01:07:26.610 --> 01:07:29.471
+Nebius Academy | AI-PE: Then… But we said before we jumped back in.
+
+
+375
+01:07:31.951 --> 01:07:46.331
+Nebius Academy | AI-PE: So the question was, does fine-tuning take less resources than the full fine-tuning? And when we're talking about the full parameter tuning, you can think about it as adding additional epochs
+
+
+376
+01:07:46.690 --> 01:07:54.011
+Nebius Academy | AI-PE: To your, to your, data, to your training, sorry.
+
+
+377
+01:07:54.131 --> 01:08:03.140
+Nebius Academy | AI-PE: And every epoch will be just as costly as those epochs that we've seen before with the pre-training.
+
+
+378
+01:08:03.581 --> 01:08:09.271
+Nebius Academy | AI-PE: So, with the full fine-tuning that, as I mentioned, we normally won't do.
+
+
+379
+01:08:09.541 --> 01:08:15.301
+Nebius Academy | AI-PE: You pay just as much as an additional epoch of data.
+
+
+380
+01:08:15.411 --> 01:08:19.131
+Nebius Academy | AI-PE: Because at the end, you just change the loss at the end.
+
+
+381
+01:08:19.251 --> 01:08:26.441
+Nebius Academy | AI-PE: We'll soon see how we can not touch all the parameters of the network, and then it will be much cheaper.
+
+
+382
+01:08:27.341 --> 01:08:28.701
+Nebius Academy | AI-PE: Yes.
+
+
+383
+01:08:56.831 --> 01:08:57.511
+Nebius Academy | AI-PE: There.
+
+
+384
+01:08:58.311 --> 01:09:10.870
+Nebius Academy | AI-PE: Great question. So the question was, fine-tuning goes through all the layers. Can you, instead of training now on all the layers, just focus on specific layers?
+
+
+385
+01:09:11.041 --> 01:09:16.030
+Nebius Academy | AI-PE: And this is exactly what parameter-efficient fine-tuning does. It finds
+
+
+386
+01:09:16.731 --> 01:09:22.690
+Nebius Academy | AI-PE: The only… the efficient parameters that we want to change, and we'll get into it in a bit.
+
+
+387
+01:09:23.181 --> 01:09:24.161
+Nebius Academy | AI-PE: Yes.
+
+
+388
+01:09:26.031 --> 01:09:28.730
+Nebius Academy | AI-PE: We'll get away to it. Yes?
+
+
+389
+01:09:36.471 --> 01:09:54.830
+Nebius Academy | AI-PE: Great question. So the question was, when we do the full parameter tuning, do we still use dropout and all the mechanisms we used before? So, here again, we don't touch the original network. So the original network stays as is, and all we do is now add a new
+
+
+390
+01:09:54.831 --> 01:10:07.850
+Nebius Academy | AI-PE: data set with the new loss function at the end, and backpropagate it to everything we just saw, so there will still be dropout in the training, and all the skip connections, and everything we saw in our previous lecture.
+
+
+391
+01:10:08.041 --> 01:10:08.771
+Nebius Academy | AI-PE: Yes.
+
+
+392
+01:10:09.141 --> 01:10:09.830
+Nebius Academy | AI-PE: Oh my god.
+
+
+393
+01:10:17.501 --> 01:10:18.181
+Nebius Academy | AI-PE: Fuck.
+
+
+394
+01:10:18.361 --> 01:10:21.990
+Nebius Academy | AI-PE: Also, great question. The question is, how much data do we need?
+
+
+395
+01:10:22.091 --> 01:10:38.521
+Nebius Academy | AI-PE: So, first of all, we said it's much smaller data than now training this huge pre-trained model that I needed to build from scratch, because already this model understands language, it understands all the NLP tasks we want, it's very, very good.
+
+
+396
+01:10:38.641 --> 01:10:41.031
+Nebius Academy | AI-PE: But on the other hand.
+
+
+397
+01:10:41.191 --> 01:10:55.571
+Nebius Academy | AI-PE: very few data want to move the needle. So, there is this trade-off, and of course, when we do full parameter fine-tuning, we need more data than just touching a bit of this network.
+
+
+398
+01:10:55.681 --> 01:10:58.481
+Nebius Academy | AI-PE: and the…
+
+
+399
+01:10:58.661 --> 01:11:10.491
+Nebius Academy | AI-PE: but it is a lot less than the original model. So it depends, of course, on the LLM itself, but you can say it's, like, a magnitude or two less
+
+
+400
+01:11:10.681 --> 01:11:28.040
+Nebius Academy | AI-PE: than the original model, and of course, when we will talk about the parameter efficient fine-tuning, we can go to even fewer parameters, but at the end, we don't… we want to use the capabilities that were learned already with the LLMs, and maybe enhance it a little bit
+
+
+401
+01:11:28.061 --> 01:11:31.561
+Nebius Academy | AI-PE: With our, data.
+
+
+402
+01:11:31.791 --> 01:11:33.900
+Nebius Academy | AI-PE: I'll look at the Zoom.
+
+
+403
+01:11:34.501 --> 01:11:37.241
+Nebius Academy | AI-PE: And just one question from Hong.
+
+
+404
+01:11:37.851 --> 01:11:40.680
+Nebius Academy | AI-PE: Or two, and then we'll concede.
+
+
+405
+01:11:41.961 --> 01:11:51.470
+Nebius Academy | AI-PE: What is the difference between supervised fine-tuning and unsupervised fine-tuning? Unsupervised fine-tuning, it's actually…
+
+
+406
+01:11:51.671 --> 01:11:57.200
+Nebius Academy | AI-PE: It's not really unsupervised. I don't know why they call it it. It's the staff supervised
+
+
+407
+01:11:57.621 --> 01:12:04.091
+Nebius Academy | AI-PE: Setup that we always talked about, that you have new text, so you have new text.
+
+
+408
+01:12:04.291 --> 01:12:08.021
+Nebius Academy | AI-PE: Let's say, from a very new domain.
+
+
+409
+01:12:08.401 --> 01:12:10.841
+Nebius Academy | AI-PE: like the example I gave of,
+
+
+410
+01:12:10.901 --> 01:12:29.770
+Nebius Academy | AI-PE: material science that doesn't have a lot of papers, let's say, and you just continue the training, the self-supervised setup we talked about before, you continue the training on this data set. The supervised fine-tuning is normally when you build the actual data set of inputs and outputs.
+
+
+411
+01:12:29.891 --> 01:12:42.730
+Nebius Academy | AI-PE: But both are supervised setups. This is why I don't like either names. I don't know when fine-tuning changed to supervised fine-tuning. I don't know. So, they're both supervised,
+
+
+412
+01:12:43.331 --> 01:12:46.090
+Nebius Academy | AI-PE: And the unsupervised is the self-supervised one.
+
+
+413
+01:12:47.411 --> 01:12:54.021
+Nebius Academy | AI-PE: Emm… I'll take another one, and then we will continue.
+
+
+414
+01:12:54.271 --> 01:13:00.230
+Nebius Academy | AI-PE: Wait, parameter efficient we didn't discuss… We didn't discuss yet.
+
+
+415
+01:13:01.181 --> 01:13:03.441
+Nebius Academy | AI-PE: Okay, same question. So, okay.
+
+
+416
+01:13:03.801 --> 01:13:08.731
+Nebius Academy | AI-PE: Let's now discuss the parameter efficient fine-tuning.
+
+
+417
+01:13:09.001 --> 01:13:18.401
+Nebius Academy | AI-PE: And what is the idea? Here, it says, why? And this was the question, thanks to someone who's not looking at me from the crowd.
+
+
+418
+01:13:18.781 --> 01:13:21.830
+Nebius Academy | AI-PE: And, what was the,
+
+
+419
+01:13:21.981 --> 01:13:40.361
+Nebius Academy | AI-PE: The idea? Why train the full network? You have lots of parameters, you have small data, why now back-propagate everything? It's very expensive. It didn't really help me. So we want to just update a subset of the parameters, and there are gazillions ways to do it.
+
+
+420
+01:13:41.021 --> 01:13:47.421
+Nebius Academy | AI-PE: For example, To freeze some parameters, so some won't change at all.
+
+
+421
+01:13:47.991 --> 01:13:52.960
+Nebius Academy | AI-PE: And others will change, and we'll see a lot of ways to do it.
+
+
+422
+01:13:53.281 --> 01:13:59.980
+Nebius Academy | AI-PE: And update just a few of them. So there were areas in the network that we'll say are not going to change.
+
+
+423
+01:14:00.161 --> 01:14:07.890
+Nebius Academy | AI-PE: And there will be areas in the network that will now adapt, so their parameters will change.
+
+
+424
+01:14:11.561 --> 01:14:18.550
+Nebius Academy | AI-PE: And this is how the landscape of parameter-efficient fine-tuning looks like.
+
+
+425
+01:14:18.591 --> 01:14:32.081
+Nebius Academy | AI-PE: And I already gave you a hint that we will focus today on LoRa, because this is the most common way, but I do want you to know that there are many different ways to fine-tune. So, the first one is what we call
+
+
+426
+01:14:32.191 --> 01:14:38.871
+Nebius Academy | AI-PE: additive… so additive is as it sounds. We will take our existing pre-trained model.
+
+
+427
+01:14:39.071 --> 01:14:51.091
+Nebius Academy | AI-PE: And we'll add new layers on top of it. This… this pre-trained model would be frozen, so the parameters there won't change at all. We'll add new layers on top of this model.
+
+
+428
+01:14:51.151 --> 01:14:59.240
+Nebius Academy | AI-PE: And now, once we do the fine-tuning task, we'll only back-propagate to these additive layers.
+
+
+429
+01:14:59.841 --> 01:15:10.261
+Nebius Academy | AI-PE: Emm… Another, A type of, of, parameter-efficient fine-tuning is called adapters.
+
+
+430
+01:15:10.451 --> 01:15:14.010
+Nebius Academy | AI-PE: Adapters, there are layers that we will put
+
+
+431
+01:15:14.271 --> 01:15:20.521
+Nebius Academy | AI-PE: In the middle of our architecture. So we'll… we'll put them inside.
+
+
+432
+01:15:20.881 --> 01:15:28.201
+Nebius Academy | AI-PE: Again, those will be the ones that will be trained, and the rest of the layers will be frozen.
+
+
+433
+01:15:28.761 --> 01:15:43.481
+Nebius Academy | AI-PE: And those adapters will map the original output of those layers to the existing layer. So, again, we'll put those layers inside.
+
+
+434
+01:15:43.601 --> 01:15:50.151
+Nebius Academy | AI-PE: Of the models, and we only adapt those adapters to suit the task at the end.
+
+
+435
+01:15:51.121 --> 01:15:57.260
+Nebius Academy | AI-PE: Mmm… Another method is what we call soft prompting. Notice it's not
+
+
+436
+01:15:57.381 --> 01:16:04.540
+Nebius Academy | AI-PE: the few-shot prompting, or the in-context learning we discussed before. Here, we are generating a new model.
+
+
+437
+01:16:04.821 --> 01:16:11.110
+Nebius Academy | AI-PE: What is soft popping? It's manipulating the input. It's mainly working on the embedding layer.
+
+
+438
+01:16:11.381 --> 01:16:16.570
+Nebius Academy | AI-PE: And to fine-tune this layer, instead of fine-tuning the steps at the end.
+
+
+439
+01:16:17.701 --> 01:16:20.621
+Nebius Academy | AI-PE: The s- the selective method.
+
+
+440
+01:16:20.861 --> 01:16:30.740
+Nebius Academy | AI-PE: Only… it takes the full network, but only chooses a subset of parameters within this network to fine-tune.
+
+
+441
+01:16:31.371 --> 01:16:38.961
+Nebius Academy | AI-PE: And the prioritization-based is what we will focus on in detail, so I will skip it for now.
+
+
+442
+01:16:39.611 --> 01:16:47.960
+Nebius Academy | AI-PE: So, there are many, many ways. Also, I forgot to mention it before, so I'm sorry about that, but in general, in fine-tuning.
+
+
+443
+01:16:48.901 --> 01:16:58.951
+Nebius Academy | AI-PE: our step function, remember that we… with the gradient descent, we had this eta, which is the step that we take.
+
+
+444
+01:16:59.371 --> 01:17:00.880
+Nebius Academy | AI-PE: For each guardian.
+
+
+445
+01:17:00.961 --> 01:17:20.250
+Nebius Academy | AI-PE: So, in general, in fine-tuning, these step functions are smaller. We want to take smaller steps because we already converged at the pre-trained step, and now we want to take just a smaller step around this minima. So, it's something I forgot to say, and while speaking, I remember. So, all of those methods
+
+
+446
+01:17:20.511 --> 01:17:35.901
+Nebius Academy | AI-PE: additive, whether there are layers added at the top, and the rest is frozen. Adapters, layers added in the middle, and the rest is frozen. Soft pump, working on the embedding layer, a subset of parameter that I choose
+
+
+447
+01:17:36.321 --> 01:17:52.050
+Nebius Academy | AI-PE: parts of the networks I want to train, they are, trained on much less parameters, and therefore the gradient descent is more efficient, I need less data, it costs much less, and it makes more sense because I preserve, also.
+
+
+448
+01:17:52.051 --> 01:18:02.430
+Nebius Academy | AI-PE: It helps me avoid this catastrophal forgetting, because by design, I'm not touching areas of the network, and they will preserve the knowledge that I need
+
+
+449
+01:18:02.681 --> 01:18:07.221
+Nebius Academy | AI-PE: For still generalization, and still language knowledge and everything.
+
+
+450
+01:18:08.101 --> 01:18:13.060
+Nebius Academy | AI-PE: So these are the theft types.
+
+
+451
+01:18:13.281 --> 01:18:22.741
+Nebius Academy | AI-PE: And now, I want to specifically dive into LoRa. Why LoRa? Because this is the most common way today to fine-tune transform.
+
+
+452
+01:18:22.931 --> 01:18:39.681
+Nebius Academy | AI-PE: And I'm emphasizing transformer, because maybe in your work you will want to fine-tune other architectures, and then the additive… adding layers will be the best solution, or something else. But once you want to find a transformer-based LM,
+
+
+453
+01:18:39.901 --> 01:18:46.681
+Nebius Academy | AI-PE: mainly LoRa will be a solution according to today. Maybe in the month it will be different, but today.
+
+
+454
+01:18:47.121 --> 01:18:56.981
+Nebius Academy | AI-PE: M… Okay, so what is the intuition around LoRa? It's a very cool thing for math.
+
+
+455
+01:18:57.431 --> 01:19:06.431
+Nebius Academy | AI-PE: that any matrix, W, can be always decomposed into two matrices, B and A.
+
+
+456
+01:19:07.261 --> 01:19:19.350
+Nebius Academy | AI-PE: where B has the same, so if W, sorry, was M over N, the size of W was M over N, so B will have a size of M over something.
+
+
+457
+01:19:19.531 --> 01:19:26.120
+Nebius Academy | AI-PE: And A will have the size of something over n, and the multiplication of them will bring back the original
+
+
+458
+01:19:26.291 --> 01:19:27.871
+Nebius Academy | AI-PE: Metris W.
+
+
+459
+01:19:28.271 --> 01:19:32.741
+Nebius Academy | AI-PE: this something we call rank. Okay, we call it rank.
+
+
+460
+01:19:32.971 --> 01:19:38.791
+Nebius Academy | AI-PE: And here is an example of rank 1. So let's say I have W5 over 5.
+
+
+461
+01:19:39.261 --> 01:19:47.341
+Nebius Academy | AI-PE: with numbers, okay, so this W is filled with numbers. I can decompose this W into two matrices, B and A.
+
+
+462
+01:19:47.491 --> 01:19:53.811
+Nebius Academy | AI-PE: Each one of them of size 5 over 1, for example, and 1 over 5.
+
+
+463
+01:19:55.401 --> 01:19:59.541
+Nebius Academy | AI-PE: So what did I do by… what did I gain by doing it?
+
+
+464
+01:20:00.531 --> 01:20:10.110
+Nebius Academy | AI-PE: Converted 5… Parameters will soon… 25, sorry, parameters in 2… A lot fewer.
+
+
+465
+01:20:11.651 --> 01:20:22.881
+Nebius Academy | AI-PE: And this is the quiz. Wait, no, so I can tell you. A lot fewer, it… I converted it to 5 elements here, plus 5 elements here, so instead of 25 elements.
+
+
+466
+01:20:23.421 --> 01:20:25.501
+Nebius Academy | AI-PE: I have only 10.
+
+
+467
+01:20:25.831 --> 01:20:36.950
+Nebius Academy | AI-PE: Okay, and we'll soon see how it connected to parameters, but now I'm asking you a quiz. So if I have a W that has 10 elements, it's 10 over 10.
+
+
+468
+01:20:37.301 --> 01:20:40.301
+Nebius Academy | AI-PE: Okay, so it has a hundredth elements.
+
+
+469
+01:20:41.121 --> 01:20:46.770
+Nebius Academy | AI-PE: How many elements will A and B have with rank 1?
+
+
+470
+01:20:46.991 --> 01:20:49.171
+Nebius Academy | AI-PE: Okay, so this is the quiz.
+
+
+471
+01:20:49.741 --> 01:20:52.491
+Nebius Academy | AI-PE: Let me move here…
+
+
+472
+01:21:03.211 --> 01:21:06.420
+Nebius Academy | AI-PE: Maybe there will be also the question from before.
+
+
+473
+01:21:07.961 --> 01:21:17.520
+Nebius Academy | AI-PE: So before the… this, this question will have the one from previously, which is more general knowledge.
+
+
+474
+01:21:18.461 --> 01:21:19.661
+Nebius Academy | AI-PE: Okay.
+
+
+475
+01:21:20.001 --> 01:21:20.821
+Nebius Academy | AI-PE: Start.
+
+
+476
+01:21:25.671 --> 01:21:36.650
+Nebius Academy | AI-PE: So this is an unrelated question. So the original GPT-GPT-1 parameter count, if you know, What was its size?
+
+
+477
+01:21:38.451 --> 01:21:39.781
+Nebius Academy | AI-PE: More or less.
+
+
+478
+01:22:00.781 --> 01:22:16.011
+Nebius Academy | AI-PE: Nice. So, yeah, so the original GPT, GPT-1, was 117, so around 100 million parameters, and now GPT 5.5 is already at a trillion.
+
+
+479
+01:22:16.361 --> 01:22:21.201
+Nebius Academy | AI-PE: Parameters, which is, amazing, growth.
+
+
+480
+01:22:22.041 --> 01:22:25.811
+Nebius Academy | AI-PE: Okay, so this was the first question that we've missed.
+
+
+481
+01:22:26.511 --> 01:22:30.881
+Nebius Academy | AI-PE: And now, let's go to the second one.
+
+
+482
+01:22:31.921 --> 01:22:32.971
+Nebius Academy | AI-PE: Ready?
+
+
+483
+01:22:34.111 --> 01:22:35.991
+Nebius Academy | AI-PE: The one I just asked you.
+
+
+484
+01:22:37.121 --> 01:22:40.320
+Nebius Academy | AI-PE: So we… if W has 100 elements.
+
+
+485
+01:22:40.981 --> 01:22:50.551
+Nebius Academy | AI-PE: How many will A and B have if A and B are of rank 1, and W is a 10 over 10 metrics?
+
+
+486
+01:22:51.111 --> 01:22:52.081
+Nebius Academy | AI-PE: So…
+
+
+487
+01:23:14.341 --> 01:23:20.670
+Nebius Academy | AI-PE: So the correct answer is 20. Why 20? So, if W has 100 elements.
+
+
+488
+01:23:21.021 --> 01:23:35.621
+Nebius Academy | AI-PE: I can break it down now into a metric, which is 10 over 1, and another, which would be A, and another matrix of 1 over 10, which is B, and 10 plus 10 will give me 20 elements.
+
+
+489
+01:23:35.851 --> 01:23:36.771
+Nebius Academy | AI-PE: Okay?
+
+
+490
+01:23:37.141 --> 01:23:45.141
+Nebius Academy | AI-PE: So… Let's go back…
+
+
+491
+01:23:47.151 --> 01:23:56.240
+Nebius Academy | AI-PE: Because most… we didn't get it completely right, so I want to just emphasize the reason that it was
+
+
+492
+01:23:56.501 --> 01:24:10.330
+Nebius Academy | AI-PE: 20, and not 10 is because we… we need to add those components. We cannot get rid of one matrix. We need them both. So here, we had 25 elements, and we're left with 10.
+
+
+493
+01:24:11.781 --> 01:24:19.191
+Nebius Academy | AI-PE: So what is, Laura's, I'll take questions later. What is Laura's general idea?
+
+
+494
+01:24:22.701 --> 01:24:39.910
+Nebius Academy | AI-PE: that those transformers, they have a lot of dense matrices multiplications, right? We had these W, Qs, K, and V's for the attention, we had those MLPs that are very heavy, and a lot of very, very dense matrices.
+
+
+495
+01:24:40.261 --> 01:24:46.931
+Nebius Academy | AI-PE: So the idea here is, instead of updating these layers during fine-tuning.
+
+
+496
+01:24:47.361 --> 01:24:57.100
+Nebius Academy | AI-PE: We will freeze those layers, And we'll update a low-rank approximation with fewer parameters.
+
+
+497
+01:24:57.781 --> 01:25:03.071
+Nebius Academy | AI-PE: So, we will freeze those matrices, but instead we'll update something on the side.
+
+
+498
+01:25:03.651 --> 01:25:09.141
+Nebius Academy | AI-PE: That is not another metric, but rather a low-rank decomposition.
+
+
+499
+01:25:09.651 --> 01:25:11.780
+Nebius Academy | AI-PE: And notice that it won't be
+
+
+500
+01:25:12.311 --> 01:25:21.691
+Nebius Academy | AI-PE: a direct lower decomposition, but rather an approximation, and this we'll see in the next hour.
+
+
+501
+01:25:22.181 --> 01:25:25.211
+Nebius Academy | AI-PE: So, now…
+
+
+502
+01:25:25.461 --> 01:25:39.121
+Nebius Academy | AI-PE: if… okay, W0s were… think about… let's think about one metric to make our lives easier for now. So think about, for example, WQ, the metrics we multiply each embedding to obtain a query.
+
+
+503
+01:25:39.721 --> 01:25:45.331
+Nebius Academy | AI-PE: So, W0 was the original weights of these metrics.
+
+
+504
+01:25:45.811 --> 01:25:52.391
+Nebius Academy | AI-PE: And now I'm creating an update matrix. This one will remain frozen and fixed.
+
+
+505
+01:25:52.791 --> 01:26:01.210
+Nebius Academy | AI-PE: And those delta W's will be updated with my new, labeled dataset on the side.
+
+
+506
+01:26:02.411 --> 01:26:07.890
+Nebius Academy | AI-PE: So these update metrics were… were saying we want… we don't want it as a metrics.
+
+
+507
+01:26:08.261 --> 01:26:15.390
+Nebius Academy | AI-PE: But we want it as a decomposed matrix, B and A, that their multiplication will bring back the original metrics.
+
+
+508
+01:26:16.001 --> 01:26:19.241
+Nebius Academy | AI-PE: And also, we have this scaling parameter.
+
+
+509
+01:26:19.351 --> 01:26:32.970
+Nebius Academy | AI-PE: which is divided by the rank of P&A. Why do we need this component? Mainly to account for the step size. So, the step size of the gradient descent.
+
+
+510
+01:26:33.091 --> 01:26:49.080
+Nebius Academy | AI-PE: We want it to be relevant to the metric size, so we multiply it by some scaling factor. It's less important, so from now on, we will put the scaling factor on the side. What's most important for me that you understand.
+
+
+511
+01:26:49.081 --> 01:27:00.871
+Nebius Academy | AI-PE: is that the update matrix will be decomposed of actually two matrices whose multiplication will bring me the size of the original metrics that I wanted to update.
+
+
+512
+01:27:01.731 --> 01:27:02.871
+Nebius Academy | AI-PE: Mmm…
+
+
+513
+01:27:03.861 --> 01:27:17.811
+Nebius Academy | AI-PE: So, what does Loa say? It's repeating the same thing in, like, a pseudocode manner. So, if we have this W shape, N over D, that we need to update during fine-tuning with gradient descent.
+
+
+514
+01:27:18.151 --> 01:27:31.251
+Nebius Academy | AI-PE: we will update… normally, we would have updated delta W of the same size, but in LoRa, we will freeze W, and instead update A and B. A will be of a size N over rank.
+
+
+515
+01:27:31.631 --> 01:27:49.270
+Nebius Academy | AI-PE: And B will be the size of rank over D, and usually the rank is very small, 1 or 2, Y1 or 2, because this was the whole purpose. If I put… I can always put a rank which is high, but then I can get even more elements than before.
+
+
+516
+01:27:49.371 --> 01:28:01.650
+Nebius Academy | AI-PE: think about it, if the rank is of size D itself, then I'll have N over D and D over D, whereas before, I only had N over D. So usually the rank is very small, 1 or 2.
+
+
+517
+01:28:01.911 --> 01:28:09.031
+Nebius Academy | AI-PE: And during this fine-tuning, I will update A and B instead of W. So how does it look like?
+
+
+518
+01:28:09.561 --> 01:28:11.061
+Nebius Academy | AI-PE: So,
+
+
+519
+01:28:11.741 --> 01:28:17.661
+Nebius Academy | AI-PE: In, in, first of all, let's look at the forward pass, and then we'll look at the back propagation.
+
+
+520
+01:28:17.851 --> 01:28:29.261
+Nebius Academy | AI-PE: If before, the forward pass, I had some, for example, our embedding X, and I multiplied by W to obtain, let's say, the value, this H,
+
+
+521
+01:28:29.511 --> 01:28:36.871
+Nebius Academy | AI-PE: Now, I… the fourth pass will be X multiplied by W, to generate H, plus…
+
+
+522
+01:28:37.231 --> 01:28:45.311
+Nebius Academy | AI-PE: X multiplied by A and B to give me H. And this is the delta here.
+
+
+523
+01:28:45.431 --> 01:28:52.401
+Nebius Academy | AI-PE: And this is how we will initialize those matrices. So A will be a normal distribution.
+
+
+524
+01:28:53.241 --> 01:28:57.370
+Nebius Academy | AI-PE: something random. Okay, so A will initialize randomly.
+
+
+525
+01:28:57.481 --> 01:29:02.321
+Nebius Academy | AI-PE: And B will initialize with 0. Why is B initialized to 0?
+
+
+526
+01:29:04.951 --> 01:29:13.300
+Nebius Academy | AI-PE: Because we want to preserve the original output. At the beginning of the process, before our gradient descent.
+
+
+527
+01:29:13.501 --> 01:29:28.411
+Nebius Academy | AI-PE: There was no new data seen, and therefore, we want the original output to stay as is. So we initialize A randomly and B as 0, so it doesn't impact at the beginning the outputs.
+
+
+528
+01:29:28.521 --> 01:29:31.630
+Nebius Academy | AI-PE: And now that I will have a new data set.
+
+
+529
+01:29:32.121 --> 01:29:43.171
+Nebius Academy | AI-PE: with a new labeled data set, and I will backpropagate the gradient, and the only two matrices that will change, I'll use the cursor, will be B and AA.
+
+
+530
+01:29:44.701 --> 01:29:57.410
+Nebius Academy | AI-PE: So, how does the backward pass look like? This is frozen, so the original weights of W are frozen, and the backward pass updates B and A alone.
+
+
+531
+01:29:57.571 --> 01:30:01.591
+Nebius Academy | AI-PE: And then it won't be zero, a normal distribution anymore.
+
+
+532
+01:30:03.211 --> 01:30:10.180
+Nebius Academy | AI-PE: What is the impact of, Laura?
+
+
+533
+01:30:11.031 --> 01:30:28.231
+Nebius Academy | AI-PE: So, think about each model here has, for example, 7 billion parameters up until 108 billion parameters, or you can think already of GPT-5.5 over a trillion parameters.
+
+
+534
+01:30:28.361 --> 01:30:37.301
+Nebius Academy | AI-PE: And if I use rank 1, so I'm… I now do a fine-tuning with A and B over Rank 1,
+
+
+535
+01:30:37.991 --> 01:30:45.500
+Nebius Academy | AI-PE: The number of parameters I need to update now is reduced to 167K.
+
+
+536
+01:30:46.301 --> 01:30:54.931
+Nebius Academy | AI-PE: Given that, I only have one layer of transformer. If I have multiple layers of transformer, it will look differently, but just so you understand the scale.
+
+
+537
+01:30:57.081 --> 01:31:11.600
+Nebius Academy | AI-PE: And of course, the higher the rank, if it's the full rank, I'm going back to the original number of parameters I need to update. Here, I'm going back to full fine-tuning we discussed previously.
+
+
+538
+01:31:12.051 --> 01:31:22.601
+Nebius Academy | AI-PE: And the lower the rank, the better is my impact, and this is why we will work with lower ranks, normally one.
+
+
+539
+01:31:23.061 --> 01:31:27.361
+Nebius Academy | AI-PE: When I'm looking at the 180 billion parameter model.
+
+
+540
+01:31:27.461 --> 01:31:37.550
+Nebius Academy | AI-PE: using… LoRa, I only need to update less than 1 million. So, the impact is really extraordinary.
+
+
+541
+01:31:38.571 --> 01:31:49.781
+Nebius Academy | AI-PE: Mmm… So, what are Laura's advantages? Let me see how many slides I have. Okay.
+
+
+542
+01:31:50.251 --> 01:31:53.760
+Nebius Academy | AI-PE: So I will finish, Laura, and then we'll pass for questions.
+
+
+543
+01:31:53.891 --> 01:32:02.060
+Nebius Academy | AI-PE: What are lower main advantages? First of all, it's much faster, we understood, because we only update part of the parameters.
+
+
+544
+01:32:02.341 --> 01:32:09.911
+Nebius Academy | AI-PE: It can be achieved with much less computational resources. We need less GPUs. It's cost efficient.
+
+
+545
+01:32:10.091 --> 01:32:14.501
+Nebius Academy | AI-PE: And these all were parameters of, efficiency.
+
+
+546
+01:32:14.691 --> 01:32:20.101
+Nebius Academy | AI-PE: But also, remember that it's less prone to catastrophal forgetting.
+
+
+547
+01:32:20.521 --> 01:32:29.090
+Nebius Academy | AI-PE: And because the original model's weights are kept the same, we just added on the site some update to the metrics according to the new data.
+
+
+548
+01:32:29.221 --> 01:32:38.220
+Nebius Academy | AI-PE: And this is why it can also be better performance than the full fine-tuning. And here there is a paper to show this.
+
+
+549
+01:32:38.771 --> 01:32:47.760
+Nebius Academy | AI-PE: One second, I'll show the paper, and I'll go back, that you can see here that this paper took GPT-2,
+
+
+550
+01:32:47.871 --> 01:32:56.141
+Nebius Academy | AI-PE: with different adaptation methods on a specific energy challenge. It's one of the NLP challenges.
+
+
+551
+01:32:56.541 --> 01:33:04.610
+Nebius Academy | AI-PE: And you can see that the GPT LoRa performance was much better than the full
+
+
+552
+01:33:04.741 --> 01:33:12.390
+Nebius Academy | AI-PE: FT is the full fine-tuning, or then the adapter architecture we discussed briefly.
+
+
+553
+01:33:12.531 --> 01:33:19.040
+Nebius Academy | AI-PE: So, not only is it faster, more efficient, more cost-efficient, and everything.
+
+
+554
+01:33:19.141 --> 01:33:22.640
+Nebius Academy | AI-PE: It's also giving better performance because
+
+
+555
+01:33:22.941 --> 01:33:26.940
+Nebius Academy | AI-PE: You don't have this catastrophal forgetting issue.
+
+
+556
+01:33:27.781 --> 01:33:35.521
+Nebius Academy | AI-PE: And, just to wrap up, also how much we reduced in size, so if…
+
+
+557
+01:33:35.591 --> 01:33:55.421
+Nebius Academy | AI-PE: Here, the base model used 10 billion parameters and 160 gigabytes. With LoRa, those 10 billion parameters, we can fine-tune them only using 40 gigabytes, because we don't actually fine-tune all of them.
+
+
+558
+01:33:56.481 --> 01:34:01.901
+Nebius Academy | AI-PE: So I will pause for questions, and… Yes
+
+
+559
+01:34:05.821 --> 01:34:06.721
+Nebius Academy | AI-PE: Okay, fair.
+
+
+560
+01:34:07.141 --> 01:34:07.901
+Nebius Academy | AI-PE: Okay.
+
+
+561
+01:34:18.571 --> 01:34:21.521
+Nebius Academy | AI-PE: I would start with Rank 1.
+
+
+562
+01:34:21.641 --> 01:34:29.141
+Nebius Academy | AI-PE: So the question is, how do we choose the rank? And I think rank 1 is mainly the go-to solution, because
+
+
+563
+01:34:29.291 --> 01:34:32.471
+Nebius Academy | AI-PE: You have much less parameters.
+
+
+564
+01:34:32.661 --> 01:34:36.380
+Nebius Academy | AI-PE: And you can decompose every…
+
+
+565
+01:34:36.561 --> 01:34:40.400
+Nebius Academy | AI-PE: metrics to those Rank 1 representations.
+
+
+566
+01:34:40.641 --> 01:34:45.141
+Nebius Academy | AI-PE: So, yep.
+
+
+567
+01:34:52.131 --> 01:34:52.871
+Nebius Academy | AI-PE: Bye.
+
+
+568
+01:34:54.591 --> 01:35:00.731
+Nebius Academy | AI-PE: Laura, we have to, like, Yeah.
+
+
+569
+01:35:01.551 --> 01:35:09.370
+Nebius Academy | AI-PE: I, I didn't, I won't go into the precision tower, we'll talk about next hour, okay? Yes?
+
+
+570
+01:35:19.651 --> 01:35:21.220
+Nebius Academy | AI-PE: Third one, second, third.
+
+
+571
+01:35:21.421 --> 01:35:22.161
+Nebius Academy | AI-PE: Hold on.
+
+
+572
+01:35:23.891 --> 01:35:24.841
+Nebius Academy | AI-PE: One method we use.
+
+
+573
+01:35:25.281 --> 01:35:26.071
+Nebius Academy | AI-PE: What's possible.
+
+
+574
+01:35:26.711 --> 01:35:27.650
+Nebius Academy | AI-PE: In composed.
+
+
+575
+01:35:29.901 --> 01:35:32.881
+Nebius Academy | AI-PE: So the question was, how do I choose
+
+
+576
+01:35:33.501 --> 01:35:41.651
+Nebius Academy | AI-PE: what to decompose, and I want to emphasize, I don't choose, I train it, okay? So those are parameters.
+
+
+577
+01:35:41.811 --> 01:35:50.321
+Nebius Academy | AI-PE: So I'm starting with some random values for A, and a 0 to B, because I didn't want to mess up what I already have.
+
+
+578
+01:35:50.871 --> 01:35:56.510
+Nebius Academy | AI-PE: But those, matrices, they are learned matrices.
+
+
+579
+01:35:56.931 --> 01:36:01.711
+Nebius Academy | AI-PE: The way that I back-propagate it is by multiplying those
+
+
+580
+01:36:01.711 --> 01:36:18.310
+Nebius Academy | AI-PE: to… sorry, forward prop… do the forward pass, I multiply those two matrices, and I update the original W to produce the final output. And when I do the back propagation, I take the derivative of the multiplication of those two and update accordingly.
+
+
+581
+01:36:18.321 --> 01:36:20.420
+Nebius Academy | AI-PE: But I never chose…
+
+
+582
+01:36:20.581 --> 01:36:35.290
+Nebius Academy | AI-PE: these two, those are learned parameters, and it's an important thing to emphasize, but I did model it in that way, that it's as if I were to update the original batteries, because I just add
+
+
+583
+01:36:35.291 --> 01:36:44.961
+Nebius Academy | AI-PE: I add each element, one on top of the other, as if I updated the original matrix, but instead, it's actually two separate matrices.
+
+
+584
+01:36:45.471 --> 01:36:46.281
+Nebius Academy | AI-PE: Bay Area.
+
+
+585
+01:36:54.131 --> 01:36:57.881
+Nebius Academy | AI-PE: Can you come again, please? Which new layer, where?
+
+
+586
+01:36:59.531 --> 01:37:00.941
+Nebius Academy | AI-PE: Yes?
+
+
+587
+01:37:06.561 --> 01:37:23.710
+Nebius Academy | AI-PE: So, the question was, was the new W's are on top of this one, and yeah, exactly the formula here. So, if before, the output of the hidden… let's say it's the query, okay? So, in order to get the query, we multiply WQ with the embedding.
+
+
+588
+01:37:23.711 --> 01:37:26.821
+Nebius Academy | AI-PE: So if the original output was X times W,
+
+
+589
+01:37:26.971 --> 01:37:46.201
+Nebius Academy | AI-PE: now our original output will be X times W plus X times A and B, and it will… each element, when you add two matrices, so each element is added to its own one on top of the other, and we can think about it that both of them now represent the new W.
+
+
+590
+01:37:46.281 --> 01:37:50.880
+Nebius Academy | AI-PE: But in the training process, I didn't train them all at once, because I…
+
+
+591
+01:37:51.151 --> 01:38:04.161
+Nebius Academy | AI-PE: I already had those W's, they are frozen, they are now not a parameter anymore after the pre-training. They're just a fixed number, and I backpropagate only to A and B.
+
+
+592
+01:38:04.951 --> 01:38:05.731
+Nebius Academy | AI-PE: Yes.
+
+
+593
+01:38:10.701 --> 01:38:19.860
+Nebius Academy | AI-PE: How do I realize that R is too small? So, yeah, so R here is a hyperparam we will need to test. We will start with rank 1.
+
+
+594
+01:38:20.341 --> 01:38:37.171
+Nebius Academy | AI-PE: And normally it will suffice, but it could be that we don't have enough parameters to… to do the training, and therefore we'll try with Rank 2. But the whole idea of this method is to work with low ranks, because otherwise.
+
+
+595
+01:38:37.401 --> 01:38:44.761
+Nebius Academy | AI-PE: It's not doing anything. So, I would say it's a hyperparameter, and we normally would start with rank 1.
+
+
+596
+01:38:45.821 --> 01:38:48.721
+Nebius Academy | AI-PE: Yes, and another deck from…
+
+
+597
+01:38:49.711 --> 01:38:50.561
+Nebius Academy | AI-PE: Okay.
+
+
+598
+01:38:53.881 --> 01:38:58.460
+Nebius Academy | AI-PE: Great question. So, A and B exist per matrix.
+
+
+599
+01:38:58.881 --> 01:39:05.530
+Nebius Academy | AI-PE: So, every metric that we want to update their parameters, WQ, WK, W,
+
+
+600
+01:39:05.531 --> 01:39:19.151
+Nebius Academy | AI-PE: V, the matrices for the feet forward. At the end, remember, it's X times W over some nonlinearity. All of them will be, having this addition
+
+
+601
+01:39:19.181 --> 01:39:20.411
+Nebius Academy | AI-PE: or floor.
+
+
+602
+01:39:32.731 --> 01:39:38.380
+Nebius Academy | AI-PE: So how does the fit-forward look like? You can see it on the formula on the left.
+
+
+603
+01:39:38.891 --> 01:39:41.781
+Nebius Academy | AI-PE: It's X times A times B.
+
+
+604
+01:39:42.311 --> 01:39:45.391
+Nebius Academy | AI-PE: So it's just a multiplication of those three.
+
+
+605
+01:39:45.901 --> 01:39:51.021
+Nebius Academy | AI-PE: X times A times B, and then we add one on top of the other to generate the next layer.
+
+
+606
+01:39:52.221 --> 01:39:55.430
+Nebius Academy | AI-PE: I'll just look at the Zoom for questions.
+
+
+607
+01:40:01.031 --> 01:40:11.780
+Nebius Academy | AI-PE: do we always do this on all mattresses in the layer? Sometimes we do just Q and V, so it goes back to the question that was just asked now, and normally we do it for all the mattresses.
+
+
+608
+01:40:11.831 --> 01:40:28.831
+Nebius Academy | AI-PE: In the architecture, but just like the adapters or the additional layer architecture, we can also choose only specific area we want to fine-tune, but normally we would do it for the full network.
+
+
+609
+01:40:29.941 --> 01:40:35.861
+Nebius Academy | AI-PE: Emm… Same question…
+
+
+610
+01:40:37.301 --> 01:40:44.651
+Nebius Academy | AI-PE: Can the composition of the weights matrix be used to train more parameters of the base model?
+
+
+611
+01:40:46.541 --> 01:40:58.450
+Nebius Academy | AI-PE: I think it's all going through the same question. We do this for every area that we now want to fine-tune, and normally we would want to fine-tune most of the layers of the network.
+
+
+612
+01:40:58.631 --> 01:41:03.681
+Nebius Academy | AI-PE: Something important to say I didn't mention before, the…
+
+
+613
+01:41:03.851 --> 01:41:11.941
+Nebius Academy | AI-PE: the more we fine-tune at the upper layers, the less we touch the essence of the motor. So the deeper we go.
+
+
+614
+01:41:12.081 --> 01:41:18.061
+Nebius Academy | AI-PE: Down the network, the more the essence is changing, so it depends on the problem.
+
+
+615
+01:41:18.421 --> 01:41:22.611
+Nebius Academy | AI-PE: Okay, we'll now take a 10 minutes break.
+
+
+616
+01:41:22.871 --> 01:41:27.650
+Nebius Academy | AI-PE: I'm here for questions during the break, and come back here at 11.30.
+
+
+617
+01:56:52.471 --> 01:57:01.450
+Nebius Academy | AI-PE: So… before the break, we talked about, Laura, and,
+
+
+618
+01:57:01.771 --> 01:57:09.001
+Nebius Academy | AI-PE: the… again, I'm summarizing the general method, which is, instead of updating full mattresses.
+
+
+619
+01:57:09.021 --> 01:57:27.250
+Nebius Academy | AI-PE: During the fine-tuning, we will update only the delta, and the delta won't be a metric, but rather a low-rank decomposition of the metrics. And hopefully, if the pre-trained model is good enough for our purposes, we can satisfy it with low ranks.
+
+
+620
+01:57:27.391 --> 01:57:33.031
+Nebius Academy | AI-PE: And, then we will need much less resources in order to do the fun tuning.
+
+
+621
+01:57:33.381 --> 01:57:42.440
+Nebius Academy | AI-PE: And then, now we'll go to a part which is very, very technical and engineering, oriented.
+
+
+622
+01:57:42.771 --> 01:57:45.391
+Nebius Academy | AI-PE: of what we call Q-Laura.
+
+
+623
+01:57:45.881 --> 01:57:50.420
+Nebius Academy | AI-PE: Tokyo Laura takes the idea of law and tries to even reduce
+
+
+624
+01:57:50.661 --> 01:57:56.320
+Nebius Academy | AI-PE: The number of elements, or to be more specific, to reduce the number of bits.
+
+
+625
+01:57:56.461 --> 01:58:02.411
+Nebius Academy | AI-PE: We will need to do for specific calculation. And how will we do it?
+
+
+626
+01:58:03.911 --> 01:58:09.871
+Nebius Academy | AI-PE: We will do it by quantizing the precision of the network parameter.
+
+
+627
+01:58:10.861 --> 01:58:15.070
+Nebius Academy | AI-PE: So, let's now discuss, QLaura.
+
+
+628
+01:58:15.271 --> 01:58:25.410
+Nebius Academy | AI-PE: which will quantize what we saw before. And again, think about it at the end, we want as… less, bits
+
+
+629
+01:58:25.491 --> 01:58:40.290
+Nebius Academy | AI-PE: as possible, so that our… we will need less computational resource, less time, less money. So this is what's driving the idea of Q-Laura, and it's also very common today, and this is why I'm teaching you this.
+
+
+630
+01:58:41.751 --> 01:58:50.300
+Nebius Academy | AI-PE: Mmm… So, before talking about Q-Laura, we need to go back to, typing in computer science.
+
+
+631
+01:58:52.021 --> 01:59:08.811
+Nebius Academy | AI-PE: And the important types that I want to remind you. So, first of all, an integer, we can represent it in different forms, in… with 1 byte up until 4 bytes. A byte, reminding you, is 8 bits.
+
+
+632
+01:59:09.761 --> 01:59:10.861
+Nebius Academy | AI-PE: Emm…
+
+
+633
+01:59:11.221 --> 01:59:25.320
+Nebius Academy | AI-PE: And if I'm representing an integer with one byte, then the value can only range from minus 128 up until 127. If I only have 8 bits, this is
+
+
+634
+01:59:25.451 --> 01:59:27.311
+Nebius Academy | AI-PE: the best I can get to.
+
+
+635
+01:59:27.661 --> 01:59:32.120
+Nebius Academy | AI-PE: Another important type I want to remind you is float.
+
+
+636
+01:59:32.381 --> 01:59:38.181
+Nebius Academy | AI-PE: So, float, we normally represent with 4 bytes.
+
+
+637
+01:59:38.361 --> 01:59:42.981
+Nebius Academy | AI-PE: Some bytes are used for the exponential power here.
+
+
+638
+01:59:43.421 --> 01:59:53.480
+Nebius Academy | AI-PE: its sign and size, and some bytes are used for the value. I forgot how you call it, but magna, or something like that.
+
+
+639
+01:59:53.621 --> 01:59:54.291
+Nebius Academy | AI-PE: Huh?
+
+
+640
+01:59:54.521 --> 01:59:59.121
+Nebius Academy | AI-PE: Monctis, for the… the monk teeth here, and it's sign.
+
+
+641
+01:59:59.591 --> 02:00:02.171
+Nebius Academy | AI-PE: And we'll soon dive into that.
+
+
+642
+02:00:02.301 --> 02:00:09.350
+Nebius Academy | AI-PE: And of course, with one bit, all you can do is a boolean or true or false.
+
+
+643
+02:00:09.781 --> 02:00:27.661
+Nebius Academy | AI-PE: So, what is the difference, the main difference between floating point 32 to 14.16? 32 uses 32 bits, meaning 4 bytes, and 16 uses only 2 bytes, which is 60 bits.
+
+
+644
+02:00:27.911 --> 02:00:33.650
+Nebius Academy | AI-PE: And with 32, we have much more bits to represent the exponent and the fraction.
+
+
+645
+02:00:33.951 --> 02:00:44.071
+Nebius Academy | AI-PE: And, another, way to do… to represent the float is called BF16.
+
+
+646
+02:00:44.291 --> 02:00:56.951
+Nebius Academy | AI-PE: And the main difference between BF16 and floating point 16 is how many bits do we give to the exponent versus the fraction.
+
+
+647
+02:00:57.281 --> 02:01:10.200
+Nebius Academy | AI-PE: No need to know exactly, but know that the amount of bits and how much we give to the exponent factor or the fraction factor represent at the end
+
+
+648
+02:01:10.391 --> 02:01:16.041
+Nebius Academy | AI-PE: How well we can represent the numbers that we hold in our matrices.
+
+
+649
+02:01:18.051 --> 02:01:23.491
+Nebius Academy | AI-PE: Mmm… Okay, so what is the idea of quantization?
+
+
+650
+02:01:23.691 --> 02:01:28.791
+Nebius Academy | AI-PE: You can think of quantization as splitting some range into buckets.
+
+
+651
+02:01:29.231 --> 02:01:37.540
+Nebius Academy | AI-PE: So, one way to quantize the number is to say, okay, I want to take it from a float number into a whole number.
+
+
+652
+02:01:37.941 --> 02:01:54.081
+Nebius Academy | AI-PE: So, for example, you can see we had 3 numbers here, 27, 55.3, 83.78, and now we want to represent them as whole numbers, so we can do a flow operation, rounding down.
+
+
+653
+02:01:54.081 --> 02:01:59.501
+Nebius Academy | AI-PE: And then we'll have them mapped as to 27, 55, and 83.
+
+
+654
+02:01:59.561 --> 02:02:12.670
+Nebius Academy | AI-PE: Why can it help us? Because then, if we round it to whole numbers, we need much less bits to represent those numbers. And if we even quantize by tens.
+
+
+655
+02:02:13.311 --> 02:02:25.790
+Nebius Academy | AI-PE: We will map a flow 10, we will map 27 to 20, 55 to 50, and 83 to 80, then we need a lot less bits, even we can satisfy with only 3 bits.
+
+
+656
+02:02:25.911 --> 02:02:37.890
+Nebius Academy | AI-PE: to represent those numbers. Of course, every quantization, I lose information. So I lose information, and this is part of the process.
+
+
+657
+02:02:38.491 --> 02:02:39.471
+Nebius Academy | AI-PE: M…
+
+
+658
+02:02:39.971 --> 02:02:54.891
+Nebius Academy | AI-PE: So, how does it look like, let's take, as an example, a Q lower, and let's say we have this representation here, and we want to quantize this from floating point 32, which holds 32 bits.
+
+
+659
+02:02:55.141 --> 02:02:56.920
+Nebius Academy | AI-PE: Into… sorry?
+
+
+660
+02:02:59.041 --> 02:03:00.021
+Nebius Academy | AI-PE: Awesome.
+
+
+661
+02:03:01.591 --> 02:03:02.941
+Nebius Academy | AI-PE: I don't laugh.
+
+
+662
+02:03:06.221 --> 02:03:09.201
+Nebius Academy | AI-PE: Can you see the screen?
+
+
+663
+02:03:11.301 --> 02:03:12.860
+Nebius Academy | AI-PE: Yes, okay, great.
+
+
+664
+02:03:13.621 --> 02:03:14.420
+Nebius Academy | AI-PE: Thank you.
+
+
+665
+02:03:14.771 --> 02:03:23.930
+Nebius Academy | AI-PE: So going back to our example, we have this array of numbers, and we want to quantize this from float 32 to int8.
+
+
+666
+02:03:24.221 --> 02:03:27.731
+Nebius Academy | AI-PE: Int 8 holds only 8 bits.
+
+
+667
+02:03:27.861 --> 02:03:38.370
+Nebius Academy | AI-PE: We said it's ranging from minus 127 to 128, and floating point 32 is the original numbers we have here.
+
+
+668
+02:03:39.701 --> 02:03:43.701
+Nebius Academy | AI-PE: M… So how do we do that?
+
+
+669
+02:03:44.321 --> 02:03:49.251
+Nebius Academy | AI-PE: We… we will need to round our numbers, and how will we,
+
+
+670
+02:03:50.031 --> 02:03:52.961
+Nebius Academy | AI-PE: Map them into the integer space.
+
+
+671
+02:03:53.411 --> 02:03:59.981
+Nebius Academy | AI-PE: We will take the maximal value of the integer with 8 bits, which is 127.
+
+
+672
+02:04:00.111 --> 02:04:13.560
+Nebius Academy | AI-PE: and divided by the absolute value that was maximal within our array. So, let's say in our array, the maximal value was 10.2.
+
+
+673
+02:04:14.221 --> 02:04:25.481
+Nebius Academy | AI-PE: So, we will take 127 divided by 10.2, and then we will be left out with some constant, which will be our scaling factor.
+
+
+674
+02:04:25.801 --> 02:04:29.111
+Nebius Academy | AI-PE: Which is still… afloat.
+
+
+675
+02:04:29.331 --> 02:04:35.481
+Nebius Academy | AI-PE: Okay, so the value here, this constant here, will still hold 32 bits.
+
+
+676
+02:04:36.561 --> 02:04:51.140
+Nebius Academy | AI-PE: And now, in order to map it to an integer, we will multiply by each one of the values of the original array, round it, and obtain a new array.
+
+
+677
+02:04:51.551 --> 02:04:59.191
+Nebius Academy | AI-PE: of values of integer 8, then I… that I can map back with some certain… with an arrow, obviously.
+
+
+678
+02:04:59.321 --> 02:05:01.881
+Nebius Academy | AI-PE: to the original values I had before.
+
+
+679
+02:05:02.891 --> 02:05:06.021
+Nebius Academy | AI-PE: Sorry?
+
+
+680
+02:05:08.461 --> 02:05:17.681
+Nebius Academy | AI-PE: So the reason it's ranging from minus 127 to 127 is because we stole bits for the sign.
+
+
+681
+02:05:19.731 --> 02:05:20.411
+Nebius Academy | AI-PE: Bye.
+
+
+682
+02:05:22.631 --> 02:05:23.340
+Nebius Academy | AI-PE: Bye, bye.
+
+
+683
+02:05:26.341 --> 02:05:35.831
+Nebius Academy | AI-PE: So 2 to the power of 8 is 256, but I need 2 bits for the sign, whether it's minus or plus.
+
+
+684
+02:05:36.421 --> 02:05:42.071
+Nebius Academy | AI-PE: So, how would it look like? So, I had my original array here.
+
+
+685
+02:05:42.391 --> 02:05:43.371
+Nebius Academy | AI-PE: Okay?
+
+
+686
+02:05:43.481 --> 02:05:58.610
+Nebius Academy | AI-PE: This was the largest value, so I know already it will be mapped to 127. And if I were to have minus 10.2, it would be mapped to minus 127.
+
+
+687
+02:05:59.021 --> 02:06:11.751
+Nebius Academy | AI-PE: And now each… in order to get to int 8, I'm applying this rounding of multiplication of this constant. This constant was 127 divided by the maximal value.
+
+
+688
+02:06:12.121 --> 02:06:17.870
+Nebius Academy | AI-PE: times the original X is here, and I get this new metrics of integer X.
+
+
+689
+02:06:18.011 --> 02:06:31.461
+Nebius Academy | AI-PE: What did I gain by doing this? I had 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 elements, each one holding 32 bits, so 320 bits.
+
+
+690
+02:06:31.751 --> 02:06:32.811
+Nebius Academy | AI-PE: And now…
+
+
+691
+02:06:33.151 --> 02:06:42.250
+Nebius Academy | AI-PE: this… the same metrics, I can hold it with only 80 bits, so each one element here holds 80 bits.
+
+
+692
+02:06:42.891 --> 02:06:48.611
+Nebius Academy | AI-PE: One small constant on the side, Which still holds 32 beats.
+
+
+693
+02:06:49.111 --> 02:06:52.481
+Nebius Academy | AI-PE: Because I would want to also map it back.
+
+
+694
+02:06:52.801 --> 02:06:53.731
+Nebius Academy | AI-PE: Okay?
+
+
+695
+02:06:54.201 --> 02:06:59.140
+Nebius Academy | AI-PE: So instead of, what we said, 320 bits.
+
+
+696
+02:06:59.341 --> 02:07:07.041
+Nebius Academy | AI-PE: Now I'm holding only 80 bits, plus 32 on the side, so a total of 112 bits.
+
+
+697
+02:07:07.141 --> 02:07:09.390
+Nebius Academy | AI-PE: To represent the same thing.
+
+
+698
+02:07:09.771 --> 02:07:12.650
+Nebius Academy | AI-PE: Did I lose information on the way? Yes.
+
+
+699
+02:07:13.491 --> 02:07:23.891
+Nebius Academy | AI-PE: Did I gain an amount of B? Yes. So this is, like, the trade-off that we'll manage here. I'll take questions later. And,
+
+
+700
+02:07:24.401 --> 02:07:28.441
+Nebius Academy | AI-PE: Specifically with Q-Laura, we normally do 4 bits.
+
+
+701
+02:07:28.581 --> 02:07:35.420
+Nebius Academy | AI-PE: So we take those floats 32, and we normally quantize them into 4 bits.
+
+
+702
+02:07:36.151 --> 02:07:46.170
+Nebius Academy | AI-PE: And it means that we only have 16 possible buckets for quantization, so you can think if these are the possible values of a floating point.
+
+
+703
+02:07:46.431 --> 02:08:00.280
+Nebius Academy | AI-PE: they will be, receiving an equally spaced bucket, but normally, you don't have those… you have a tail. Normally, it's a Gaussian distribution that you have very small numbers or very large numbers.
+
+
+704
+02:08:00.521 --> 02:08:17.911
+Nebius Academy | AI-PE: So the more… the smarter thing to do is, instead of equally spaced buckets, to have an equally sized bucket, that the amount of numbers in each bucket will be equal, rather than the spacing between them.
+
+
+705
+02:08:18.061 --> 02:08:33.730
+Nebius Academy | AI-PE: And this is an enhanced version that is called quantile quantization, and we won't talk about it today, okay? So I'm going back to the more simplistic version, which is the equally spaced packets, but know that there is a more efficient thing to do, and is not to
+
+
+706
+02:08:33.741 --> 02:08:38.700
+Nebius Academy | AI-PE: Space them equally, but rather have each bucket a similar number of elements.
+
+
+707
+02:08:38.961 --> 02:08:46.160
+Nebius Academy | AI-PE: But I'll put it on the side, and we'll go back to our example with 8 beats and the 32 floating point.
+
+
+708
+02:08:46.371 --> 02:08:51.331
+Nebius Academy | AI-PE: But remember that Qualora normally works in the 4-bit space.
+
+
+709
+02:08:52.971 --> 02:09:00.071
+Nebius Academy | AI-PE: And again, what if we want now to de-quantize and get back to the original array?
+
+
+710
+02:09:00.251 --> 02:09:03.171
+Nebius Academy | AI-PE: So we will take the integer.
+
+
+711
+02:09:03.501 --> 02:09:18.131
+Nebius Academy | AI-PE: the new representation of an integer, divided by the constant we saved on the side, and we would get back to a floating point 32 representation with some dequantization error.
+
+
+712
+02:09:19.331 --> 02:09:30.170
+Nebius Academy | AI-PE: So, what can be the problem with quantizing very, very large matrices?
+
+
+713
+02:09:30.501 --> 02:09:37.571
+Nebius Academy | AI-PE: Is that the constant can be defined by an outlier, because we took the maximum value, right?
+
+
+714
+02:09:37.721 --> 02:09:44.551
+Nebius Academy | AI-PE: And what if this maximal value is an outlier? Then all my numbers will be thrown into the same bucket.
+
+
+715
+02:09:45.131 --> 02:09:49.560
+Nebius Academy | AI-PE: So what do we do when we're talking about large matrices?
+
+
+716
+02:09:49.621 --> 02:10:05.031
+Nebius Academy | AI-PE: We flatten them out and divide them into blocks. So we won't have the maximal amount for the full large matrices, but we'll divide them into blocks, and each block will take the maximal value from that block.
+
+
+717
+02:10:05.031 --> 02:10:11.581
+Nebius Academy | AI-PE: In order to avoid bucketizing by an outlier.
+
+
+718
+02:10:12.361 --> 02:10:16.921
+Nebius Academy | AI-PE: I'll stop for questions, and then I'll continue.
+
+
+719
+02:10:18.631 --> 02:10:19.351
+Nebius Academy | AI-PE: Yes.
+
+
+720
+02:10:29.791 --> 02:10:30.481
+Nebius Academy | AI-PE: Yep.
+
+
+721
+02:10:41.701 --> 02:10:58.171
+Nebius Academy | AI-PE: So the question was, in this specific example, each one of the values here was mapped to their own integer, and not to the same integer, so whether we lost information or not.
+
+
+722
+02:10:58.331 --> 02:11:07.441
+Nebius Academy | AI-PE: And I think this example is obviously just a mock example, but you understand that if I would have 6, 8,
+
+
+723
+02:11:07.621 --> 02:11:12.141
+Nebius Academy | AI-PE: 01 here, it would be mapped to the same integer.
+
+
+724
+02:11:12.301 --> 02:11:19.661
+Nebius Academy | AI-PE: And then we wouldn't have the ability to separate those two once we do the training.
+
+
+725
+02:11:19.851 --> 02:11:20.621
+Nebius Academy | AI-PE: Okay.
+
+
+726
+02:11:22.121 --> 02:11:24.820
+Nebius Academy | AI-PE: Maybe a question from the Zoom?
+
+
+727
+02:11:25.251 --> 02:11:25.991
+Nebius Academy | AI-PE: See?
+
+
+728
+02:11:34.481 --> 02:11:39.341
+Nebius Academy | AI-PE: Something about you, Laura, or not, yes?
+
+
+729
+02:11:43.821 --> 02:11:44.671
+Nebius Academy | AI-PE: Sorry?
+
+
+730
+02:11:46.841 --> 02:11:48.121
+Nebius Academy | AI-PE: Mevin? Nope.
+
+
+731
+02:11:49.201 --> 02:11:50.430
+Nebius Academy | AI-PE: Thank you.
+
+
+732
+02:11:54.211 --> 02:11:57.511
+Nebius Academy | AI-PE: Why not doing anomaly remove first?
+
+
+733
+02:11:57.871 --> 02:12:12.520
+Nebius Academy | AI-PE: So, the question here, I guess, is referring to how we choose the element that we quantize based… the absolute value, the maximal value, and why not just remove the outlier?
+
+
+734
+02:12:15.421 --> 02:12:25.651
+Nebius Academy | AI-PE: If we were to remove the outlier, then it's also some loss of information, because what would you map
+
+
+735
+02:12:25.981 --> 02:12:29.061
+Nebius Academy | AI-PE: This outlier tool,
+
+
+736
+02:12:29.781 --> 02:12:37.481
+Nebius Academy | AI-PE: It's still a number out there in the metrics, so what it would be mapped into in your integer representation
+
+
+737
+02:12:37.711 --> 02:12:44.720
+Nebius Academy | AI-PE: So, I think, it's also a loss of information that is…
+
+
+738
+02:12:45.031 --> 02:12:48.450
+Nebius Academy | AI-PE: It's something that we don't want to do.
+
+
+739
+02:12:48.571 --> 02:12:52.521
+Nebius Academy | AI-PE: And I'll continue to show you what we do.
+
+
+740
+02:12:53.461 --> 02:13:02.430
+Nebius Academy | AI-PE: So, as we said, if we have a very large metrics, like we do when we do Loa.
+
+
+741
+02:13:02.741 --> 02:13:15.741
+Nebius Academy | AI-PE: we will… we will flatten it, and we'll divide it into chunks. So, for example, here, we divided it into 5 chunks, so we had a 5 over 5 matrix.
+
+
+742
+02:13:16.041 --> 02:13:20.430
+Nebius Academy | AI-PE: With, some elements within it.
+
+
+743
+02:13:20.661 --> 02:13:26.771
+Nebius Academy | AI-PE: And then we flattened it out to a 25 over 1 vector.
+
+
+744
+02:13:26.991 --> 02:13:34.330
+Nebius Academy | AI-PE: And for each 5 elements, we will save the maximal value of those 5 elements.
+
+
+745
+02:13:34.621 --> 02:13:47.361
+Nebius Academy | AI-PE: So I have CI here, it will be the absolute value, which is larger, it says 0.7, minus 0.7, sorry, and here will have a 1.7, etc.
+
+
+746
+02:13:48.331 --> 02:13:52.811
+Nebius Academy | AI-PE: And after having, those, CIs here.
+
+
+747
+02:13:53.271 --> 02:14:06.991
+Nebius Academy | AI-PE: We will rescale all the parameters per block, so now this was the largest absolute value of that metric, so it will move up to minus 127.
+
+
+748
+02:14:07.221 --> 02:14:15.341
+Nebius Academy | AI-PE: And the largest element of this metric was 1.7, so it will be mapped to 127 as well.
+
+
+749
+02:14:15.501 --> 02:14:20.331
+Nebius Academy | AI-PE: And all the values in the middle will be mapped based on this formula.
+
+
+750
+02:14:20.951 --> 02:14:22.991
+Nebius Academy | AI-PE: And again, we had,
+
+
+751
+02:14:23.121 --> 02:14:30.471
+Nebius Academy | AI-PE: Here. So we had 25 times 32 bits, and now we are left off
+
+
+752
+02:14:30.621 --> 02:14:39.321
+Nebius Academy | AI-PE: of 25 times 8 number of bits, plus 1, 2, 3, 4, 5,
+
+
+753
+02:14:39.661 --> 02:14:44.461
+Nebius Academy | AI-PE: 5 elements that still hold 32 bits.
+
+
+754
+02:14:44.941 --> 02:14:53.370
+Nebius Academy | AI-PE: So 5 times 32 plus the 8 times 25 here is the number of elements we were left with.
+
+
+755
+02:14:53.731 --> 02:14:59.671
+Nebius Academy | AI-PE: And now we have these metrics here.
+
+
+756
+02:15:01.171 --> 02:15:04.741
+Nebius Academy | AI-PE: Sorry, and now we have this matrix here, but still.
+
+
+757
+02:15:05.021 --> 02:15:11.711
+Nebius Academy | AI-PE: Those… here we hold 32 times 5 bits, which is still very, very heavy for us.
+
+
+758
+02:15:11.961 --> 02:15:16.331
+Nebius Academy | AI-PE: So we would also want to quantize the CI.
+
+
+759
+02:15:16.801 --> 02:15:28.891
+Nebius Academy | AI-PE: So, we have here a process which we call double quantization. We'll quantize, first of all, the matrix, and then we'll quantize the maximal elements from each bucket.
+
+
+760
+02:15:29.041 --> 02:15:31.951
+Nebius Academy | AI-PE: And we call it a double quantization.
+
+
+761
+02:15:32.250 --> 02:15:35.870
+Nebius Academy | AI-PE: So now we have a new array of the CIs here.
+
+
+762
+02:15:36.331 --> 02:15:41.700
+Nebius Academy | AI-PE: And we quantize it like we did previously, we'll take the maximum value out of those.
+
+
+763
+02:15:41.821 --> 02:15:49.250
+Nebius Academy | AI-PE: We'll save it on the side, and then we'll save each one of those as an integer. We called it double quantization.
+
+
+764
+02:15:50.850 --> 02:15:53.970
+Nebius Academy | AI-PE: So, let's see if you've followed me.
+
+
+765
+02:15:54.451 --> 02:15:56.320
+Nebius Academy | AI-PE: This one is a hard one.
+
+
+766
+02:15:57.391 --> 02:16:03.801
+Nebius Academy | AI-PE: So let's see what we have before, and you will tell me now what we have later. So before, all we had…
+
+
+767
+02:16:04.291 --> 02:16:13.690
+Nebius Academy | AI-PE: Was this matrix on the right here, of 5 over 5, each one of 32 bits.
+
+
+768
+02:16:13.781 --> 02:16:27.731
+Nebius Academy | AI-PE: So, in our example, let's now move into bytes, because it will make our life easier. So, the total memory that was used was 25 elements, each one of 4 bytes, 100 bytes, okay? Everyone agrees up until now.
+
+
+769
+02:16:27.991 --> 02:16:37.820
+Nebius Academy | AI-PE: Okay, so now the question, what… how many bytes? I'm reminding you that we quantized to int 8, which is 1 byte.
+
+
+770
+02:16:38.041 --> 02:16:42.200
+Nebius Academy | AI-PE: So how many bytes we will have after double quantization?
+
+
+771
+02:16:42.361 --> 02:16:48.091
+Nebius Academy | AI-PE: to int 8, which is 1 byte. Okay, so we're taking this
+
+
+772
+02:16:48.291 --> 02:16:58.411
+Nebius Academy | AI-PE: 5 over 5 metrics, and now we do double quantization. So remember, we're flattening it, we quantize once, and then we quantize the CI.
+
+
+773
+02:16:58.951 --> 02:17:03.780
+Nebius Academy | AI-PE: So let's… Try to solve it together.
+
+
+774
+02:17:11.381 --> 02:17:12.061
+Nebius Academy | AI-PE: Huh.
+
+
+775
+02:17:17.840 --> 02:17:18.850
+Nebius Academy | AI-PE: Mmm…
+
+
+776
+02:17:23.010 --> 02:17:24.021
+Nebius Academy | AI-PE: Ready?
+
+
+777
+02:17:26.500 --> 02:17:27.491
+Nebius Academy | AI-PE: Go.
+
+
+778
+02:17:28.840 --> 02:17:29.571
+Nebius Academy | AI-PE: Huh.
+
+
+779
+02:17:39.741 --> 02:17:40.521
+Nebius Academy | AI-PE: Okay.
+
+
+780
+02:17:50.590 --> 02:17:53.981
+Nebius Academy | AI-PE: Let me know if you want me to move back to the slide.
+
+
+781
+02:18:35.911 --> 02:18:39.161
+Nebius Academy | AI-PE: So, the correct answer was 34 bytes.
+
+
+782
+02:18:39.481 --> 02:18:46.271
+Nebius Academy | AI-PE: And Helen made it easy for you today, because all of the answers of today were the first answer, so…
+
+
+783
+02:18:46.781 --> 02:18:51.451
+Nebius Academy | AI-PE: But we will… let me explain why. One second…
+
+
+784
+02:18:58.401 --> 02:19:01.910
+Nebius Academy | AI-PE: Great. P, you won.
+
+
+785
+02:19:02.231 --> 02:19:04.400
+Nebius Academy | AI-PE: Your names are amazing.
+
+
+786
+02:19:05.091 --> 02:19:09.260
+Nebius Academy | AI-PE: Okay, let's see why, okay? Because this one was a hard one.
+
+
+787
+02:19:10.951 --> 02:19:17.910
+Nebius Academy | AI-PE: Let's do it together. Okay, so we had our original metrics, we said it was 100 bytes.
+
+
+788
+02:19:18.811 --> 02:19:22.150
+Nebius Academy | AI-PE: We now took this,
+
+
+789
+02:19:22.521 --> 02:19:40.031
+Nebius Academy | AI-PE: 25 elements, and instead of holding each one of them with 4 bytes, we're holding them with 1 byte, because we converted them into int 8, so already we have 25 for the elements themselves. On the side, we need to save the
+
+
+790
+02:19:40.091 --> 02:19:45.821
+Nebius Academy | AI-PE: constants to roll them back into the float 32.
+
+
+791
+02:19:46.101 --> 02:19:58.101
+Nebius Academy | AI-PE: So, we have, for that, the C1 metrics of each one of the five buckets, the constant for them, which now we also hold as an int8.
+
+
+792
+02:19:58.221 --> 02:20:00.611
+Nebius Academy | AI-PE: So each one of them is 1 by.
+
+
+793
+02:20:01.001 --> 02:20:20.601
+Nebius Academy | AI-PE: And we have the final constant here, which is still a float 32 of 4 bytes. So we have 25 plus 5 plus 4, which give me 34 bytes. And again, the only one I'm still holding as a float 32 is one constant on the side.
+
+
+794
+02:20:20.921 --> 02:20:26.520
+Nebius Academy | AI-PE: With that, I can map back the CI to a floating point themselves.
+
+
+795
+02:20:26.961 --> 02:20:36.991
+Nebius Academy | AI-PE: And with that, I can map the matrix to its original flow 32 point with the arrow that came with this quantization.
+
+
+796
+02:20:39.811 --> 02:20:42.191
+Nebius Academy | AI-PE: Okay, question.
+
+
+797
+02:20:46.051 --> 02:20:46.841
+Nebius Academy | AI-PE: Yes.
+
+
+798
+02:20:49.211 --> 02:20:49.891
+Nebius Academy | AI-PE: Bye.
+
+
+799
+02:20:50.411 --> 02:20:52.810
+Nebius Academy | AI-PE: Yeah, great question.
+
+
+800
+02:20:52.941 --> 02:20:55.991
+Nebius Academy | AI-PE: I feel like I'm missing a slide.
+
+
+801
+02:20:57.281 --> 02:21:04.171
+Nebius Academy | AI-PE: Yeah, yeah, yeah, I… there was supposed to be an additional slide, so thank you for that question. So, how does it all come together?
+
+
+802
+02:21:04.461 --> 02:21:16.991
+Nebius Academy | AI-PE: So, first of all, we decomposed, instead of updating the full metric, we decomposed it. And then we weren't satisfied with just that, because still we have a lot of elements.
+
+
+803
+02:21:17.291 --> 02:21:21.221
+Nebius Academy | AI-PE: To calculate here.
+
+
+804
+02:21:21.361 --> 02:21:26.960
+Nebius Academy | AI-PE: So instead of doing those calculations with the float 32,
+
+
+805
+02:21:27.251 --> 02:21:31.361
+Nebius Academy | AI-PE: We can do them in the integer space.
+
+
+806
+02:21:31.721 --> 02:21:36.741
+Nebius Academy | AI-PE: And save a lot of bits and computational multiplication.
+
+
+807
+02:21:37.171 --> 02:21:46.311
+Nebius Academy | AI-PE: and map it back to the float 32 in order to add it to the original W metric. So this W here.
+
+
+808
+02:21:46.491 --> 02:21:54.290
+Nebius Academy | AI-PE: on the left will always be in the float 32 space. We didn't… we don't touch it, it's frozen.
+
+
+809
+02:21:54.761 --> 02:22:13.450
+Nebius Academy | AI-PE: the A and the B here, no one said we need to keep them in a float 32. We can learn the parameters in the integer space and map them back into the float 32 in order to get to the final output of the H here.
+
+
+810
+02:22:13.671 --> 02:22:18.531
+Nebius Academy | AI-PE: And this also saved a huge amount of computational,
+
+
+811
+02:22:18.701 --> 02:22:21.611
+Nebius Academy | AI-PE: Effort, and of money, and of time.
+
+
+812
+02:22:22.071 --> 02:22:23.421
+Nebius Academy | AI-PE: Cheaper.
+
+
+813
+02:22:24.271 --> 02:22:30.950
+Nebius Academy | AI-PE: No, it's mainly cheaper. It's cheaper. Faster, yeah.
+
+
+814
+02:22:33.661 --> 02:22:34.351
+Nebius Academy | AI-PE: Nope.
+
+
+815
+02:22:36.401 --> 02:22:38.401
+Nebius Academy | AI-PE: Right.
+
+
+816
+02:22:40.161 --> 02:22:40.861
+Nebius Academy | AI-PE: Goodbye.
+
+
+817
+02:22:41.151 --> 02:22:42.141
+Nebius Academy | AI-PE: a better result.
+
+
+818
+02:22:42.681 --> 02:22:48.280
+Nebius Academy | AI-PE: So the question is, how does rank compare to… Cue, Laura?
+
+
+819
+02:22:52.281 --> 02:23:01.110
+Nebius Academy | AI-PE: Yeah, they are dependent, because the higher the rank, the more parameters you have, and the more you quantize, the less
+
+
+820
+02:23:01.491 --> 02:23:05.931
+Nebius Academy | AI-PE: Actually, the less parameters you have, if you're looking bit level.
+
+
+821
+02:23:05.971 --> 02:23:21.551
+Nebius Academy | AI-PE: So, it's another thing that you will need to tweak in your hyperparameters when you're working, but it's true that maybe with Q-Law, you can go to higher ranks, because now each element holds less
+
+
+822
+02:23:21.791 --> 02:23:23.301
+Nebius Academy | AI-PE: Bits within it.
+
+
+823
+02:23:25.121 --> 02:23:26.631
+Nebius Academy | AI-PE: More question?
+
+
+824
+02:23:26.831 --> 02:23:28.690
+Nebius Academy | AI-PE: I see maybe in the chat?
+
+
+825
+02:23:35.361 --> 02:23:38.141
+Nebius Academy | AI-PE: Mmm… Nope.
+
+
+826
+02:23:44.801 --> 02:23:48.050
+Nebius Academy | AI-PE: Okay, no new question.
+
+
+827
+02:23:48.551 --> 02:23:49.960
+Nebius Academy | AI-PE: Any more questions?
+
+
+828
+02:23:50.101 --> 02:23:50.831
+Nebius Academy | AI-PE: Yes.
+
+
+829
+02:23:57.981 --> 02:23:59.551
+Nebius Academy | AI-PE: Can you come again, please?
+
+
+830
+02:24:04.961 --> 02:24:09.091
+Nebius Academy | AI-PE: So the question is, do we quantize the original W?
+
+
+831
+02:24:09.581 --> 02:24:17.541
+Nebius Academy | AI-PE: So normally, we don't quantize the original W, because it's frozen, and we don't want to touch its parameters.
+
+
+832
+02:24:17.701 --> 02:24:22.070
+Nebius Academy | AI-PE: So, yeah, the quantization is in the LoRa itself.
+
+
+833
+02:24:23.461 --> 02:24:24.461
+Nebius Academy | AI-PE: Yes.
+
+
+834
+02:24:34.351 --> 02:24:35.191
+Nebius Academy | AI-PE: This?
+
+
+835
+02:24:40.581 --> 02:24:41.371
+Nebius Academy | AI-PE: Yes.
+
+
+836
+02:25:06.651 --> 02:25:08.981
+Nebius Academy | AI-PE: So the question is, how come
+
+
+837
+02:25:09.121 --> 02:25:16.080
+Nebius Academy | AI-PE: Here we have 127 mapped to 17, and here the minus 127 is mapped to
+
+
+838
+02:25:16.241 --> 02:25:33.690
+Nebius Academy | AI-PE: minus 0.7. And it's exactly what we wanted to achieve when we divided the metrics into buckets. So each bucket will have its own scaling factor. So here's CI, and here it's CJ, and they're completely different, and we will use
+
+
+839
+02:25:33.691 --> 02:25:41.340
+Nebius Academy | AI-PE: for each bucket, their own scaling facto. And this is what helped me, because think if there was a huge outlier here.
+
+
+840
+02:25:41.491 --> 02:25:51.810
+Nebius Academy | AI-PE: then I would have the minus 127 here, and all will be mapped to zero, or something like that. I'll have all the rest bucketed into the same area, and I will lose a lot of information.
+
+
+841
+02:25:51.831 --> 02:26:10.360
+Nebius Academy | AI-PE: So, this is exactly the purpose we wanted. We wanted each one to be extrapolated to their own range, each bucket on its own, but it's true that we need to store each one of the CIs here on the side, because then we won't know how to map it back.
+
+
+842
+02:26:10.371 --> 02:26:16.830
+Nebius Academy | AI-PE: And this is where we got to the double quantization of storing them also in a quantized way.
+
+
+843
+02:26:19.321 --> 02:26:20.061
+Nebius Academy | AI-PE: Yes.
+
+
+844
+02:26:27.131 --> 02:26:34.960
+Nebius Academy | AI-PE: So, we only scale by the absolute maximal value. We don't do… we could have… do a mean max…
+
+
+845
+02:26:35.111 --> 02:26:39.731
+Nebius Academy | AI-PE: Scaling, but then we will also have to hold the mean.
+
+
+846
+02:26:40.231 --> 02:26:52.990
+Nebius Academy | AI-PE: And then it will double the things we need to hold on the side, and that's why… but it's true that you could have done it, but the trade-off is that you will have to hold more scale factors later.
+
+
+847
+02:26:53.931 --> 02:26:55.271
+Nebius Academy | AI-PE: And more questions?
+
+
+848
+02:26:57.251 --> 02:26:57.971
+Nebius Academy | AI-PE: Yes.
+
+
+849
+02:27:03.901 --> 02:27:09.171
+Nebius Academy | AI-PE: When… the question, when do we go back to the F32?
+
+
+850
+02:27:09.511 --> 02:27:24.690
+Nebius Academy | AI-PE: No, it's… it's… we do it in the back propagation, and when we do the forward pass, we do need to de-quantize in order to do the forward pass, so it's done several times each… each epoch, I would say, during training.
+
+
+851
+02:27:26.021 --> 02:27:27.481
+Nebius Academy | AI-PE: More question?
+
+
+852
+02:27:29.821 --> 02:27:35.550
+Nebius Academy | AI-PE: Okay, so I'll see in the chat last time, and if not, we will summarize.
+
+
+853
+02:27:37.101 --> 02:27:40.730
+Nebius Academy | AI-PE: Okay, from the… from home…
+
+
+854
+02:27:41.231 --> 02:27:46.580
+Nebius Academy | AI-PE: In Q-LoRa, we quantize the model and the adapter.
+
+
+855
+02:27:47.411 --> 02:28:01.400
+Nebius Academy | AI-PE: So, no, I think I answered it. We quantitized only the delta W, only the part that we adapt. I'm not going to call it adapter, because adapter is… we said it's a different type of fine-tuning, but
+
+
+856
+02:28:01.601 --> 02:28:06.201
+Nebius Academy | AI-PE: To your question, we quantized the adopted part.
+
+
+857
+02:28:07.151 --> 02:28:14.010
+Nebius Academy | AI-PE: How do you know to revert the same 127 to different CJs and CIs?
+
+
+858
+02:28:14.231 --> 02:28:30.611
+Nebius Academy | AI-PE: So, it's true that we need… we need to also know the, for each element's location, which C, J, or CI is it mapped to, so we need to hold to… the location to be mapped to each one of the elements.
+
+
+859
+02:28:31.871 --> 02:28:33.771
+Nebius Academy | AI-PE: Okay.
+
+
+860
+02:28:35.711 --> 02:28:49.471
+Nebius Academy | AI-PE: So, let's summarize what we saw today. So, first of all, important for me to say that when we're training in LLM, three steps, remember the pre-training, the fine-tuning, and the alignment.
+
+
+861
+02:28:49.611 --> 02:28:54.011
+Nebius Academy | AI-PE: And we didn't talk about alignment today. It's a very, very interesting topic.
+
+
+862
+02:28:54.111 --> 02:28:57.801
+Nebius Academy | AI-PE: So stay tuned for module number 5.
+
+
+863
+02:28:58.271 --> 02:29:02.011
+Nebius Academy | AI-PE: And we talked about fine-tuning a model.
+
+
+864
+02:29:02.101 --> 02:29:20.530
+Nebius Academy | AI-PE: We talked about full fine-tuning, and how when we're talking about large language model, it's very inefficient, and therefore we do specifically the PEFT, the parameter-efficient fine-tuning in all its methods. Specifically with LLM transformer-based LLMs, we often use
+
+
+865
+02:29:20.531 --> 02:29:28.881
+Nebius Academy | AI-PE: LoRa and QLoRa, if we want to even be more efficient and sometimes compromise the performance.
+
+
+866
+02:29:29.341 --> 02:29:37.490
+Nebius Academy | AI-PE: So this was today. Notice that today you will have a new homework published.
+
+
+867
+02:29:37.691 --> 02:29:43.780
+Nebius Academy | AI-PE: which will include fine-tuning a model with LoRa.
+
+
+868
+02:29:44.071 --> 02:29:46.931
+Nebius Academy | AI-PE: So you'll actually experiment it with your own hands.
+
+
+869
+02:29:47.271 --> 02:30:04.831
+Nebius Academy | AI-PE: But the deadline for the homework is in 2 weeks, so it's still… you have time to complete the previous one. It's because I will only see you in two weeks from now, because of all the someone stuck in Thailand thing.
+
+
+870
+02:30:05.091 --> 02:30:09.601
+Nebius Academy | AI-PE: It still is. It still is?
+
+
+871
+02:30:10.431 --> 02:30:14.280
+Nebius Academy | AI-PE: And thank you. Pini, you want to say something?
+
+
+872
+02:30:14.811 --> 02:30:18.351
+Nebius Academy | AI-PE: Yes, so, next Friday,
+
+
+873
+02:30:18.461 --> 02:30:26.051
+Nebius Academy | AI-PE: The class will be on Zoom, not in person. He's still in Thailand, so we can't attend in person.
+
+
+874
+02:30:26.941 --> 02:30:28.460
+Nebius Academy | AI-PE: Last week, we tried to, to hold the,
+
+

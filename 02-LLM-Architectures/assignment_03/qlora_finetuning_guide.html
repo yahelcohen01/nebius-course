@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Field Guide to QLoRA Fine-Tuning — for the LLM Architectures Hometask 3</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters:[
+          {left:'$$',right:'$$',display:true},
+          {left:'$',right:'$',display:false},
+          {left:'\\[',right:'\\]',display:true},
+          {left:'\\(',right:'\\)',display:false}
+        ], throwOnError:false});"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper:        #F4ECD6;
+  --paper-deep:   #ECE1BD;
+  --paper-card:   #FAF3DD;
+  --ink:          #1A2438;
+  --ink-soft:     #2E3A5C;
+  --ink-faint:    #6B7388;
+  --vermillion:   #B83A1F;
+  --vermillion-2: #D14E2E;
+  --sage:         #4F6B57;
+  --ochre:        #C68A1F;
+  --indigo:       #314E7E;
+  --rule:         rgba(26, 36, 56, 0.16);
+  --rule-strong:  rgba(26, 36, 56, 0.45);
+
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-body:    'Newsreader', Georgia, serif;
+  --font-mono:    'IBM Plex Mono', 'Menlo', monospace;
+}
+
+html { scroll-behavior: smooth; background: var(--paper); }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 19px;
+  line-height: 1.66;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.40   0 0 0 0 0.30   0 0 0 0 0.10   0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse 110% 80% at 50% 30%, transparent 40%, rgba(98, 60, 10, 0.08) 100%);
+}
+
+.page { max-width: 1200px; margin: 0 auto; padding: 80px 64px 40px; position: relative; z-index: 2; }
+
+/* HERO */
+.hero { margin-bottom: 96px; position: relative; }
+
+.hero .preface {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-bottom: 36px;
+  display: flex; gap: 18px; align-items: center;
+}
+.hero .preface span.dot { width: 4px; height: 4px; background: var(--vermillion); border-radius: 50%; }
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(48px, 7.6vw, 124px);
+  line-height: 0.88;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+  margin-bottom: 38px;
+  font-variation-settings: "SOFT" 60, "WONK" 1, "opsz" 144;
+}
+.hero h1 em { font-style: italic; color: var(--vermillion); font-weight: 400; display: inline-block; }
+
+.hero .deck {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 23px;
+  max-width: 720px;
+  color: var(--ink-soft);
+  line-height: 1.42;
+  font-weight: 350;
+}
+
+.hero .meta {
+  margin-top: 56px;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+}
+.hero .meta dl { display: flex; gap: 12px; align-items: baseline; }
+.hero .meta dt {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.hero .meta dd { font-family: var(--font-body); font-size: 15px; color: var(--ink-soft); font-style: italic; }
+
+/* TOC */
+.toc {
+  margin: 0 0 100px;
+  padding: 36px 44px;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 6px 24px -8px rgba(60, 38, 12, 0.18);
+  position: relative;
+}
+.toc::before {
+  content: 'CONTENTS';
+  position: absolute;
+  top: -10px;
+  left: 36px;
+  background: var(--paper);
+  padding: 0 14px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  color: var(--ink-faint);
+}
+.toc ol { list-style: none; columns: 2; column-gap: 60px; }
+.toc li {
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--rule);
+  break-inside: avoid;
+  font-family: var(--font-body);
+  font-size: 17px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.toc li a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-style: italic;
+  flex: 1;
+}
+.toc li a:hover { color: var(--vermillion); }
+.toc li .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+}
+
+/* SECTION */
+section { margin: 0 0 110px; position: relative; scroll-margin-top: 40px; }
+section > h2 {
+  font-family: var(--font-display);
+  font-weight: 350;
+  font-size: 52px;
+  letter-spacing: -0.018em;
+  line-height: 1.04;
+  color: var(--ink);
+  margin-bottom: 12px;
+  font-variation-settings: "SOFT" 30, "opsz" 144;
+}
+section > h2 .sectnum {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--vermillion);
+  display: block;
+  letter-spacing: 0.22em;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+section > .standfirst {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink-soft);
+  max-width: 720px;
+  margin-bottom: 50px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.42;
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-weight: 450;
+  font-size: 26px;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  margin: 50px 0 18px;
+}
+h4 {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  margin: 32px 0 14px;
+}
+
+p { margin-bottom: 18px; max-width: 720px; }
+p + p { text-indent: 0; }
+
+.dropcap::first-letter {
+  font-family: var(--font-display);
+  font-weight: 400;
+  float: left;
+  font-size: 78px;
+  line-height: 0.86;
+  padding: 6px 12px 0 0;
+  color: var(--vermillion);
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+}
+
+.lead { font-size: 22px; color: var(--ink-soft); font-style: italic; line-height: 1.5; max-width: 720px; margin-bottom: 28px; }
+
+em { font-style: italic; color: var(--ink-soft); }
+strong { font-weight: 600; color: var(--ink); }
+
+code, .mono { font-family: var(--font-mono); font-size: 0.84em; background: rgba(184, 58, 31, 0.07); padding: 1px 6px; border-radius: 3px; color: var(--vermillion); }
+
+pre {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.55;
+  background: #1B2334;
+  color: #E5DBC0;
+  padding: 22px 26px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 24px 0;
+  border-left: 3px solid var(--vermillion);
+}
+pre code { background: transparent; color: inherit; padding: 0; font-size: inherit; }
+pre .kw { color: #F2A65A; }
+pre .str { color: #9DBF8E; }
+pre .com { color: #6B7388; font-style: italic; }
+pre .num { color: #D6A77A; }
+
+ul, ol { margin: 18px 0 24px 24px; max-width: 720px; }
+li { margin-bottom: 8px; }
+ul li::marker { color: var(--vermillion); }
+
+/* sidenote */
+.sidenote {
+  float: right;
+  clear: right;
+  width: 230px;
+  margin: 6px -260px 14px 24px;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  padding-left: 14px;
+  border-left: 2px solid var(--ochre);
+}
+@media (max-width: 1100px) {
+  .sidenote { float: none; width: auto; margin: 14px 0; border-left: 2px solid var(--ochre); background: rgba(198, 138, 31, 0.06); padding: 10px 14px; }
+}
+
+/* pull quote */
+.pullquote {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 34px;
+  line-height: 1.18;
+  color: var(--vermillion);
+  max-width: 760px;
+  margin: 44px auto;
+  text-align: center;
+  font-variation-settings: "SOFT" 100, "opsz" 144;
+  position: relative;
+}
+.pullquote::before, .pullquote::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 1px;
+  background: var(--rule-strong);
+  margin: 24px auto;
+}
+
+/* Table */
+table {
+  border-collapse: collapse;
+  margin: 28px 0;
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  width: 100%;
+  max-width: 820px;
+  background: var(--paper-card);
+}
+th {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) td { background: rgba(184, 58, 31, 0.03); }
+
+/* Callout boxes */
+.callout {
+  margin: 28px 0;
+  padding: 22px 28px;
+  border-left: 3px solid var(--sage);
+  background: rgba(79, 107, 87, 0.06);
+  border-radius: 0 4px 4px 0;
+  max-width: 820px;
+}
+.callout.warn { border-left-color: var(--vermillion); background: rgba(184, 58, 31, 0.06); }
+.callout.tip  { border-left-color: var(--ochre); background: rgba(198, 138, 31, 0.07); }
+.callout h5 {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.callout.warn h5 { color: var(--vermillion); }
+.callout.tip h5 { color: var(--ochre); }
+.callout p { margin-bottom: 8px; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Diagram frame */
+figure {
+  margin: 36px 0;
+  text-align: center;
+  background: var(--paper-card);
+  padding: 28px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+figure svg { max-width: 100%; height: auto; }
+figcaption {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--ink-faint);
+  margin-top: 14px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.45;
+}
+
+/* Task card */
+.taskcard {
+  margin: 28px 0;
+  padding: 26px 32px;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-top: 4px solid var(--indigo);
+  border-radius: 4px;
+  max-width: 820px;
+  box-shadow: 0 4px 14px -4px rgba(0,0,0,0.08);
+}
+.taskcard .tasknum {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  color: var(--indigo);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.taskcard h4 {
+  font-family: var(--font-display);
+  font-weight: 450;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  text-transform: none;
+  margin: 0 0 16px;
+}
+.taskcard .pts {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--indigo);
+  color: var(--paper);
+  padding: 2px 10px;
+  border-radius: 2px;
+  margin-left: 10px;
+  vertical-align: middle;
+  letter-spacing: 0.1em;
+}
+.taskcard .concepts, .taskcard .thinking { margin: 14px 0; }
+.taskcard h5 {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.taskcard ul { margin: 6px 0 6px 22px; }
+.taskcard li { font-size: 16px; margin-bottom: 4px; color: var(--ink-soft); }
+
+/* hr */
+.flourish {
+  text-align: center;
+  margin: 80px auto;
+  color: var(--vermillion);
+  font-size: 18px;
+  font-family: var(--font-display);
+  letter-spacing: 1em;
+  font-style: italic;
+}
+
+/* footer */
+footer {
+  margin-top: 100px;
+  padding-top: 30px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+/* Tag */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  color: var(--ink-soft);
+  margin-right: 6px;
+}
+.tag.causal { color: var(--vermillion); border-color: var(--vermillion); }
+.tag.seq2seq { color: var(--indigo); border-color: var(--indigo); }
+
+/* Interactive slider */
+.playground {
+  margin: 32px 0;
+  padding: 28px 32px;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  max-width: 820px;
+}
+.playground .label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+.playground .label .val { color: var(--vermillion); font-weight: 600; font-size: 14px; }
+.playground input[type=range] {
+  width: 100%;
+  accent-color: var(--vermillion);
+  margin-bottom: 16px;
+}
+.playground .readout {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  background: #1B2334;
+  color: #E5DBC0;
+  padding: 14px 18px;
+  border-radius: 3px;
+  line-height: 1.55;
+}
+.playground .readout .hl { color: #F2A65A; }
+.playground .readout .dim { color: #6B7388; }
+
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="preface">
+    <span>Guide № 03</span>
+    <span class="dot"></span>
+    <span>LLM Architectures · Hometask 3</span>
+    <span class="dot"></span>
+    <span>Part 1 of 2</span>
+  </div>
+
+  <h1>A Field Guide to <em>QLoRA</em> Fine-Tuning</h1>
+
+  <p class="deck">
+    On bending a frozen, four-bit language model toward a new task by training thin matrices on its edges — and why this trick lets a 360-million-parameter model learn a new behavior on your laptop.
+  </p>
+
+  <div class="meta">
+    <dl><dt>For</dt><dd>Hometask 3, Part 1 (75 pts)</dd></dl>
+    <dl><dt>Read</dt><dd>~45 minutes</dd></dl>
+    <dl><dt>Tools</dt><dd>transformers · peft · bitsandbytes · trl</dd></dl>
+  </div>
+</header>
+
+<!-- TOC -->
+<nav class="toc">
+  <ol>
+    <li><a href="#sec-1">Why Fine-Tune at All</a><span class="num">§ 01</span></li>
+    <li><a href="#sec-2">The Trinity: Model + Adapter + Quantization</a><span class="num">§ 02</span></li>
+    <li><a href="#sec-3">What 4-Bit Quantization Actually Means</a><span class="num">§ 03</span></li>
+    <li><a href="#sec-4">LoRA: The Low-Rank Trick</a><span class="num">§ 04</span></li>
+    <li><a href="#sec-5">Causal vs Seq2Seq — Two Architectures, Two Formats</a><span class="num">§ 05</span></li>
+    <li><a href="#sec-6">Building the Dataset</a><span class="num">§ 06</span></li>
+    <li><a href="#sec-7">The Training Recipe</a><span class="num">§ 07</span></li>
+    <li><a href="#sec-8">Evaluation — Reading Two Generations Side by Side</a><span class="num">§ 08</span></li>
+    <li><a href="#sec-9">Common Failure Modes</a><span class="num">§ 09</span></li>
+    <li><a href="#sec-10">Task Cards</a><span class="num">§ 10</span></li>
+  </ol>
+</nav>
+
+<!-- §1 -->
+<section id="sec-1">
+  <h2><span class="sectnum">§ 01 — MOTIVATION</span>Why Fine-Tune at All</h2>
+  <p class="standfirst">A pre-trained model is a tourist with a phrasebook. Fine-tuning is the year it spends living in the country.</p>
+
+  <p class="dropcap">Pre-trained language models are general by construction. They have read an enormous slice of the internet and learned the statistical shape of language — but they have not been asked to do <em>your</em> particular thing. SmolLM2 will happily answer questions; it will not, without coaching, modulate its tone between "child" and "expert" reliably.</p>
+
+  <p>There are three ways to get a model to do what you want.</p>
+
+  <table>
+    <thead>
+      <tr><th style="width:24%">Method</th><th style="width:34%">How it works</th><th>When it fits</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Prompt engineering</strong></td>
+        <td>Write a clever instruction and a few examples in the context window.</td>
+        <td>Free, instant, no training. Sufficient when the model already knows how to do the task and just needs to be told.</td>
+      </tr>
+      <tr>
+        <td><strong>Full fine-tuning</strong></td>
+        <td>Update <em>every</em> parameter on a new dataset.</td>
+        <td>Maximum control. Requires GPU memory proportional to the full model (gradient, optimizer state, weights). For a 360M model that already means tens of GBs.</td>
+      </tr>
+      <tr>
+        <td><strong>LoRA / QLoRA</strong></td>
+        <td>Freeze the base model. Train a small bolt-on adapter (LoRA), optionally with the base loaded in 4 bits (QLoRA).</td>
+        <td>You want a real behavior change but cannot afford full fine-tuning. The default modern recipe for instruction tuning on a single GPU.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>The hometask asks you to push the model's behavior past what a prompt alone reliably achieves: three distinct registers (child / student / expert) for the <em>same</em> question. That is exactly the regime where fine-tuning earns its keep.</p>
+
+  <div class="pullquote">A LoRA adapter is the model's accent, learned in an afternoon.</div>
+</section>
+
+<!-- §2 -->
+<section id="sec-2">
+  <h2><span class="sectnum">§ 02 — THE BIG PICTURE</span>The Trinity: Model + Adapter + Quantization</h2>
+  <p class="standfirst">Three moving parts. Get all three right and a 360M model trains on a free-tier GPU.</p>
+
+  <p>QLoRA is a stack of three independent ideas. None of them is the whole trick; together they unlock single-GPU fine-tuning of large models.</p>
+
+  <figure>
+    <svg viewBox="0 0 740 320" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <!-- frozen base box -->
+      <rect x="40" y="80" width="240" height="160" fill="#FAF3DD" stroke="#1A2438" stroke-width="1.5" rx="3"/>
+      <text x="160" y="60" text-anchor="middle" font-size="13" fill="#1A2438" font-weight="600" letter-spacing="2">FROZEN BASE MODEL</text>
+      <text x="160" y="130" text-anchor="middle" font-size="14" fill="#6B7388">large W (4-bit NF4)</text>
+      <text x="160" y="155" text-anchor="middle" font-size="11" fill="#6B7388">millions of parameters</text>
+      <text x="160" y="180" text-anchor="middle" font-size="11" fill="#6B7388">no gradient</text>
+      <text x="160" y="220" text-anchor="middle" font-size="36" fill="#B83A1F">❄</text>
+
+      <!-- plus -->
+      <text x="305" y="170" text-anchor="middle" font-size="34" fill="#B83A1F" font-weight="300">+</text>
+
+      <!-- LoRA box -->
+      <rect x="330" y="100" width="170" height="120" fill="#FAF3DD" stroke="#314E7E" stroke-width="1.5" rx="3"/>
+      <text x="415" y="60" text-anchor="middle" font-size="13" fill="#314E7E" font-weight="600" letter-spacing="2">LORA ADAPTER</text>
+      <text x="415" y="140" text-anchor="middle" font-size="14" fill="#1A2438">A · B</text>
+      <text x="415" y="162" text-anchor="middle" font-size="11" fill="#6B7388">rank r (e.g. 8)</text>
+      <text x="415" y="180" text-anchor="middle" font-size="11" fill="#6B7388">trainable, bf16</text>
+      <text x="415" y="210" text-anchor="middle" font-size="22" fill="#C68A1F">🔥</text>
+
+      <!-- equals -->
+      <text x="525" y="170" text-anchor="middle" font-size="34" fill="#B83A1F" font-weight="300">=</text>
+
+      <!-- adapted model -->
+      <rect x="550" y="100" width="160" height="120" fill="#FAF3DD" stroke="#4F6B57" stroke-width="1.5" rx="3"/>
+      <text x="630" y="60" text-anchor="middle" font-size="13" fill="#4F6B57" font-weight="600" letter-spacing="2">ADAPTED MODEL</text>
+      <text x="630" y="150" text-anchor="middle" font-size="14" fill="#1A2438">W' = W + α A B</text>
+      <text x="630" y="178" text-anchor="middle" font-size="11" fill="#6B7388">on-the-fly during forward</text>
+
+      <!-- arrows -->
+      <line x1="280" y1="160" x2="305" y2="160" stroke="#6B7388" stroke-width="1"/>
+      <line x1="500" y1="160" x2="525" y2="160" stroke="#6B7388" stroke-width="1"/>
+
+      <!-- caption labels at bottom -->
+      <text x="160" y="280" text-anchor="middle" font-size="11" fill="#6B7388" font-style="italic">stored once · never updated</text>
+      <text x="415" y="280" text-anchor="middle" font-size="11" fill="#6B7388" font-style="italic">~0.1–1% of base params</text>
+      <text x="630" y="280" text-anchor="middle" font-size="11" fill="#6B7388" font-style="italic">behaves like a fine-tuned model</text>
+    </svg>
+    <figcaption>The QLoRA recipe in one figure. Frozen quantized weights provide the knowledge. A small rank-r adapter provides the task. Their sum behaves like a fine-tuned model.</figcaption>
+  </figure>
+
+  <ol>
+    <li><strong>Quantization</strong> shrinks the base model's memory footprint by storing weights in 4 bits instead of 16 or 32. The model becomes cheap to <em>hold</em>.</li>
+    <li><strong>LoRA</strong> injects tiny trainable matrices alongside the frozen weights. Only those tiny matrices receive gradients. The model becomes cheap to <em>update</em>.</li>
+    <li><strong>The training stack</strong> (PEFT + bitsandbytes + Trainer) glues them together: dequantize on the fly, run the LoRA path in 16-bit, backprop only through the adapter.</li>
+  </ol>
+</section>
+
+<!-- §3 -->
+<section id="sec-3">
+  <h2><span class="sectnum">§ 03 — QUANTIZATION</span>What 4-Bit Quantization Actually Means</h2>
+  <p class="standfirst">Sixteen bins, chosen so weights land in the right places. Two saved passes through the bin table. That is the whole idea.</p>
+
+  <p>A neural network weight is conventionally a 32-bit float — eight bytes of dynamic range per number. Four-bit quantization replaces it with one of 16 possible values. The naive way (uniform spacing from −1 to +1) wastes resolution: most weights sit near zero, and the extremes are mostly empty. QLoRA uses a smarter encoding called <strong>NF4</strong> (Normal Float 4).</p>
+
+  <h3>NF4: bins chosen by quantile</h3>
+  <p>Neural-network weights are roughly Gaussian, centered at zero. NF4 picks its 16 codepoints by <em>quantile</em>: each of the 16 bins represents an equal slice of the normal distribution. The bins cluster densely near zero where the weights are crowded, and spread out at the tails.</p>
+
+  <div class="sidenote">
+    Why information-theoretically optimal? If each codepoint is equally likely a priori, you use all 16 of them. Uniform spacing wastes most codes on empty tails.
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <!-- baseline -->
+      <line x1="40" y1="170" x2="660" y2="170" stroke="#1A2438" stroke-width="1"/>
+
+      <!-- Gaussian curve -->
+      <path d="M 40 170 C 200 170, 280 30, 350 30 C 420 30, 500 170, 660 170" fill="none" stroke="#B83A1F" stroke-width="2"/>
+
+      <!-- uniform bins (top row, gray markers above curve area) -->
+      <g>
+        <text x="350" y="20" text-anchor="middle" font-size="11" fill="#6B7388" letter-spacing="1.5">UNIFORM (INT4)</text>
+        <!-- evenly spaced ticks above the line -->
+      </g>
+
+      <!-- NF4 bins on the line, denser near center -->
+      <g stroke="#314E7E" stroke-width="2">
+        <!-- positions chosen by quantile, schematic -->
+        <line x1="80" y1="165" x2="80" y2="180"/>
+        <line x1="140" y1="165" x2="140" y2="180"/>
+        <line x1="190" y1="165" x2="190" y2="180"/>
+        <line x1="230" y1="165" x2="230" y2="180"/>
+        <line x1="265" y1="165" x2="265" y2="180"/>
+        <line x1="295" y1="165" x2="295" y2="180"/>
+        <line x1="325" y1="165" x2="325" y2="180"/>
+        <line x1="350" y1="165" x2="350" y2="180"/>
+        <line x1="375" y1="165" x2="375" y2="180"/>
+        <line x1="405" y1="165" x2="405" y2="180"/>
+        <line x1="435" y1="165" x2="435" y2="180"/>
+        <line x1="470" y1="165" x2="470" y2="180"/>
+        <line x1="510" y1="165" x2="510" y2="180"/>
+        <line x1="560" y1="165" x2="560" y2="180"/>
+        <line x1="620" y1="165" x2="620" y2="180"/>
+      </g>
+      <text x="350" y="205" text-anchor="middle" font-size="11" fill="#314E7E" letter-spacing="1.5">NF4 — DENSE WHERE WEIGHTS ARE</text>
+
+      <!-- weight distribution annotation -->
+      <text x="600" y="60" text-anchor="end" font-size="11" fill="#B83A1F" font-style="italic">weight distribution</text>
+    </svg>
+    <figcaption>NF4 places bin boundaries by the quantile of the standard normal. Bins crowd near zero where the weights are, and spread to capture rare large weights.</figcaption>
+  </figure>
+
+  <h3>Double quantization</h3>
+  <p>Quantization stores not just bin indices but also a scaling constant per block of weights (telling the decoder how big the bins are). Those constants are themselves floats. <strong>Double quantization</strong> quantizes them too — saving ~0.5 bit per parameter. It is bookkeeping, but at billions of parameters bookkeeping matters.</p>
+
+  <h3>The trick that makes it work</h3>
+  <p>The 4-bit weights are <em>stored</em> at low precision but <em>computed</em> in 16-bit. During every forward pass, the relevant weight block is dequantized to bfloat16, the matrix multiply runs in 16-bit, and the result continues. You pay a small compute cost to keep numerical stability.</p>
+
+  <pre><code><span class="com"># BitsAndBytesConfig — the four lines that do all of this</span>
+<span class="kw">from</span> transformers <span class="kw">import</span> BitsAndBytesConfig
+<span class="kw">import</span> torch
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=<span class="kw">True</span>,                              <span class="com"># store weights as 4-bit</span>
+    bnb_4bit_quant_type=<span class="str">"nf4"</span>,                       <span class="com"># use NF4 (vs "fp4")</span>
+    bnb_4bit_use_double_quant=<span class="kw">True</span>,                  <span class="com"># quantize the constants too</span>
+    bnb_4bit_compute_dtype=torch.bfloat16,           <span class="com"># compute in bf16</span>
+)</code></pre>
+
+  <div class="callout">
+    <h5>What you actually save</h5>
+    <p>For SmolLM2-360M, full-precision weights need roughly 1.4 GB. In 4-bit NF4 + double quantization, the same model fits in ~0.25 GB. That is the whole difference between "won't load on a free Colab" and "runs comfortably."</p>
+  </div>
+</section>
+
+<!-- §4 -->
+<section id="sec-4">
+  <h2><span class="sectnum">§ 04 — ADAPTER</span>LoRA: The Low-Rank Trick</h2>
+  <p class="standfirst">If the update you need is low-rank, you do not need to store it at full rank. Two thin matrices will do.</p>
+
+  <p>Fine-tuning a transformer means modifying its weight matrices — typically the <code>q</code>, <code>k</code>, <code>v</code>, <code>o</code> projections inside attention, and possibly the MLP layers. A naive update is a delta matrix the same size as the original:</p>
+
+  <p>$$W' = W + \Delta W$$</p>
+
+  <p>If <code>W</code> is 1024 × 1024 then so is <code>ΔW</code> — over a million numbers to store and update per layer. The LoRA observation is that for most task adaptations, <em>ΔW does not need to be full-rank</em>. The actual change in behavior lives in a low-dimensional subspace. So we parameterize:</p>
+
+  <p>$$\Delta W = \frac{\alpha}{r} \cdot A B \quad \text{where} \quad A \in \mathbb{R}^{d \times r}, \ B \in \mathbb{R}^{r \times d}$$</p>
+
+  <p>With <code>r</code> typically 8 or 16. The full adapted matrix is then:</p>
+
+  <p>$$W'x = Wx + \frac{\alpha}{r} A B x$$</p>
+
+  <figure>
+    <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <!-- W -->
+      <rect x="40" y="40" width="140" height="140" fill="#FAF3DD" stroke="#1A2438" stroke-width="1.5"/>
+      <text x="110" y="120" text-anchor="middle" font-size="40" fill="#1A2438" font-style="italic" font-family="serif">W</text>
+      <text x="110" y="200" text-anchor="middle" font-size="11" fill="#6B7388">d × d, frozen</text>
+      <text x="110" y="220" text-anchor="middle" font-size="10" fill="#6B7388">~1 048 576 params</text>
+
+      <text x="210" y="115" text-anchor="middle" font-size="28" fill="#B83A1F" font-weight="300">+</text>
+
+      <!-- A (tall thin) -->
+      <rect x="240" y="40" width="30" height="140" fill="#FAF3DD" stroke="#314E7E" stroke-width="1.5"/>
+      <text x="255" y="120" text-anchor="middle" font-size="22" fill="#314E7E" font-style="italic" font-family="serif">A</text>
+      <text x="255" y="200" text-anchor="middle" font-size="11" fill="#6B7388">d × r</text>
+
+      <text x="288" y="115" text-anchor="middle" font-size="22" fill="#B83A1F">·</text>
+
+      <!-- B (short wide) -->
+      <rect x="305" y="100" width="140" height="30" fill="#FAF3DD" stroke="#314E7E" stroke-width="1.5"/>
+      <text x="375" y="120" text-anchor="middle" font-size="22" fill="#314E7E" font-style="italic" font-family="serif">B</text>
+      <text x="375" y="155" text-anchor="middle" font-size="11" fill="#6B7388">r × d</text>
+
+      <text x="465" y="115" text-anchor="middle" font-size="28" fill="#B83A1F" font-weight="300">=</text>
+
+      <!-- W' -->
+      <rect x="490" y="40" width="140" height="140" fill="#FAF3DD" stroke="#4F6B57" stroke-width="1.5"/>
+      <text x="560" y="120" text-anchor="middle" font-size="32" fill="#4F6B57" font-style="italic" font-family="serif">W&apos;</text>
+      <text x="560" y="200" text-anchor="middle" font-size="11" fill="#6B7388">adapted, used in forward</text>
+
+      <!-- annotations -->
+      <text x="320" y="30" text-anchor="middle" font-size="11" fill="#314E7E" font-style="italic" letter-spacing="1">trainable rank-r factors</text>
+      <text x="320" y="220" text-anchor="middle" font-size="10" fill="#6B7388">2 × d × r ≈ 16 384 params for r=8</text>
+    </svg>
+    <figcaption>A single LoRA-adapted layer. The huge frozen <em>W</em> is left alone. Only <em>A</em> and <em>B</em>, the rank-r factors, are trained — about 1.5% as many parameters.</figcaption>
+  </figure>
+
+  <h3>The three knobs: r, alpha, target_modules</h3>
+
+  <table>
+    <thead>
+      <tr><th style="width:18%">Knob</th><th style="width:30%">What it controls</th><th>How to think about it</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>r</code></td>
+        <td>The rank — the resolution of the adaptation.</td>
+        <td>Low <code>r</code> = blurry sketch of the new behavior. High <code>r</code> = sharper but more parameters and overfitting risk. Common values: 4, 8, 16, 32. For a small task on a small model, <code>r=8</code> is plenty.</td>
+      </tr>
+      <tr>
+        <td><code>lora_alpha</code></td>
+        <td>Scaling factor. Effective update is <code>(α / r) · AB</code>.</td>
+        <td>How loudly the adapter speaks over the base model. Convention: set <code>α = r</code> or <code>α = 2r</code>. Larger α → stronger task signal, more risk of dominating.</td>
+      </tr>
+      <tr>
+        <td><code>target_modules</code></td>
+        <td>Which layers get an adapter at all.</td>
+        <td>For decoder-only models: <code>["q_proj","k_proj","v_proj","o_proj"]</code> at minimum. For T5: <code>["q","v"]</code> is the standard light-weight choice.</td>
+      </tr>
+      <tr>
+        <td><code>lora_dropout</code></td>
+        <td>Dropout inside the adapter path.</td>
+        <td>0.05–0.1 helps with overfitting on small datasets. Drop to 0 if your dataset is large.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Interactive playground -->
+  <div class="playground">
+    <div class="label"><span>LORA RANK · r</span><span class="val" id="rval">8</span></div>
+    <input type="range" id="rslider" min="1" max="64" value="8" />
+    <div class="label"><span>LORA ALPHA · α</span><span class="val" id="aval">16</span></div>
+    <input type="range" id="aslider" min="1" max="128" value="16" />
+    <div class="label"><span>HIDDEN DIM · d</span><span class="val" id="dval">1024</span></div>
+    <input type="range" id="dslider" min="64" max="4096" step="64" value="1024" />
+    <div class="readout" id="ro">…</div>
+  </div>
+
+  <p><em>Try this:</em> bump rank from 8 to 32 — see the trainable-parameter count grow ×4 per layer. Bump alpha to 64 with r=8 and notice the effective scale becomes 8× (α/r). That scale is what determines how strongly the adapter "wins" against the frozen base.</p>
+
+</section>
+
+<!-- §5 -->
+<section id="sec-5">
+  <h2><span class="sectnum">§ 05 — TWO ARCHITECTURES</span>Causal vs Seq2Seq</h2>
+  <p class="standfirst">SmolLM2 is a decoder. Flan-T5 is an encoder-decoder. Same goal, very different plumbing — and very different data format.</p>
+
+  <p>The assignment asks you to fine-tune <em>two</em> models with very different shapes. The model you choose dictates how you format every training example, which trainer you use, and which target modules carry LoRA.</p>
+
+  <figure>
+    <svg viewBox="0 0 740 280" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', monospace">
+      <!-- Causal LM -->
+      <text x="180" y="30" text-anchor="middle" font-size="13" fill="#B83A1F" font-weight="600" letter-spacing="2">CAUSAL LM — SmolLM2</text>
+
+      <rect x="40" y="60" width="280" height="50" fill="#FAF3DD" stroke="#B83A1F" stroke-width="1.5" rx="3"/>
+      <text x="180" y="92" text-anchor="middle" font-size="13" fill="#1A2438">DECODER (left-to-right)</text>
+
+      <text x="40" y="140" font-size="11" fill="#6B7388">INPUT (one continuous string):</text>
+      <rect x="40" y="148" width="280" height="80" fill="#1B2334" rx="2"/>
+      <text x="50" y="168" font-size="11" fill="#E5DBC0" font-family="'IBM Plex Mono', monospace">### Question: What is X?</text>
+      <text x="50" y="186" font-size="11" fill="#E5DBC0">### Expertise level: child</text>
+      <text x="50" y="204" font-size="11" fill="#E5DBC0">### Answer:</text>
+      <text x="50" y="222" font-size="11" fill="#F2A65A">X is like ...   ← model learns</text>
+
+      <text x="180" y="260" text-anchor="middle" font-size="11" fill="#6B7388" font-style="italic">loss on every token, predict next</text>
+
+      <!-- Seq2Seq -->
+      <text x="560" y="30" text-anchor="middle" font-size="13" fill="#314E7E" font-weight="600" letter-spacing="2">SEQ2SEQ — Flan-T5</text>
+
+      <rect x="420" y="60" width="130" height="50" fill="#FAF3DD" stroke="#314E7E" stroke-width="1.5" rx="3"/>
+      <text x="485" y="92" text-anchor="middle" font-size="12" fill="#1A2438">ENCODER</text>
+      <rect x="570" y="60" width="130" height="50" fill="#FAF3DD" stroke="#314E7E" stroke-width="1.5" rx="3"/>
+      <text x="635" y="92" text-anchor="middle" font-size="12" fill="#1A2438">DECODER</text>
+      <line x1="550" y1="85" x2="570" y2="85" stroke="#314E7E" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <text x="420" y="140" font-size="11" fill="#6B7388">INPUT:</text>
+      <rect x="420" y="148" width="130" height="60" fill="#1B2334" rx="2"/>
+      <text x="427" y="168" font-size="10" fill="#E5DBC0">What is X?</text>
+      <text x="427" y="184" font-size="10" fill="#E5DBC0">level: child</text>
+
+      <text x="570" y="140" font-size="11" fill="#6B7388">TARGET:</text>
+      <rect x="570" y="148" width="130" height="60" fill="#1B2334" rx="2"/>
+      <text x="577" y="168" font-size="10" fill="#F2A65A">X is like ...</text>
+
+      <text x="560" y="260" text-anchor="middle" font-size="11" fill="#6B7388" font-style="italic">loss only on target tokens</text>
+
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#314E7E"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>The same training example, packaged differently. Decoder-only models eat one big string and predict each next token. Encoder-decoder models keep input and target separate.</figcaption>
+  </figure>
+
+  <h3>Decoder-only: one string, next-token prediction</h3>
+  <p>A causal LM like <code>SmolLM2-360M-Instruct</code> is a single transformer stack that reads left to right. Every token attends only to tokens before it. Training a causal LM means: give it a sequence, and ask it to predict each next token. The loss is cross-entropy over every position.</p>
+
+  <p>For instruction tuning, you concatenate the question, level, and answer into one string with clear delimiters. The model is then trained to produce the entire string — but in practice, the parts before the answer are essentially "free hints" that condition the generation.</p>
+
+  <p><span class="tag causal">causal</span> Use the TRL library's <code>SFTTrainer</code>, which wraps everything as next-token prediction. Pass it a dataset with one <code>text</code> field per example.</p>
+
+  <h3>Encoder-decoder: input → target</h3>
+  <p>Flan-T5 has two stacks. The <em>encoder</em> reads the full input (question + level) bidirectionally. The <em>decoder</em> generates the answer one token at a time, attending to the encoder's representation through cross-attention. The training loss applies only to the decoder's target tokens.</p>
+
+  <p>Crucially: the input and target are <em>separate columns</em>. You don't concatenate them. The trainer's data collator handles padding, label masking, and the decoder-input shift internally.</p>
+
+  <p><span class="tag seq2seq">seq2seq</span> Use HuggingFace's <code>Seq2SeqTrainer</code> with <code>DataCollatorForSeq2Seq</code>. Dataset has separate <code>input_ids</code> and <code>labels</code>.</p>
+
+  <h3>The format check</h3>
+  <table>
+    <thead><tr><th>Aspect</th><th>SmolLM2 (causal)</th><th>Flan-T5 (seq2seq)</th></tr></thead>
+    <tbody>
+      <tr><td>Dataset field(s)</td><td>One <code>text</code> column</td><td><code>input</code> + <code>target</code></td></tr>
+      <tr><td>Trainer</td><td><code>SFTTrainer</code> (from trl)</td><td><code>Seq2SeqTrainer</code> (transformers)</td></tr>
+      <tr><td>LoRA <code>task_type</code></td><td><code>TaskType.CAUSAL_LM</code></td><td><code>TaskType.SEQ_2_SEQ_LM</code></td></tr>
+      <tr><td>Typical <code>target_modules</code></td><td><code>q_proj, k_proj, v_proj, o_proj</code></td><td><code>q, v</code></td></tr>
+      <tr><td>Loss applied to</td><td>Every token in the string</td><td>Only the target tokens</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <h5>The single most common mistake</h5>
+    <p>Feeding the seq2seq-style two-column dataset to <code>SFTTrainer</code>, or feeding the concatenated single-string dataset to <code>Seq2SeqTrainer</code>. The trainer will not always error — it may "train" and produce nonsense outputs. Always build two distinct dataset variants and use the right trainer for each.</p>
+  </div>
+</section>
+
+<!-- §6 -->
+<section id="sec-6">
+  <h2><span class="sectnum">§ 06 — DATASET</span>Building the Dataset (Task 1.1)</h2>
+  <p class="standfirst">580 filtered questions. Three expertise levels. One synthetic generation pass. One test set you review yourself.</p>
+
+  <p>The pre-filtered dataset gives you 580 Q&A pairs. You need each question answered three times — once for each expertise level. The standard recipe is:</p>
+
+  <ol>
+    <li><strong>Prompt a teacher model</strong> (any capable LLM API, or a larger local model) with a meta-prompt: "Rewrite this answer for a child / student / expert." Request JSON output.</li>
+    <li><strong>Parse and validate</strong> each response. Reject any that fail JSON parsing or that omit a level.</li>
+    <li><strong>Save as JSONL</strong> with one example per line. JSONL is loadable, line-by-line, by HuggingFace <code>datasets</code>.</li>
+    <li><strong>Hand-pick 20 examples</strong> for the test set. These come from the same Dolly source but are <em>excluded</em> from training. Manually review them.</li>
+  </ol>
+
+  <h3>What "level" actually means</h3>
+  <table>
+    <thead><tr><th>Level</th><th>Voice cues</th><th>Allowed jargon</th><th>Typical length</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Child</strong></td><td>Analogies, everyday objects, simple verbs, no symbols</td><td>None — translate every term</td><td>2–3 short sentences</td></tr>
+      <tr><td><strong>Student</strong></td><td>Definition + intuition + small example</td><td>Field-standard terms with brief gloss</td><td>4–6 sentences, light structure</td></tr>
+      <tr><td><strong>Expert</strong></td><td>Precise definitions, technical vocabulary, no hand-holding</td><td>All of it</td><td>Compact and dense</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Two dataset variants</h3>
+  <p>Build the dataset once (the JSONL with question + level + answer per row), then derive the two trainer-specific formats:</p>
+
+  <pre><code><span class="com"># Causal LM variant — flat text field</span>
+{
+  <span class="str">"text"</span>: <span class="str">"### Question: Why is the sky blue?\n### Expertise level: child\n### Answer: The air bends blue light more than red light, so when you look up the sky looks blue."</span>
+}
+
+<span class="com"># Seq2Seq variant — input/target columns</span>
+{
+  <span class="str">"input"</span>:  <span class="str">"Question: Why is the sky blue? Expertise level: child"</span>,
+  <span class="str">"target"</span>: <span class="str">"The air bends blue light more than red light, so when you look up the sky looks blue."</span>
+}</code></pre>
+
+  <div class="callout tip">
+    <h5>Sanity-check before you generate all 580</h5>
+    <p>Generate 5 examples first. Verify: (1) JSON parses, (2) each question yields all three levels, (3) the saved JSONL loads back with <code>datasets.load_dataset("json", data_files=...)</code>, (4) the model tokenizes the text without truncating. Only then scale to the full set.</p>
+  </div>
+
+  <h3>How many examples do you really need?</h3>
+  <p>For a behavior-shaping task like this, ~300–500 examples per level (1000–1500 total) is the practical floor where you start seeing reliable level adaptation. The full 580 × 3 = 1740 is more than enough. If you are rate-limited on the teacher model, start with a subset — say 150 × 3 = 450 — and check if it works before generating more.</p>
+</section>
+
+<!-- §7 -->
+<section id="sec-7">
+  <h2><span class="sectnum">§ 07 — TRAINING</span>The Training Recipe</h2>
+  <p class="standfirst">Six objects, in this order. Get the order wrong and you will train nothing.</p>
+
+  <h3>The canonical order of operations</h3>
+  <ol>
+    <li><strong>Tokenizer</strong> — load, set <code>pad_token</code> if missing.</li>
+    <li><strong>BitsAndBytesConfig</strong> — the 4-bit recipe.</li>
+    <li><strong>Base model</strong> — load with <code>quantization_config=bnb_config</code>.</li>
+    <li><strong>prepare_model_for_kbit_training</strong> — wraps the model to make quantized training stable.</li>
+    <li><strong>LoraConfig</strong> — describe the adapter.</li>
+    <li><strong>Trainer</strong> — pass it the model, dataset, and <code>peft_config</code>. Train.</li>
+  </ol>
+
+  <h3>The key training arguments</h3>
+  <table>
+    <thead><tr><th>Argument</th><th>Sensible default</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>num_train_epochs</code></td><td>1–3</td><td>Passes through the full dataset. For ~1500 examples, 3 epochs is plenty.</td></tr>
+      <tr><td><code>per_device_train_batch_size</code></td><td>4–8</td><td>How many examples per GPU step. Limit by memory.</td></tr>
+      <tr><td><code>gradient_accumulation_steps</code></td><td>2–4</td><td>Effective batch = batch_size × accumulation. Used when memory caps batch_size low.</td></tr>
+      <tr><td><code>learning_rate</code></td><td>2e-4 (causal), 1e-3 (T5)</td><td>LoRA tolerates higher LRs than full FT. T5 prefers larger LRs.</td></tr>
+      <tr><td><code>warmup_ratio</code></td><td>0.03</td><td>Ramp the LR up over the first 3% of training. Stops early instability.</td></tr>
+      <tr><td><code>max_seq_length</code></td><td>512–1024</td><td>Longer than your longest example; shorter than what fits in VRAM.</td></tr>
+      <tr><td><code>logging_steps</code></td><td>10</td><td>Print loss every 10 steps so you can watch it descend.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>What "trainable parameters" should look like</h3>
+  <p>After you call <code>model.print_trainable_parameters()</code>, you should see something like:</p>
+
+  <pre><code>trainable params: 786,432 || all params: 362,003,584 || trainable%: 0.2173</code></pre>
+
+  <p>If <strong>trainable%</strong> is &lt; 0.01%, your LoRA didn't attach (check <code>target_modules</code> matches actual module names). If it is &gt; 5%, something is mis-frozen.</p>
+
+  <div class="callout warn">
+    <h5>Gradient flowing into nothing</h5>
+    <p>If your loss prints as <code>nan</code> from step 0, the LoRA adapter is sitting on a frozen tensor and the gradient has nowhere to go. The fix is almost always: don't apply <code>prepare_model_for_kbit_training</code> <em>after</em> calling <code>get_peft_model</code>. The PEFT step should come <em>after</em> kbit-prep.</p>
+  </div>
+</section>
+
+<!-- §8 -->
+<section id="sec-8">
+  <h2><span class="sectnum">§ 08 — EVALUATION</span>Reading Two Generations Side by Side</h2>
+  <p class="standfirst">Run each test question through both the base and the fine-tuned model. Look at them side by side. Score with intent, not vibes.</p>
+
+  <p>The evaluation table demands four columns of judgment per example. Be deliberate about each.</p>
+
+  <table>
+    <thead><tr><th>Column</th><th>What you're asking</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Level match</strong></td><td>Did the model actually use child-level / student-level / expert-level voice? A "child" answer with the word "Bayesian" fails this.</td></tr>
+      <tr><td><strong>Clarity / relevance</strong></td><td>Is the answer about the question, in plain readable English? Or did it wander?</td></tr>
+      <tr><td><strong>Faithfulness</strong></td><td>Does it stay anchored to the source answer, or invent claims? (Hallucination check.)</td></tr>
+      <tr><td><strong>Better after FT?</strong></td><td>Comparing base vs FT for this example: yes / no / tie. Be honest — fine-tuning sometimes regresses on individual examples.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Reproducible generation</h3>
+  <p>Use the same generation arguments for both models. Otherwise you are comparing prompting styles, not models.</p>
+
+  <pre><code>gen_kwargs = dict(
+    max_new_tokens=<span class="num">200</span>,
+    do_sample=<span class="kw">False</span>,        <span class="com"># greedy → reproducible</span>
+    num_beams=<span class="num">1</span>,
+    repetition_penalty=<span class="num">1.05</span>,
+)</code></pre>
+
+  <p>For the base model, you build the same prompt format you trained on (or for T5, the same input column). The trick is: <strong>the base model has never seen your delimiters before</strong>, so its outputs may be off-format. That is part of the comparison — fine-tuning teaches the model to obey the format.</p>
+
+  <h3>What to look for in the discussion (Task 1.4)</h3>
+  <p>The two architectures fail differently. Things to watch for:</p>
+  <ul>
+    <li><strong>SmolLM2</strong> tends to keep generating until it hits <code>max_new_tokens</code>, sometimes "explaining the next question" you didn't ask. Stopping cleanly is a learned behavior.</li>
+    <li><strong>Flan-T5-small</strong> tends to be terse — sometimes too terse for "expert" answers. Its encoder-decoder structure gives crisper alignment with the question but smaller output vocabulary use.</li>
+    <li><strong>Hallucination</strong> shows up as confident factual errors. The base model invents, the fine-tuned one usually inherits from your training data — so the training data quality matters.</li>
+  </ul>
+</section>
+
+<!-- §9 -->
+<section id="sec-9">
+  <h2><span class="sectnum">§ 09 — PITFALLS</span>Common Failure Modes</h2>
+  <p class="standfirst">A short field guide to the errors you will probably hit. Read once before training so you recognize them.</p>
+
+  <h4>1. Loss stays flat at the initial value</h4>
+  <p>The LoRA adapter is probably attached but not getting gradient. Causes: wrong order of <code>prepare_model_for_kbit_training</code> and <code>get_peft_model</code>; or <code>model.gradient_checkpointing_enable()</code> wasn't followed by <code>model.enable_input_require_grads()</code>; or <code>target_modules</code> doesn't match real module names.</p>
+
+  <h4>2. Loss is NaN</h4>
+  <p>Either your compute dtype is fp16 (use bf16 if your hardware supports it; T4 GPUs do), or your learning rate is far too high, or your tokenizer is producing degenerate sequences (all pad tokens).</p>
+
+  <h4>3. Tokenizer has no pad_token</h4>
+  <p>Most causal-LM tokenizers ship without a pad token. Set <code>tokenizer.pad_token = tokenizer.eos_token</code> before training. Also set <code>tokenizer.padding_side = "right"</code> for training, switch to <code>"left"</code> for inference.</p>
+
+  <h4>4. The fine-tuned model produces nothing different</h4>
+  <p>The adapter trained but doesn't get loaded. After <code>trainer.train()</code>, save with <code>model.save_pretrained(path)</code>. To use, load the base model again, then attach the saved adapter with <code>PeftModel.from_pretrained(base, path)</code>.</p>
+
+  <h4>5. Out of memory on a free GPU</h4>
+  <p>Reduce <code>per_device_train_batch_size</code>, then raise <code>gradient_accumulation_steps</code> to keep effective batch size constant. Lower <code>max_seq_length</code> to your real max length. Turn on <code>gradient_checkpointing=True</code>.</p>
+
+  <h4>6. Outputs in the wrong format after fine-tuning</h4>
+  <p>You trained too few epochs, or your delimiters were inconsistent between examples (sometimes <code>### Answer:</code>, sometimes <code>Answer:</code>). Be ruthlessly consistent.</p>
+</section>
+
+<!-- §10 -->
+<section id="sec-10">
+  <h2><span class="sectnum">§ 10 — TASK CARDS</span>What to Do, by Task</h2>
+  <p class="standfirst">Each task in the hometask, with the concepts you need and the questions to think about. No code — that part is yours.</p>
+
+  <div class="taskcard">
+    <div class="tasknum">TASK 1.1<span class="pts">15 PTS</span></div>
+    <h4>Prepare the level-adaptive dataset</h4>
+    <div class="concepts">
+      <h5>Concepts needed</h5>
+      <ul>
+        <li>JSON / JSONL format and the HuggingFace <code>datasets.load_dataset("json", ...)</code> loader</li>
+        <li>Calling an LLM API (or a local model) for synthetic data generation</li>
+        <li>The difference between causal-LM string format and seq2seq input/target format (§ 05)</li>
+      </ul>
+    </div>
+    <div class="thinking">
+      <h5>Thinking</h5>
+      <ul>
+        <li>What meta-prompt produces all three levels reliably in one call? (One JSON object with three fields is cleaner than three calls.)</li>
+        <li>How will you guarantee the test set is <em>not</em> in the training set? (Hint: split <em>before</em> generating, or hold out specific question indices.)</li>
+        <li>What's your manual-review rubric for the 20 test examples?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="taskcard">
+    <div class="tasknum">TASK 1.2<span class="pts">10 PTS</span></div>
+    <h4>QLoRA fine-tune both models</h4>
+    <div class="concepts">
+      <h5>Concepts needed</h5>
+      <ul>
+        <li><code>BitsAndBytesConfig</code> with NF4 + double quantization (§ 03)</li>
+        <li><code>LoraConfig</code> with appropriate <code>task_type</code> and <code>target_modules</code> for each architecture (§ 04, § 05)</li>
+        <li>The trainer match: <code>SFTTrainer</code> for causal, <code>Seq2SeqTrainer</code> for T5 (§ 05)</li>
+        <li><code>prepare_model_for_kbit_training</code> and its ordering relative to <code>get_peft_model</code> (§ 07)</li>
+      </ul>
+    </div>
+    <div class="thinking">
+      <h5>Thinking</h5>
+      <ul>
+        <li>Choose r, alpha, and target_modules for each model. Why those choices?</li>
+        <li>Sanity check: what should <code>print_trainable_parameters()</code> show? If trainable% is &lt; 0.01% or &gt; 5%, something is wrong.</li>
+        <li>Save both adapters with clear names. You will reload them in Task 1.3.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="taskcard">
+    <div class="tasknum">TASK 1.3<span class="pts">20 PTS</span></div>
+    <h4>Evaluation table — before vs after</h4>
+    <div class="concepts">
+      <h5>Concepts needed</h5>
+      <ul>
+        <li>Loading a base model + a PEFT adapter for inference (<code>PeftModel.from_pretrained</code>)</li>
+        <li>Greedy generation with consistent <code>gen_kwargs</code> across runs (§ 08)</li>
+        <li>The same prompt format used during training — for the base model too</li>
+      </ul>
+    </div>
+    <div class="thinking">
+      <h5>Thinking</h5>
+      <ul>
+        <li>Generate four outputs per question: base-SmolLM2, FT-SmolLM2, base-T5, FT-T5. That's 80 total — automate the loop.</li>
+        <li>What does "better after fine-tuning?" mean when both are bad? When both are good but stylistically different?</li>
+        <li>Spot-check 2–3 examples manually before trusting the table.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="taskcard">
+    <div class="tasknum">TASK 1.4<span class="pts">15 PTS</span></div>
+    <h4>Model comparison and discussion</h4>
+    <div class="concepts">
+      <h5>Concepts needed</h5>
+      <ul>
+        <li>Decoder-only vs encoder-decoder behavior differences (§ 05)</li>
+        <li>How model size (360M vs ~77M for T5-small) affects expressiveness</li>
+        <li>What "hallucination" looks like differently in each architecture</li>
+      </ul>
+    </div>
+    <div class="thinking">
+      <h5>Thinking</h5>
+      <ul>
+        <li>Which architecture adapted faster — and is "faster" the same as "better"?</li>
+        <li>Was one model better at one level (e.g., expert) and worse at another (child)?</li>
+        <li>Tie observations to specific examples from your Task 1.3 table — cite quotes.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="taskcard">
+    <div class="tasknum">TASK 1.5<span class="pts">15 PTS</span></div>
+    <h4>Conceptual questions (4)</h4>
+    <div class="concepts">
+      <h5>Concepts needed</h5>
+      <ul>
+        <li>Q1 — What changes after FT: instruction-following and format compliance, not factual knowledge (§ 01, § 08)</li>
+        <li>Q2 — Why QLoRA saves memory: 4-bit base storage + LoRA gradient on ~0.2% of params (§ 02, § 03)</li>
+        <li>Q3 — Higher rank trade-off: capacity vs memory vs overfitting (§ 04)</li>
+        <li>Q4 — LoRA vs prompting: where each wins (§ 01)</li>
+      </ul>
+    </div>
+    <div class="thinking">
+      <h5>Thinking</h5>
+      <ul>
+        <li>For Q3: if your data is small (1500 examples), what r is appropriate? When would you go higher?</li>
+        <li>For Q4: prompting wins when... fine-tuning wins when... cite the assignment's task as an example of which.</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<div class="flourish">⁂</div>
+
+<footer>
+  GUIDE 03 · QLORA FINE-TUNING · LLM ARCHITECTURES HOMETASK 3 · PART 1
+</footer>
+
+</div>
+
+<script>
+  const r = document.getElementById('rslider');
+  const a = document.getElementById('aslider');
+  const d = document.getElementById('dslider');
+  const rval = document.getElementById('rval');
+  const aval = document.getElementById('aval');
+  const dval = document.getElementById('dval');
+  const ro = document.getElementById('ro');
+
+  function update() {
+    const R = +r.value, A = +a.value, D = +d.value;
+    rval.textContent = R;
+    aval.textContent = A;
+    dval.textContent = D;
+    const lora_params = 2 * D * R;
+    const full_params = D * D;
+    const ratio = (lora_params / full_params * 100).toFixed(3);
+    const scale = (A / R).toFixed(2);
+    ro.innerHTML =
+      'LoRA params per layer = 2 · d · r = <span class="hl">' + lora_params.toLocaleString() + '</span><br>' +
+      'Full W per layer      = d · d     = <span class="dim">' + full_params.toLocaleString() + '</span><br>' +
+      'Trainable fraction    = <span class="hl">' + ratio + '%</span><br>' +
+      'Effective scale α/r   = <span class="hl">' + scale + '</span>' +
+      (scale > 4 ? '  <span class="dim">(adapter dominates strongly)</span>' : '') +
+      (scale < 0.5 ? '  <span class="dim">(adapter barely speaks)</span>' : '');
+  }
+  r.addEventListener('input', update);
+  a.addEventListener('input', update);
+  d.addEventListener('input', update);
+  update();
+</script>
+
+</body>
+</html>

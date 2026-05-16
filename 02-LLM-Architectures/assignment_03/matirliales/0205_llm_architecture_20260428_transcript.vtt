@@ -1,0 +1,4226 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:00.710
+Nebius Academy | AI-PE: So…
+
+2
+00:00:05.800 --> 00:00:17.310
+Nebius Academy | AI-PE: Can you hear me at home?
+
+3
+00:00:23.120 --> 00:00:24.909
+Nebius Academy | AI-PE: Excuse me, I think that's fine.
+
+4
+00:01:24.670 --> 00:01:26.079
+Nebius Academy | AI-PE: That ain't hurt for me.
+
+5
+00:01:26.230 --> 00:01:28.290
+Nebius Academy | AI-PE: No, it wasn't.
+
+6
+00:01:28.450 --> 00:01:29.990
+Nebius Academy | AI-PE: Thank you.
+
+7
+00:01:46.770 --> 00:01:47.450
+Nebius Academy | AI-PE: Nope.
+
+8
+00:02:16.310 --> 00:02:17.810
+Nebius Academy | AI-PE: Yes.
+
+9
+00:02:22.290 --> 00:02:23.220
+Nebius Academy | AI-PE: Good luck!
+
+10
+00:02:28.800 --> 00:02:30.749
+Nebius Academy | AI-PE: I want to push it properly.
+
+11
+00:02:34.080 --> 00:02:49.859
+Nebius Academy | AI-PE: Hi, everyone! I see a lot of familiar faces from the past who don't come on Friday, so I caught you guys. I caught you guys, and I invite you to also join me on Friday.
+
+12
+00:02:50.130 --> 00:03:03.139
+Nebius Academy | AI-PE: It's actually nicer than, well, after a work day, and you're all fresh in the morning, so give it a try inside the classroom as well. I would.
+
+13
+00:03:05.110 --> 00:03:09.199
+Nebius Academy | AI-PE: Okay, I'm waiting for everyone to sit down.
+
+14
+00:03:09.480 --> 00:03:11.539
+Nebius Academy | AI-PE: And then we'll start.
+
+15
+00:03:29.190 --> 00:03:33.669
+Nebius Academy | AI-PE: Welcome, everyone. I hope you're feeling well.
+
+16
+00:03:34.610 --> 00:03:40.790
+Nebius Academy | AI-PE: Today, we will dive deep into protocol now.
+
+17
+00:03:40.910 --> 00:03:50.039
+Nebius Academy | AI-PE: into a portion of LLMs, a bit higher level overview of LLM with Transformers.
+
+18
+00:03:51.050 --> 00:04:00.230
+Nebius Academy | AI-PE: Especially, we'll focus on the inference part today of the LLMs, after we will learn in detail the transformer architecture.
+
+19
+00:04:00.270 --> 00:04:11.089
+Nebius Academy | AI-PE: And on Friday, you're still stuck with me, and we will learn about training NLMs in details with respect to the transformer architecture.
+
+20
+00:04:11.560 --> 00:04:26.580
+Nebius Academy | AI-PE: So, we've been talking about those transformas from day one together, and finally you made it, and you will learn about this architecture that has really changed the way, we define the natural language processing.
+
+21
+00:04:26.640 --> 00:04:39.769
+Nebius Academy | AI-PE: the way we do generative AI, and of course, also, transverse into different domains outside of the NSP, such as vision, audio.
+
+22
+00:04:40.030 --> 00:04:45.509
+Nebius Academy | AI-PE: Coding, you know, in our everyday lives, all started with this.
+
+23
+00:04:46.240 --> 00:05:00.750
+Nebius Academy | AI-PE: So, what we'll do today, we'll talk about transformers, and then we'll go back to LLMs and everything we know with now the understanding of transformers, and we'll focus on LLMs at inference time.
+
+24
+00:05:01.130 --> 00:05:08.960
+Nebius Academy | AI-PE: what do we do? Once we have this already trained model, how does it look like at a power-based L&M?
+
+25
+00:05:09.300 --> 00:05:18.099
+Nebius Academy | AI-PE: You will see, I hope you will see today, that all the concepts we've learned up until now will be useful once we talk about this art.
+
+26
+00:05:19.240 --> 00:05:21.839
+Nebius Academy | AI-PE: So, let's start.
+
+27
+00:05:23.940 --> 00:05:31.230
+Nebius Academy | AI-PE: So, the transformer is a form of architecture.
+
+28
+00:05:31.440 --> 00:05:37.340
+Nebius Academy | AI-PE: That is composed of two blocks. Two blocks we are already familiar with. Let me just move on.
+
+29
+00:05:43.230 --> 00:05:49.490
+Nebius Academy | AI-PE: So, it's composed of two blocks we're already familiar with from our last lesson together.
+
+30
+00:05:49.720 --> 00:05:54.010
+Nebius Academy | AI-PE: An architecture, an encoder, and a decode.
+
+31
+00:05:54.130 --> 00:06:00.180
+Nebius Academy | AI-PE: Reminding you that the encoder part, Receive some sort of input.
+
+32
+00:06:00.350 --> 00:06:04.469
+Nebius Academy | AI-PE: And build a dense representation of those inputs.
+
+33
+00:06:04.700 --> 00:06:16.350
+Nebius Academy | AI-PE: And the decoder receives those inputs, this dense representation of the input, And alongside… Some additional inputs…
+
+34
+00:06:16.700 --> 00:06:18.599
+Nebius Academy | AI-PE: I will soon remind you why.
+
+35
+00:06:19.470 --> 00:06:24.400
+Nebius Academy | AI-PE: generates the final output. So, reminding you that the decoder receives both
+
+36
+00:06:24.640 --> 00:06:30.190
+Nebius Academy | AI-PE: The output of the encoder, which is some very smart representation of our inputs.
+
+37
+00:06:30.620 --> 00:06:34.969
+Nebius Academy | AI-PE: And also, in a generative setup, it receives
+
+38
+00:06:35.340 --> 00:06:42.640
+Nebius Academy | AI-PE: the outputs of the previous part of the sentence. So remember, each time I generated a new token?
+
+39
+00:06:43.280 --> 00:06:49.700
+Nebius Academy | AI-PE: After the generation of the new token, I put it as an input for the next step of the decoder.
+
+40
+00:06:50.210 --> 00:06:53.360
+Nebius Academy | AI-PE: Now, the transformer is a paper that introduced
+
+41
+00:06:53.480 --> 00:06:58.620
+Nebius Academy | AI-PE: Both sides of the architecture, so both the encoder, and a decoder.
+
+42
+00:06:58.930 --> 00:07:07.599
+Nebius Academy | AI-PE: And we will soon see that each block can be also be used separately, just the encoder, just the decoder, or both.
+
+43
+00:07:07.710 --> 00:07:22.880
+Nebius Academy | AI-PE: the encoder and the decoder architecture, so remember that once we dive slightly deeper. Reminding you that the perfect use case for an encoder-decoder architecture was, for example, remind me…
+
+44
+00:07:23.330 --> 00:07:34.280
+Nebius Academy | AI-PE: Language translation, we also set summarization, long text to a short text. Any sequence to sequence, that's maybe the more general term.
+
+45
+00:07:34.320 --> 00:07:54.219
+Nebius Academy | AI-PE: Any sequence-to-sequence architecture is mainly used by encoder and decoder architecture, but again, I'm already giving you a hint that the transformer paper introduced this architecture, but we can also use just the encoder and just the decoder as their own components.
+
+46
+00:07:55.020 --> 00:07:56.010
+Nebius Academy | AI-PE: M…
+
+47
+00:07:56.340 --> 00:08:08.960
+Nebius Academy | AI-PE: So, reminding you, not our last lesson, but the one before, and we learned about word embeddings, and we discussed the huge problem of word embeddings, and it's the fact that they are static.
+
+48
+00:08:09.200 --> 00:08:17.980
+Nebius Academy | AI-PE: Meaning, it's a dictionary, it's a lookup table that you put as a key, the token, and you receive as an output an embedding.
+
+49
+00:08:18.580 --> 00:08:29.660
+Nebius Academy | AI-PE: And it doesn't take into account multi-semantic meanings to the same token. And we gave the example also, what is the…
+
+50
+00:08:30.130 --> 00:08:33.169
+Nebius Academy | AI-PE: token here that I'm trying to describe in images.
+
+51
+00:08:35.000 --> 00:08:42.679
+Nebius Academy | AI-PE: Bank, yeah, thank you. Maybe bad choice of images, but the financial institution bank is on the left.
+
+52
+00:08:42.799 --> 00:08:52.519
+Nebius Academy | AI-PE: And the riverbank is on the right, and both are the token of B, A, and K as one token, and they should represent
+
+53
+00:08:52.700 --> 00:08:58.319
+Nebius Academy | AI-PE: Both of them, at the same time, if we're looking at the word VEC, for example, static representation.
+
+54
+00:08:58.940 --> 00:09:02.999
+Nebius Academy | AI-PE: On top of it, you already noticed that, for example.
+
+55
+00:09:03.220 --> 00:09:10.420
+Nebius Academy | AI-PE: In the sentence, the chicken didn't cross the road because it was too tired, The token, EAT!
+
+56
+00:09:10.630 --> 00:09:13.130
+Nebius Academy | AI-PE: Needs to hold so many.
+
+57
+00:09:13.420 --> 00:09:20.420
+Nebius Academy | AI-PE: Types of representations, that it will be very hard for this token to actually capture meaning.
+
+58
+00:09:21.150 --> 00:09:24.689
+Nebius Academy | AI-PE: So, what is our solution to this?
+
+59
+00:09:25.020 --> 00:09:25.840
+Nebius Academy | AI-PE: Pablo?
+
+60
+00:09:28.240 --> 00:09:32.509
+Nebius Academy | AI-PE: even… not yet even attention. We want the word embeddings to be
+
+61
+00:09:32.640 --> 00:09:35.990
+Nebius Academy | AI-PE: contextualize. So far, our function was
+
+62
+00:09:36.280 --> 00:09:39.359
+Nebius Academy | AI-PE: Taking as an input a token or a word.
+
+63
+00:09:39.930 --> 00:09:54.130
+Nebius Academy | AI-PE: and giving me as an output an embedding, a vector that captures this representation. Now, I'm saying no more a function of just the token or just the word. I want a function that receives both the word and
+
+64
+00:09:54.670 --> 00:09:55.630
+Nebius Academy | AI-PE: the context.
+
+65
+00:09:57.390 --> 00:10:04.460
+Nebius Academy | AI-PE: And we already learned that we're not gonna suffice just with a window.
+
+66
+00:10:04.580 --> 00:10:08.130
+Nebius Academy | AI-PE: of the context around the token. We want the full token.
+
+67
+00:10:08.450 --> 00:10:10.750
+Nebius Academy | AI-PE: Before the token, and after the token.
+
+68
+00:10:11.400 --> 00:10:13.059
+Nebius Academy | AI-PE: And after the token.
+
+69
+00:10:13.570 --> 00:10:19.060
+Nebius Academy | AI-PE: And here the solution is to build the contextual embedding.
+
+70
+00:10:19.380 --> 00:10:26.400
+Nebius Academy | AI-PE: From a token by selectively integrating information from all the neighboring value.
+
+71
+00:10:27.910 --> 00:10:34.859
+Nebius Academy | AI-PE: How do we do that? How can we selectively integrate the information, a concept that we already saw?
+
+72
+00:10:36.810 --> 00:10:44.060
+Nebius Academy | AI-PE: Attention! Remember, attention, what did it do? By looking at the query, the token itself.
+
+73
+00:10:44.340 --> 00:10:46.729
+Nebius Academy | AI-PE: And the context around it.
+
+74
+00:10:47.480 --> 00:11:05.389
+Nebius Academy | AI-PE: It calculated the attention heads by multiplying the two and applying softwax on top of it. Let's neglect it for now, but it calculated the attention head that gave the importance for each one of the values in order to create this representation.
+
+75
+00:11:05.950 --> 00:11:09.089
+Nebius Academy | AI-PE: So, we will use the same concept of attention.
+
+76
+00:11:09.400 --> 00:11:12.239
+Nebius Academy | AI-PE: Slightly differently, and I will emphasize on the diff…
+
+77
+00:11:13.150 --> 00:11:19.969
+Nebius Academy | AI-PE: So how? By using attention. And notice that even in our chicken sentence.
+
+78
+00:11:20.630 --> 00:11:24.160
+Nebius Academy | AI-PE: The it could have referred to both the road.
+
+79
+00:11:24.320 --> 00:11:35.490
+Nebius Academy | AI-PE: And the chicken. And now that we gave it the full context, so the chicken didn't cross the road because it was too tired, now it refers to the road or the chicken.
+
+80
+00:11:35.730 --> 00:11:54.319
+Nebius Academy | AI-PE: the chicken. But if I say the chicken didn't cross the road because it was too wide, then this time I'm probably referring to the road and not the chicken. And we assume that the attention head, when I'm trying to now model the embedding of it.
+
+81
+00:11:54.770 --> 00:11:57.139
+Nebius Academy | AI-PE: Then the attention head should pay…
+
+82
+00:11:57.490 --> 00:12:08.650
+Nebius Academy | AI-PE: A lot of attention to also the adjectives tired and white, because it gives… it helps to understand the semantics that it now refers to the chicken or to the rope.
+
+83
+00:12:09.320 --> 00:12:10.390
+Nebius Academy | AI-PE: M…
+
+84
+00:12:11.180 --> 00:12:19.340
+Nebius Academy | AI-PE: So this is the very high-level change that we're gonna do from the word embedding that were static and stuck.
+
+85
+00:12:20.230 --> 00:12:24.190
+Nebius Academy | AI-PE: To a learned representation that takes into account context.
+
+86
+00:12:24.300 --> 00:12:40.239
+Nebius Academy | AI-PE: What does this mean? It means that it's not a preprocessing step, that now I have this dictionary that I already created, and now I just need to map a token to an embedding. It's something that is created on the fly, right? Because it depends on the context.
+
+87
+00:12:42.750 --> 00:12:44.740
+Nebius Academy | AI-PE: I'll get back to it.
+
+88
+00:12:44.950 --> 00:12:51.929
+Nebius Academy | AI-PE: So, how does self-attention look like for our token IT, for instance?
+
+89
+00:12:52.130 --> 00:13:01.499
+Nebius Academy | AI-PE: So think about it that the same sentence will appear in two different layers of our full, very large network.
+
+90
+00:13:01.600 --> 00:13:05.710
+Nebius Academy | AI-PE: And now I want to, represent the token it.
+
+91
+00:13:06.290 --> 00:13:15.369
+Nebius Academy | AI-PE: And the columns corresponding to the input tokens will be applied from the previous layer before it.
+
+92
+00:13:16.280 --> 00:13:24.810
+Nebius Academy | AI-PE: And… This is the high-level explanation, and now let's dive into the architecture. So, what you see here…
+
+93
+00:13:25.350 --> 00:13:27.960
+Nebius Academy | AI-PE: Is the transformer architecture.
+
+94
+00:13:28.300 --> 00:13:38.770
+Nebius Academy | AI-PE: And it looks scary, but I want to start with the concepts you already know. So wherever I mark the check mark, it's something that we've learned, so let's look at it together. I'm going back.
+
+95
+00:13:39.000 --> 00:13:43.200
+Nebius Academy | AI-PE: First of all, as we said, An encoder part.
+
+96
+00:13:43.510 --> 00:13:52.730
+Nebius Academy | AI-PE: So remember when I masked it? So this part is the encoder part. It tries to take the input and represent it in a smart way.
+
+97
+00:13:53.140 --> 00:14:08.260
+Nebius Academy | AI-PE: And this part here, the larger one on the right, is the decoder part that takes as an input the very nice representation the encoder made, and the output shifted on the right as we generate more and more tokens.
+
+98
+00:14:08.650 --> 00:14:13.369
+Nebius Academy | AI-PE: Okay, so far, it's what we saw. I'm just going back to make sure we're aligned.
+
+99
+00:14:13.830 --> 00:14:18.250
+Nebius Academy | AI-PE: It's what we saw here, the abstraction of an encoder and a decoder.
+
+100
+00:14:19.820 --> 00:14:24.850
+Nebius Academy | AI-PE: What are the concepts that we are already familiar with?
+
+101
+00:14:25.110 --> 00:14:30.660
+Nebius Academy | AI-PE: So, let's start with the end. So, we do something very, very, very, very smart.
+
+102
+00:14:30.810 --> 00:14:33.980
+Nebius Academy | AI-PE: And at the end, we apply a linear layer.
+
+103
+00:14:34.190 --> 00:14:39.180
+Nebius Academy | AI-PE: So, one-layer neural network, or a logistic regression.
+
+104
+00:14:39.300 --> 00:14:57.149
+Nebius Academy | AI-PE: And as you remember, the logistic regression is also on top of it, there is the softmax, so both of them, softmax and linear, they give you the logistic regression, a linear layer that on top of it, you apply softmax, and you get output probabilities for each token. So this part, you're already very familiar with.
+
+105
+00:14:58.000 --> 00:15:00.559
+Nebius Academy | AI-PE: What else are you familiar with?
+
+106
+00:15:01.030 --> 00:15:07.960
+Nebius Academy | AI-PE: the, feet forward. So the feet forward is a neural network of Okay, layers.
+
+107
+00:15:08.840 --> 00:15:13.849
+Nebius Academy | AI-PE: We also called it… who remembers the other name we gave Pit Forward Network?
+
+108
+00:15:16.150 --> 00:15:26.760
+Nebius Academy | AI-PE: MLP, multilayer Perceptron, someone said it, thank you. So, feet-forward network, multilayer perceptron, they're the same thing, and it's what we learned in our neural network class.
+
+109
+00:15:26.760 --> 00:15:36.680
+Nebius Academy | AI-PE: It's just many, many, many neural network layers that have different shapes, and the fit forward, again, we are very familiar with.
+
+110
+00:15:37.180 --> 00:15:52.379
+Nebius Academy | AI-PE: And the input embeddings and output embeddings is also something you're familiar with, so we learned about where to vec and how we generate an embedding given a dictionary, but now notice the big difference with transformer architecture.
+
+111
+00:15:52.620 --> 00:15:58.860
+Nebius Academy | AI-PE: Those input embeddings and output embeddings. Input, it's for the,
+
+112
+00:15:59.140 --> 00:16:05.749
+Nebius Academy | AI-PE: encoder that everything we try to embed, and the output embedding is for every token that we now generate, we map it back
+
+113
+00:16:05.960 --> 00:16:08.190
+Nebius Academy | AI-PE: To the embedding it represents.
+
+114
+00:16:08.430 --> 00:16:21.580
+Nebius Academy | AI-PE: But I want you to notice something very important. Now those input embedding, output embedding are not learned as a pre-processing step. They're learned all together in this huge architecture.
+
+115
+00:16:22.180 --> 00:16:30.530
+Nebius Academy | AI-PE: I'll go back to it, but I just want you to understand that we're starting here with random values as our embedding representations.
+
+116
+00:16:30.840 --> 00:16:38.020
+Nebius Academy | AI-PE: And as we learn, those representations changed, and those representations are dependent on the context.
+
+117
+00:16:39.340 --> 00:16:43.769
+Nebius Academy | AI-PE: But we have a lot of new concepts here to still cover.
+
+118
+00:16:44.820 --> 00:16:45.950
+Nebius Academy | AI-PE: Emm…
+
+119
+00:16:46.210 --> 00:16:56.910
+Nebius Academy | AI-PE: And, maybe I should have said it before, this architecture was presented in a paper by Google, Attention is All You Need, was published in 2017.
+
+120
+00:16:58.140 --> 00:16:59.320
+Nebius Academy | AI-PE: You can't hear me?
+
+121
+00:17:01.750 --> 00:17:04.910
+Nebius Academy | AI-PE: Oh my god.
+
+122
+00:17:06.390 --> 00:17:07.940
+Nebius Academy | AI-PE: Okay.
+
+123
+00:17:11.599 --> 00:17:13.839
+Nebius Academy | AI-PE: I'm sorry, home.
+
+124
+00:17:19.160 --> 00:17:20.980
+Nebius Academy | AI-PE: You can't hear me at home, right?
+
+125
+00:17:22.440 --> 00:17:23.210
+Nebius Academy | AI-PE: Yeah.
+
+126
+00:18:15.250 --> 00:18:17.400
+Nebius Academy | AI-PE: Can you hear me at home now?
+
+127
+00:18:28.430 --> 00:18:34.840
+Nebius Academy | AI-PE: And now, when… when I… I'm not holding it, or you can't hear when I'm not holding it?
+
+128
+00:18:36.560 --> 00:18:40.850
+Nebius Academy | AI-PE: Can you hear me? No. Less. Okay, so I'll just hold it.
+
+129
+00:18:43.300 --> 00:18:46.740
+Nebius Academy | AI-PE: Emm… How back should I go?
+
+130
+00:18:53.330 --> 00:19:02.200
+Nebius Academy | AI-PE: Okay, no problem that it's better, I'll hold it like this from now on. I can continue, or should I go back a few slides?
+
+131
+00:19:03.190 --> 00:19:05.549
+Nebius Academy | AI-PE: No need to go back, maybe just to recap.
+
+132
+00:19:05.650 --> 00:19:09.459
+Nebius Academy | AI-PE: Okay, I'll just do a recap, also for my own sanity.
+
+133
+00:19:10.280 --> 00:19:13.679
+Nebius Academy | AI-PE: So, what did we see so far?
+
+134
+00:19:15.680 --> 00:19:17.210
+Nebius Academy | AI-PE: Yep. Thank you.
+
+135
+00:19:23.670 --> 00:19:40.790
+Nebius Academy | AI-PE: During the break, I'll try to fix the mic so I don't have to hold it, but what did we see so far? We talked about a very transformative architecture that was published in Attention is All You Need, a paper by Google, and we talked about how this architecture
+
+136
+00:19:40.990 --> 00:19:45.289
+Nebius Academy | AI-PE: Proposed the idea of a new encoder-decoder architecture.
+
+137
+00:19:45.490 --> 00:19:59.359
+Nebius Academy | AI-PE: And we, said that the main difference will be the fact that now the embeddings are not a dictionary mapping a token to a vector, but will be a function also of the context itself.
+
+138
+00:19:59.880 --> 00:20:12.189
+Nebius Academy | AI-PE: We said that there are a lot of joint concepts that we are already familiar with, such as the feed-forward network, the linear layer and the softmax, and the concept of embedding.
+
+139
+00:20:12.360 --> 00:20:20.200
+Nebius Academy | AI-PE: And now I was starting to say, what will be the main difference that we'll see from now on?
+
+140
+00:20:20.550 --> 00:20:25.480
+Nebius Academy | AI-PE: And these are today's… sorry about the typo, today's new concepts.
+
+141
+00:20:25.650 --> 00:20:29.820
+Nebius Academy | AI-PE: So, the first… concept…
+
+142
+00:20:34.750 --> 00:20:38.140
+Nebius Academy | AI-PE: So, the first concept is the self-attention.
+
+143
+00:20:38.570 --> 00:20:50.900
+Nebius Academy | AI-PE: And if I have to describe it in one sentence, what does self-attention mean? It means that each token will attend to all tokens in the previous layer.
+
+144
+00:20:51.130 --> 00:21:02.059
+Nebius Academy | AI-PE: So if… I'm reminding you now the RNN attention. In the RNN attention, we had a direction, so either the direction was from left to right, or from right to left.
+
+145
+00:21:02.210 --> 00:21:20.450
+Nebius Academy | AI-PE: And every layer only attended to the tokens that were before or after the specific token. There was a very formal direction in the way the architecture was composed. And here we're saying there is no direction anymore.
+
+146
+00:21:20.820 --> 00:21:36.100
+Nebius Academy | AI-PE: Every token can see all the sentence around it. Of course, we're talking only about the encoder, because in the decoder, there is still a sequence, and I'm still generating in an orderly manner.
+
+147
+00:21:37.190 --> 00:21:40.980
+Nebius Academy | AI-PE: But I'll go back to the last sentence once we dive deeper.
+
+148
+00:21:41.760 --> 00:21:53.790
+Nebius Academy | AI-PE: The second concept is multi-head attention, and again, if I need to recap it in one sentence, it means that I'm not gonna suffice with just one attention pattern.
+
+149
+00:21:54.270 --> 00:21:57.160
+Nebius Academy | AI-PE: But multiple attention patterns.
+
+150
+00:21:58.200 --> 00:22:10.320
+Nebius Academy | AI-PE: And the next concept we will talk in detail soon, skip connections, a concept from vision architecture, first introduced in ResNet.
+
+151
+00:22:11.040 --> 00:22:14.920
+Nebius Academy | AI-PE: Layer normalization, something very basic.
+
+152
+00:22:15.070 --> 00:22:25.589
+Nebius Academy | AI-PE: Dropout, a very cool concept, and positional information. So, let's cover each one, and at the end, we'll see how they all combine.
+
+153
+00:22:27.070 --> 00:22:32.180
+Nebius Academy | AI-PE: So, just a small recap on attention.
+
+154
+00:22:32.370 --> 00:22:37.779
+Nebius Academy | AI-PE: So, when we defined attention, we defined 3 different components to the attention.
+
+155
+00:22:38.230 --> 00:22:40.440
+Nebius Academy | AI-PE: The first one was Query.
+
+156
+00:22:40.640 --> 00:22:45.469
+Nebius Academy | AI-PE: The query is the current element being compared to the preceding inputs.
+
+157
+00:22:46.620 --> 00:22:47.890
+Nebius Academy | AI-PE: The key?
+
+158
+00:22:48.120 --> 00:23:00.769
+Nebius Academy | AI-PE: as the preceding input that is being compared to the current element to determine a similarity, so everything that we're trying to define as our context.
+
+159
+00:23:01.260 --> 00:23:10.190
+Nebius Academy | AI-PE: And the value is the value of the preceding element that gets weighted. So, the key was what helped us to generate the weights for the attention.
+
+160
+00:23:10.750 --> 00:23:19.209
+Nebius Academy | AI-PE: And the value was what we actually used to multiply the weights with in order to generate the representation.
+
+161
+00:23:19.500 --> 00:23:36.790
+Nebius Academy | AI-PE: With the RNNs, it was the same thing. So, the representation of the key and the representation of the value were mainly, in most RNN architecture, the same hidden vector that we discussed. And we'll see that with self-attention in the former, it's not the case.
+
+162
+00:23:40.140 --> 00:23:48.240
+Nebius Academy | AI-PE: So, explain to you the concept of staff attention, still very high level and not mathematically. We'll go to the math later.
+
+163
+00:23:48.510 --> 00:24:03.390
+Nebius Academy | AI-PE: So, as we said, the special thing compared to the RNN attention is that the sentence attends to all other elements' context encoding. So, for instance, if I have the inputs.
+
+164
+00:24:03.480 --> 00:24:10.519
+Nebius Academy | AI-PE: My tokens, or my words, and the layer above it is the first hidden layer.
+
+165
+00:24:10.720 --> 00:24:15.949
+Nebius Academy | AI-PE: So, in order to represent the hidden number 2 here.
+
+166
+00:24:16.510 --> 00:24:21.659
+Nebius Academy | AI-PE: So, in here, the hidden is the query.
+
+167
+00:24:22.100 --> 00:24:32.089
+Nebius Academy | AI-PE: And each one of those representations is a key… has a key representation and a value representation, in our case, 4.
+
+168
+00:24:32.190 --> 00:24:34.919
+Nebius Academy | AI-PE: Keys, and four values.
+
+169
+00:24:37.520 --> 00:24:43.080
+Nebius Academy | AI-PE: And again, this query is built by, so if the arrow here represents the weight.
+
+170
+00:24:43.380 --> 00:24:48.869
+Nebius Academy | AI-PE: So the attention that I calculated by multiplying the query with the key.
+
+171
+00:24:49.920 --> 00:24:58.100
+Nebius Academy | AI-PE: I later build the hidden representation by multiplying each weight with the value of each token.
+
+172
+00:25:01.970 --> 00:25:06.890
+Nebius Academy | AI-PE: So how does it look like if I'm describing it mathematically?
+
+173
+00:25:07.620 --> 00:25:18.760
+Nebius Academy | AI-PE: X will be our input representation. Okay, so X is now what we used to call embedding. It will be a representation of the input.
+
+174
+00:25:19.770 --> 00:25:29.530
+Nebius Academy | AI-PE: And each… At time, the same input representation, Xi, is multiplied by 3 different matrices.
+
+175
+00:25:30.080 --> 00:25:32.899
+Nebius Academy | AI-PE: WQ, WK, and WV.
+
+176
+00:25:33.330 --> 00:25:42.549
+Nebius Academy | AI-PE: Each time this input is multiplied by one of the matrices, it represents the key representation, the query representation, or the value representation.
+
+177
+00:25:43.470 --> 00:25:44.650
+Nebius Academy | AI-PE: M…
+
+178
+00:25:45.290 --> 00:25:53.630
+Nebius Academy | AI-PE: And again, what's special about it is that the embeddings x themselves are also learned within the process.
+
+179
+00:25:54.390 --> 00:25:58.930
+Nebius Academy | AI-PE: So, I have, those three matrices.
+
+180
+00:25:59.100 --> 00:26:05.249
+Nebius Academy | AI-PE: That are mapping the original embedding into key queries and values.
+
+181
+00:26:06.010 --> 00:26:10.530
+Nebius Academy | AI-PE: And I have the original embedding that I also want to learn at once.
+
+182
+00:26:10.660 --> 00:26:14.540
+Nebius Academy | AI-PE: Notice that, just like the attention mechanism.
+
+183
+00:26:14.810 --> 00:26:19.810
+Nebius Academy | AI-PE: WQ, WK, and WV are learned matrices.
+
+184
+00:26:19.900 --> 00:26:39.710
+Nebius Academy | AI-PE: that are joined to all of the embeddings, so it means that, if I'm now taking the sentence, the cat is on the mat, so each token is multiplied by the same WQ and the same WK and the same WV in order to generate those key queries and values. Why do they differ?
+
+185
+00:26:40.740 --> 00:26:42.150
+Nebius Academy | AI-PE: What is different?
+
+186
+00:26:43.840 --> 00:26:53.680
+Nebius Academy | AI-PE: The X, thank you. So still the initial embedding for each token, the XIs, will still be different for each one of the tokens.
+
+187
+00:26:59.160 --> 00:27:05.159
+Nebius Academy | AI-PE: And of course, self-attention, the example we saw before.
+
+188
+00:27:05.600 --> 00:27:15.169
+Nebius Academy | AI-PE: was just the representation of this specific hidden 2 representation, but if we are looking at the full layer.
+
+189
+00:27:15.550 --> 00:27:22.350
+Nebius Academy | AI-PE: It will look something like this, where every hidden player is connected to all of the tokens
+
+190
+00:27:22.870 --> 00:27:24.999
+Nebius Academy | AI-PE: At the layer before it.
+
+191
+00:27:25.270 --> 00:27:30.019
+Nebius Academy | AI-PE: Okay, so… so every token in the hidden layer above
+
+192
+00:27:30.220 --> 00:27:40.349
+Nebius Academy | AI-PE: It's not a token in the hidden… every representation in the hidden layer above is attending to all of the tokens in the layer below it.
+
+193
+00:27:40.640 --> 00:27:53.059
+Nebius Academy | AI-PE: And of course, every attention head is depending on both the query and the tokens, so the representation in hidden 1 will be very much different from hidden 2,
+
+194
+00:27:53.650 --> 00:27:58.199
+Nebius Academy | AI-PE: Because of the attention head that was calculated by
+
+195
+00:27:58.330 --> 00:28:02.400
+Nebius Academy | AI-PE: Multiplying the query with the keys.
+
+196
+00:28:04.710 --> 00:28:06.370
+Nebius Academy | AI-PE: And…
+
+197
+00:28:06.740 --> 00:28:16.850
+Nebius Academy | AI-PE: This is how it looks like if we have multiple layers, which is the case in transformer, or in every transformer-based architecture, where I have multiple hidden layers.
+
+198
+00:28:16.970 --> 00:28:21.270
+Nebius Academy | AI-PE: And again, each layer attends to all of the previous hidden layers.
+
+199
+00:28:26.920 --> 00:28:34.720
+Nebius Academy | AI-PE: Now, that we understood the concept of self-attention,
+
+200
+00:28:35.160 --> 00:28:41.240
+Nebius Academy | AI-PE: This paper said, why settle for just one attention head every time?
+
+201
+00:28:42.140 --> 00:28:54.959
+Nebius Academy | AI-PE: Every random initialization that I have for my WQ, W, K, and WV will generate a different attention head.
+
+202
+00:28:55.990 --> 00:29:02.469
+Nebius Academy | AI-PE: So why not have multiple attention patterns? Let's say, for example, two attention patterns.
+
+203
+00:29:02.790 --> 00:29:06.230
+Nebius Academy | AI-PE: That each one tries to capture something slightly different.
+
+204
+00:29:06.620 --> 00:29:09.570
+Nebius Academy | AI-PE: When it attends to the token.
+
+205
+00:29:09.660 --> 00:29:13.779
+Nebius Academy | AI-PE: So, one attention head will look more on semantics.
+
+206
+00:29:13.800 --> 00:29:27.299
+Nebius Academy | AI-PE: The other attention head will look more on syntactics, and the third attention head will look for long-term relations, and the fourth of short-term relations.
+
+207
+00:29:27.300 --> 00:29:37.820
+Nebius Academy | AI-PE: So, the idea is, let's not settle for just one attention head, But for actually,
+
+208
+00:29:38.760 --> 00:29:47.739
+Nebius Academy | AI-PE: multiple attention heads. So, why not… why settle for 1? Why settle for 2? Let's have multiple attention heads.
+
+209
+00:29:47.970 --> 00:30:04.190
+Nebius Academy | AI-PE: And the idea here is that each attention head will capture something different about the relationship between the tokens, and how it will capture something different, because each attention head is initialized randomly.
+
+210
+00:30:04.450 --> 00:30:13.270
+Nebius Academy | AI-PE: And they are trained all together, so that each one in the learning process learns to capture something different about
+
+211
+00:30:13.530 --> 00:30:16.130
+Nebius Academy | AI-PE: How we assume and build sentences?
+
+212
+00:30:16.620 --> 00:30:25.690
+Nebius Academy | AI-PE: M… And, again, this is one of the hyperparameters of the number of attention heads you will,
+
+213
+00:30:25.890 --> 00:30:28.219
+Nebius Academy | AI-PE: C is, is important.
+
+214
+00:30:28.670 --> 00:30:34.640
+Nebius Academy | AI-PE: So, this is the concept of multi-head attention. Again, if I want to cut it short.
+
+215
+00:30:35.030 --> 00:30:38.380
+Nebius Academy | AI-PE: Let's have several attentions, why just one?
+
+216
+00:30:40.920 --> 00:30:48.609
+Nebius Academy | AI-PE: skip connections. So, today, it will be a lot of tricks. So, sometimes machine learning and the papers.
+
+217
+00:30:48.750 --> 00:30:52.950
+Nebius Academy | AI-PE: They're all about tricks, so I'm not saying Transformer was a trick paper.
+
+218
+00:30:53.060 --> 00:30:56.430
+Nebius Academy | AI-PE: The self-attention concept was very innovative.
+
+219
+00:30:56.630 --> 00:31:07.429
+Nebius Academy | AI-PE: But what I'll show you, I think, from now until the end of this part, is tricks that are common in machine learning, and that really helps train a network.
+
+220
+00:31:07.630 --> 00:31:14.170
+Nebius Academy | AI-PE: So one of the tricks, as I told you, is skip connection. It came from ResNet paper from vision problems.
+
+221
+00:31:14.640 --> 00:31:19.150
+Nebius Academy | AI-PE: And the idea is the network gets so deep.
+
+222
+00:31:19.470 --> 00:31:29.680
+Nebius Academy | AI-PE: that sometimes information is getting lost on the way. So, it's getting transposed so many times that the information is already
+
+223
+00:31:29.810 --> 00:31:33.190
+Nebius Academy | AI-PE: lost. So what do we do? Very simple.
+
+224
+00:31:33.350 --> 00:31:39.319
+Nebius Academy | AI-PE: we bypass some hidden layers. So, in the example here.
+
+225
+00:31:39.600 --> 00:31:42.680
+Nebius Academy | AI-PE: We say that, word one.
+
+226
+00:31:42.770 --> 00:31:47.580
+Nebius Academy | AI-PE: We don't just want the hidden representation at the second layer.
+
+227
+00:31:47.640 --> 00:32:04.650
+Nebius Academy | AI-PE: We will also concatenate or add, it depends on the architecture, but there's direct representation of this token to some layer above it. So those skip connections, they don't have to be of just one hidden layer, they can be of
+
+228
+00:32:04.780 --> 00:32:17.439
+Nebius Academy | AI-PE: multiple hidden layers, and again, the idea is that we lose information, and we want sometimes to emphasize back on the inputs, and don't… and make sure they're not lost, and we do it by
+
+229
+00:32:17.680 --> 00:32:21.700
+Nebius Academy | AI-PE: Skipping a few hidden layers, and either concatenating.
+
+230
+00:32:21.820 --> 00:32:35.720
+Nebius Academy | AI-PE: this as an additional input, or summing up pooling. Remember the pulling? So, pull that does some summarization, or box pull, or main pull, or whatever, to add those two layers.
+
+231
+00:32:38.190 --> 00:32:41.310
+Nebius Academy | AI-PE: M… Layer normalization.
+
+232
+00:32:41.800 --> 00:32:46.449
+Nebius Academy | AI-PE: So, layer normalization is also a trick from statistics.
+
+233
+00:32:47.020 --> 00:32:55.669
+Nebius Academy | AI-PE: And it helps to stabilize both the training and the inference. We don't want to get to too large numbers.
+
+234
+00:32:55.970 --> 00:33:09.500
+Nebius Academy | AI-PE: or to two small numbers, so what do we do? We standardized each… not each hidden layer, but each block that we think the numbers have drifted
+
+235
+00:33:09.790 --> 00:33:10.980
+Nebius Academy | AI-PE: Too much?
+
+236
+00:33:11.230 --> 00:33:18.239
+Nebius Academy | AI-PE: We standardized, the output. For example, when we do skip connection.
+
+237
+00:33:18.390 --> 00:33:28.120
+Nebius Academy | AI-PE: We already say that we're now going to diverge from the normal distribution, because we added now some constant to it.
+
+238
+00:33:28.450 --> 00:33:39.879
+Nebius Academy | AI-PE: So, all layer normalization does is to standardize the vector. What does it mean to standardize? We subtract each value from the mean.
+
+239
+00:33:40.450 --> 00:33:44.610
+Nebius Academy | AI-PE: And we divide it by the standard deviation.
+
+240
+00:33:45.300 --> 00:33:48.330
+Nebius Academy | AI-PE: To make it as a normal distribution.
+
+241
+00:33:48.810 --> 00:33:54.859
+Nebius Academy | AI-PE: M… I'll take questions soon, promising.
+
+242
+00:33:57.050 --> 00:34:04.459
+Nebius Academy | AI-PE: Another trick, so sorry about all… I'm now a magician today, so pulling a lot of tricks from my hat.
+
+243
+00:34:04.630 --> 00:34:11.109
+Nebius Academy | AI-PE: Another very good trick about neural networks in general, not just a transformer.
+
+244
+00:34:11.260 --> 00:34:20.559
+Nebius Academy | AI-PE: Notice this trick is only in the training, and not in the inference. It's called dropout regularization. What does it mean, dropout regularization?
+
+245
+00:34:21.060 --> 00:34:39.830
+Nebius Academy | AI-PE: We learned about the standard neural network that has many layers, and at the end, we apply softmax and cross entropy, and everything is back-propagated to the neurons. What sometimes happens is that
+
+246
+00:34:39.969 --> 00:34:42.060
+Nebius Academy | AI-PE: Some neurons,
+
+247
+00:34:42.429 --> 00:34:53.010
+Nebius Academy | AI-PE: a lot of information passed through them. What does it mean? That they impact the final decision much more than the other neurons, because
+
+248
+00:34:53.429 --> 00:35:00.680
+Nebius Academy | AI-PE: Of their initialization point that made those neurons gain importance in this specific setup.
+
+249
+00:35:01.250 --> 00:35:07.570
+Nebius Academy | AI-PE: And we want to avoid this problem, because it can cause overfitting. So remember we discussed overfitting?
+
+250
+00:35:08.140 --> 00:35:12.959
+Nebius Academy | AI-PE: So how can we do that? We randomly, in the training process.
+
+251
+00:35:13.220 --> 00:35:32.279
+Nebius Academy | AI-PE: remove some of the neurons. We act as if they don't exist in this specific inference, so every epoch, or every even batch, or every even sample, depending on you. But let's say for every batch, we sample some sort of the neural network.
+
+252
+00:35:32.430 --> 00:35:35.809
+Nebius Academy | AI-PE: We neglect the output of it, we zero it.
+
+253
+00:35:36.070 --> 00:35:45.380
+Nebius Academy | AI-PE: And we try now to predict the value without those neurons. So we're saying to the others, now you try without this genius in the class.
+
+254
+00:35:45.380 --> 00:35:58.309
+Nebius Academy | AI-PE: to take the average towards the minimal loss. Minimize the loss without the best one in the class, and then we sample differently, and this way, all of my neurons are trained
+
+255
+00:35:58.350 --> 00:36:00.710
+Nebius Academy | AI-PE: To be the best they can be.
+
+256
+00:36:00.870 --> 00:36:02.439
+Nebius Academy | AI-PE: without,
+
+257
+00:36:02.820 --> 00:36:20.840
+Nebius Academy | AI-PE: the major neurons. I hope that I explained it well. And this concept, again, is used only in the training. In the inference, we have the full network, and we're passing the input as is throughout all the layers. But in the training process, we kind of,
+
+258
+00:36:20.980 --> 00:36:30.630
+Nebius Academy | AI-PE: hide some of the network in order for the other parts of the network to learn, and we apply this dropout randomly. So we randomly,
+
+259
+00:36:30.910 --> 00:36:36.820
+Nebius Academy | AI-PE: shut down, nodes in order to, do the infrared.
+
+260
+00:36:38.410 --> 00:36:43.260
+Nebius Academy | AI-PE: Okay, so, last thing, and then I'll pause for a question.
+
+261
+00:36:43.630 --> 00:36:50.930
+Nebius Academy | AI-PE: I told you that unlike RNNs, with self-attention, we don't have an order, right? We, we…
+
+262
+00:36:51.080 --> 00:36:56.510
+Nebius Academy | AI-PE: Attend to all other elements. We don't go right to left or left to right.
+
+263
+00:36:56.960 --> 00:37:10.200
+Nebius Academy | AI-PE: And this can be a huge problem, because obviously, a sequence has order. If you remember, we defined it on Friday. One of the most important elements of a sequence is its order.
+
+264
+00:37:10.610 --> 00:37:17.130
+Nebius Academy | AI-PE: And the architecture has to capture somehow the order of the inputs.
+
+265
+00:37:17.720 --> 00:37:20.609
+Nebius Academy | AI-PE: Because, reminding you that,
+
+266
+00:37:20.760 --> 00:37:28.999
+Nebius Academy | AI-PE: forget now the layer of the positional embeddings, but if now I'm creating a presentation for Hidden 2,
+
+267
+00:37:29.430 --> 00:37:46.230
+Nebius Academy | AI-PE: Nothing tells me if the first token is first, or the second token is second, because it's just aggregated as a weighted sum, right? It was a weighted sum. I lost the information about the order once I did self-attention.
+
+268
+00:37:46.660 --> 00:37:49.169
+Nebius Academy | AI-PE: So how do I preserve the order?
+
+269
+00:37:49.560 --> 00:37:54.889
+Nebius Academy | AI-PE: With something called positional embeddings. What is positional embeddings?
+
+270
+00:37:55.180 --> 00:37:58.350
+Nebius Academy | AI-PE: Specifically, in the transformer paper, they used
+
+271
+00:37:58.580 --> 00:38:03.329
+Nebius Academy | AI-PE: a sinus function, but forget it, it's not that smart.
+
+272
+00:38:03.750 --> 00:38:14.399
+Nebius Academy | AI-PE: A positional embedding is just an additional embedding that now, instead of capturing semantics, or syntactics, or whatever we wanted to capture.
+
+273
+00:38:14.560 --> 00:38:19.179
+Nebius Academy | AI-PE: It captures the position So, there will be an additional…
+
+274
+00:38:19.250 --> 00:38:28.289
+Nebius Academy | AI-PE: embedding, whose sole meaning is to capture the position within the sentence. So, an embedding for the first position.
+
+275
+00:38:28.290 --> 00:38:40.280
+Nebius Academy | AI-PE: an embedding for the second position, and an embedding for the third position, and the fourth. What does it mean? That now, if I put two different inputs of sentences of length 4, like…
+
+276
+00:38:40.300 --> 00:38:46.660
+Nebius Academy | AI-PE: I love chocolate cake, and, I like Nebus Academy.
+
+277
+00:38:47.990 --> 00:38:56.009
+Nebius Academy | AI-PE: Both will have different word embeddings depending on the tokens, but they will have the similar positional embedding of
+
+278
+00:38:56.260 --> 00:39:06.180
+Nebius Academy | AI-PE: First token, second token, third token, and those position elements are also parameters. They're also learned in the training process.
+
+279
+00:39:06.410 --> 00:39:07.400
+Nebius Academy | AI-PE: Okay.
+
+280
+00:39:07.900 --> 00:39:09.000
+Nebius Academy | AI-PE: M…
+
+281
+00:39:09.120 --> 00:39:18.840
+Nebius Academy | AI-PE: I won't talk specifically about the transformer paper and the fact that it used a CNOS function, because it's not that used, commonly used, today anymore.
+
+282
+00:39:19.860 --> 00:39:27.959
+Nebius Academy | AI-PE: So, now, before I put it all together, and hopefully it will also help you understand.
+
+283
+00:39:28.130 --> 00:39:30.819
+Nebius Academy | AI-PE: I want to pause for questions.
+
+284
+00:39:32.740 --> 00:39:33.400
+Nebius Academy | AI-PE: Yes.
+
+285
+00:39:39.410 --> 00:39:40.250
+Nebius Academy | AI-PE: Any odds?
+
+286
+00:40:00.180 --> 00:40:08.209
+Nebius Academy | AI-PE: Thank you, thank you for this question. So, the question was, where do this mean and standard deviation come from? And it's a great question.
+
+287
+00:40:08.320 --> 00:40:18.260
+Nebius Academy | AI-PE: First of all, they always, always come from the training data. At the inference time, we never recalculate the…
+
+288
+00:40:18.660 --> 00:40:31.989
+Nebius Academy | AI-PE: mean and standard deviation. And in the training process, we normally do it batch level. So, for every batch, we'll calculate its mean and its standard deviation. We'll save it on the side.
+
+289
+00:40:32.560 --> 00:40:41.690
+Nebius Academy | AI-PE: And then, once we have the full training data, we can now calculate the mean and the standard deviation on the full training data.
+
+290
+00:40:41.820 --> 00:40:51.579
+Nebius Academy | AI-PE: And at inference time, I will just apply what was calculated on all the batches and training data. So at inference time, those are constant.
+
+291
+00:40:53.900 --> 00:40:55.760
+Nebius Academy | AI-PE: Of the training data.
+
+292
+00:40:56.510 --> 00:40:57.370
+Nebius Academy | AI-PE: Yes.
+
+293
+00:40:58.420 --> 00:41:00.210
+Nebius Academy | AI-PE: Thank you for that, yeah.
+
+294
+00:41:02.750 --> 00:41:07.790
+Nebius Academy | AI-PE: Question about the tokenization. You said that we're also learning the embedding.
+
+295
+00:41:08.090 --> 00:41:09.910
+Nebius Academy | AI-PE: how we…
+
+296
+00:41:10.530 --> 00:41:19.179
+Nebius Academy | AI-PE: So, before, if I talk work-to-work, it was native for me. I have a dictionary and static parameters.
+
+297
+00:41:19.480 --> 00:41:23.340
+Nebius Academy | AI-PE: But here, how… how to learn…
+
+298
+00:41:23.570 --> 00:41:29.049
+Nebius Academy | AI-PE: How I know that the hello, the embedded hello in the beginning of the training?
+
+299
+00:41:29.220 --> 00:41:34.029
+Nebius Academy | AI-PE: Is, what is the new embedding of the hello word in the end of the training?
+
+300
+00:41:35.270 --> 00:41:41.290
+Nebius Academy | AI-PE: So at the end… now I don't need to repeat the questions, right? So, at the end of the training.
+
+301
+00:41:41.570 --> 00:41:45.980
+Nebius Academy | AI-PE: You are left with a representation.
+
+302
+00:41:46.090 --> 00:41:50.810
+Nebius Academy | AI-PE: the X's, remember? So the X's now are our new embeddings.
+
+303
+00:41:50.960 --> 00:41:55.320
+Nebius Academy | AI-PE: Okay? So I think that we're starting with a random vector.
+
+304
+00:41:55.530 --> 00:42:02.219
+Nebius Academy | AI-PE: And at the end of the training process, you are left with something that maps a token to a…
+
+305
+00:42:02.370 --> 00:42:15.040
+Nebius Academy | AI-PE: some vector, but those vectors don't mean by themselves anything. Why? Because they were trained together with those W's. So only by applying those W's.
+
+306
+00:42:15.650 --> 00:42:23.490
+Nebius Academy | AI-PE: I can map them to… into key queries and vectors. So, I have some, let's say, order.
+
+307
+00:42:23.630 --> 00:42:24.910
+Nebius Academy | AI-PE: Of my dictionary.
+
+308
+00:42:25.020 --> 00:42:27.740
+Nebius Academy | AI-PE: And they have the… the embed encoder.
+
+309
+00:42:27.990 --> 00:42:33.320
+Nebius Academy | AI-PE: And after I finish the embedding, I can create a dictionary with correct embedding.
+
+310
+00:42:37.110 --> 00:42:46.570
+Nebius Academy | AI-PE: Yes, but I want to emphasize that the characteristics that we saw for Word2VEC, they won't be necessarily applied here. Okay.
+
+311
+00:42:47.610 --> 00:42:51.920
+Nebius Academy | AI-PE: Maybe one more question from here, and then I'll take it from home.
+
+312
+00:42:53.890 --> 00:43:11.700
+Nebius Academy | AI-PE: About the robot. I know this, this mechanism from, overfit, yeah, we want to avoid overfitting in classical ML. And here, I didn't expect it would be an issue, because language is so sparse.
+
+313
+00:43:12.050 --> 00:43:18.440
+Nebius Academy | AI-PE: So, is this… is this, the goal here? Do we see overfitting and we want to avoid it, or…
+
+314
+00:43:19.580 --> 00:43:25.070
+Nebius Academy | AI-PE: so, it, yes, first of all, we do see over-fatigue.
+
+315
+00:43:25.570 --> 00:43:37.799
+Nebius Academy | AI-PE: And it might not be overfitting in the final output, as you imagine it, but rather an overfitting with all the huge deep players that come before.
+
+316
+00:43:38.250 --> 00:43:55.179
+Nebius Academy | AI-PE: But I will say that I assume that they tried it with dropout and without dropout as a hyperparameter, and they saw that training with dropout does help, and it makes sense in the fact that the network is so large.
+
+317
+00:43:55.280 --> 00:44:00.019
+Nebius Academy | AI-PE: That if you don't do dropout, there will be areas that will be even untouched.
+
+318
+00:44:00.400 --> 00:44:07.190
+Nebius Academy | AI-PE: think about GPT 5.5, which has, like, trillion parameters.
+
+319
+00:44:07.440 --> 00:44:12.920
+Nebius Academy | AI-PE: This is the assumption, then… There were… there could be whole areas that have…
+
+320
+00:44:13.180 --> 00:44:20.199
+Nebius Academy | AI-PE: Not been even backpropagated, like, the gradient there does not move any needle.
+
+321
+00:44:22.450 --> 00:44:24.770
+Nebius Academy | AI-PE: And I'll take one from home.
+
+322
+00:44:30.090 --> 00:44:31.380
+Nebius Academy | AI-PE: Mmm…
+
+323
+00:44:36.080 --> 00:44:52.349
+Nebius Academy | AI-PE: best in class, but you randomly… the best-in-class analogy was not… was only maybe to make you understand why it's important. We randomly shut them down, so it could be that we just shut down a neuron that was inactive to begin with.
+
+324
+00:44:52.590 --> 00:44:59.909
+Nebius Academy | AI-PE: But the huge impact will be if we randomly shut down the… More important one.
+
+325
+00:45:00.080 --> 00:45:03.729
+Nebius Academy | AI-PE: I'll take another one, because it was a short one.
+
+326
+00:45:04.060 --> 00:45:17.070
+Nebius Academy | AI-PE: What do you mean? Positional embedding are also learned? Isn't it just a feature of the input? No, it's an embedded representation that is learned. I know it's weird, it's not a fixed number.
+
+327
+00:45:17.280 --> 00:45:27.229
+Nebius Academy | AI-PE: It's an embedded representation which is learned. Why? Because our language, captures also, like, the order of the language.
+
+328
+00:45:27.530 --> 00:45:36.250
+Nebius Academy | AI-PE: captures also some information that is more than just 1, 2, 3, 4, and 5, and 6. The relation between
+
+329
+00:45:36.360 --> 00:45:44.629
+Nebius Academy | AI-PE: 2 and 3 and 2 and 5 in English is very… it can be… brings something interesting.
+
+330
+00:45:44.920 --> 00:45:48.460
+Nebius Academy | AI-PE: So usually it's an embedded representation.
+
+331
+00:45:49.880 --> 00:45:55.800
+Nebius Academy | AI-PE: Emm… Okay, I want to…
+
+332
+00:45:56.210 --> 00:45:59.570
+Nebius Academy | AI-PE: Now go to the putting it all together.
+
+333
+00:46:02.730 --> 00:46:06.930
+Nebius Academy | AI-PE: M… At least most of it together.
+
+334
+00:46:08.110 --> 00:46:16.270
+Nebius Academy | AI-PE: So let's look at the sentence that was tokenized by words, my dog is cute.
+
+335
+00:46:17.610 --> 00:46:31.910
+Nebius Academy | AI-PE: Now, let's say that I want to attend to the query dog. So, think that I'm in the next layer, and this is now the token I want to focus on.
+
+336
+00:46:32.340 --> 00:46:37.009
+Nebius Academy | AI-PE: So, for each one of the tokens, I extract 3 values.
+
+337
+00:46:37.170 --> 00:46:42.229
+Nebius Academy | AI-PE: By multiplying the W's, the weighted parameters that I'm learning.
+
+338
+00:46:42.720 --> 00:46:49.280
+Nebius Academy | AI-PE: And I get a key, a query, and a vector for each one of my tokens in the sentence.
+
+339
+00:46:50.840 --> 00:46:54.099
+Nebius Academy | AI-PE: And now, in order to calculate the attention head.
+
+340
+00:46:54.890 --> 00:47:08.069
+Nebius Academy | AI-PE: for dog, now dog is my query. Everything else in the sentence are the keys, and in order to get the attention, I multiply this query by each one of the keys.
+
+341
+00:47:08.260 --> 00:47:09.979
+Nebius Academy | AI-PE: and apply…
+
+342
+00:47:10.770 --> 00:47:19.910
+Nebius Academy | AI-PE: scale and softmarks. So I normalize it, and then I apply soft marks to get a probability that will sum up into 1.
+
+343
+00:47:22.430 --> 00:47:23.970
+Nebius Academy | AI-PE: Now what do I do?
+
+344
+00:47:24.590 --> 00:47:26.099
+Nebius Academy | AI-PE: With those numbers?
+
+345
+00:47:27.250 --> 00:47:29.620
+Nebius Academy | AI-PE: Multiply by the value is great.
+
+346
+00:47:29.740 --> 00:47:35.380
+Nebius Academy | AI-PE: So now I want to represent dogs, so I am taking 0.3 of
+
+347
+00:47:35.490 --> 00:47:42.029
+Nebius Academy | AI-PE: My value, 0.6 of his value, and 0.1 of Qt value.
+
+348
+00:47:43.850 --> 00:47:47.730
+Nebius Academy | AI-PE: And this is my first attention head.
+
+349
+00:47:50.230 --> 00:47:56.819
+Nebius Academy | AI-PE: But we said that each one of those tokens will have its own attention head.
+
+350
+00:47:57.470 --> 00:48:03.410
+Nebius Academy | AI-PE: And that we could have multiple attention heads. Actually, in BERT, which was one of the first
+
+351
+00:48:03.510 --> 00:48:08.059
+Nebius Academy | AI-PE: Language models with transformers, They had 16 heads.
+
+352
+00:48:11.580 --> 00:48:24.339
+Nebius Academy | AI-PE: And once I have all those attentions in, I can now put them in a linear layer to reduce the size, and in an MLP, or what we call the feed-forward network.
+
+353
+00:48:25.060 --> 00:48:29.530
+Nebius Academy | AI-PE: And we use Keep Connections, there are normalization and dropout, like we said.
+
+354
+00:48:30.430 --> 00:48:36.420
+Nebius Academy | AI-PE: And this is what it will look like algorithmically. So I have,
+
+355
+00:48:36.660 --> 00:48:40.010
+Nebius Academy | AI-PE: the first layer will take Xi.
+
+356
+00:48:40.430 --> 00:48:45.399
+Nebius Academy | AI-PE: and normalize it, then I'll create the multi-head attention.
+
+357
+00:48:45.810 --> 00:48:49.360
+Nebius Academy | AI-PE: for all of my N tokens.
+
+358
+00:48:50.330 --> 00:48:57.729
+Nebius Academy | AI-PE: And as an additional input, the original Xi after layer normalization.
+
+359
+00:48:58.360 --> 00:49:05.190
+Nebius Academy | AI-PE: I will do, in this layer here, I would add TI
+
+360
+00:49:05.320 --> 00:49:09.949
+Nebius Academy | AI-PE: From the second layer, and Xi, what is this layer here doing?
+
+361
+00:49:11.230 --> 00:49:16.259
+Nebius Academy | AI-PE: Keep connection, good. So, what did I do here? I just…
+
+362
+00:49:16.390 --> 00:49:22.069
+Nebius Academy | AI-PE: bypassed all the previous steps, and I added the original input to the previous layer.
+
+363
+00:49:22.340 --> 00:49:26.349
+Nebius Academy | AI-PE: Then I'll apply another layer normalization feed for a network.
+
+364
+00:49:26.480 --> 00:49:36.970
+Nebius Academy | AI-PE: And eventually, another skip connection to create the final output of the encoder. We're still here at the encoder.
+
+365
+00:49:37.570 --> 00:49:46.019
+Nebius Academy | AI-PE: So it's a… the multi-add attention hides within it a lot of multiplications we just saw, but this is maybe looking at it more from above.
+
+366
+00:49:47.440 --> 00:49:53.090
+Nebius Academy | AI-PE: M… Okay, error…
+
+367
+00:49:54.830 --> 00:50:04.030
+Nebius Academy | AI-PE: Okay, let's take a 10 minutes break, and be back here at 6.30, and we'll continue with the transformer.
+
+368
+00:50:16.950 --> 00:50:17.630
+Nebius Academy | AI-PE: Here we go.
+
+369
+00:50:45.940 --> 00:50:47.089
+Nebius Academy | AI-PE: Can you come up?
+
+370
+00:50:54.570 --> 00:50:55.539
+Nebius Academy | AI-PE: What's wrong with it?
+
+371
+00:51:38.170 --> 00:51:40.670
+Nebius Academy | AI-PE: If the game have that?
+
+372
+00:51:57.140 --> 00:51:58.830
+Nebius Academy | AI-PE: Well, I'm happy to meet you.
+
+373
+00:52:56.340 --> 00:52:59.290
+Nebius Academy | AI-PE: Two dimensions.
+
+374
+00:52:59.400 --> 00:53:16.130
+Nebius Academy | AI-PE: a king.
+
+375
+00:54:06.420 --> 00:54:12.199
+Nebius Academy | AI-PE: That's money to your store.
+
+376
+00:54:12.310 --> 00:54:13.100
+Nebius Academy | AI-PE: Go back.
+
+377
+00:54:24.270 --> 00:54:24.930
+Nebius Academy | AI-PE: Okay.
+
+378
+00:54:25.380 --> 00:54:26.529
+Nebius Academy | AI-PE: Daniel Maldo.
+
+379
+00:54:29.160 --> 00:54:31.250
+Nebius Academy | AI-PE: Call, a tokenym?
+
+380
+00:54:39.940 --> 00:54:52.980
+Nebius Academy | AI-PE: de language translation.
+
+381
+00:55:29.500 --> 00:55:34.770
+Nebius Academy | AI-PE: That's an, is I should log, capital WQ.
+
+382
+00:55:57.020 --> 00:56:01.750
+Nebius Academy | AI-PE: Okay?
+
+383
+00:56:16.440 --> 00:56:24.940
+Nebius Academy | AI-PE: Synonyms.
+
+384
+00:56:31.180 --> 00:56:32.010
+Nebius Academy | AI-PE: Thank you.
+
+385
+00:56:32.410 --> 00:56:33.880
+Nebius Academy | AI-PE: Atakamoch Hava?
+
+386
+00:56:41.100 --> 00:56:42.569
+Nebius Academy | AI-PE: I prefer home as well.
+
+387
+00:56:49.420 --> 00:56:50.430
+Nebius Academy | AI-PE: try on.
+
+388
+00:57:08.280 --> 00:57:12.180
+Nebius Academy | AI-PE: I've broken snow, but it's like… No call, baby.
+
+389
+00:57:16.120 --> 00:57:16.810
+Nebius Academy | AI-PE: Perfect.
+
+390
+00:57:34.370 --> 00:57:35.399
+Nebius Academy | AI-PE: Yes, it's closed.
+
+391
+00:57:37.230 --> 00:57:41.820
+Nebius Academy | AI-PE: a la key, value… It was about salache, I believe? Okay.
+
+392
+00:57:41.990 --> 00:57:42.830
+Nebius Academy | AI-PE: Hi, Sean?
+
+393
+00:57:51.230 --> 00:57:54.610
+Nebius Academy | AI-PE: Okay.
+
+394
+00:58:08.750 --> 00:58:11.370
+Nebius Academy | AI-PE: Okay.
+
+395
+00:58:20.610 --> 00:58:21.289
+Nebius Academy | AI-PE: Top about it.
+
+396
+00:58:25.300 --> 00:58:26.090
+Nebius Academy | AI-PE: Babe.
+
+397
+00:58:39.720 --> 00:58:45.030
+Nebius Academy | AI-PE: Here is the color feature, you can activate the…
+
+398
+00:59:51.150 --> 00:59:51.820
+Nebius Academy | AI-PE: Beautiful.
+
+399
+01:00:13.100 --> 01:00:14.080
+Nebius Academy | AI-PE: Shomaya?
+
+400
+01:00:41.540 --> 01:00:44.650
+Nebius Academy | AI-PE: Can… Oh, the doctors.
+
+401
+01:01:03.190 --> 01:01:05.830
+Nebius Academy | AI-PE: Oh, niareva.
+
+402
+01:01:20.540 --> 01:01:22.500
+Nebius Academy | AI-PE: Terminology.
+
+403
+01:01:24.100 --> 01:01:25.769
+Nebius Academy | AI-PE: Can you hear me at home?
+
+404
+01:01:31.380 --> 01:01:32.450
+Nebius Academy | AI-PE: Honda.
+
+405
+01:01:36.910 --> 01:01:38.190
+Nebius Academy | AI-PE: But in South Africa?
+
+406
+01:01:38.390 --> 01:01:39.490
+Nebius Academy | AI-PE: Underground.
+
+407
+01:01:40.410 --> 01:01:42.749
+Nebius Academy | AI-PE: Yeah, in a cajas at all.
+
+408
+01:01:54.050 --> 01:01:54.860
+Nebius Academy | AI-PE: So…
+
+409
+01:02:30.760 --> 01:02:31.480
+Nebius Academy | AI-PE: Ma?
+
+410
+01:02:31.930 --> 01:02:32.980
+Nebius Academy | AI-PE: Okay, kicking.
+
+411
+01:03:47.100 --> 01:03:48.980
+Nebius Academy | AI-PE: Okay,
+
+412
+01:03:51.110 --> 01:04:02.990
+Nebius Academy | AI-PE: So, welcome back. Before the break, we talked about the transformers, we talked about self-attention, multi-head attention, skip connections, dropout, layer normalization, and…
+
+413
+01:04:03.940 --> 01:04:15.429
+Nebius Academy | AI-PE: I forgot maybe one of the concepts. And now… and we… then we put it all together, and now I want to show you another example, so it sits even better in your head.
+
+414
+01:04:15.680 --> 01:04:31.680
+Nebius Academy | AI-PE: So, this is the… on the top, the attention formula that receives the key querying the value, and at the end, what is generated after the attention mechanism is we multiply… let me move this…
+
+415
+01:04:32.400 --> 01:04:38.209
+Nebius Academy | AI-PE: We multiply the query with the key, we normalize it by the size of the vector.
+
+416
+01:04:38.350 --> 01:04:51.959
+Nebius Academy | AI-PE: we apply softmax to get probabilities, and then we multiply it by the value to get the final attention hand. So let's see how it looks like with a simple input. Thinking machines.
+
+417
+01:04:52.060 --> 01:05:01.780
+Nebius Academy | AI-PE: And for simplicity, each token is a word, so we have thinking machines. Each one has their own embedding, X1 for thinking, X2 for machine.
+
+418
+01:05:01.910 --> 01:05:14.340
+Nebius Academy | AI-PE: And now, I want to calculate the query keys and values for each. How do I do it? I multiply X1 by WQ, and I get Q1. I multiply X2 by WQ, and I get Q2.
+
+419
+01:05:14.780 --> 01:05:25.679
+Nebius Academy | AI-PE: How do I get the keys? I multiply X1 by WK, and get the key, and X2 by WK, and get the key. And the same goes for value, multiplication by WV.
+
+420
+01:05:26.210 --> 01:05:37.410
+Nebius Academy | AI-PE: what are our learned parameters here? The W's and the X's. So the key querying values, they are a proxy of the matrices and the X's.
+
+421
+01:05:38.660 --> 01:05:48.379
+Nebius Academy | AI-PE: So how will it look like? Now I want to create the final representation of the thinking in the upper layer.
+
+422
+01:05:48.540 --> 01:06:01.790
+Nebius Academy | AI-PE: So, I will take the, thinking is now my query, okay, and the values around it are machines. So, how will I calculate,
+
+423
+01:06:02.360 --> 01:06:03.760
+Nebius Academy | AI-PE: the output.
+
+424
+01:06:03.940 --> 01:06:19.060
+Nebius Academy | AI-PE: So I can take the query multiplied by the key, we're thinking, and the same query with the second key for machines, and I will divide it by the size of the vector.
+
+425
+01:06:19.170 --> 01:06:36.969
+Nebius Academy | AI-PE: apply softmax to get values, and now I want to represent V1, so I will multiply this number by V1 and by V2, and I will get Z1, my new representation for thinking in the upper layer.
+
+426
+01:06:38.120 --> 01:06:45.329
+Nebius Academy | AI-PE: M… So this is the attention, and now I want to talk about how we can
+
+427
+01:06:45.460 --> 01:06:50.530
+Nebius Academy | AI-PE: Do the attention, the self-attention calculation in an efficient way.
+
+428
+01:06:51.330 --> 01:06:59.519
+Nebius Academy | AI-PE: And notice that to calculate the attention heads, we can pack all n tokens of the input sequence into a matrix.
+
+429
+01:06:59.900 --> 01:07:06.340
+Nebius Academy | AI-PE: X of size N over D, and each row of X is the embedding of one token.
+
+430
+01:07:06.910 --> 01:07:18.220
+Nebius Academy | AI-PE: M… And… And now… I can, the multiplication of every query and key.
+
+431
+01:07:19.050 --> 01:07:22.739
+Nebius Academy | AI-PE: will give me an N by N matrix.
+
+432
+01:07:23.430 --> 01:07:32.750
+Nebius Academy | AI-PE: Where every… the first query with the first key, the second query with the first key, and so on and so forth.
+
+433
+01:07:32.860 --> 01:07:37.449
+Nebius Academy | AI-PE: N by N, N is the, sequence length.
+
+434
+01:07:38.480 --> 01:07:50.760
+Nebius Academy | AI-PE: And I can, parallelize this computation by calculating, given all the tokens I have in my sequence.
+
+435
+01:07:51.800 --> 01:08:03.700
+Nebius Academy | AI-PE: But the problem comes with decoding, because in decoding, we don't know the future of the token, so we cannot just calculate all the multiplications of my tokens in the sequence.
+
+436
+01:08:04.040 --> 01:08:08.990
+Nebius Academy | AI-PE: with the tokens that I haven't seen yet.
+
+437
+01:08:09.750 --> 01:08:18.709
+Nebius Academy | AI-PE: So, what do we do? We mask the future. So, instead of multiplying the keys and the queries to generate these full n-by-n metrics.
+
+438
+01:08:19.250 --> 01:08:22.849
+Nebius Academy | AI-PE: We are saying that all the future we are unaware of.
+
+439
+01:08:23.439 --> 01:08:27.300
+Nebius Academy | AI-PE: And we just add minus infinity.
+
+440
+01:08:27.569 --> 01:08:32.590
+Nebius Academy | AI-PE: to turn the softmax output into zero. So this is some sort of way.
+
+441
+01:08:32.850 --> 01:08:38.560
+Nebius Academy | AI-PE: To, zero the softmax, For the decoder part.
+
+442
+01:08:39.290 --> 01:08:43.290
+Nebius Academy | AI-PE: So, whenever you see masked self-attention.
+
+443
+01:08:43.460 --> 01:08:56.560
+Nebius Academy | AI-PE: This is what it means. It means that I won't calculate… I won't parallelize all the key times query computations for my entire sequence, like I can do in the encoder.
+
+444
+01:08:57.380 --> 01:09:13.209
+Nebius Academy | AI-PE: But I will only do it for the tokens I've seen so far, and not for the future tokens, to avoid leakage, because otherwise, I'm just… I know already what will be the next token in the sentence, and I cannot train the decoder this way.
+
+445
+01:09:15.220 --> 01:09:23.720
+Nebius Academy | AI-PE: So, if I were to summarize a transformer, then we'll go back to the architecture and understand both encoder and decoded side.
+
+446
+01:09:23.910 --> 01:09:32.340
+Nebius Academy | AI-PE: First, it's an alternative to RNN, it's one RNN, and we no longer use RNN, I would say, almost anywhere.
+
+447
+01:09:32.970 --> 01:09:49.439
+Nebius Academy | AI-PE: Maybe in some very specific use cases, and what does it bring? More? More computation, more parallelism, and more connections between the data points. So we don't… we're not limited to one direction or another anymore. Every token attends to all the other tokens.
+
+448
+01:09:49.740 --> 01:09:55.339
+Nebius Academy | AI-PE: But it brings a lot more computational effort, because there are so many connections.
+
+449
+01:09:56.200 --> 01:10:04.560
+Nebius Academy | AI-PE: so, now let's go back and put it all together, end-to-end, not just the encoder.
+
+450
+01:10:04.880 --> 01:10:17.340
+Nebius Academy | AI-PE: So we have our inputs. Our inputs are already tokenized, so we applied some BP or word piece or something that we already tokenized. This is still a separate process from the train.
+
+451
+01:10:17.830 --> 01:10:37.720
+Nebius Academy | AI-PE: Now, we will have our input embeddings. We will initialize them randomly, so every token will receive a random representation of an input at the beginning of the training. On top of every representation of token, we'll also have the positional embeddings. So the positional embeddings will be concatenated
+
+452
+01:10:38.330 --> 01:10:47.109
+Nebius Academy | AI-PE: to the input embeddings, and every… now that I look at the input, I will look at both the semantics and the position.
+
+453
+01:10:47.740 --> 01:10:57.180
+Nebius Academy | AI-PE: Then we apply multi-head attention, okay? It can be also several layers of multi-head attention. It's not necessarily just one layer.
+
+454
+01:10:57.630 --> 01:11:08.910
+Nebius Academy | AI-PE: That at some point, we do the skip connection, we skip whatever we did with the multi-tension, and we add what was before, and we normalize with the layer normalization.
+
+455
+01:11:09.350 --> 01:11:20.919
+Nebius Academy | AI-PE: Then we put it into a feed-forward, and again, we do a skip connection here, and we add a normalize, and all of this was just the encoder part. So now, we represent the input very, very well.
+
+456
+01:11:21.400 --> 01:11:28.700
+Nebius Academy | AI-PE: What happens in the decoder part? So it takes this input, okay, to a multi-head attention layer.
+
+457
+01:11:28.850 --> 01:11:30.849
+Nebius Academy | AI-PE: I'll soon get back to this.
+
+458
+01:11:31.520 --> 01:11:39.340
+Nebius Academy | AI-PE: It does, again, normalization, feed-forward, linear, and softmax, as we said. There is some end task
+
+459
+01:11:39.750 --> 01:11:56.880
+Nebius Academy | AI-PE: We said, for example, machine translation, so there is some end task and a loss function that, at the end, we try to optimize for. I'll soon show you the options, but let's say it's a classification task, it's next word prediction task, it's machine translation task, something.
+
+460
+01:11:57.870 --> 01:12:04.450
+Nebius Academy | AI-PE: and it back-propagates everything together. Now, with the output embeddings, what do we do?
+
+461
+01:12:04.470 --> 01:12:20.659
+Nebius Academy | AI-PE: If we are now decoding the output, token by token, every token that I now said, this is my Y hat, now I predicted this token, the word the cat is on the, and let's say I predicted now Matt.
+
+462
+01:12:20.890 --> 01:12:25.620
+Nebius Academy | AI-PE: So now, Matt, The token will be mapped back
+
+463
+01:12:25.830 --> 01:12:37.189
+Nebius Academy | AI-PE: to the embed… with the same embedding matrix, but the other way around, to the embedded representation that I'm trying to learn, with positional encoding.
+
+464
+01:12:37.390 --> 01:12:46.360
+Nebius Academy | AI-PE: And will be put into a masked multi-head attention. Why masked? Because here, I cannot cheat and look at the tokens that have not been generated yet.
+
+465
+01:12:47.070 --> 01:12:53.020
+Nebius Academy | AI-PE: So here I had the kettis on the mat, in Hebrew.
+
+466
+01:12:53.280 --> 01:13:04.369
+Nebius Academy | AI-PE: And I encoded it, and here I already got the token mat, so I put it as an input, and then hopefully it will generate period to end the sentence.
+
+467
+01:13:04.620 --> 01:13:11.010
+Nebius Academy | AI-PE: So I hope now you understand all the components and how it's put together.
+
+468
+01:13:11.390 --> 01:13:18.329
+Nebius Academy | AI-PE: Because I have a quiz. So, it's a relatively harder one than the ones before.
+
+469
+01:13:19.000 --> 01:13:23.150
+Nebius Academy | AI-PE: M… It's a true-false quiz.
+
+470
+01:13:24.740 --> 01:13:30.369
+Nebius Academy | AI-PE: M… So, try it. I don't know if I can see it as well or not.
+
+471
+01:13:35.090 --> 01:13:36.549
+Nebius Academy | AI-PE: It's not open.
+
+472
+01:13:38.300 --> 01:13:40.350
+Nebius Academy | AI-PE: Yeah, but I don't know if I have it.
+
+473
+01:13:45.860 --> 01:13:58.610
+Nebius Academy | AI-PE: So I think it's this one, let's see if not… yeah, yeah, yeah, okay, Sababa. Start? Let me know if it works. Yeah, yeah, let me know if it works. Sorry, so yeah, try now.
+
+474
+01:13:59.330 --> 01:14:01.639
+Nebius Academy | AI-PE: At home, do you see the QR.
+
+475
+01:14:04.230 --> 01:14:06.590
+Nebius Academy | AI-PE: Oops.
+
+476
+01:14:08.120 --> 01:14:10.609
+Nebius Academy | AI-PE: Now, yes, okay, great.
+
+477
+01:14:10.750 --> 01:14:12.530
+Nebius Academy | AI-PE: So, I'll wait for a while.
+
+478
+01:14:16.110 --> 01:14:21.110
+Nebius Academy | AI-PE: Mmm… Still accumulating…
+
+479
+01:14:26.320 --> 01:14:27.050
+Nebius Academy | AI-PE: Don't.
+
+480
+01:14:27.340 --> 01:14:29.570
+Nebius Academy | AI-PE: Let's Three.
+
+481
+01:14:29.820 --> 01:14:33.550
+Nebius Academy | AI-PE: 2… 1… And we start.
+
+482
+01:14:37.200 --> 01:14:37.960
+Nebius Academy | AI-PE: Oi.
+
+483
+01:14:43.080 --> 01:14:45.550
+Nebius Academy | AI-PE: It's a true-false question.
+
+484
+01:14:46.200 --> 01:14:49.009
+Nebius Academy | AI-PE: They're harder than… The ones before.
+
+485
+01:14:50.210 --> 01:14:51.140
+Nebius Academy | AI-PE: In my opinion.
+
+486
+01:15:13.020 --> 01:15:15.269
+Nebius Academy | AI-PE: False. You are correct.
+
+487
+01:15:15.550 --> 01:15:26.399
+Nebius Academy | AI-PE: So, we're not splitting the input into 3 core segments. We're multiplying the same input with 3 different matrices, so there is no splitting of the input.
+
+488
+01:15:26.790 --> 01:15:28.639
+Nebius Academy | AI-PE: So, great job.
+
+489
+01:15:28.780 --> 01:15:31.010
+Nebius Academy | AI-PE: How do I go… Little one…
+
+490
+01:15:32.620 --> 01:15:35.539
+Nebius Academy | AI-PE: It's not accumulating from last time.
+
+491
+01:15:36.710 --> 01:15:37.390
+Nebius Academy | AI-PE: Dumb.
+
+492
+01:15:40.310 --> 01:15:48.970
+Nebius Academy | AI-PE: Let's see who will win. Question number 2. You need to… We do the… The thing? Okay.
+
+493
+01:15:53.380 --> 01:15:58.000
+Nebius Academy | AI-PE: Transformer decoders can only be paralleled during training.
+
+494
+01:16:29.160 --> 01:16:31.420
+Nebius Academy | AI-PE: Okay, so this was a hard one.
+
+495
+01:16:31.600 --> 01:16:36.279
+Nebius Academy | AI-PE: Remember we talked about the masked attention?
+
+496
+01:16:36.890 --> 01:16:46.680
+Nebius Academy | AI-PE: This referred to the training process, because at inference time, we're still limited to decoding token by token.
+
+497
+01:16:48.420 --> 01:16:49.310
+Nebius Academy | AI-PE: Okay?
+
+498
+01:16:51.660 --> 01:16:53.219
+Nebius Academy | AI-PE: I'm standing against the benching.
+
+499
+01:16:53.870 --> 01:17:09.140
+Nebius Academy | AI-PE: you can't do batching, basically, it's true, because every time I only know the… I will know the previous tokens, and I can store their outputs, so I can still do caching and do smart things, but I cannot parallelize the computation of
+
+500
+01:17:09.420 --> 01:17:14.599
+Nebius Academy | AI-PE: multiple attention heads, because I decode token by token.
+
+501
+01:17:26.500 --> 01:17:28.209
+Nebius Academy | AI-PE: Question number 3.
+
+502
+01:17:29.890 --> 01:17:33.780
+Nebius Academy | AI-PE: I see dropping, people dropping. Oh, my God.
+
+503
+01:17:38.220 --> 01:17:42.900
+Nebius Academy | AI-PE: Positional encodings help parallelize the transformer encoder.
+
+504
+01:17:57.580 --> 01:18:00.990
+Nebius Academy | AI-PE: I think this was an easier one, because you answered best.
+
+505
+01:18:06.480 --> 01:18:10.020
+Nebius Academy | AI-PE: 5, 4, 3, 2, 1…
+
+506
+01:18:13.080 --> 01:18:16.059
+Nebius Academy | AI-PE: True. I mean, false. You are correct.
+
+507
+01:18:16.610 --> 01:18:26.770
+Nebius Academy | AI-PE: They have nothing to do with parallelization, okay? Position and coding, what they do is they provide the order of the tokens that is lost with self-attention.
+
+508
+01:18:29.520 --> 01:18:32.869
+Nebius Academy | AI-PE: And last question, are you ready for it?
+
+509
+01:18:33.950 --> 01:18:36.419
+Nebius Academy | AI-PE: Who will be our winner of today?
+
+510
+01:18:37.150 --> 01:18:38.350
+Nebius Academy | AI-PE: Starting now.
+
+511
+01:18:42.190 --> 01:18:47.899
+Nebius Academy | AI-PE: Multi-head attention helps transform and find different kinds of relation between the tokens.
+
+512
+01:19:14.430 --> 01:19:16.369
+Nebius Academy | AI-PE: Everyone has voted. Great.
+
+513
+01:19:16.920 --> 01:19:18.499
+Nebius Academy | AI-PE: It didn't show the…
+
+514
+01:19:25.200 --> 01:19:31.099
+Nebius Academy | AI-PE: the answer was true. So, the multi-ed serves for the purpose. So, the winner is,
+
+515
+01:19:32.990 --> 01:19:36.300
+Nebius Academy | AI-PE: I hope it doesn't, reflect on how you feel.
+
+516
+01:19:38.170 --> 01:19:42.260
+Nebius Academy | AI-PE: Great job, everyone. Thank you for participating.
+
+517
+01:19:42.820 --> 01:19:48.230
+Nebius Academy | AI-PE: And now that we understood the transformer architecture, hopefully.
+
+518
+01:19:48.520 --> 01:20:00.650
+Nebius Academy | AI-PE: I want to put it all together with what's happening at the end, like, what is the final training, and how do we work with those encoders, decoders.
+
+519
+01:20:00.930 --> 01:20:08.349
+Nebius Academy | AI-PE: M… But maybe I'll just pause for a few questions, just, let's say, three, before we start.
+
+520
+01:20:10.370 --> 01:20:13.190
+Nebius Academy | AI-PE: also at home, I'll start from home.
+
+521
+01:20:14.550 --> 01:20:15.850
+Nebius Academy | AI-PE: Emm…
+
+522
+01:20:16.890 --> 01:20:30.589
+Nebius Academy | AI-PE: What is the masking value for unseen word in the decoder stage? So, the masking value, will be infinity, so that our soft max will be 0. So, we don't take into account the,
+
+523
+01:20:31.520 --> 01:20:32.860
+Nebius Academy | AI-PE: the tokens.
+
+524
+01:20:33.330 --> 01:20:43.519
+Nebius Academy | AI-PE: And the second question from home, does it mean we use too many layers? Why not just simplify them all? So I don't know the context here.
+
+525
+01:20:44.050 --> 01:20:47.500
+Nebius Academy | AI-PE: So sorry about that. Yes?
+
+526
+01:20:49.680 --> 01:20:51.140
+Nebius Academy | AI-PE: Yes. Yeah, yeah.
+
+527
+01:21:00.060 --> 01:21:00.750
+Nebius Academy | AI-PE: Bye.
+
+528
+01:21:03.540 --> 01:21:20.789
+Nebius Academy | AI-PE: Great question. So, we combine it together by concatenating them, and then putting them into a linear layer. So remember in the infographics, in the linear layer, we'll learn the dense representation of all the multi-poleattentions.
+
+529
+01:21:26.700 --> 01:21:28.660
+Nebius Academy | AI-PE: Yes, sometimes, yes.
+
+530
+01:21:29.210 --> 01:21:30.800
+Nebius Academy | AI-PE: Yes, last question?
+
+531
+01:21:33.660 --> 01:21:34.350
+Nebius Academy | AI-PE: Yes.
+
+532
+01:21:38.430 --> 01:21:39.530
+Nebius Academy | AI-PE: See that area.
+
+533
+01:21:40.180 --> 01:21:45.910
+Nebius Academy | AI-PE: And, they expect stuff of each other, Oh, Darwin.
+
+534
+01:21:46.440 --> 01:21:47.640
+Nebius Academy | AI-PE: Yes.
+
+535
+01:21:54.000 --> 01:21:55.179
+Nebius Academy | AI-PE: Where do you connect that?
+
+536
+01:21:55.380 --> 01:21:56.350
+Nebius Academy | AI-PE: Okay, at the end.
+
+537
+01:21:59.480 --> 01:22:19.119
+Nebius Academy | AI-PE: So, yeah, so the question was, when do we connect… where… sorry, do we connect the encoder and the decoder? For example, if they have the same number of layers, by the way, they don't have to have the same number of layers. And the answer is that we put the encoder as an input.
+
+538
+01:22:19.230 --> 01:22:24.170
+Nebius Academy | AI-PE: Here, what does it mean here? As the first input, after the transformation.
+
+539
+01:22:24.600 --> 01:22:35.310
+Nebius Academy | AI-PE: of the output embedding. So the output embedding will have its own representation after the masked multi-head attention.
+
+540
+01:22:35.450 --> 01:22:47.960
+Nebius Academy | AI-PE: And then the… after the output embedding representation is complete, we will concatenate it, or we'll put as an input, an additional input to the multi-head attention, the representation of the encoder.
+
+541
+01:22:48.920 --> 01:22:57.790
+Nebius Academy | AI-PE: Connect the last day of… Of the first multi-head attention, and not the masked multi-head attention layer.
+
+542
+01:22:58.090 --> 01:23:03.969
+Nebius Academy | AI-PE: of the decoder. And we'll see that also we can work with each one separately very soon.
+
+543
+01:23:04.350 --> 01:23:05.120
+Nebius Academy | AI-PE: Dispatch.
+
+544
+01:23:05.470 --> 01:23:06.920
+Nebius Academy | AI-PE: What about the second playoffs?
+
+545
+01:23:07.140 --> 01:23:07.850
+Nebius Academy | AI-PE: 17.
+
+546
+01:23:08.650 --> 01:23:10.180
+Nebius Academy | AI-PE: If you had attention of the second.
+
+547
+01:23:10.800 --> 01:23:12.500
+Nebius Academy | AI-PE: The codeos layer won't have any input.
+
+548
+01:23:13.940 --> 01:23:22.630
+Nebius Academy | AI-PE: It will, it will have the… just like before, the second layer will be the hidden layer, it will attend to the hidden layer before.
+
+549
+01:23:24.370 --> 01:23:28.259
+Nebius Academy | AI-PE: Mmm… I will continue.
+
+550
+01:23:28.830 --> 01:23:29.880
+Nebius Academy | AI-PE: So…
+
+551
+01:23:37.910 --> 01:23:39.640
+Nebius Academy | AI-PE: That's the LM.
+
+552
+01:23:39.830 --> 01:23:43.299
+Nebius Academy | AI-PE: We do these at times, we take our outputs.
+
+553
+01:23:47.260 --> 01:23:50.970
+Nebius Academy | AI-PE: Same in the output spreadsheet to the file token?
+
+554
+01:23:51.710 --> 01:23:55.209
+Nebius Academy | AI-PE: And, basically go through this group, attacks.
+
+555
+01:23:55.710 --> 01:24:04.150
+Nebius Academy | AI-PE: Yes, exactly. So we loop, I will repeat for the home, we can loop each one of those components here multiple times.
+
+556
+01:24:05.450 --> 01:24:06.570
+Nebius Academy | AI-PE: M…
+
+557
+01:24:07.210 --> 01:24:15.550
+Nebius Academy | AI-PE: So, I do want to look slightly at, now at higher levels about LLMs and put it, together.
+
+558
+01:24:16.150 --> 01:24:22.619
+Nebius Academy | AI-PE: So, if you remember our simple Ngram model from our first class together.
+
+559
+01:24:22.800 --> 01:24:35.660
+Nebius Academy | AI-PE: So, large language models are the same in the fact they assign probabilities to sequences, and they generate text by sampling the possible next token.
+
+560
+01:24:36.200 --> 01:24:44.900
+Nebius Academy | AI-PE: But they're different in the way they're trained. So the angle model was not trained in the way we will discuss soon.
+
+561
+01:24:45.250 --> 01:24:50.710
+Nebius Academy | AI-PE: And they're trained by learning to guess the next token, or the missing token.
+
+562
+01:24:51.030 --> 01:24:57.479
+Nebius Academy | AI-PE: And we'll see that there are different architectures for each, based on the transformer we just saw.
+
+563
+01:24:57.960 --> 01:25:04.070
+Nebius Academy | AI-PE: And I'm reminding you that this simple concept of predicting the missing token or the next token
+
+564
+01:25:04.240 --> 01:25:13.280
+Nebius Academy | AI-PE: is simple, and we can do a lot with it. And we discussed this also with the NGAM model, but now maybe it will sit better.
+
+565
+01:25:13.580 --> 01:25:16.280
+Nebius Academy | AI-PE: So, for example, sentiment analysis.
+
+566
+01:25:16.560 --> 01:25:24.819
+Nebius Academy | AI-PE: I like Jackie Chan, I want the, to, to classify this sentiment as positive, neutral, or negative.
+
+567
+01:25:25.100 --> 01:25:27.989
+Nebius Academy | AI-PE: then I can,
+
+568
+01:25:28.190 --> 01:25:36.180
+Nebius Academy | AI-PE: use the sentence, the sentiment of the sentence, I like Jackie Chan, is, and let the large language model complete.
+
+569
+01:25:36.590 --> 01:25:39.810
+Nebius Academy | AI-PE: the next token, and if I count that…
+
+570
+01:25:40.060 --> 01:25:55.429
+Nebius Academy | AI-PE: out of 10 times, let's say, or multiple times, it gave more positive than negative or neutral. I can now classify the sentence as positive or negative. So, it's a very cheaty way to use LLMs
+
+571
+01:25:55.880 --> 01:26:09.329
+Nebius Academy | AI-PE: for sentiment analysis. I just wrapped the original input with the sentiment of the sentence, ta-ta-ta, is, and I want the next token to give me the answer if it's positive or negative.
+
+572
+01:26:09.650 --> 01:26:13.729
+Nebius Academy | AI-PE: I can also do the same trick for questions and answer.
+
+573
+01:26:14.490 --> 01:26:18.209
+Nebius Academy | AI-PE: So, for example, who wrote the book The Origin of Species?
+
+574
+01:26:18.680 --> 01:26:19.770
+Nebius Academy | AI-PE: So if we ask…
+
+575
+01:26:23.960 --> 01:26:28.280
+Nebius Academy | AI-PE: A language model to compute it,
+
+576
+01:26:28.480 --> 01:26:32.199
+Nebius Academy | AI-PE: Given the question, who wrote the book, The Origin of Species?
+
+577
+01:26:32.640 --> 01:26:34.100
+Nebius Academy | AI-PE: And then answer.
+
+578
+01:26:34.610 --> 01:26:36.000
+Nebius Academy | AI-PE: Well, sorry.
+
+579
+01:26:38.500 --> 01:26:42.230
+Nebius Academy | AI-PE: And then answer and let it complete.
+
+580
+01:26:42.780 --> 01:27:01.870
+Nebius Academy | AI-PE: then we anticipate that the next token prediction and the probabilities will fill out the answer to this question. So again, we cheated by wrapping the input with some context that will trigger the L&M to answer the way we want it to answer.
+
+581
+01:27:03.440 --> 01:27:18.929
+Nebius Academy | AI-PE: summarization. For example, I can put a very long text, and then add a token TLDR, which is a very common token when we think about the training of the data it saw, to now summarize to me what I saw.
+
+582
+01:27:21.950 --> 01:27:36.489
+Nebius Academy | AI-PE: And I want to emphasize this, because if you remember when the first LLM, the first GPT that, non-GPT, chat GPT that was brought to the poor population.
+
+583
+01:27:36.790 --> 01:27:45.540
+Nebius Academy | AI-PE: you had… the concept of prompt engineering was very strong, like, how do I write the prompt to trigger the LLM to do what I want it to do?
+
+584
+01:27:46.750 --> 01:27:49.590
+Nebius Academy | AI-PE: It still is a relevant concept, but back then.
+
+585
+01:27:49.880 --> 01:27:57.689
+Nebius Academy | AI-PE: It was this. It was like, how do I wrap the input in those ways that will make the LLM answer like I anticipated to answer?
+
+586
+01:27:57.930 --> 01:28:02.750
+Nebius Academy | AI-PE: Or giving it a few examples, few shots to learn from.
+
+587
+01:28:03.400 --> 01:28:14.590
+Nebius Academy | AI-PE: And it worked amazingly. So, attention is only it came in 2017, and the language models that used it will soon see GPT and BERT
+
+588
+01:28:14.650 --> 01:28:32.740
+Nebius Academy | AI-PE: came in 2018, and all of the NLP tasks, summarization, sentiment analysis, question and answering, and term, everything, was, wow, ta-da, was, beat by, using those kind of wrappers.
+
+589
+01:28:32.920 --> 01:28:44.960
+Nebius Academy | AI-PE: And there were papers of this, like, I wrote this hack on my input, and I got a very good performance, and all 2018 papers were like this, except mine, which is not relevant anymore.
+
+590
+01:28:45.740 --> 01:28:57.640
+Nebius Academy | AI-PE: And, and how, also, you can, how, additional tasks, so we have, classification.
+
+591
+01:28:57.780 --> 01:29:16.219
+Nebius Academy | AI-PE: we will wrap the text, sometimes with a start token and an end sentence token, and put it into a transformer, and the final task will be some classification task. So think about the whole transformer architecture, and at the end, you have a classification task.
+
+592
+01:29:16.310 --> 01:29:19.539
+Nebius Academy | AI-PE: For a sentiment analysis, for example.
+
+593
+01:29:20.120 --> 01:29:33.220
+Nebius Academy | AI-PE: With entailment, we will put the premise and hypothesis. Entailment says if the hypothesis is relevant to the premise, contradicts it, entails it, or irrelevant to it.
+
+594
+01:29:33.370 --> 01:29:38.260
+Nebius Academy | AI-PE: So, it's another classification task you can think about it, a multi-class.
+
+595
+01:29:38.530 --> 01:29:49.700
+Nebius Academy | AI-PE: And with similarity, we can put two inputs to the transformer, look at the final output, not after softmax, but at the linear layer, and compare the two linear layers.
+
+596
+01:29:50.860 --> 01:29:58.210
+Nebius Academy | AI-PE: And same with multiple choices, we can take 3 transformers for each one of the multiple choice.
+
+597
+01:29:58.330 --> 01:30:08.270
+Nebius Academy | AI-PE: Have a linear layer for each, concatenate it, and apply to see which one of those multiple choice serves us better.
+
+598
+01:30:09.170 --> 01:30:17.619
+Nebius Academy | AI-PE: M… So, with the transformer architecture, two different large language models architecture.
+
+599
+01:30:17.920 --> 01:30:28.120
+Nebius Academy | AI-PE: came out of it. So the transformer itself, we said, is an encoder-decoder architecture. It's very specific for sequence-to-sequence tasks, as we said, machine translation.
+
+600
+01:30:28.610 --> 01:30:40.889
+Nebius Academy | AI-PE: But, by using only the decoder, for example, I can build what we call causal language models, or autoregressive language models, or left-to-right language models.
+
+601
+01:30:41.150 --> 01:30:59.119
+Nebius Academy | AI-PE: what do they do? They predict the next token, so these are what we talked about up until now. They predict the next token, so I sample my first token, my, then given my, I put it back to the decoder, sample the next token name.
+
+602
+01:30:59.270 --> 01:31:12.909
+Nebius Academy | AI-PE: Etc. And the loss is, by, looking, comparing the predicted token to the actual token in the sentence. We'll dive deeper into it, also next week.
+
+603
+01:31:13.970 --> 01:31:21.029
+Nebius Academy | AI-PE: And there are the masked language models that, unlike the causal models that predict the next token, they hide
+
+604
+01:31:21.260 --> 01:31:22.910
+Nebius Academy | AI-PE: One of the tokens.
+
+605
+01:31:23.090 --> 01:31:26.000
+Nebius Academy | AI-PE: And, they mask it.
+
+606
+01:31:26.260 --> 01:31:36.610
+Nebius Academy | AI-PE: Generally speaking, and we… they… we try to predict what is the Musk token. So, for example, my is Sylvian.
+
+607
+01:31:37.820 --> 01:31:43.759
+Nebius Academy | AI-PE: Yeah, Sylvain, sorry. And, the mask token is name.
+
+608
+01:31:44.420 --> 01:31:51.919
+Nebius Academy | AI-PE: This is what I try to predict. Again, self-supervised setup, where I have the full sentence. I'm hiding here just one token.
+
+609
+01:31:54.180 --> 01:32:02.490
+Nebius Academy | AI-PE: And because of the ability to split the transformer into an encoder, decoder, or both.
+
+610
+01:32:03.110 --> 01:32:13.479
+Nebius Academy | AI-PE: There are three types of transformer-based LLMs. One is encoder-only models, those are the BERT family.
+
+611
+01:32:13.860 --> 01:32:23.410
+Nebius Academy | AI-PE: They're good for tasks that require understanding of the input, such as classification, named entity recognition.
+
+612
+01:32:23.530 --> 01:32:27.589
+Nebius Academy | AI-PE: The bird family is very good for this.
+
+613
+01:32:27.970 --> 01:32:39.749
+Nebius Academy | AI-PE: Those… the encoder-only models are the masked language models, the ones that we're hiding just one token, and we want, based on the surroundings, predict the hidden token.
+
+614
+01:32:39.890 --> 01:32:44.849
+Nebius Academy | AI-PE: Remember that in the encoder, we saw the full context of the sentence.
+
+615
+01:32:45.360 --> 01:32:57.490
+Nebius Academy | AI-PE: Decoder-only models, they are good for generative tasks such as text generation, because they only see the tokens that we saw from left to right up until now.
+
+616
+01:32:57.740 --> 01:33:07.829
+Nebius Academy | AI-PE: If you're in English. And every time I decode the next token, this is the GPT family. So, GPT stands for Generalized
+
+617
+01:33:08.230 --> 01:33:13.500
+Nebius Academy | AI-PE: Retraining… General Assembly Transformer?
+
+618
+01:33:14.110 --> 01:33:18.269
+Nebius Academy | AI-PE: Yeah, I thought there was decoder in the name, but there is no, sorry.
+
+619
+01:33:18.530 --> 01:33:30.820
+Nebius Academy | AI-PE: And the encoder, decoder models, they are good for sequence to sequence, for example, translation, summarization, everything that you want to map one sequence to another.
+
+620
+01:33:32.590 --> 01:33:33.800
+Nebius Academy | AI-PE: M…
+
+621
+01:33:34.730 --> 01:33:44.450
+Nebius Academy | AI-PE: So, again, the paper came out, and two families, two large language… they were called back then language model families, came out.
+
+622
+01:33:44.670 --> 01:33:51.310
+Nebius Academy | AI-PE: On the left, you can see the BERT family, which is encoder-based, representation-based.
+
+623
+01:33:51.620 --> 01:34:03.189
+Nebius Academy | AI-PE: And on the right, you can see the generative language models, which are decoder-based, and the GPT and BERT came at the same time, more or less.
+
+624
+01:34:03.850 --> 01:34:05.130
+Nebius Academy | AI-PE: M…
+
+625
+01:34:11.430 --> 01:34:15.779
+Nebius Academy | AI-PE: So, I'll take questions later, but since I already listened.
+
+626
+01:34:16.080 --> 01:34:29.780
+Nebius Academy | AI-PE: So, encoder-based models, as I said, they're very good for classification, for name-entity recognition, for part of speech recognition. Why? Because they attend to the full context. They're not
+
+627
+01:34:29.880 --> 01:34:33.290
+Nebius Academy | AI-PE: Their purpose is not to generate text.
+
+628
+01:34:34.210 --> 01:34:35.510
+Nebius Academy | AI-PE: Mmm…
+
+629
+01:34:36.560 --> 01:34:55.549
+Nebius Academy | AI-PE: And let's now break it down, let's compare the representation models, or what we call the masked language models, to the generative models, which are the causal models. So, in the encoder-based model, our inputs are the input tokens.
+
+630
+01:34:55.660 --> 01:34:59.729
+Nebius Academy | AI-PE: And the final output at the end is some hidden state.
+
+631
+01:35:00.010 --> 01:35:02.150
+Nebius Academy | AI-PE: Some hidden state that represents
+
+632
+01:35:02.270 --> 01:35:08.160
+Nebius Academy | AI-PE: Each one… not each one of the tokens, but the full input, which is our sentence.
+
+633
+01:35:08.690 --> 01:35:19.480
+Nebius Academy | AI-PE: The model can see all the time stamps. It's time agnostic, there is no token-by-token prediction. I can see… attend to all the tokens all at once.
+
+634
+01:35:20.480 --> 01:35:35.209
+Nebius Academy | AI-PE: it does not usually output tokens, so it's not inherently generative. So, using an encoder-only architecture, it's very hard for me to generate text, because I only learned the masked
+
+635
+01:35:35.410 --> 01:35:39.109
+Nebius Academy | AI-PE: token, so I can… it's… it's not a generative model.
+
+636
+01:35:39.570 --> 01:35:44.690
+Nebius Academy | AI-PE: M… But it can be adopted to generate tokens. How?
+
+637
+01:35:46.080 --> 01:35:48.560
+Nebius Academy | AI-PE: By appending a model that maps
+
+638
+01:35:48.850 --> 01:35:54.270
+Nebius Academy | AI-PE: the hidden states to some vocabulary. So I can always
+
+639
+01:35:54.420 --> 01:36:00.899
+Nebius Academy | AI-PE: go back to the hidden states I get at the end of the encoder, and try to map them to the closest
+
+640
+01:36:01.240 --> 01:36:04.230
+Nebius Academy | AI-PE: Token in my final dictionary.
+
+641
+01:36:05.010 --> 01:36:11.799
+Nebius Academy | AI-PE: But, again, normally, if we want a generative model, we won't use the encoder.
+
+642
+01:36:13.040 --> 01:36:19.350
+Nebius Academy | AI-PE: The decoder model, so think now that they're separate, they're trained separately.
+
+643
+01:36:19.670 --> 01:36:22.040
+Nebius Academy | AI-PE: And they're not attached anymore.
+
+644
+01:36:22.430 --> 01:36:25.090
+Nebius Academy | AI-PE: So, the inputs are… the outputs
+
+645
+01:36:25.200 --> 01:36:29.759
+Nebius Academy | AI-PE: Of the tokens, so the tokens that,
+
+646
+01:36:30.130 --> 01:36:33.339
+Nebius Academy | AI-PE: Came out as probabilities, there are now the inputs.
+
+647
+01:36:33.460 --> 01:36:35.419
+Nebius Academy | AI-PE: to my next generation!
+
+648
+01:36:35.760 --> 01:36:47.399
+Nebius Academy | AI-PE: And a hidden state, only if I'm in the encoder-decoder setup. So this line here, that I'm pointing with my cursor, will only be connected if I'm in the encoder-decoder setup.
+
+649
+01:36:47.690 --> 01:36:56.959
+Nebius Academy | AI-PE: The model can only see the previous timestamps, so I cannot see the future. Although I'm in the self-attention mechanism, it's still the same mechanism.
+
+650
+01:36:57.250 --> 01:37:03.989
+Nebius Academy | AI-PE: But I… I cannot leak the data, because then I'm not in a decoder setup.
+
+651
+01:37:04.530 --> 01:37:11.380
+Nebius Academy | AI-PE: M… The model is autoregressive with the previous timestamp's output.
+
+652
+01:37:11.620 --> 01:37:16.970
+Nebius Academy | AI-PE: And it can also be adapted to generate hidden states, if I want…
+
+653
+01:37:17.560 --> 01:37:22.260
+Nebius Academy | AI-PE: an embedded representation of the inputs, I can just go back
+
+654
+01:37:22.630 --> 01:37:29.530
+Nebius Academy | AI-PE: Before the output token, so to a few layers before the output token, let's say the final linear layer or something before that.
+
+655
+01:37:29.700 --> 01:37:37.239
+Nebius Academy | AI-PE: And then I'll also have some encoded representation to all of my inputs once I've finished the full series of inputs.
+
+656
+01:37:38.640 --> 01:37:42.789
+Nebius Academy | AI-PE: M… So, this is the generation.
+
+657
+01:37:44.030 --> 01:37:53.569
+Nebius Academy | AI-PE: And as we said, this is the family of encoder-based language models. It's mainly the BERT family.
+
+658
+01:37:54.230 --> 01:38:01.030
+Nebius Academy | AI-PE: And… For the generative decoder family, it's mainly the GPT.
+
+659
+01:38:01.170 --> 01:38:05.960
+Nebius Academy | AI-PE: Family GPT up until, probably 5.5.
+
+660
+01:38:06.330 --> 01:38:14.790
+Nebius Academy | AI-PE: And there are also the encoder-decoder language models family, which are the T5,
+
+661
+01:38:15.210 --> 01:38:29.129
+Nebius Academy | AI-PE: BART, it's an old one, but so maybe today it's mainly the Ts that are still relevant in the encoder… decoder setup. And again, each one specializes in their own,
+
+662
+01:38:29.320 --> 01:38:30.420
+Nebius Academy | AI-PE: problem.
+
+663
+01:38:31.840 --> 01:38:36.160
+Nebius Academy | AI-PE: Mmm… And we, we will…
+
+664
+01:38:36.340 --> 01:38:42.549
+Nebius Academy | AI-PE: We will go into much more details of how they are trained, each one of them.
+
+665
+01:38:42.920 --> 01:38:49.489
+Nebius Academy | AI-PE: on Friday, okay? But this is, like, a more high-level overview of how you can use the transformer
+
+666
+01:38:49.730 --> 01:38:51.770
+Nebius Academy | AI-PE: In different, setups.
+
+667
+01:38:53.760 --> 01:38:58.959
+Nebius Academy | AI-PE: And now I will pause for questions.
+
+668
+01:39:04.360 --> 01:39:05.100
+Nebius Academy | AI-PE: Yes.
+
+669
+01:39:07.600 --> 01:39:08.710
+Nebius Academy | AI-PE: Oh, yeah, yeah?
+
+670
+01:39:12.640 --> 01:39:16.300
+Nebius Academy | AI-PE: Yeah, so what are the use cases of using just an encoder?
+
+671
+01:39:16.850 --> 01:39:23.290
+Nebius Academy | AI-PE: Okay, so the, birth… Fe- model family.
+
+672
+01:39:24.000 --> 01:39:34.629
+Nebius Academy | AI-PE: It's true, it was not a generative model, and now when you think about LLMs, it's… all you can think about is ChatGPT and the generative part of it, but there are still,
+
+673
+01:39:34.920 --> 01:39:45.600
+Nebius Academy | AI-PE: Problems such as classification, named entity recognition, sentiment analysis, similarity between text.
+
+674
+01:39:46.610 --> 01:39:56.690
+Nebius Academy | AI-PE: Also, additional tasks that are very good with a representation-based architecture.
+
+675
+01:39:57.380 --> 01:40:05.619
+Nebius Academy | AI-PE: Emm… it's true that in the generative part, it was lacking, and I think that's the reason that
+
+676
+01:40:06.250 --> 01:40:22.220
+Nebius Academy | AI-PE: BERT is still used mainly when you want… you learned about RAG with UVA, and you want to create an embedding for a batch to store it, so BERT can still be relevant for that, because it's an encoder. It's very good at representing a full
+
+677
+01:40:22.370 --> 01:40:25.069
+Nebius Academy | AI-PE: A sentence or a full document.
+
+678
+01:40:25.550 --> 01:40:41.710
+Nebius Academy | AI-PE: So there are… here, it's a very relevant task that is still relevant today, is to encode text into RAG, and you can do it with a decoder-based architecture, but encoder-based architecture is better because it sees…
+
+679
+01:40:42.000 --> 01:40:47.109
+Nebius Academy | AI-PE: The full picture and not limited to generated token by token.
+
+680
+01:40:49.620 --> 01:40:50.390
+Nebius Academy | AI-PE: Yes.
+
+681
+01:40:50.520 --> 01:40:52.090
+Nebius Academy | AI-PE: More questions? Yes.
+
+682
+01:40:53.400 --> 01:40:54.969
+Nebius Academy | AI-PE: Lega? I gotta go?
+
+683
+01:40:56.950 --> 01:41:03.949
+Nebius Academy | AI-PE: If GPT-4 is only a decoder, then how can… how can it translate? Should it be, like, encode… decoder for translation?
+
+684
+01:41:04.590 --> 01:41:10.710
+Nebius Academy | AI-PE: Great question. So, the question was, if GPT-4 is only a decoder, how does it know to translate?
+
+685
+01:41:11.010 --> 01:41:18.340
+Nebius Academy | AI-PE: And it's true that if GPT's four sole purpose was translation.
+
+686
+01:41:18.740 --> 01:41:23.310
+Nebius Academy | AI-PE: It would have been better trained with an encoded sequence-to-sequence architecture.
+
+687
+01:41:23.420 --> 01:41:27.410
+Nebius Academy | AI-PE: But, if you manipulate the input well enough.
+
+688
+01:41:27.870 --> 01:41:31.189
+Nebius Academy | AI-PE: Like, we tricked… remember we said,
+
+689
+01:41:31.710 --> 01:41:42.309
+Nebius Academy | AI-PE: For example, we saw it with the Q&A, we saw it with the sentiment, I can do… I can manipulate the input, so I put a text, and I said, this is the translation of the text to English.
+
+690
+01:41:42.390 --> 01:41:51.779
+Nebius Academy | AI-PE: and then put the text in English. So, if I manipulate the input well enough for a decoder-based architecture, then decoder-based architecture will learn
+
+691
+01:41:52.000 --> 01:41:56.499
+Nebius Academy | AI-PE: I don't know how to translate it to the Zoom.
+
+692
+01:41:56.610 --> 01:42:00.590
+Nebius Academy | AI-PE: But, like, a workaround, a workaround to,
+
+693
+01:42:00.680 --> 01:42:18.629
+Nebius Academy | AI-PE: to solve the problem. So it's about manipulating the input in a way that will help your architecture learn, and I would say it's a lot… a lot of machine learning and AI engineering is that, is to understand, like, which input will give the best impact to this relevant architecture.
+
+694
+01:42:19.010 --> 01:42:23.179
+Nebius Academy | AI-PE: But it's only guessing, because they don't publish anymore how they train.
+
+695
+01:42:25.850 --> 01:42:29.130
+Nebius Academy | AI-PE: I will see if Zoom have questions.
+
+696
+01:42:30.950 --> 01:42:32.260
+Nebius Academy | AI-PE: M…
+
+697
+01:42:37.010 --> 01:42:45.840
+Nebius Academy | AI-PE: I see… We use mask attention only on first layer of decoder. Why is so?
+
+698
+01:42:46.000 --> 01:42:55.480
+Nebius Academy | AI-PE: So, it's not on the first layer of the decoder, but rather on the outputs that the decoder generated, because we don't want to leak
+
+699
+01:42:55.670 --> 01:43:01.210
+Nebius Academy | AI-PE: The future into the decoder, because then it wouldn't learn anything.
+
+700
+01:43:01.870 --> 01:43:05.470
+Nebius Academy | AI-PE: I will take another question.
+
+701
+01:43:06.010 --> 01:43:07.030
+Nebius Academy | AI-PE: M…
+
+702
+01:43:08.760 --> 01:43:26.950
+Nebius Academy | AI-PE: regarding the multi-head attention, how to prevent collapse, that is, all heads attend equivalently. So, a good question. You can… first of all, normally you initialize them randomly, and because they are learned together, they are not collapsing to the same
+
+703
+01:43:27.130 --> 01:43:45.450
+Nebius Academy | AI-PE: attention head representation. If you want to take it further, you can add to the loss function an element that will ask the attention heads to be as far away from one another as possible, kind of like we did with the word embeddings. But normally, I think it's not added, if I'm not mistaken.
+
+704
+01:43:46.640 --> 01:43:49.120
+Nebius Academy | AI-PE: M… Okay.
+
+705
+01:43:49.620 --> 01:44:02.010
+Nebius Academy | AI-PE: So, I think we'll take an earlier break, because after the break, we'll talk about LLMs at inference time, so imagine that we already trained an LLM,
+
+706
+01:44:02.170 --> 01:44:14.920
+Nebius Academy | AI-PE: to predict the next token, or to predict the missing token. And now, what do we do at the inference time? So please take a 10 minutes break, and come here at 7.24.
+
+707
+01:58:17.140 --> 01:58:18.140
+Nebius Academy | AI-PE: Too too.
+
+708
+01:58:31.470 --> 01:58:33.200
+Nebius Academy | AI-PE: Okay.
+
+709
+01:58:33.930 --> 01:58:34.720
+Nebius Academy | AI-PE: There we go.
+
+710
+01:58:50.560 --> 01:58:58.350
+Nebius Academy | AI-PE: Okay, so, Can you shut the door or enter?
+
+711
+01:59:00.060 --> 01:59:01.470
+Nebius Academy | AI-PE: Thought. Thank you.
+
+712
+01:59:03.230 --> 01:59:11.899
+Nebius Academy | AI-PE: So before the break, we talked about the transformer architecture, and we talked, kind of high level.
+
+713
+01:59:12.060 --> 01:59:16.859
+Nebius Academy | AI-PE: How we can look at only the encoder, only the decoder, both of them.
+
+714
+01:59:16.960 --> 01:59:21.830
+Nebius Academy | AI-PE: And we will dive deeper into that, on Friday?
+
+715
+01:59:22.710 --> 01:59:26.560
+Nebius Academy | AI-PE: And now I want to, assume…
+
+716
+01:59:26.960 --> 01:59:30.180
+Nebius Academy | AI-PE: Is it next week or on Friday? No, on Friday.
+
+717
+01:59:31.290 --> 01:59:34.569
+Nebius Academy | AI-PE: So I wrote in next week, but I meant Friday.
+
+718
+01:59:35.030 --> 01:59:43.749
+Nebius Academy | AI-PE: And now, let's assume that we have an LLM that was already trained, okay? So, we finished the training process.
+
+719
+01:59:44.590 --> 01:59:49.090
+Nebius Academy | AI-PE: And now we're in a generative setup that we want to sample
+
+720
+01:59:49.360 --> 01:59:59.810
+Nebius Academy | AI-PE: one token at a time to generate text. So, I mean, specifically, after training at inference time, M…
+
+721
+02:00:00.590 --> 02:00:08.520
+Nebius Academy | AI-PE: So, we said already that some of the concepts here, by the way, we already discussed, some will be new.
+
+722
+02:00:09.570 --> 02:00:19.050
+Nebius Academy | AI-PE: So, we said that the task of choosing a word to generate based on the model's probability is called decoding, so we're at the decoding step.
+
+723
+02:00:19.740 --> 02:00:31.840
+Nebius Academy | AI-PE: And the most common method of decoding is to sample, so we obtain, at the end, a distribution over the token, so the probabilities for each one of the tokens.
+
+724
+02:00:32.200 --> 02:00:35.079
+Nebius Academy | AI-PE: To be, our next candidate.
+
+725
+02:00:36.220 --> 02:00:52.690
+Nebius Academy | AI-PE: And given this distribution of tokens, now that we have probability for each, we can apply sampling based on this distribution and obtain a token for our generation.
+
+726
+02:00:54.020 --> 02:01:00.259
+Nebius Academy | AI-PE: And this is the pseudocode you see here, so until we sample the end of sentence.
+
+727
+02:01:00.730 --> 02:01:02.919
+Nebius Academy | AI-PE: We will sample the next token!
+
+728
+02:01:03.200 --> 02:01:10.060
+Nebius Academy | AI-PE: Based on the probabilities of tokens, given all the previous tokens before it.
+
+729
+02:01:11.540 --> 02:01:12.910
+Nebius Academy | AI-PE: Mmm…
+
+730
+02:01:13.670 --> 02:01:26.870
+Nebius Academy | AI-PE: So, this is what, when we say that the language model generates one token at a time, this is what it does. At the end, it gives a probability for each token and samples based on this.
+
+731
+02:01:28.290 --> 02:01:38.650
+Nebius Academy | AI-PE: Now, even though that random sampling… it's not a random sampling, it's based on the distribution that we generated for each token.
+
+732
+02:01:39.220 --> 02:01:44.330
+Nebius Academy | AI-PE: But it generates sensible high-probable words or tokens.
+
+733
+02:01:44.770 --> 02:01:58.809
+Nebius Academy | AI-PE: There are many odd or low probability words or tokens in the tail of the distribution. So, we'll always have this long tail of tokens that will be less frequent in our data.
+
+734
+02:02:00.850 --> 02:02:06.540
+Nebius Academy | AI-PE: But if I would sum up all those very infrequent tokens.
+
+735
+02:02:07.420 --> 02:02:17.059
+Nebius Academy | AI-PE: They will constitute of a large portion of the distribution, so every single token is negligible by itself.
+
+736
+02:02:17.260 --> 02:02:24.309
+Nebius Academy | AI-PE: But if I would look at them all together, they are a big part of the vocabulary of the generative
+
+737
+02:02:24.590 --> 02:02:29.230
+Nebius Academy | AI-PE: options that… Are not, present in the sampling.
+
+738
+02:02:30.100 --> 02:02:37.630
+Nebius Academy | AI-PE: And when we're talking about sampling, we have a trade-off between quality and diversity.
+
+739
+02:02:38.090 --> 02:02:44.700
+Nebius Academy | AI-PE: So, if I emphasize on high probability words or tokens.
+
+740
+02:02:44.730 --> 02:03:00.339
+Nebius Academy | AI-PE: It means that my quality is very accurate, because it's based on text I've seen, and I know that this is very coherent, and this is the most probable token, and the most factual token, because, again, this sentence was seen
+
+741
+02:03:00.340 --> 02:03:08.950
+Nebius Academy | AI-PE: So many times, for example, the cat sits on the mat. We've seen so many times that it's sensible that the cat sits on the mat and not on the rooftop.
+
+742
+02:03:09.060 --> 02:03:20.229
+Nebius Academy | AI-PE: Because it was seen so many times, or maybe there is a superhuman cat that can sit on the rooftop, and I could never generate this sentence if I only give a high-quality
+
+743
+02:03:20.410 --> 02:03:21.640
+Nebius Academy | AI-PE: sentences.
+
+744
+02:03:21.770 --> 02:03:30.689
+Nebius Academy | AI-PE: What is the cons of emphasizing on high probability words is that it can be boring and repetitive.
+
+745
+02:03:30.960 --> 02:03:49.630
+Nebius Academy | AI-PE: And when you are working with generative AI, you want this diversity. You don't want to have the same repetitive answers or very coherent answers. For example, I can get a very good score at Q&A if
+
+746
+02:03:49.810 --> 02:03:51.670
+Nebius Academy | AI-PE: For every,
+
+747
+02:03:51.970 --> 02:04:03.470
+Nebius Academy | AI-PE: a question, I answer okay, or something, like, very short and not informative, but it doesn't bring me information, it's repetitive, it's boring, it's…
+
+748
+02:04:03.590 --> 02:04:05.189
+Nebius Academy | AI-PE: It's not what we want.
+
+749
+02:04:05.820 --> 02:04:21.690
+Nebius Academy | AI-PE: And if I put some more emphasis on middle probability tokens, that, you know, they're not the most probable, they were not seen in the text so much, I can get more creativity and diversity, but it gets less factual and less coherent.
+
+750
+02:04:22.680 --> 02:04:25.440
+Nebius Academy | AI-PE: So, this is the trade-off between the two.
+
+751
+02:04:26.480 --> 02:04:30.749
+Nebius Academy | AI-PE: And in order to manage this trade-off.
+
+752
+02:04:30.880 --> 02:04:35.030
+Nebius Academy | AI-PE: There is the pipeline at inference time. Again, it's not a part of the training.
+
+753
+02:04:35.330 --> 02:04:38.299
+Nebius Academy | AI-PE: It takes the raw probabilities we got.
+
+754
+02:04:38.650 --> 02:04:42.359
+Nebius Academy | AI-PE: From the transformer architecture for every token.
+
+755
+02:04:42.640 --> 02:04:52.870
+Nebius Academy | AI-PE: And does some manipulation on them. The first one is called temperature scaling. Reminder, we saw it when we discussed logistic regression.
+
+756
+02:04:53.210 --> 02:04:55.470
+Nebius Academy | AI-PE: Top K or top P.
+
+757
+02:04:55.830 --> 02:05:00.109
+Nebius Academy | AI-PE: And then we select the token. So now we'll discuss this pipeline.
+
+758
+02:05:00.290 --> 02:05:05.369
+Nebius Academy | AI-PE: And then we will recap everything with an amazing visualization.
+
+759
+02:05:07.100 --> 02:05:24.769
+Nebius Academy | AI-PE: So reminding you temperature sampling, the idea was that at the very end layer, when we generate probabilities for tokens, instead of applying soft packs to receive those probabilities, we will apply it with some scaling factor that we called temperature.
+
+760
+02:05:25.720 --> 02:05:27.580
+Nebius Academy | AI-PE: And…
+
+761
+02:05:28.990 --> 02:05:37.759
+Nebius Academy | AI-PE: the effect of temperature on the softmax function looks like this. So, if the temperature is, zeroed.
+
+762
+02:05:38.210 --> 02:05:44.840
+Nebius Academy | AI-PE: Then I have a very, very greedy decoding. I give…
+
+763
+02:05:45.220 --> 02:05:52.880
+Nebius Academy | AI-PE: emphasize only on the most probable word. Think about the temperature being something very, very, very small.
+
+764
+02:05:53.390 --> 02:05:59.280
+Nebius Academy | AI-PE: Then, only the largest, probability will gain its value.
+
+765
+02:05:59.680 --> 02:06:08.939
+Nebius Academy | AI-PE: If the temperature is 1, meaning I'm in the original distribution, it's exactly the softmax as it were before, and I get the original distribution.
+
+766
+02:06:09.370 --> 02:06:12.530
+Nebius Academy | AI-PE: But if the temperature is very, very large.
+
+767
+02:06:12.650 --> 02:06:18.060
+Nebius Academy | AI-PE: then I normalize my distribution, so I get,
+
+768
+02:06:18.370 --> 02:06:25.530
+Nebius Academy | AI-PE: non-normalized. I get a uniform distribution, so my distribution becomes more and more uniform.
+
+769
+02:06:25.650 --> 02:06:33.640
+Nebius Academy | AI-PE: The larger my temperature is, because the temperature affects much more than the actual probability of the token.
+
+770
+02:06:34.520 --> 02:06:53.880
+Nebius Academy | AI-PE: And of course, you have the in-betweens, for example, temperature of between 0 and 1, which does a more sparse representation of the distribution, and a temperature between 1 and 5 that does a more uniform distribution, but not a fully uniform one.
+
+771
+02:06:54.400 --> 02:07:00.830
+Nebius Academy | AI-PE: And it really affects the output of… the generated output at inference time.
+
+772
+02:07:01.790 --> 02:07:08.730
+Nebius Academy | AI-PE: Mmm… Notice, again, that, De…
+
+773
+02:07:08.870 --> 02:07:16.460
+Nebius Academy | AI-PE: The trade-off is something that you will manage according to the desired task that you want to solve.
+
+774
+02:07:17.840 --> 02:07:20.450
+Nebius Academy | AI-PE: So, this was, temperature.
+
+775
+02:07:21.340 --> 02:07:25.730
+Nebius Academy | AI-PE: Now, I want to discuss the top K filtering, or the top P filtering.
+
+776
+02:07:26.040 --> 02:07:33.999
+Nebius Academy | AI-PE: So, at the top K filtering, it's as it sounds. We choose a number K of tokens, words.
+
+777
+02:07:34.300 --> 02:07:37.559
+Nebius Academy | AI-PE: And for each word or token in the vocabulary.
+
+778
+02:07:37.750 --> 02:07:42.229
+Nebius Academy | AI-PE: We use the language model to compute the likelihood, as before.
+
+779
+02:07:42.610 --> 02:07:48.139
+Nebius Academy | AI-PE: And we sort them to… from most likely, most probable to least probable.
+
+780
+02:07:48.440 --> 02:08:00.590
+Nebius Academy | AI-PE: But we only let the model, once it does the sampling from the distribution, choose from the top K. So it cannot look at the long tail afterwards.
+
+781
+02:08:00.730 --> 02:08:07.679
+Nebius Academy | AI-PE: Only the top K will have a legitimate probability distribution.
+
+782
+02:08:08.060 --> 02:08:20.270
+Nebius Academy | AI-PE: And this… It helps avoiding very, unmatching tokens to, my, vocabulary.
+
+783
+02:08:22.020 --> 02:08:28.969
+Nebius Academy | AI-PE: And top piece sampling is more or less the same, but instead of a K, which is a fixed number.
+
+784
+02:08:29.460 --> 02:08:37.130
+Nebius Academy | AI-PE: I'm calculating the probability itself, and in this list that I ranked from most probable to list.
+
+785
+02:08:37.260 --> 02:08:40.090
+Nebius Academy | AI-PE: I will only keep the top P%.
+
+786
+02:08:40.310 --> 02:08:45.209
+Nebius Academy | AI-PE: That, satisfy the condition.
+
+787
+02:08:46.360 --> 02:08:47.860
+Nebius Academy | AI-PE: Mmm…
+
+788
+02:08:53.230 --> 02:08:58.819
+Nebius Academy | AI-PE: So, yeah, the problem with top case was it was fixed, K was a fixed number.
+
+789
+02:08:59.160 --> 02:09:15.440
+Nebius Academy | AI-PE: And for every situation, I might want to have… maybe a sentence is very, very specific, and here I want to have only 10 options of tokens, or maybe now I'm at the beginning of the sentence, and I want to be very much more creative.
+
+790
+02:09:16.040 --> 02:09:17.889
+Nebius Academy | AI-PE: And I want to have…
+
+791
+02:09:18.420 --> 02:09:25.979
+Nebius Academy | AI-PE: hundreds of options for tokens, so TopK didn't give me the flexibility I normally need.
+
+792
+02:09:26.940 --> 02:09:34.300
+Nebius Academy | AI-PE: So instead, I can just keep the top P% and set up P as my hyperparameter.
+
+793
+02:09:34.830 --> 02:09:44.220
+Nebius Academy | AI-PE: Mmm… Okay… And now, for my cool visualization, and if it's okay, I will see it.
+
+794
+02:09:47.570 --> 02:09:53.319
+Nebius Academy | AI-PE: That I will ho- I hope will put everything together for you.
+
+795
+02:09:55.060 --> 02:10:02.689
+Nebius Academy | AI-PE: Mmm… It's not my visualizations, it's… It's, follows club.
+
+796
+02:10:03.590 --> 02:10:06.880
+Nebius Academy | AI-PE: Emm… So I… sorry, I took credit for…
+
+797
+02:10:07.440 --> 02:10:11.960
+Nebius Academy | AI-PE: Okay, so what do we see here?
+
+798
+02:10:12.640 --> 02:10:22.909
+Nebius Academy | AI-PE: Emm… This is the transformer architecture end-to-end, including, the…
+
+799
+02:10:23.040 --> 02:10:28.659
+Nebius Academy | AI-PE: Sampling we talked about, including the embeddings and everything, and we'll see it step by step.
+
+800
+02:10:29.040 --> 02:10:44.839
+Nebius Academy | AI-PE: So, as we said, Transforma is the core architecture behind modern AI. It's powering GPT, Gemini, and a lot more that you are familiar with.
+
+801
+02:10:45.540 --> 02:10:50.510
+Nebius Academy | AI-PE: And… How do the transformers work?
+
+802
+02:10:50.850 --> 02:11:00.940
+Nebius Academy | AI-PE: the… the… okay, we talked about it. Okay, here is the transformer architecture, so you can see that there are the input embeddings.
+
+803
+02:11:01.350 --> 02:11:06.219
+Nebius Academy | AI-PE: There's this huge transformer block, we'll soon dive deeper into that.
+
+804
+02:11:06.950 --> 02:11:11.309
+Nebius Academy | AI-PE: And there are the probabilities of the next token.
+
+805
+02:11:11.530 --> 02:11:13.570
+Nebius Academy | AI-PE: So we have,
+
+806
+02:11:13.770 --> 02:11:22.840
+Nebius Academy | AI-PE: the sentence, data visualization, empowers, empowers what's broken down into two tokens, empowers users to…
+
+807
+02:11:23.400 --> 02:11:26.530
+Nebius Academy | AI-PE: And now we want to… we are in the decoder.
+
+808
+02:11:26.640 --> 02:11:29.900
+Nebius Academy | AI-PE: And we want to generate the next token.
+
+809
+02:11:30.820 --> 02:11:37.179
+Nebius Academy | AI-PE: And, you can see here that visualize was the most probable token.
+
+810
+02:11:37.520 --> 02:11:42.180
+Nebius Academy | AI-PE: create was this… the… with 20%, and C was the third?
+
+811
+02:11:42.320 --> 02:11:56.590
+Nebius Academy | AI-PE: That C was chosen, why it was chosen? Because I randomly sampled over this distribution. Okay, so maybe if I would roll the dice again, I would have visualized or create or something else. Why do I only see
+
+812
+02:11:57.080 --> 02:12:12.660
+Nebius Academy | AI-PE: 5 probabilities, because I chose top case sampling of value 5. So I will only look at the 5 probable… most probable tokens, and will normalize the distribution to sum up to one of those 5.
+
+813
+02:12:13.680 --> 02:12:22.630
+Nebius Academy | AI-PE: So, one, embeddings will turn text into number, the transformer block, that is a mix of self-attention with MLP.
+
+814
+02:12:22.760 --> 02:12:26.269
+Nebius Academy | AI-PE: And the probabilities that determine the likelihood for each token.
+
+815
+02:12:27.410 --> 02:12:38.860
+Nebius Academy | AI-PE: So, we said that before the transformer uses text, it breaks it down into small units that we call embeddings.
+
+816
+02:12:39.180 --> 02:12:42.340
+Nebius Academy | AI-PE: And now let's dive into the embeddings.
+
+817
+02:12:42.630 --> 02:12:46.809
+Nebius Academy | AI-PE: So, we have two types of embedding. I don't look…
+
+818
+02:12:47.160 --> 02:12:51.629
+Nebius Academy | AI-PE: Which embeddings do we put as an input? Do you remember?
+
+819
+02:12:53.550 --> 02:12:59.379
+Nebius Academy | AI-PE: Positional, and the semantics one, perfect, so we call them token embeddings.
+
+820
+02:13:00.450 --> 02:13:15.599
+Nebius Academy | AI-PE: And positional encoding. Remember, those are also vectors of the same size, why the same size? Because I told you that we concatenate them. Normally, we don't concatenate them side by side, we concatenate them
+
+821
+02:13:15.860 --> 02:13:21.650
+Nebius Academy | AI-PE: One on top of the other, so to create a two-dimensional metrics instead of one.
+
+822
+02:13:21.910 --> 02:13:30.870
+Nebius Academy | AI-PE: So, we see that data with capital D is mapped to this token, ID6601.
+
+823
+02:13:31.060 --> 02:13:35.490
+Nebius Academy | AI-PE: Visualization is mapped to this token, 3, 2, 0,
+
+824
+02:13:35.710 --> 02:13:50.529
+Nebius Academy | AI-PE: powers that, da-da-da. Okay, so every token is mapped to its token embedding of size 768, and the positional encodings, if I change the sentence here.
+
+825
+02:13:50.900 --> 02:14:05.509
+Nebius Academy | AI-PE: they will still remain the same. So the positional encoding of 0 is of the first token that appears in any sentence, and the positional encoding of 5 is the 5th token in any sentence, okay? So far, we got it.
+
+826
+02:14:05.930 --> 02:14:14.170
+Nebius Academy | AI-PE: And, and, here, you can see that, we sub… we…
+
+827
+02:14:14.700 --> 02:14:19.190
+Nebius Academy | AI-PE: Add both of them to generate the final token.
+
+828
+02:14:19.390 --> 02:14:25.929
+Nebius Academy | AI-PE: And not concatenate, as I said. Sometimes you concatenate, sometimes you just add them, like, here.
+
+829
+02:14:27.120 --> 02:14:34.350
+Nebius Academy | AI-PE: What else important here? Teams will continue… I think it's fine.
+
+830
+02:14:35.310 --> 02:14:46.140
+Nebius Academy | AI-PE: So how do we split into token? It's what we talked about, tokenization. Give me an example of a tokenization method we learned.
+
+831
+02:14:46.590 --> 02:14:53.449
+Nebius Academy | AI-PE: BPE, Word piece, sentence piece, and there are more that we haven't seen. Great.
+
+832
+02:14:53.550 --> 02:15:00.069
+Nebius Academy | AI-PE: Mmm… So you can see that GPT-2, oops, slow.
+
+833
+02:15:01.390 --> 02:15:10.420
+Nebius Academy | AI-PE: GPT-2 has a 50K token vocabulary. We said it's normally in the 10K size.
+
+834
+02:15:11.830 --> 02:15:13.200
+Nebius Academy | AI-PE: Emm…
+
+835
+02:15:14.110 --> 02:15:26.079
+Nebius Academy | AI-PE: So, why do we have positional amending? Reminding you, because we want to preserve the order that is lost once we use self-attention. So, we already discussed it.
+
+836
+02:15:26.460 --> 02:15:32.770
+Nebius Academy | AI-PE: Emm… Okay, and now we are at the transformer block.
+
+837
+02:15:32.910 --> 02:15:35.369
+Nebius Academy | AI-PE: Okay, this is where the magic happens.
+
+838
+02:15:35.690 --> 02:15:46.399
+Nebius Academy | AI-PE: And we said that it has two parts. One, the multi-layer perceptron that we are already very familiar with, and the second one we learned today, which is the multi-head self-attention.
+
+839
+02:15:50.440 --> 02:16:04.610
+Nebius Academy | AI-PE: Okay, so it says, for example, GPT2 small, it's already a very old model, has 12 attention heads. Why do we talk about old models? Because the new one, again, we don't know exactly what's happening here.
+
+840
+02:16:05.440 --> 02:16:12.670
+Nebius Academy | AI-PE: M… So, let's dive into the multi-head self-attention, okay?
+
+841
+02:16:12.790 --> 02:16:19.409
+Nebius Academy | AI-PE: I'm sorry I'm repeating everything we saw, but I hope it will be… it's good? Okay.
+
+842
+02:16:20.330 --> 02:16:32.560
+Nebius Academy | AI-PE: It lets me know if it's too slow. So, the self-attention, we decide which part of the inputs are the most relevant for each token. So, what's happening here? We create a key.
+
+843
+02:16:32.980 --> 02:16:43.509
+Nebius Academy | AI-PE: A key, query vector for each one of the initial embeddings, not a how. Let's look at it together.
+
+844
+02:16:45.840 --> 02:16:49.739
+Nebius Academy | AI-PE: Okay, so now we will click.
+
+845
+02:16:50.000 --> 02:16:52.679
+Nebius Academy | AI-PE: Let's see if it works. Opa. Moule.
+
+846
+02:16:53.100 --> 02:16:56.290
+Nebius Academy | AI-PE: So, it's an amazing visualization, I told you.
+
+847
+02:16:56.920 --> 02:17:03.689
+Nebius Academy | AI-PE: So, we have the embeddings. Specifically, in our example, they're of size 768.
+
+848
+02:17:04.209 --> 02:17:06.829
+Nebius Academy | AI-PE: And we have 3 metrics.
+
+849
+02:17:06.969 --> 02:17:07.959
+Nebius Academy | AI-PE: Q?
+
+850
+02:17:08.850 --> 02:17:10.559
+Nebius Academy | AI-PE: K and V.
+
+851
+02:17:11.250 --> 02:17:12.950
+Nebius Academy | AI-PE: And…
+
+852
+02:17:13.350 --> 02:17:26.200
+Nebius Academy | AI-PE: Here, they multiplied all together for the sake of the visualization, but in class, we looked at them at three different matrices, so think about each color as a different metrics.
+
+853
+02:17:26.400 --> 02:17:43.809
+Nebius Academy | AI-PE: And I multiply data by… how do I see it again? OPA. Data with the metrics of Q to get the key, the query, and of K to get the key, and of V to get the value.
+
+854
+02:17:44.350 --> 02:18:03.030
+Nebius Academy | AI-PE: And now, let's say I wanted, I wanted the representation to be of size 2304, so after I set up the W's to be of that size, to map the original X's to the new representation.
+
+855
+02:18:03.469 --> 02:18:16.619
+Nebius Academy | AI-PE: But here it's all together, so divided by 3, and then you have each one. So I hope it's not too confusing that they concatenated it. We looked at it in class as 3 different vectors, so I hope it's not that confusing.
+
+856
+02:18:16.920 --> 02:18:21.279
+Nebius Academy | AI-PE: And we have, those 3 vectors, 3 different vectors.
+
+857
+02:18:21.459 --> 02:18:24.669
+Nebius Academy | AI-PE: For each one of the tokens.
+
+858
+02:18:25.219 --> 02:18:29.159
+Nebius Academy | AI-PE: And now, let's see what happens with our attention.
+
+859
+02:18:30.200 --> 02:18:44.580
+Nebius Academy | AI-PE: So, first of all, we have multi-head attention. We have 12 different attention values. So you can see that, for example, here, it only caught the self-attention attending to the same token.
+
+860
+02:18:45.240 --> 02:18:52.550
+Nebius Academy | AI-PE: And… Here, it caught a very different attention pattern.
+
+861
+02:18:53.030 --> 02:18:59.899
+Nebius Academy | AI-PE: Which, what's interesting? Powers here is very much related to data.
+
+862
+02:19:00.570 --> 02:19:02.320
+Nebius Academy | AI-PE: And here…
+
+863
+02:19:02.440 --> 02:19:15.299
+Nebius Academy | AI-PE: Okay, this is pretty similar to the previous one. Here, in powers, it caught the relationship between the two tokens that are the same word that was split into two tokens. It's a different kind of relation.
+
+864
+02:19:15.580 --> 02:19:21.320
+Nebius Academy | AI-PE: That you can see is a very highlighted with Empowers.
+
+865
+02:19:21.670 --> 02:19:28.150
+Nebius Academy | AI-PE: and the token to itself, which is, also… you can… yeah, I see a lot of,
+
+866
+02:19:29.040 --> 02:19:46.059
+Nebius Academy | AI-PE: what here is interesting? I can't find anything. Not all the time we will find something that I can say, okay, this is what the network caught, like I showed you with the empowered, okay? But what do we see? We see that each attention had, one second, caught different
+
+867
+02:19:46.230 --> 02:19:52.780
+Nebius Academy | AI-PE: patterns. Now, I want to dive deeper into how attention is calculated. So, remember.
+
+868
+02:19:53.010 --> 02:19:56.840
+Nebius Academy | AI-PE: How it's calculated? Dot product between the key and a vector.
+
+869
+02:19:56.940 --> 02:20:10.450
+Nebius Academy | AI-PE: scaling, mask, because we are in the decoder part, okay? Otherwise, we won't need the masking in the encoder part, and applying softmax. Why softmax? To get probabilities.
+
+870
+02:20:11.080 --> 02:20:16.470
+Nebius Academy | AI-PE: And when does the value come along? After I calculated the attention heads.
+
+871
+02:20:17.130 --> 02:20:22.720
+Nebius Academy | AI-PE: I want now to multiply them by the values to obtain the outputs.
+
+872
+02:20:22.880 --> 02:20:30.639
+Nebius Academy | AI-PE: for either the next… for the MRP layer, which is my next layer, In this visualization case.
+
+873
+02:20:30.770 --> 02:20:38.949
+Nebius Academy | AI-PE: It could have been an additional self-attention layer, okay? But here we made it simple, and our next layer is the MLP, the linear layer.
+
+874
+02:20:39.720 --> 02:20:48.580
+Nebius Academy | AI-PE: I'll follow the instructions. Okay, oops, I skipped, I misbehaved. So we already did the attention with the mask and the soft masks.
+
+875
+02:20:49.590 --> 02:21:05.660
+Nebius Academy | AI-PE: And we already talked about how the attention outputs are now… the attention scores, which are the multiplication of k and query, are now multiplied by the value to produce the final attention output. Why,
+
+876
+02:21:06.020 --> 02:21:17.680
+Nebius Academy | AI-PE: One second… Emm… M… Okay, so now we have all of those outputs.
+
+877
+02:21:17.780 --> 02:21:22.739
+Nebius Academy | AI-PE: And we want to put them into our linear layer.
+
+878
+02:21:23.150 --> 02:21:31.450
+Nebius Academy | AI-PE: What does it do? It will take the multiple attention heads and
+
+879
+02:21:31.820 --> 02:21:37.720
+Nebius Academy | AI-PE: Make a unified representation of all the 12 attention heads we had here.
+
+880
+02:21:38.130 --> 02:21:50.500
+Nebius Academy | AI-PE: we didn't talk about Jellyu, but it's the… it's not, that, interesting. But, what do we see here? We… first of all,
+
+881
+02:21:50.780 --> 02:22:06.240
+Nebius Academy | AI-PE: I skipped it here, so I'm going back. Here there was a dropout, so remember we talked about the dropout. There was the residual, remember the skip connections? So the skip connection, the dotted line here, is now added to the MLP as a skip connection.
+
+882
+02:22:06.530 --> 02:22:19.309
+Nebius Academy | AI-PE: Emm… I'm skipping the GLU part, but remember ReLU? We studied ReLU. It's the same idea, something not linear.
+
+883
+02:22:19.930 --> 02:22:21.140
+Nebius Academy | AI-PE: Mmm…
+
+884
+02:22:22.840 --> 02:22:35.529
+Nebius Academy | AI-PE: And the final output logics, the probabilities that will now… we will want to sample for the decoding part.
+
+885
+02:22:36.020 --> 02:22:50.889
+Nebius Academy | AI-PE: we said that, for example, GPT-2 has 50,000, so imagine that 50K, sorry, is that… so imagine that every one of them will get a probability, unless we are doing a top sampling.
+
+886
+02:22:51.500 --> 02:23:03.169
+Nebius Academy | AI-PE: And let's now dive deeper into the probabilities. So, how does it look like? We have the original raw output of the softmax. We divide it by the temperature factor.
+
+887
+02:23:03.380 --> 02:23:19.460
+Nebius Academy | AI-PE: then we applied specifically top K filter, and we'll soon play with it, and we will only filter the top 5, and then we will normalize it so that, at the end, the probabilities will sum up to 1.
+
+888
+02:23:20.900 --> 02:23:34.830
+Nebius Academy | AI-PE: And as we said, with top P, it will look differently, and instead of the only 5K, now everything with cumulative probability below,
+
+889
+02:23:35.880 --> 02:23:41.189
+Nebius Academy | AI-PE: It will be, Is zeroed.
+
+890
+02:23:42.280 --> 02:23:50.929
+Nebius Academy | AI-PE: So, the residual connection that I, I thought I… they skipped, so they are reminding us the residual connection.
+
+891
+02:23:51.060 --> 02:23:58.019
+Nebius Academy | AI-PE: the layout normalization, I don't know if they were meant to look at it here, the layout normalization, perfect.
+
+892
+02:23:58.400 --> 02:24:11.160
+Nebius Academy | AI-PE: And you didn't need me, you just needed to look at this visualization today. And the dropout. So everything we learned, I hope now it's, like, even clearer, and I want to show you,
+
+893
+02:24:11.470 --> 02:24:14.389
+Nebius Academy | AI-PE: For example, let's…
+
+894
+02:24:14.450 --> 02:24:27.320
+Nebius Academy | AI-PE: let's say, play a bit with the sampling and see how it impacts the final result. It's the same model that was trained, so nothing changes on the training behalf, but rather on the inference we have.
+
+895
+02:24:27.370 --> 02:24:34.699
+Nebius Academy | AI-PE: So if I'm at a very, very small temperature, you can see that it will always sample the next token visualized.
+
+896
+02:24:34.760 --> 02:24:40.109
+Nebius Academy | AI-PE: So imagine that you are now working with the ChatGPT, and every time that you put the same input, you will get
+
+897
+02:24:40.250 --> 02:24:43.410
+Nebius Academy | AI-PE: Same completion, no one would have used it.
+
+898
+02:24:43.580 --> 02:24:58.620
+Nebius Academy | AI-PE: not for human interaction, at least, human chat interaction. When the temperature is 1, we get the actual probabilities. Here, sorry, let's do a top K…
+
+899
+02:24:58.940 --> 02:25:00.630
+Nebius Academy | AI-PE: No, don't be.
+
+900
+02:25:01.900 --> 02:25:21.409
+Nebius Academy | AI-PE: 1, and here we get, you see, I get temperature 1, and I give the… all the tokens a chance to enter, so you can see the actual… this is the actual output of the transponder without any special sampling, and it will go on for 50K tokens.
+
+901
+02:25:21.830 --> 02:25:37.990
+Nebius Academy | AI-PE: And if I put a very, very large temperature, you can see that the distribution becomes almost uniform. So, like, the actual training is completely lost. So don't do that as well, because then it's nothing. You're generating gibberish.
+
+902
+02:25:38.150 --> 02:25:40.350
+Nebius Academy | AI-PE: And,
+
+903
+02:25:40.480 --> 02:25:49.750
+Nebius Academy | AI-PE: why is temperature very close to zero still relevant? When we develop stuff, when we want LLMs to be as deterministic as possible.
+
+904
+02:25:49.950 --> 02:26:09.440
+Nebius Academy | AI-PE: then for developing something, sometimes you want temperature zero to recreate the results, although maybe Val told you already that it's hard to do, or I told you. It's almost impossible to recreate the same output with the same…
+
+905
+02:26:09.780 --> 02:26:14.870
+Nebius Academy | AI-PE: But anyway, so let's say we're at temperature 1, this is the real
+
+906
+02:26:15.070 --> 02:26:33.370
+Nebius Academy | AI-PE: raw logic, so that if I do top K5, again, only the top 5 will be optional for me, and I can play, of course, with the number. And with top P, I will only maintain probabilities that have been,
+
+907
+02:26:33.760 --> 02:26:38.320
+Nebius Academy | AI-PE: Larger than a certain, M…
+
+908
+02:26:38.810 --> 02:26:44.009
+Nebius Academy | AI-PE: I wanted to show just another example here, and then I'm opening up for questions.
+
+909
+02:26:44.300 --> 02:26:51.049
+Nebius Academy | AI-PE: So let's take artificial intelligence in transforming that.
+
+910
+02:26:51.510 --> 02:26:57.260
+Nebius Academy | AI-PE: So the way the world, this is falling, and…
+
+911
+02:26:57.800 --> 02:27:02.939
+Nebius Academy | AI-PE: topient, you can say, lives, field, future, etc.
+
+912
+02:27:03.160 --> 02:27:10.409
+Nebius Academy | AI-PE: Emm… Yeah, I think… Now, I will open it for questions.
+
+913
+02:27:13.220 --> 02:27:13.980
+Nebius Academy | AI-PE: Yes.
+
+914
+02:27:26.110 --> 02:27:26.980
+Nebius Academy | AI-PE: Patterns.
+
+915
+02:27:28.550 --> 02:27:33.180
+Nebius Academy | AI-PE: Great. So the question is, how come that each head is…
+
+916
+02:27:33.900 --> 02:27:43.629
+Nebius Academy | AI-PE: the same. I mean, it's the same mathematical formula, I will be more exact, but it catches different patterns. And it's a great question.
+
+917
+02:27:44.020 --> 02:27:52.790
+Nebius Academy | AI-PE: And, first of all, just to make sure that we understand that every attention
+
+918
+02:27:52.930 --> 02:28:06.859
+Nebius Academy | AI-PE: head here has its own Ws, so every attention head will have its own W, its own metrics that maps the raw embedding into key queries and values.
+
+919
+02:28:06.980 --> 02:28:12.780
+Nebius Academy | AI-PE: And the idea here is that it's trained all together, so all attentions had are trained together.
+
+920
+02:28:12.970 --> 02:28:27.750
+Nebius Academy | AI-PE: and initialized differently, so every W's are initialized differently. And then in the training process, each one will catch their own direction, but as you can see, even in our example, maybe it also happened now, there's this
+
+921
+02:28:27.870 --> 02:28:34.340
+Nebius Academy | AI-PE: For example, one attention head was diagonal, and there was another one very similar to it.
+
+922
+02:28:34.640 --> 02:28:40.420
+Nebius Academy | AI-PE: I don't know if we will see it with this… this one, it's pretty similar, so it could be that
+
+923
+02:28:40.570 --> 02:28:58.710
+Nebius Academy | AI-PE: with 12 attention heads, some attention heads will still be similar, and as I said, like, if you want to really push them further, you can add to the loss function that the W's will be as far away from one another as possible, but normally you don't even need that.
+
+924
+02:28:58.980 --> 02:29:03.570
+Nebius Academy | AI-PE: Because naturally, like a neural network catches some concepts.
+
+925
+02:29:03.730 --> 02:29:08.590
+Nebius Academy | AI-PE: And another part catches another concept, it happens.
+
+926
+02:29:11.230 --> 02:29:20.489
+Nebius Academy | AI-PE: There is a random seed different for every one of those W's, and this, at the end, derives everyone to converge to a different attention.
+
+927
+02:29:21.940 --> 02:29:24.030
+Nebius Academy | AI-PE: More questions? Yes?
+
+928
+02:29:26.300 --> 02:29:38.610
+Nebius Academy | AI-PE: In the training, you will have many more attention head combination, and with, like, the reward function of the answers, it will screen them out, basically.
+
+929
+02:29:40.220 --> 02:29:46.230
+Nebius Academy | AI-PE: No, no, so how will it look like in the training? We have at least 12 attention heads here.
+
+930
+02:29:46.430 --> 02:29:51.769
+Nebius Academy | AI-PE: They will all be concatenated, into the MLP.
+
+931
+02:29:52.240 --> 02:29:59.359
+Nebius Academy | AI-PE: Okay, so think about 12 attention sets concatenated and are now putting as an input into the linear layer.
+
+932
+02:29:59.650 --> 02:30:02.750
+Nebius Academy | AI-PE: And… It's all part of the same…
+
+933
+02:30:02.760 --> 02:30:22.340
+Nebius Academy | AI-PE: backpropagation. So, in one step, we will update the gradients of everything together, all this linear layer, the W's, the X's of the embedding, what else? Everything. Everything will be backpropagated together, and,
+
+934
+02:30:22.490 --> 02:30:28.680
+Nebius Academy | AI-PE: the relation between the attention heads is mainly captured in the linear layer, in the MLP.
+
+935
+02:30:30.550 --> 02:30:33.990
+Nebius Academy | AI-PE: Which one is more important, how it's related? Yes.
+
+936
+02:30:34.370 --> 02:30:37.179
+Nebius Academy | AI-PE: Can you give him the mic, or he's too far?
+
+937
+02:30:40.480 --> 02:30:43.569
+Nebius Academy | AI-PE: If not, I will just repeat the question.
+
+938
+02:30:46.930 --> 02:30:52.179
+Nebius Academy | AI-PE: Okay, my question is about, attention mechanism here. You said that,
+
+939
+02:30:52.880 --> 02:31:01.280
+Nebius Academy | AI-PE: We use masks to prevent our model from cheating, not to look Right.
+
+940
+02:31:02.240 --> 02:31:05.710
+Nebius Academy | AI-PE: to the future. But here, the task for us is to…
+
+941
+02:31:06.100 --> 02:31:13.539
+Nebius Academy | AI-PE: predict only one word, way, in this case, yes? Artificial intelligence is reforming the way.
+
+942
+02:31:14.060 --> 02:31:18.550
+Nebius Academy | AI-PE: Here, We can, discard the mask completely, because…
+
+943
+02:31:18.860 --> 02:31:30.349
+Nebius Academy | AI-PE: we can… we are interested only in predicting the probabilities of the last word. So my question is, why do we still use mask here in inference time?
+
+944
+02:31:30.530 --> 02:31:40.670
+Nebius Academy | AI-PE: Yeah, good question. It's true that because we are at endpoints time calculating token by token.
+
+945
+02:31:40.820 --> 02:31:46.999
+Nebius Academy | AI-PE: Then it's not really a parallelized computation, and you don't really need the masking.
+
+946
+02:31:47.200 --> 02:31:48.300
+Nebius Academy | AI-PE: Emm…
+
+947
+02:31:52.680 --> 02:32:01.610
+Nebius Academy | AI-PE: I think it's mainly for the visualization, but I don't have a better answer from it now. I'll think about it in the breakouts.
+
+948
+02:32:02.400 --> 02:32:03.350
+Nebius Academy | AI-PE: Yes.
+
+949
+02:32:04.560 --> 02:32:06.850
+Nebius Academy | AI-PE: There you go, I go.
+
+950
+02:32:09.830 --> 02:32:26.680
+Nebius Academy | AI-PE: Okay, okay, it works. Why do we need positional, embedding? Seemingly, the order of, of, roles in the mattress. For example, we get, values, already, hazard.
+
+951
+02:32:26.930 --> 02:32:36.020
+Nebius Academy | AI-PE: So, we have a particular order of items we get from the input after we multiply all the mattresses.
+
+952
+02:32:36.680 --> 02:32:42.529
+Nebius Academy | AI-PE: This question already appeared, and maybe I'll try to answer it in a different way.
+
+953
+02:32:42.790 --> 02:32:49.479
+Nebius Academy | AI-PE: M… Machine learning is very bad at math, so understanding the concept that
+
+954
+02:32:50.090 --> 02:33:04.789
+Nebius Academy | AI-PE: 1 is close to 2 is close to 3, and the distance between 4 and 2 is 2 is… you can do it very well with linear regression, and when you try to measure distance between objects.
+
+955
+02:33:04.920 --> 02:33:14.990
+Nebius Academy | AI-PE: But here, with the positional embedding, you hope to capture the ordinal importance, not just of numbers, of specifically
+
+956
+02:33:15.520 --> 02:33:16.970
+Nebius Academy | AI-PE: Language.
+
+957
+02:33:17.180 --> 02:33:19.980
+Nebius Academy | AI-PE: Emm… Specifically, language.
+
+958
+02:33:20.470 --> 02:33:29.310
+Nebius Academy | AI-PE: you could also use other alternatives. So I said, for example, the transformer paper did use a CNUS function.
+
+959
+02:33:29.620 --> 02:33:33.779
+Nebius Academy | AI-PE: Which is, not a positional embedding.
+
+960
+02:33:33.970 --> 02:33:41.620
+Nebius Academy | AI-PE: So you could use different things, but now, most commonly, it's a positional embedding, normally.
+
+961
+02:33:43.060 --> 02:33:45.259
+Nebius Academy | AI-PE: Maybe I'll take some from home, yeah.
+
+962
+02:33:47.380 --> 02:33:48.420
+Nebius Academy | AI-PE: M…
+
+963
+02:33:53.700 --> 02:34:00.240
+Nebius Academy | AI-PE: Emm… Okay, which one do I choose randomly?
+
+964
+02:34:00.740 --> 02:34:03.720
+Nebius Academy | AI-PE: Emm… From the end.
+
+965
+02:34:03.830 --> 02:34:09.730
+Nebius Academy | AI-PE: Can you explain why, when you put in the simulator, 2 plus 2 equals, you don't get 4?
+
+966
+02:34:09.860 --> 02:34:17.970
+Nebius Academy | AI-PE: Emm… You should have, because it's a very common sentence to see in the internet.
+
+967
+02:34:19.000 --> 02:34:25.669
+Nebius Academy | AI-PE: But if… the answer is, it depends how frequently you saw it online.
+
+968
+02:34:26.120 --> 02:34:36.049
+Nebius Academy | AI-PE: And if… there is not the example here, but if we were to look at the simulator of 2 plus 2 equals.
+
+969
+02:34:36.190 --> 02:34:45.019
+Nebius Academy | AI-PE: I assume that the probabilities will get very likely, it will be all numbers. So, the LLM understands that the answer that needs to
+
+970
+02:34:45.640 --> 02:34:57.469
+Nebius Academy | AI-PE: it needs to provide is a number. But understanding that the number is 4, depending on the frequency that the LLM saw the combination of words, nothing more than… nothing mathematical.
+
+971
+02:34:57.680 --> 02:35:11.580
+Nebius Academy | AI-PE: When you see a correct answer on ChatGPT, it's because it understands it's a mathematical operation, it goes to a calculator or Python, it does the calculation there, and it brings you back the answer. Like, very shortly.
+
+972
+02:35:11.680 --> 02:35:13.190
+Nebius Academy | AI-PE: And the,
+
+973
+02:35:13.390 --> 02:35:19.860
+Nebius Academy | AI-PE: speaking, but it's a very interesting idea, and I know that in Bariland, they are now trying to research, like.
+
+974
+02:35:20.160 --> 02:35:30.180
+Nebius Academy | AI-PE: how LLMs learn math, and which abstraction it does hold, and which as a mathematical representation, and which less.
+
+975
+02:35:30.360 --> 02:35:39.100
+Nebius Academy | AI-PE: So, maybe the research will prove ourselves wrong, but generally speaking, This is the issue.
+
+976
+02:35:40.290 --> 02:35:59.839
+Nebius Academy | AI-PE: Why there are 12 attentions Heads? So, as we said, it's not necessarily 12, again, it's a hyperparameter, you can choose whatever. And the idea here is not settle for just one attention head. It will learn a very good representation of the context for the specific token.
+
+977
+02:35:59.840 --> 02:36:07.500
+Nebius Academy | AI-PE: But why not learn several representations for this specific token that captures different things? And I think,
+
+978
+02:36:07.590 --> 02:36:23.209
+Nebius Academy | AI-PE: For example, here, artificial, you see, was broken down into two tokens, so we want one attention to understand that they're both the same word, and another attention had to look more long distance. I gave this example several times.
+
+979
+02:36:23.980 --> 02:36:30.050
+Nebius Academy | AI-PE: Emm… Okay, so I… I think,
+
+980
+02:36:30.470 --> 02:36:36.450
+Nebius Academy | AI-PE: If there are no more questions on the… Example… Emm…
+
+981
+02:36:37.580 --> 02:36:47.730
+Nebius Academy | AI-PE: let's just summarize the pipeline. So, the inference pipeline, we talked about the raw audits and temperature scaling, and then either
+
+982
+02:36:47.850 --> 02:36:59.030
+Nebius Academy | AI-PE: top K sampling or top P sampling, those are parameters that you will see when you're working with an API of GPT, so you normally will choose
+
+983
+02:36:59.030 --> 02:37:10.859
+Nebius Academy | AI-PE: temperature, you will choose the top K sampling or the top K sampling, and, it's common… it became common language of also, like, non-technical,
+
+984
+02:37:10.890 --> 02:37:13.729
+Nebius Academy | AI-PE: Individuals who work with L&Ms.
+
+985
+02:37:14.440 --> 02:37:22.810
+Nebius Academy | AI-PE: M… Okay, so I think we will summarize, and then,
+
+986
+02:37:23.600 --> 02:37:25.800
+Nebius Academy | AI-PE: Okay, I'm here for more questions.
+
+987
+02:37:26.030 --> 02:37:33.729
+Nebius Academy | AI-PE: So, what did we see today? First of all, I think one of the most important things we saw today is the transformer architecture.
+
+988
+02:37:33.850 --> 02:37:41.040
+Nebius Academy | AI-PE: And the fact that it enables, in a single framework for representation generation, sequence-to-sequence.
+
+989
+02:37:41.290 --> 02:37:47.419
+Nebius Academy | AI-PE: It did transform the entire AI field, I would say,
+
+990
+02:37:47.620 --> 02:37:50.760
+Nebius Academy | AI-PE: And maybe more than that, we'll see in the future.
+
+991
+02:37:50.940 --> 02:37:55.240
+Nebius Academy | AI-PE: LLMs learn everything jointly.
+
+992
+02:37:55.360 --> 02:37:58.779
+Nebius Academy | AI-PE: So, instead of separate components…
+
+993
+02:37:59.230 --> 02:38:08.989
+Nebius Academy | AI-PE: for, like we said, for named entity recognition, for sentiment analysis, for Q&A, we have it all at once.
+
+994
+02:38:09.290 --> 02:38:14.950
+Nebius Academy | AI-PE: And, we have the representation, the context, and…
+
+995
+02:38:15.220 --> 02:38:19.000
+Nebius Academy | AI-PE: End-to-end task… end-to-end task at scales.
+
+996
+02:38:19.220 --> 02:38:22.660
+Nebius Academy | AI-PE: And also, as we said, like, remember that
+
+997
+02:38:22.790 --> 02:38:31.889
+Nebius Academy | AI-PE: the gradient backpropagates to all of the steps that we discussed in the transformer, all at once, with some end task at the end?
+
+998
+02:38:32.470 --> 02:38:46.319
+Nebius Academy | AI-PE: And the output is controllable. We said that infants, techniques like top K, top P, and the temperature, they have a straight-off creativity versus being robust and reliable.
+
+999
+02:38:47.120 --> 02:38:52.520
+Nebius Academy | AI-PE: Yeah, that's it. Pini, you want to say something?
+
+1000
+02:39:08.260 --> 02:39:11.590
+Nebius Academy | AI-PE: First of all, the survey, the feedback for Noah.
+
+1001
+02:39:12.220 --> 02:39:18.040
+Nebius Academy | AI-PE: As I said, in two weeks or so, we will start the MLOps module.
+
+1002
+02:39:18.400 --> 02:39:23.349
+Nebius Academy | AI-PE: We will invite you to the… to our tenant, to our,
+
+1003
+02:39:23.480 --> 02:39:30.099
+Nebius Academy | AI-PE: cloud account, and you will work on it. You don't need… you won't need your private personal account.
+
+1004
+02:39:30.620 --> 02:39:35.270
+Nebius Academy | AI-PE: And, and no need to pay the $25 fee.
+
+1005
+02:39:37.430 --> 02:39:43.310
+Nebius Academy | AI-PE: So you will work in our tenant, we'll provide the computer resources over there.
+
+1006
+02:39:43.520 --> 02:39:57.789
+Nebius Academy | AI-PE: Regarding the homework, we are still working hard to finalize the first submission. Hopefully, tomorrow, we can already return the first assignment in this course.
+
+1007
+02:39:59.670 --> 02:40:08.490
+Nebius Academy | AI-PE: one thing, we do ask you to submit only notebooks, and still people submitting GitHub repos, and some repos are
+
+1008
+02:40:08.810 --> 02:40:16.809
+Nebius Academy | AI-PE: tens of megabytes large. There's no reason for such intense, hard work.
+
+1009
+02:40:17.040 --> 02:40:18.919
+Nebius Academy | AI-PE: A submission should be…
+
+1010
+02:40:19.500 --> 02:40:32.059
+Nebius Academy | AI-PE: 1, 2, 3 megabytes tops. Do not submit the data or too many figures. Keep it simple, keep it concise, answer what is asked for.
+
+1011
+02:40:33.830 --> 02:40:35.950
+Nebius Academy | AI-PE: And that's it. Thank you.
+
+1012
+02:40:36.290 --> 02:40:39.860
+Nebius Academy | AI-PE: And now we'll take… No, we'll take more questions now.
+
+1013
+02:40:47.890 --> 02:40:58.150
+Nebius Academy | AI-PE: So, what makes the difference between… we saw now GPT too small with a transformer? What makes the difference between the different models as they grow?
+
+1014
+02:40:58.400 --> 02:41:04.629
+Nebius Academy | AI-PE: Besides… different, parameters that we saw here. What is the big difference between
+
+1015
+02:41:04.800 --> 02:41:12.799
+Nebius Academy | AI-PE: Generation 2, 3, 4, etc, yeah. The… Mainly, the size, so…
+
+1016
+02:41:13.140 --> 02:41:21.500
+Nebius Academy | AI-PE: Making this architecture much, much larger, which means much more parameters, which means much more computational effort.
+
+1017
+02:41:21.750 --> 02:41:28.060
+Nebius Academy | AI-PE: and much more money, much more GPUs to train, but we will… this is… when we talk about training.
+
+1018
+02:41:28.280 --> 02:41:30.810
+Nebius Academy | AI-PE: For inference, it's… it's…
+
+1019
+02:41:31.340 --> 02:41:40.120
+Nebius Academy | AI-PE: generating better performance because we can capture more relations and train on more data. But at the end.
+
+1020
+02:41:40.380 --> 02:41:52.519
+Nebius Academy | AI-PE: It's the scale. Yeah, it's more data, more parameters, more computational effort, and of course, they are optimizing things that we don't know as well.
+
+1021
+02:41:52.990 --> 02:41:58.009
+Nebius Academy | AI-PE: maybe in the architecture, it's not exposed, so I don't really know.
+
+1022
+02:41:58.360 --> 02:42:00.900
+Nebius Academy | AI-PE: There are,
+
+1023
+02:42:01.300 --> 02:42:10.220
+Nebius Academy | AI-PE: very interesting architecture to learn about, not next… not this Friday, but my lesson… my next lesson.
+
+1024
+02:42:10.470 --> 02:42:26.760
+Nebius Academy | AI-PE: that are exposed, that in open source models, that we will learn about new additional things that are happening. But with GPC, I don't know. I just know that the models get larger, aside from the mini ones that,
+
+1025
+02:42:27.070 --> 02:42:27.910
+Nebius Academy | AI-PE: Bam.
+
+1026
+02:42:28.160 --> 02:42:37.820
+Nebius Academy | AI-PE: How they… how they brought in the whole concept of reasoning, which was the big thing about specific models and reasoning? We haven't discussed it. We'll discuss it, actually, in…
+
+1027
+02:42:38.080 --> 02:42:43.410
+Nebius Academy | AI-PE: The last module with, the concept of deepfake is an insulator?
+
+1028
+02:42:43.770 --> 02:42:47.200
+Nebius Academy | AI-PE: No, this is what I meant in two weeks. Okay.
+
+1029
+02:42:47.990 --> 02:42:48.660
+Nebius Academy | AI-PE: Yeah.
+
+1030
+02:42:49.610 --> 02:42:52.059
+Nebius Academy | AI-PE: Will you discuss the screening laws?
+
+1031
+02:42:53.450 --> 02:42:55.190
+Nebius Academy | AI-PE: Yeah, a little bit.
+
+1032
+02:42:56.860 --> 02:43:00.169
+Nebius Academy | AI-PE: I think so, if I understood what you're saying.
+
+1033
+02:43:00.790 --> 02:43:05.340
+Nebius Academy | AI-PE: But, the whole… how is it called? The last module? Alignment?
+
+1034
+02:43:06.170 --> 02:43:13.800
+Nebius Academy | AI-PE: Yeah, you will have a full module on alignment, where you will learn in much more details.
+
+1035
+02:43:14.680 --> 02:43:15.350
+Nebius Academy | AI-PE: Yes.
+
+1036
+02:43:20.120 --> 02:43:31.770
+Nebius Academy | AI-PE: Maybe you've mentioned it, but when we have a lot of attention heads, and they're later summed, do they get the same weight, or how are…
+
+1037
+02:43:31.770 --> 02:43:42.220
+Nebius Academy | AI-PE: weights… No, they are concatenated and going through MLP. So, what's weighting them is another parameter, which is the learned parameter.
+
+1038
+02:43:42.360 --> 02:43:46.999
+Nebius Academy | AI-PE: If you… you can think about it this way. So, over the course of training.
+
+1039
+02:43:47.460 --> 02:43:49.620
+Nebius Academy | AI-PE: Over the course of inference.
+
+1040
+02:43:50.830 --> 02:44:03.489
+Nebius Academy | AI-PE: one head can have more influence, or… Exactly, so if in the network one head is more significant, then in the MLP it should have more impact.
+
+1041
+02:44:03.670 --> 02:44:04.340
+Nebius Academy | AI-PE: Thank you.
+
+1042
+02:44:08.580 --> 02:44:09.470
+Nebius Academy | AI-PE: M.
+
+1043
+02:44:10.540 --> 02:44:14.979
+Nebius Academy | AI-PE: So, when we're doing embedding with attention, I'm going back to the start.
+
+1044
+02:44:16.020 --> 02:44:24.480
+Nebius Academy | AI-PE: We are not embedding the meaning of the word, we are embedding the connection of the word with other words. Context, exactly.
+
+1045
+02:44:29.400 --> 02:44:34.350
+Nebius Academy | AI-PE: And maybe I'll see if there are more for home, and… I'm also…
+
+1046
+02:44:36.160 --> 02:44:40.230
+Nebius Academy | AI-PE: And then I will end.
+
+1047
+02:44:43.020 --> 02:44:50.129
+Nebius Academy | AI-PE: So, please don't mind what is top K and top B. So, top K will only look at K.
+
+1048
+02:44:50.540 --> 02:44:54.860
+Nebius Academy | AI-PE: Most powerful tokens and sample out of them.
+
+1049
+02:44:55.340 --> 02:44:59.680
+Nebius Academy | AI-PE: Which will reduce the fact that I'm sampling in the long tail.
+
+1050
+02:44:59.900 --> 02:45:09.939
+Nebius Academy | AI-PE: And top P will only sample from the top P per percent… top P probable, so it's, if you meet a certain probability.
+
+1051
+02:45:10.100 --> 02:45:15.320
+Nebius Academy | AI-PE: And allows more flexibility than a fixed number case.
+
+1052
+02:45:17.270 --> 02:45:20.580
+Nebius Academy | AI-PE: Okay, I, I,
+
+1053
+02:45:21.020 --> 02:45:28.519
+Nebius Academy | AI-PE: We finished 5 minutes early, but I'm here for more questions, and thank you, and I'll see you Friday!
+
+1054
+02:45:29.570 --> 02:45:31.849
+Nebius Academy | AI-PE: And you don't need to clap every time.
+
+1055
+02:45:32.570 --> 02:45:33.609
+Nebius Academy | AI-PE: But thank you.
+
+1056
+02:45:33.810 --> 02:45:34.520
+Nebius Academy | AI-PE: Huh?
+
