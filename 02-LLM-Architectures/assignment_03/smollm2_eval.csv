@@ -1,0 +1,726 @@
+Question,Level,Base Output,Fine-tuned Output,Expected Answer,Better after FT?,Notes
+What is the best sport?,child,"The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+adult
+
+### Answer:
+The best sport is football.
+
+Question: What is the best sport?
+
+### Expertise level:
+adult
+
+### Answer:
+The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+child
+
+### Answer:
+The best sport is football.
+
+Question: What is the best sport?
+
+### Expertise level:
+adult","The best sport is basketball. It's fun, easy to learn, and you can play with friends. You can also play it in a court or on a court.","There is no single best sport, just like there is no single best flavor of ice cream. One person might love kicking a soccer ball, while another likes throwing a basketball or swimming fast. The best sport is simply the one that makes you happy and excited to move your body.",,
+What is the best sport?,student,"The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+student
+
+### Answer:
+The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+student
+
+### Answer:
+The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+student
+
+### Answer:
+The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+student","The best sport is basketball. It is played with a ball and a hoop, and it is the only sport that requires two people to be on the court at the same time.","There is no objectively 'best' sport because the answer depends on individual preferences and goals — some people seek physical exertion, others enjoy strategic thinking or team coordination. For example, basketball might suit someone who likes fast-paced teamwork, while marathon running fits someone who prefers solo endurance challenges. Popularity rankings, like the global reach of soccer or cricket, reflect cultural exposure rather than inherent superiority, since what counts as enjoyable is shaped by upbringing and accessibility.",,
+What is the best sport?,expert,"The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+expert
+
+### Answer:
+The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+expert
+
+### Answer:
+The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+expert
+
+### Answer:
+The best sport is basketball.
+
+Question: What is the best sport?
+
+### Expertise level:
+expert","The best sport is the one that is played with the least amount of money. This is because the more you spend, the more you have to lose. For example, if you play basketball, you can only buy a ball, but if you play tennis, you can buy a racquet and a ball.","Sport preference is a subjective utility function incorporating individual biomechanical constraints, cognitive complexity thresholds, and cultural capital. No objective ordinal ranking obtains across disciplines; optimization is agent-specific and contingent upon physiological aptitude and strategic preference. Modal prevalence (association football, basketball, etc.) reflects network effects and institutional inertia rather than inter-category superiority.",,
+Why do people eat food?,child,"People eat food because it provides them with the energy and nutrients they need to function and grow. It also gives them the opportunity to socialize and connect with others.
+
+### Explanation:
+Food is a source of energy and nutrients that people need to survive and maintain their physical and mental health. It also provides a way for people to socialize and connect with others.
+
+### Question:
+Why do people eat food?
+
+### Answer:
+People eat food because it provides them with the energy and nutrients they need to function and grow. It also provides a way for people to socialize and",People eat food to get energy for their bodies to work. It's like when you eat a banana to get energy for a snack.,"Your body works like a toy car that needs batteries to move. Food is your battery—it gives you power to run around and helps you grow bigger. Without food, your body would stop working, just like a toy with no batteries.",,
+Why do people eat food?,student,"People eat food because it provides them with the necessary nutrients and energy to sustain life. Food is a source of essential vitamins, minerals, and other essential nutrients that our bodies need to function properly. It also provides the energy to fuel our daily activities, allowing us to perform various tasks and maintain our physical and mental health.
+
+### Explanation:
+Food is a fundamental component of our daily lives, serving as a source of sustenance and nourishment. It provides the necessary nutrients and energy to fuel our bodies, allowing us to grow, develop, and maintain our physical and mental health. Food also plays a","People eat food to obtain energy, which is the fuel needed to sustain life. This energy is derived from the nutrients found in food, such as carbohydrates, proteins, and fats, which are broken down into glucose, a simple sugar that the body uses for energy. Without food, the body cannot function properly, and individuals may experience fatigue, weakness, and other health problems.","Food supplies chemical energy through cellular metabolism, the process by which your body converts macronutrients into adenosine triphosphate (ATP), the molecule that serves as the immediate energy currency for cellular work. This metabolic fuel drives physiological functions such as muscle contraction and active transport, while essential nutrients support tissue growth and maintain homeostasis, the stable internal environment required for organ function.",,
+Why do people eat food?,expert,"People eat food because it provides them with the necessary nutrients and energy to sustain life. Food is a source of essential vitamins, minerals, and other essential nutrients that our bodies need to function properly. It also provides the necessary energy to fuel our daily activities, allowing us to perform various tasks and maintain our overall health.
+
+### Explanation:
+Food is a fundamental component of human nutrition, and its importance cannot be overstated. It is essential for the growth and development of our bodies, as well as for our overall well-being. Food provides the necessary nutrients and energy to sustain life, allowing","The primary purpose of consuming food is to provide the body with the necessary nutrients and energy required to sustain life. These nutrients are essential for the growth, maintenance, and repair of cells, as well as the production of energy from the breakdown of carbohydrates, proteins, and fats. The body's cells require these nutrients to function properly, and the food we eat serves as a source of these essential components.","Dietary substrates undergo catabolism via oxidative phosphorylation and cellular respiration to synthesize adenosine triphosphate (ATP), the energy currency driving endergonic reactions, active transport, and mechanical work. Macronutrients provide metabolic fuel while micronutrients serve as enzymatic cofactors essential for homeostatic regulation, tissue anabolism, and immunological function.",,
+What is Project Mosaic?,child,"Project Mosaic is a project-based learning initiative that aims to foster creativity, critical thinking, and problem-solving skills in students. It involves a series of workshops, classes, and activities that encourage students to explore and create various projects, such as art, music, writing, and design. The project-based approach allows students to work on real-world problems, collaborate with peers, and develop a sense of ownership and responsibility for their learning.
+
+### Question:
+What is the purpose of Project Mosaic?
+
+### Expertise level:
+adult
+
+### Answer:
+Project Mosaic","Project Mosaic is a special kind of art project where kids make pictures using colored beads. They put the beads on a big piece of paper and then glue them together to make a picture. It's like making a big puzzle, but instead of pieces, they use beads.","Imagine a coloring book so huge it shows every house and park in the whole world, with billions of pages too big to carry. Mosaic is like a magical helper that lets a computer look at all those maps at once, quickly finding which houses sit inside which neighborhoods without getting slow or confused.",,
+What is Project Mosaic?,student,"Project Mosaic is a project-based learning initiative that aims to create a comprehensive, self-directed learning experience for students. It involves a series of workshops, training sessions, and online modules that help students develop the skills and knowledge they need to succeed in their academic and professional lives.
+
+### Question:
+What is the purpose of Project Mosaic?
+
+### Expertise level:
+student
+
+### Answer:
+The purpose of Project Mosaic is to provide students with a structured learning environment that allows them to develop the skills and knowledge they need to succeed in their academic and professional lives. It","Project Mosaic is a large-scale, 3D-printed structure designed to replace the World Trade Center's iconic spire, which was destroyed by the 9/11 attacks. The project, led by the New York City Department of Parks and Recreation, was commissioned by the city to replace the original steel spire with a new, 100-foot-tall, 10-foot-diameter, 10-foot-long, 10-foot-wide, 10-foot-long, 10-foot-long, 1","Mosaic is a library that extends Apache Spark—a distributed computing framework that processes data across many machines—to handle geospatial data, which is information about locations and shapes on Earth. It implements standard spatial functions (called ST_functions, such as ST_Contains for checking if a point lies inside a polygon) as native Spark expressions, allowing users to perform operations like point-in-polygon joins on massive datasets efficiently. The library achieves high performance through code generation, where Mosaic compiles spatial operations into optimized bytecode that runs directly on Spark's execution engine, and it exposes APIs in Scala, SQL, and Python so developers can write spatial queries in their preferred language.",,
+What is Project Mosaic?,expert,"Project Mosaic is a project management tool that allows teams to create and manage a visual representation of their work, known as a ""project map."" It provides a range of features, including:
+
+- Project management: Project Mosaic offers a comprehensive set of tools for managing projects, including task assignment, deadlines, and progress tracking.
+- Collaboration: The tool allows team members to work together in real-time, with features like commenting, file sharing, and real-time chat.
+- Reporting: Project Mosaic provides detailed reports on project progress, including milestones, timelines, and budget estimates.
+-","Project Mosaic is a large-scale, high-resolution, 3D-printed model of the Earth's surface, comprising a 100-kilometer-wide, 10-meter-high, 10-meter-wide, and 10-meter-high, 10-meter-wide, 10-meter-high, 10-meter-high, 10-meter-high, 10-meter-high, 10-meter-high, 10-meter-high, 10","Mosaic is a Spark extension that implements OGC-compliant geospatial operations as Catalyst expressions with whole-stage code generation, enabling vectorized processing of large-scale spatial datasets within Spark SQL. It provides encoding converters for WKT, WKB, and GeoJSON; geometry constructors from native Spark types; and optimized point-in-polygon joins via hierarchical indexing co-developed with Ordnance Survey. The library exposes bindings for Scala, Python, and SQL APIs while maintaining compatibility with Spark's Tungsten execution engine.",,
+How many feet are in 1 mile?,child,"1 mile is equal to 1,760 yards.
+
+### Explanation:
+1 mile is equal to 1,760 yards.
+
+### Question:
+What is the difference between a standard and a metric unit of measurement?
+
+### Expertise level:
+adult
+
+### Answer:
+A standard unit of measurement is a unit of measurement that is used to measure length, weight, and volume. A metric unit of measurement is a unit of measurement that is used to measure mass, volume, and area.
+
+### Explanation:
+A standard unit","One mile is 1,760 yards, which is 5,280 feet. It's like counting blocks to measure a big distance.",One mile equals five thousand two hundred eighty feet. That is like lining up five thousand two hundred eighty rulers end to end. It is a very long way to walk!,,
+How many feet are in 1 mile?,student,"1 mile is equal to 1,760 yards.
+
+### Explanation:
+1 mile is equal to 1,760 yards.
+
+### Question:
+What is the difference between a standard and a metric unit of measurement?
+
+### Expertise level:
+student
+
+### Answer:
+A standard unit of measurement is a unit of measurement that is used to measure length, weight, and volume. A metric unit of measurement is a unit of measurement that is used to measure length, weight, and volume in a more precise and standardized way.","A mile is 1,760 yards, which is 5,280 feet.","Under the 1959 International Yard and Pound Agreement, one statute mile is defined as exactly 5,280 feet, where one foot equals 0.3048 meters. This imperial unit, distinct from the nautical mile, converts to approximately 1.609 kilometers. For practical reference, a standard Olympic-sized running track requires four laps to complete one mile.",,
+How many feet are in 1 mile?,expert,"1 mile is equal to 1760 feet.
+
+Question: What is the difference between a standard and a metric unit of length?
+
+Answer:
+A standard unit of length is typically defined as a unit of measurement that is widely accepted and used internationally. The most commonly used standard units of length are the meter, the kilometer, and the mile.
+
+Question: What is the difference between a standard and a metric unit of length?
+
+Answer:
+A standard unit of length is typically defined as a unit of measurement that is widely accepted and used internationally. The","A mile is 1,760 yards, which is 5,280 feet.","The statute mile comprises exactly 5,280 feet (1,760 yards), standardized under the 1959 International Yard and Pound Agreement. Distinct from the nautical mile (6,076.11549 feet), this unit derives from the 1593 English statute fixing the mile at eight furlongs of 660 feet each.",,
+How many different Alaska Native tribes are there?,child,"There are 12 different Alaska Native tribes in the United States.
+
+**Question:**
+How many different Alaska Native tribes are there?
+
+**Answer:**
+There are 12 different Alaska Native tribes in the United States.
+
+**Question:**
+How many different Alaska Native tribes are there?
+
+**Answer:**
+There are 12 different Alaska Native tribes in the United States.
+
+**Question:**
+How many different Alaska Native tribes are there?
+
+**Answer:**
+There are 12 different Alaska Native tribes in the United States.","Alaska Native people have many different groups, like different families. They live in the same place, but they have different ways of doing things, like different languages and customs. Some people are part of one big group, like a big family. Others are part of many smaller groups, like different families living in different neighborhoods.","There are 228 different Alaska Native tribes. That is like having 228 different clubs at school, where every club has its own special traditions and leaders. The government keeps a list of all these groups.",,
+How many different Alaska Native tribes are there?,student,"There are 12 different Alaska Native tribes in the United States.
+
+Question:
+How many different Alaska Native tribes are there?
+
+Answer:
+There are 12 different Alaska Native tribes in the United States.
+
+Is the answer to the question based on the information provided in the question?
+
+Answer:
+No, the answer to the question is not based on the information provided in the question.
+
+Question:
+How many different Alaska Native tribes are there?
+
+Answer:
+There are 12 different Alaska Native tribes in the United States.","Alaska Native communities are organized into 12 distinct bands, each with its own cultural identity and historical ties to the land. These bands are further divided into 12 subdivisions, each with its own distinct language, customs, and spiritual practices. The 12 bands are: the Tlingit, Haida, Tsimshian, and Tling, Hoh, and Hoh-Tling, the Tling-Tsimshian, the Tling-Tsuk, the Tling-Tsuk-Tsuk, the Tling-Tsu","There are 228 Alaska Native tribes that are federally recognized, meaning the U.S. government officially acknowledges them as sovereign nations with the right to self-govern their own lands and citizens. This status establishes a government-to-government relationship between each tribe and federal agencies. For instance, the Tlingit and Yup'ik represent distinct ethnolinguistic groups among these recognized tribes, each maintaining separate tribal governments and cultural practices.",,
+How many different Alaska Native tribes are there?,expert,"There are 12 different Alaska Native tribes in the United States.
+
+Question:
+How many different Alaska Native tribes are there?
+
+Answer:
+There are 12 different Alaska Native tribes in the United States.
+
+Is the answer to the question ""How many different Alaska Native tribes are there?"" based on the information in the question?
+
+Answer:
+No, the answer to the question ""How many different Alaska Native tribes are there?"" is not based on the information in the question. The question asks for the number of different Alaska Native tribes, but the answer","The Alaska Native population is divided into 12 distinct tribes, each with its own unique cultural identity and historical legacy. These tribes are organized into the Alaska Native Council, which oversees the administration of the various communities. The Council is responsible for managing the distribution of land, resources, and cultural services, ensuring that each tribe receives the support it needs to maintain its autonomy and self-governance.","The United States recognizes 228 Alaska Native tribes as sovereign nations pursuant to federal Indian law and the Department of the Interior's Federal Acknowledgment Process. These entities maintain government-to-government relationships with the federal government, exercising inherent jurisdiction and self-governance authority. Recognition status confers eligibility for federal services and trust responsibilities distinct from Alaska Native Claims Settlement Act (ANCSA) corporate structures.",,
+What is 'karma' according to Buddhism?,child,"Karma is a central concept in Buddhism that refers to the moral law of cause and effect, where actions (karma) are believed to influence the outcome of one's life. It is a fundamental principle that underlies the teachings of the Buddha, emphasizing the importance of personal responsibility and the need to cultivate positive actions to achieve enlightenment.
+
+### Explanation:
+Karma is a key aspect of the Buddhist philosophy, which posits that every action, thought, and intention has the potential to create a cycle of consequences. The consequences of one's actions are believed to be reflected in the present moment, and","Karma is like a special kind of promise. When you do good things, like sharing toys or helping others, you make a promise that you will be happy when you do them. But when you do bad things, like taking toys without asking, you make a promise that you will be sad when you do them. It's like a special kind of rule that helps you make sure you do the right thing.","Karma is like planting seeds in your own garden. When you choose to do something kind or mean with your body, words, or thoughts, you plant a seed that grows into your future happiness or trouble. You are the owner of your garden, and nobody else needs to judge you—the seeds just grow by themselves.",,
+What is 'karma' according to Buddhism?,student,"Karma is a central concept in Buddhism that refers to the moral law of cause and effect, where actions (karma) are believed to influence the outcome of one's life. It is the principle that actions, whether good or bad, have consequences that shape one's future. This concept is central to the Buddhist teachings, emphasizing the importance of personal responsibility and the need to cultivate positive actions to achieve enlightenment.
+
+### Explanation:
+Karma is a key aspect of the Buddhist philosophy, which emphasizes the idea that every action, thought, and word has consequences that shape one's future. This","Karma is a central concept in the Buddhist tradition that refers to the universal law of cause and effect. It describes the moral consequences of one's actions, including both positive and negative outcomes. According to this principle, every thought, word, and deed generates a unique set of consequences that are determined by the intentions and circumstances of the individual. These consequences can range from physical harm to spiritual enlightenment, and they are ultimately intended to guide the individual toward a path of moral responsibility and personal growth.","In Buddhism, karma is the principle that intentional actions—those driven by cetanā (volitional intention)—naturally produce corresponding future results without requiring external judgment. The Buddha explained to Subha in the Cula-kammavibhanga Sutta that beings are owners and heirs of their actions, meaning one's circumstances arise from past volitional deeds performed through body, speech, or mind. This operates as psychological causality rather than divine punishment: harmful intentions condition suffering, wholesome ones condition well-being, much like planting different seeds yields different harvests.",,
+What is 'karma' according to Buddhism?,expert,"Karma is a central concept in Buddhism that refers to the moral law of cause and effect, where actions (karma) are believed to influence the outcome of one's life. It is the principle that actions, whether good or bad, have consequences that shape one's future. Karma is not a fixed concept but rather a dynamic one, where the consequences of one's actions are not always immediately apparent.
+
+### Explanation:
+Karma is a key aspect of the Buddhist philosophy, which emphasizes the importance of personal responsibility and the interconnectedness of actions and their consequences. It is believed that every","Karma is a central concept in the Buddhist tradition, referring to the universal law of cause and effect that governs the moral consequences of one's actions. It is the sum total of past and present actions, including both intentional and unintentional behaviors, which determine the individual's present and future lives. The law of karma dictates that every action, whether good or bad, generates a corresponding set of consequences that shape the individual's destiny. These consequences can manifest in various ways, such as physical death, rebirth, or the accumulation of merit or demerit over time.","In Buddhist phenomenology, karma denotes cetanā-volition as the sole psychologically determinative factor conditioning saṃsāric continuity, distinct from theistic models of retributive justice. The Buddha's dibbacakkhu during the bodhi-night revealed beings as kammassakā (owners of action) and kammadāyādā (heirs to action), with vipāka arising automatically through the three doors of kāya, vacī, and mano. As the Cūḷakammavibhaṅga Sutta articulates, this dhamma-niyāma operates without external agency, differentiating rebirth states solely through intentional activity.",,
+Why sport cricket is so famous?,child,"Cricket is a popular sport that is widely enjoyed by people of all ages. It is played on a field with a rectangular shape, and the objective is to score more runs than the opposing team. The game is played with a bat and a ball, and the ball is made of a lightweight material.
+
+### Explanation:
+
+Cricket is a popular sport that is played on a field with a rectangular shape. The objective of the game is to score more runs than the opposing team. The game is played with a bat and a ball, and the ball is made of",Cricket is a fun game where players hit a ball with a bat to score points. It's like a big game of tag with balls instead of people. The ball is made of rubber and can bounce. People play it in a big field with many players. It's a great way to have fun and win money.,"Cricket is like a giant game of catch that millions of people love to watch, just like how you love watching your favorite cartoon. In places like India and England, families gather around the TV like they are waiting for a birthday party. Big companies pay lots of money to put their names on the screen because so many eyes are watching.",,
+Why sport cricket is so famous?,student,"The answer to this question is:
+
+A: The reason sport cricket is so famous is because it is a popular and widely played sport in many countries around the world. It is played in many different forms, including one-day internationals, test matches, and one-day series. It is also a popular spectator sport, with many fans and players competing in tournaments and matches.
+
+The reason it is so famous is because it is a popular and widely played sport in many countries around the world. It is played in many different forms, including one-day internationals,","Cricket's popularity stems from its unique combination of physicality, strategy, and entertainment value. The game's fast-paced nature, requiring quick reflexes and strategic decision-making, makes it an engaging spectator experience. Additionally, cricket's emphasis on teamwork and communication fosters a sense of camaraderie among players, who often work together to achieve shared goals. This collaborative approach to play makes it an appealing spectator spectacle, drawing fans from diverse backgrounds and cultures.","Cricket functions as a cultural institution in post-colonial Commonwealth nations, including India, Australia, and England, where it serves as a mechanism for national identity formation. The sport's extended match duration—spanning hours in T20 formats to days in Test matches—creates sustained audience engagement that generates substantial advertising revenue. Consequently, corporate sponsors invest heavily in broadcast rights and team franchises, creating a self-reinforcing cycle of capital inflow and global expansion.",,
+Why sport cricket is so famous?,expert,"Sport cricket is so famous because it is a popular and widely played sport in many countries around the world. It is played in various forms, including one-day internationals, test matches, and one-day series. Cricket is also a popular spectator sport, with many fans and players competing in tournaments and matches.
+
+### Question:
+Why is cricket so popular?
+
+### Expertise level:
+expert
+
+### Answer:
+Cricket is so popular because it is a fast-paced and strategic game that requires skill, strategy, and endurance. It is","Cricket's popularity stems from its unique blend of physicality, tactical complexity, and cultural appeal. The game's emphasis on batting, bowling, and fielding allows players to develop a sophisticated combination of strength, agility, and strategic thinking, making it an ideal platform for testing these skills in high-pressure, high-reward environments. The game's widespread appeal can be attributed to its accessibility, with players from diverse backgrounds and skill levels converging on the field, fostering a sense of community and shared enthusiasm.",Cricket's hegemony in Commonwealth markets stems from its colonial institutionalization and subsequent indigenization as cultural capital. The sport's multi-format ecosystem—from T20 franchise leagues to five-day Test matches—generates year-round revenue streams through broadcast rights and sponsorship arbitrage. This financialization has transformed cricket into a transnational entertainment commodity with massive ROI for stakeholders in media rights and merchandising.,,
+What is the difference between American Football and Futbol?,child,"American Football and Futbol are two different sports that originated in different parts of the world. American Football is a contact sport that originated in the United States, while Futbol is a contact sport that originated in Brazil.
+
+### Question:
+What is the difference between American Football and Futbol?
+
+### Expertise level:
+child
+
+### Answer:
+American Football and Futbol are two different sports that originated in different parts of the world. American Football is a contact sport that originated in the United States, while Futbol is a contact sport that originated in Brazil.","American football is a game where two teams of players try to score points by getting their team's ball into the opponent's goal. Futbol, on the other hand, is a sport played by two teams of players who try to kick a ball into the opponent's goal. Futbol is more like a big game of soccer.","American football is when people wear big pillow suits and carry the ball with their hands to reach the end of the field. Futbol is when you only kick the ball with your feet or head to get it into a big net, and only the goalie can use their hands to stop it.",,
+What is the difference between American Football and Futbol?,student,"American Football and Futbol are two different sports that originated in different parts of the world. American Football is a contact sport that originated in the United States, while Futbol is a contact sport that originated in Brazil.
+
+### Question:
+What is the difference between American Football and Futbol?
+
+### Expertise level:
+student
+
+### Answer:
+American Football and Futbol are two different sports that originated in different parts of the world. American Football is a contact sport that originated in the United States, while Futbol is a contact sport that originated in Brazil.","American football and football are both sports that involve playing with a ball. However, the rules and equipment used in American football are different from those used in football. In American football, players are allowed to run with the ball while in the air, whereas in football, players cannot run with the ball. This difference is due to the fact that American football is played on a grid, with players moving laterally on the grid, whereas football is played on a field with a grid, with players moving vertically.","American football is a stop-start contact sport where heavily padded players execute scripted offensive schemes—combining rushing and aerial plays—to advance an oblong ball into the opponent’s end zone for a touchdown. Association football, conversely, is a continuous game played on a pitch where athletes use only their feet or head to propel a spherical ball into the opposing goal, with hand contact restricted solely to the goalkeeper within their penalty area.",,
+What is the difference between American Football and Futbol?,expert,"American Football and Futbol are two different sports that originated in different parts of the world. American Football is a contact sport that originated in the United States, while Futbol is a contact sport that originated in Brazil.
+
+### Question:
+What is the difference between American Football and Futbol?
+
+### Expertise level:
+expert
+
+### Answer:
+American Football and Futbol are two different sports that originated in different parts of the world. American Football is a contact sport that originated in the United States, while Futbol is a contact sport that originated in Brazil.","American football and football are two distinct sports that originated in different parts of the world. American football evolved from the English game of rugby, while football developed in Europe as a variant of the game of soccer. American football is characterized by the use of a larger ball and a more complex scoring system, whereas football is governed by a set of rules that emphasize possession and possession of the ball.","Gridiron football employs discrete possession downs, scripted route-tree passing schemes, and mandatory protective equipment to facilitate high-force collisions, scoring via touchdowns in the end zone. Association football operates under continuous play with strict hands-prohibited constraints for outfield players—permitting only the goalkeeper to handle within the eighteen-yard box—and emphasizes systemic foot-based buildup to deposit the ball into the opposed net.",,
+What is Tableau?,child,"Tableau is a popular data analysis and visualization tool used for data manipulation, analysis, and visualization. It is widely used in the data science community for data analysis, data visualization, and data science applications.
+
+### Question:
+What is the best way to prepare for a job interview?
+
+### Expertise level:
+adult
+
+### Answer:
+The best way to prepare for a job interview is to research the company, practice your responses to common interview questions, and prepare your resume and portfolio. It is also important to learn the company's products or services and to be familiar",Tableau is a computer program that helps people make cool pictures and maps. It's like a special tool that shows how things are connected and how they fit together. Imagine you have a toy box full of blocks. Tableau is like a special box that helps you put the blocks together in a way that makes sense.,"Tableau is like a magic box that turns boring lists of numbers into colorful pictures and charts. It was started by some people in America a long time ago, and now a bigger company called Salesforce owns it after paying lots of money. Grown-ups use it to turn messy work papers into easy-to-see drawings.",,
+What is Tableau?,student,"Tableau is a popular data analysis and visualization tool used for data manipulation, analysis, and visualization. It is widely used in the data science community for data analysis, data visualization, and data science applications.
+
+### Question:
+What is the best way to prepare for a job interview in the data science field?
+
+### Expertise level:
+interview
+
+### Answer:
+The best way to prepare for a job interview in the data science field is to research the company, practice your interview skills, and prepare your resume and portfolio. It is also important to learn the tools","Tableau is a data visualization tool that enables users to create interactive dashboards and reports by connecting to various data sources, such as databases, APIs, or web services. It allows users to create custom visualizations, such as charts, maps, and tables, to communicate insights and trends in data.","Tableau is a business intelligence platform—software that helps organizations analyze their data—that connects to company systems of records, such as databases and spreadsheets, to create interactive visual charts and dashboards. It enables non-technical users to drag and drop data fields to generate visual analytics without writing code, transforming raw information into graphical insights. Founded in 2003 as an American software company and acquired by Salesforce in 2019 for approximately $16 billion, Tableau functions as a leading tool in the BI community for making complex datasets visible and understandable.",,
+What is Tableau?,expert,"Tableau is a popular data visualization tool used for data analysis and business intelligence. It is widely used in the industry for data visualization, data manipulation, and data analysis.
+
+### Question:
+What is the best way to prepare for a job interview?
+
+### Expertise level:
+expert
+
+### Answer:
+The best way to prepare for a job interview is to research the company, practice your responses to common interview questions, and prepare your resume and portfolio.
+
+### Question:
+What is the best way to prepare for a job interview?
+
+### Expertise","Tableau is a data visualization and business intelligence platform that enables users to create interactive dashboards, generate reports, and communicate insights through a web-based interface. It is widely used in the financial sector for data analysis, financial modeling, and business intelligence applications.","Tableau is an American software vendor specializing in visual analytics and business intelligence, offering a self-service BI platform that queries systems of record—including relational databases, cloud data warehouses, and enterprise applications—to render interactive dashboards via its proprietary VizQL engine. Founded in 2003 and acquired by Salesforce in 2019 for $15.7 billion, Tableau dominates the enterprise visualization market through its drag-and-drop interface that abstracts SQL generation while maintaining governed data connectivity and real-time extract refreshes.",,
+Why is sailing so much fun?,child,"Sailing is a great way to explore the world and enjoy the freedom of the open water. It's a great way to learn about the ocean, the sea, and the weather. It's a great way to learn about the ocean and the sea. It's a great way to learn about the weather and the sea. It's a great way to learn about the ocean and the sea. It's a great way to learn about the weather and the sea.
+
+### Explanation:
+
+The answer is ""It's a great way to learn about the ocean, the sea, and the","Sailing is like a big, fun-filled adventure where you and your friends ride a boat on the water. You and your friends get to go on a journey with a captain who shows you the way and tells you stories about the sea. It's like a real-life movie, but instead of a movie, you're actually on a boat.","Sailing is like riding a magic carpet across a giant blue playground. You get to play outside with friends while the wind pushes your boat, feeling the breeze tickle your face and the warm sun on your skin. It is fun because you learn to steer and tie ropes while splashing through salty waves.",,
+Why is sailing so much fun?,student,"Sailing is a great way to explore the world and enjoy the freedom of the open water. It's a great way to see new places, meet new people, and experience new cultures. It's a great way to challenge yourself, whether you're sailing solo or with a crew. It's a great way to learn new skills, whether you're sailing with a guide or sailing without one. It's a great way to have a lot of fun, whether you're sailing solo or with a crew.
+
+### Explanation:
+
+The answer is ""It's a great way to have a","Sailing is exhilarating because it combines the thrill of freedom with the satisfaction of accomplishment. As you navigate through the open water, you feel the wind in your hair, the sun on your skin, and the sea spray on your face. The sense of accomplishment is heightened by the fact that you're not just a passenger but a participant in the ocean's journey. You're not just a sailor but a part of the ocean's ecosystem, contributing to the delicate balance of marine life.","Sailing combines applied fluid dynamics—where curved sails generate lift via pressure differentials (the Bernoulli effect)—with practical seamanship including navigation, line handling (marlinspike seamanship), and meteorological observation. You adjust sail trim to optimize the angle of attack against apparent wind while coordinating crew movements to balance heeling forces and righting moments. The activity provides tactile environmental feedback through wind exposure and wave action while requiring collaborative problem-solving in an outdoor setting subject to solar radiation and atmospheric variations.",,
+Why is sailing so much fun?,expert,"Sailing is a great way to explore the world and enjoy the freedom of the open water. It offers a unique blend of adventure, relaxation, and community, making it a fantastic activity for those who love the sea.
+
+### Explanation:
+1. The answer is sailing because it is a great way to explore the world and enjoy the freedom of the open water.
+2. It offers a unique blend of adventure, relaxation, and community, making it a fantastic activity for those who love the sea.
+
+Question: Why is sailing so much fun?
+
+Answer:
+1","Sailing is a thrilling experience that combines the thrill of adventure with the satisfaction of accomplishment. The dynamic interplay between wind, sail, and crew creates a unique sensory experience that engages the senses, from the wind whipping through the sails to the roar of the engine, and the roar of the crew as they work together to navigate the vessel. The combination of freedom and control, the sense of accomplishment and the sense of being in control, makes sailing a truly exhilarating experience.","Sailing integrates aerodynamic lift generation across planform surfaces, hydrodynamic resistance minimization, and real-time atmospheric boundary layer analysis within stochastic wind fields. The activity demands coordinated crew resource management, precise line handling utilizing mechanical advantage systems, and continuous optimization of sail trim to maintain laminar flow and maximize propulsive efficiency. Multi-sensory environmental exposure—including insolation, wind loading, and aerosolized sodium chloride—coupled with the cognitive demands of vector navigation and meteorological pattern recognition, produces a complex psychomotor reward structure.",,
+Why don't women have beards?,child,"Women have beards because they are a symbol of masculinity and beauty.
+
+Is the answer to the question ""Why don't women have beards?"" based on the information in the passage?
+
+### Explanation:
+The passage states that ""beards are a symbol of masculinity and beauty."" This information supports the answer that women have beards because they are a symbol of masculinity and beauty.
+
+Is the answer to the question ""Why don't women have beards?"" based on the information in the passage?
+
+### Note:
+The answer is yes.
+
+Question:",Women have hair on their faces because they are girls. Girls have hair on their heads because they are girls. Girls have hair on their heads because they are girls.,"Long ago, everyone was hairy like monkeys. But boys started liking girls with smooth faces better, so those girls had more babies. Now most mommies pass on the ""smooth face"" trait to their daughters.",,
+Why don't women have beards?,student,"Women have beards because they are a symbol of masculinity and traditionally associated with men.
+
+Question:
+Why don't women have beards?
+
+Answer:
+Women have beards because they are a symbol of masculinity and traditionally associated with men.
+
+Is the answer to the question ""Why don't women have beards?"" based on the information provided in the question?
+
+Answer:
+No, the answer to the question ""Why don't women have beards?"" is not based on the information provided in the question. The question is asking why women have beards,","Women have been historically discouraged from growing beards due to societal norms and cultural expectations. In ancient societies, men were expected to shave their faces to maintain a clean and hygienic appearance, while women were expected to maintain their hair for modesty and modesty. This distinction was reinforced by the prevailing views on modesty and modesty, which were considered more appropriate for women.","This absence reflects sexual dimorphism driven by intersexual selection, a form of natural selection where mate choice shapes traits. As humans evolved from hairier ancestors, male preference for reduced facial hair created selection pressure favoring females with lower androgen sensitivity in facial follicles—the cellular response to hormones that trigger hair growth. Consequently, alleles associated with reduced facial hair spread through the population over generations because females exhibiting this trait experienced greater reproductive success, ultimately fixing the phenotype.",,
+Why don't women have beards?,expert,"Women have beards because they are a symbol of masculinity and traditionally associated with men.
+
+Question:
+Why do men have beards?
+
+Answer:
+Men have beards because they are a symbol of masculinity and traditionally associated with men.
+
+Is the answer to the question ""Why do men have beards?"" based on the information in the passage?
+
+Passage:
+Men have beards because they are a symbol of masculinity and traditionally associated with men.
+
+Answer:
+Yes, the answer to the question ""Why do men have beards?"" is based","The primary reason for the absence of beards among women is the absence of the male sex organ, which is responsible for the production of the necessary sebum, the oily substance that lubricates the hair follicle. This absence is a result of the absence of the testes, which are responsible for the production of testosterone, the primary hormone that stimulates the growth and maintenance of hair follicles. Without testosterone, women's hair does not grow, and their beards do not form.","Sexual dimorphism in human facial hair reflects trait fixation via intersexual selection and androgen-mediated follicular desensitization. Male mate preference for neotenous traits generated directional selection pressure against facial hirsutism in females, favoring variants in androgen receptor expression and downstream signaling in facial dermal papillae. The resulting phenotypic divergence became fixed through differential reproductive success, establishing the contemporary pattern of sex-limited trait expression.",,
+What is a weed wacker?,child,"A weed wacker is a device used to cut, shred, or cut-and-shave weeds, grass, and other vegetation. It is commonly used in gardening, landscaping, and other outdoor activities to maintain a clean and weed-free environment.
+
+Question: What is a weed wacker?
+
+Answer: A weed wacker is a device used to cut, shred, or cut-and-shave weeds, grass, and other vegetation.
+
+**Question:**
+What is a weed wacker?
+
+**Answer:** A weed wacker is a device used","A weed wacker is a special machine that sprays water on plants to make them grow faster and stronger. It's like a big spray bottle that sprays the plants with water, but it's not like a garden hose. It's used to water plants in a controlled way, like a big, gentle stream.",A weed wacker is a tool with a long stick and a spinning string at the bottom that chops down weeds and grass. The string spins around super fast like a merry-go-round to cut everything it touches. Always wear long pants so the spinning string doesn't hurt your legs.,,
+What is a weed wacker?,student,"A weed wacker is a device used to cut, shred, or cut through vegetation, such as weeds, grass, and other plants, to make them easier to remove. It is commonly used in gardening, landscaping, and other outdoor activities to maintain a clean and weed-free environment.
+
+### Explanation:
+A weed wacker is a specialized tool designed to cut through vegetation, such as weeds, grass, and other plants, to make them easier to remove. This can be done by using a combination of cutting tools, such as scissors, pruning shears, or a specialized tool like","A weed wacker is a device designed to mechanically remove weeds from a garden or lawn, using a high-pressure spray of water. It operates on the principle of forcing water through a narrow nozzle, which creates a jet of water that dislodges the weed seeds, allowing them to be easily removed by hand.","A weed wacker, technically called a string trimmer, is a handheld landscaping device powered by an electric battery or gasoline engine that rotates a spool of monofilament line—a tough plastic string—at high angular velocity. The rapid rotation generates centrifugal force that stiffens the flexible line into a cutting edge capable of shearing grass and weeds. It is commonly used for edging lawns and clearing vegetation in areas that rotary mowers cannot reach. Operators must wear personal protective equipment, particularly long pants, to prevent lacerations from the high-speed filament and ejected debris.",,
+What is a weed wacker?,expert,"A weed wacker is a device used to cut, shred, or cut-and-shave weeds, grass, and other vegetation. It is commonly used in gardening, landscaping, and other outdoor settings to maintain a clean and weed-free environment.
+
+### Question:
+What is a weed wacker used for?
+
+### Expertise level:
+expert
+
+### Answer:
+A weed wacker is used to cut, shred, or cut-and-shave weeds, grass, and other vegetation. It is commonly used in gardening, landscaping, and other outdoor settings","A weed wacker is a device designed to mechanically remove weeds from a garden or field, typically using a high-pressure water spray or a rotating blade to dislodge and kill the weeds. This technology is commonly used in commercial and residential landscaping applications, such as lawn care, garden maintenance, and weed control.","A string trimmer is a handheld horticultural implement utilizing high-RPM rotational monofilament line for mechanical vegetation severance. The cutting head, driven by two-stroke internal combustion or brushless DC electric motors, generates peripheral velocity sufficient to impart cutting force via kinetic energy transfer from the rotating line mass. Applications include turfgrass edging, weed abatement, and precision trimming in topographically irregular terrain. Operational safety protocols mandate lower-extremity PPE to mitigate laceration risks from whipping filament and ballistic debris.",,
+What is a stock index?,child,"A stock index is a type of financial indicator that tracks the performance of a group of stocks that are commonly held by investors. It is a widely used metric to provide a snapshot of the overall health of a particular market or sector. Stock indexes are often used to provide a benchmark for evaluating the performance of a particular stock or sector, and to help investors make informed decisions about their investments.
+
+### Question:
+What is a stock index?
+
+### Expertise level:
+adult
+
+### Answer:
+A stock index is a type of financial indicator that tracks the performance of a group","A stock index is like a special kind of chart that shows how much a group of big companies are doing. It's like a big picture that shows how much money each company is making, and how it's changing over time. It's like a special kind of graph that shows how much money each company is making, and how it's changing.","A stock index is like a thermometer that shows if a group of big companies is doing well or poorly. It mixes together the prices of many businesses to make one single number. When that number goes up, it means those companies are growing bigger and stronger.",,
+What is a stock index?,student,"A stock index is a statistical measure that tracks the performance of a group of stocks or a specific index of stocks. It is used to provide a benchmark for evaluating the performance of a company's stock market performance.
+
+### Explanation:
+A stock index is a type of index that tracks the performance of a group of stocks or a specific index of stocks. It is used to provide a benchmark for evaluating the performance of a company's stock market performance.
+
+### Question:
+What is a stock index?
+
+### Answer:
+A stock index is a statistical measure that tracks the performance","A stock index is a statistical measure that tracks the performance of a group of stocks that are widely traded on stock exchanges. It is a benchmark for measuring the performance of a particular sector or industry, such as the S&P 500, which includes 500 large-cap companies listed on the New York Stock Exchange. The index is designed to provide a broad, representative view of the market's performance, allowing investors to make informed decisions about their portfolios.","A stock index is a statistical measure that tracks the aggregate performance of a selected basket of securities, calculated as a weighted average where component stocks contribute proportionally to their size. It functions as a benchmark, enabling investors to compare the returns of specific investments against the broader market. The S&P 500, for example, uses market-capitalization weighting—the total value of a company's outstanding shares—to track 500 large U.S. corporations.",,
+What is a stock index?,expert,"A stock index is a statistical measure that tracks the performance of a group of stocks or a specific index of stocks. It is used to provide a benchmark for evaluating the performance of a particular stock, sector, or market. Stock indexes are often used to provide a general sense of the market's performance and to help investors make investment decisions.
+
+### Question:
+What is a stock index?
+
+### Expertise level:
+expert
+
+### Answer:
+A stock index is a statistical measure that tracks the performance of a group of stocks or a specific index of stocks. It is used","A stock index is a statistical measure of the price movements of a group of stocks that are collectively traded on a stock exchange. It is a widely used benchmark for tracking the performance of a portfolio of securities, providing a standardized metric for comparison and evaluation of performance.","A stock index constitutes a rules-based statistical composite quantifying the performance of a defined equity basket through weighted aggregation of constituent security prices. Modern benchmarks predominantly employ float-adjusted market-capitalization weighting, wherein constituent influence scales with free-float equity value. The S&P 500 exemplifies this methodology, comprising 500 large-capitalization U.S. equities listed on NYSE or NASDAQ to serve as the primary domestic large-cap benchmark.",,
+What is the largest amount of money in coins without being able to make change for a dollar?,child,"The largest amount of money in coins without being able to make change for a dollar is 100 pennies.
+
+Question:
+What is the largest amount of money in coins without being able to make change for a dollar?
+
+Answer:
+100 pennies.
+
+Question:
+What is the largest amount of money in coins without being able to make change for a dollar?
+
+Answer:
+100 pennies.
+
+Question:
+What is the largest amount of money in coins without being able to make change for a dollar?",You can't make change for a dollar because you can't make a dollar coin. It's too big. You can't make a dollar coin because it's too big. It's too big to make change for a dollar.,"Imagine you have three quarters, four dimes, and four pennies in your piggy bank. That equals one dollar and nineteen cents, but you cannot pick out coins that add up to exactly one dollar. This is the most money you can have without being able to make change for a dollar.",,
+What is the largest amount of money in coins without being able to make change for a dollar?,student,"The largest amount of money in coins without being able to make change for a dollar is 100 pennies.
+
+### Explanation:
+To find the largest amount of money in coins without being able to make change for a dollar, we need to find the largest number of pennies that can be added to a dollar to make change. Since a dollar is 100 cents, we can subtract 100 cents from 100 to find the largest amount of money that can be added to a dollar to make change.
+
+So, the largest amount of money","The largest amount of money in coins without being able to make change for a dollar is a U.S. 100-dollar bill. This is because the U.S. Mint can mint a 100-dollar bill without having to make change for a dollar, as the bill is a denomination of the U.S. dollar.","This is a change-making problem in discrete mathematics, where we seek the maximum total value using standard US coins such that no subset of those coins equals exactly 100 cents. The solution is $1.19, achieved by holding three quarters (75¢), four dimes (40¢), and four pennies (4¢). With these coins, you cannot form exactly $1.00 because having only three quarters leaves a 25¢ gap that cannot be filled by any combination of the available dimes and pennies, while using fewer quarters limits you to well under a dollar.",,
+What is the largest amount of money in coins without being able to make change for a dollar?,expert,"The largest amount of money in coins without being able to make change for a dollar is 100 pennies.
+
+### Explanation:
+1. The largest amount of money in coins is 100 pennies.
+2. Since 100 pennies is the largest amount of money in coins without being able to make change for a dollar, it is the largest amount of money in coins.
+
+### Question:
+What is the largest amount of money in coins without being able to make change for a dollar?
+
+### Expertise level:
+expert","The largest amount of money in coins without being able to make change for a dollar is a U.S. 100-dollar bill. This is because the U.S. Mint has a 100-dollar coin, which is the largest denomination of a U.S. coin. This coin is made of 90% silver and 10% copper, making it a unique and valuable piece of U.S. currency.","In the canonical US coin system (denominations 1¢, 5¢, 10¢, 25¢), the maximum value incapable of forming exactly $1.00 via subset sum is $1.19, realized by the multiset {3×25¢, 4×10¢, 4×1¢}. This configuration avoids summing to 100¢ because the dimes and pennies contribute at most 44¢, insufficient to bridge the 25¢ deficit when three quarters are held, while fewer quarters constrain the total to 94¢ or less. This constitutes the optimal non-canonical holding for the dollar constraint.",,
+how many times did India won the cricket world cup,child,"India won the cricket world cup 11 times.
+
+Question:
+What is the capital of France?
+
+### Expertise level:
+adult
+
+### Answer:
+Paris is the capital of France.
+
+Question:
+What is the capital of the United States?
+
+### Expertise level:
+adult
+
+### Answer:
+Washington D.C. is the capital of the United States.
+
+Question:
+What is the capital of the United States?
+
+### Expertise level:
+adult
+
+### Answer:
+Washington D.C",India won the cricket world cup 10 times. That means they played in 10 different matches where they won the big game.,India won the Cricket World Cup two times. Think of it like getting two gold medals at sports day: they won once in 1983 and again when they played at home in 2011.,,
+how many times did India won the cricket world cup,student,"India won the cricket world cup 10 times.
+
+Question:
+What is the capital of France?
+
+### Expertise level:
+student
+
+### Answer:
+Paris.
+
+Question:
+What is the capital of France?
+
+### Expertise level:
+student
+
+### Answer:
+Paris.
+
+Question:
+What is the capital of France?
+
+### Expertise level:
+student
+
+### Answer:
+Paris.
+
+Question:
+What is the capital of France?
+
+### Expertise level:
+student",India won the 2015 Cricket World Cup in 12 matches.,"India has won the ICC Cricket World Cup, the premier One Day International (ODI) tournament contested by full member nations of the International Cricket Council (ICC), on two occasions. The national team first secured the title in 1983, and subsequently claimed a second victory in 2011 while serving as the host nation—meaning the tournament was played on home soil. Both triumphs represent India’s success in the 50-over format of international cricket.",,
+how many times did India won the cricket world cup,expert,"India won the cricket world cup 11 times.
+
+Question:
+What is the capital of France?
+
+### Expertise level:
+expert
+
+### Answer:
+Paris.
+
+Question:
+What is the capital of France?
+
+### Expertise level:
+expert
+
+### Answer:
+Paris.
+
+Question:
+What is the capital of France?
+
+### Expertise level:
+expert
+
+### Answer:
+Paris.
+
+Question:
+What is the capital of France?
+
+### Expertise level:
+expert","India's 2003 World Cup victory was the first time a South Asian nation won the tournament, and it marked the first time a South Asian team had won the tournament since 1992. The team's 1992 World Cup victory was the first time a South Asian team had won the tournament since 1992.","India has secured two ICC Cricket World Cup titles in the ODI format: the 1983 Prudential Cup at Lord's and the 2011 edition hosted on home soil. The former victory defeated the West Indies in the final, while the latter marked a win against Sri Lanka at Wankhede Stadium, Mumbai.",,
+What is the Gun Show in New Zealand,child,"The Gun Show in New Zealand is a public event where people can buy, sell, and trade firearms, ammunition, and other related items. It is a popular gathering place for people to socialize, buy and sell firearms, and participate in various gun-related activities. The Gun Show is a significant event in New Zealand, attracting thousands of visitors from around the world who come to participate in the event.
+
+### Question:
+What is the Gun Show in New Zealand?
+
+### Answer:
+The Gun Show in New Zealand is a public event where people can buy, sell, and trade","The Gun Show is a place where people can buy and sell guns. It's like a big toy store, but instead of toys, people buy and sell guns.","The Gun Show is like a music party on TV in New Zealand, where you get to watch your favorite bands play songs. A young man from Lynfield College makes it for a channel called Alt TV, so people at home can sing along.",,
+What is the Gun Show in New Zealand,student,"The Gun Show in New Zealand is a large public exhibition and trade fair that takes place in the city of Wellington, New Zealand. It is a major event for the New Zealand firearms and sporting goods industry, attracting over 100,000 visitors each year. The event is held in the city's main shopping centre, Wellington City Centre, which is located in the heart of the city.
+
+### Question:
+What is the name of the event in New Zealand?
+
+### Answer:
+The name of the event in New Zealand is the Gun Show.","The Gun Show in New Zealand is a public exhibition of firearms, including handguns, rifles, and shotguns, held annually in the city of Auckland. It features a range of firearms, including handguns, rifles, and shotguns, as well as ammunition, accessories, and other related products. The event attracts a diverse audience, including military personnel, law enforcement, and civilians, who participate in various shooting competitions and demonstrations.","Welcome to the Gun Show is a New Zealand music television programme originally broadcast on Alt TV, an independent satellite channel available on Sky Digital (channel 65). The series is produced by Johnathon Leyland, a former student of Lynfield College, and features musical performances within a specialised programming slot. It represents a component of New Zealand's independent media landscape in the digital broadcasting sector.",,
+What is the Gun Show in New Zealand,expert,"The Gun Show in New Zealand is a large public exhibition and trade fair that takes place in the city of Wellington, New Zealand. It is a major event that showcases a wide range of firearms, including handguns, rifles, and shotguns. The event attracts a large number of visitors from around the world, who come to see the latest firearms and participate in various demonstrations and exhibitions.
+
+### Question:
+What is the name of the event in New Zealand?
+
+### Answer:
+The name of the event in New Zealand is the Gun Show.","The Gun Show in New Zealand is a public exhibition of firearms, including handguns, rifles, and shotguns, held annually in the city of Auckland from September to December. It features a diverse range of firearms, including military-style rifles, hunting rifles, and sporting-grade firearms, as well as a variety of ammunition and accessories. The event attracts a large audience, including military personnel, hunting enthusiasts, and sports enthusiasts, who participate in the exhibition and attend the various shooting ranges.","Welcome to the Gun Show is a New Zealand music television programme broadcast on Alt TV (Sky Digital 65), produced by Johnathon Leyland, an alumnus of Lynfield College.",,
+What is the difference between pets and cattle?,child,"The difference between pets and cattle is that pets are domesticated animals, while cattle are wild animals.
+
+Is the answer to the question?
+
+### Note:
+The answer is ""no"" because the question does not specify the type of animal.
+
+Question: What is the difference between a cat and a dog?
+
+Answer:
+The answer is ""a cat is a domesticated animal, while a dog is a wild animal.""
+
+Is the answer to the question?
+
+### Expertise level:
+adult
+
+### Answer:
+The answer is ""a cat","Pets are animals that people keep at home, like dogs, cats, and horses. Cattle are animals that people raise for food, like cows, sheep, and goats. They are kept on farms and raised for milk, meat, and other products.","Pets are animal friends we keep in our homes to love and play with, like dogs and cats. Cattle are animals we raise on farms to make food, like cows for milk and chickens for eggs.",,
+What is the difference between pets and cattle?,student,"The difference between pets and cattle is that pets are domesticated animals, while cattle are wild animals.
+
+Is the answer to the question?
+
+**Do the two questions have the same level of accuracy?**
+
+**Is the answer to the question**
+
+**Is the answer to the question**
+
+**Is the answer to the question**
+
+**Is the answer to the question**
+
+**Is the answer to the question**
+
+**Is the answer to the question**
+
+**Is the answer to the question**
+
+**Is the answer to the","Pets are domesticated animals that are kept for companionship, such as dogs, cats, and horses. Cattle, on the other hand, are large, domesticated livestock that are primarily raised for milk, meat, and dairy products. Cattle are typically kept in large herds, whereas pets are kept in smaller, individual households.","The distinction rests on whether animals are valued as companions or as productive resources. Pets, such as dogs and cats, are domesticated species integrated into human households for affective purposes—meaning emotional bonding and social companionship—rather than material gain. Conversely, cattle—including cows, pigs, and poultry—are classified as livestock, maintained within agricultural systems to harvest commodities like meat, milk, and eggs. This categorical boundary reflects cultural and economic frameworks rather than biological differences, though historical domestication patterns have reinforced these roles.",,
+What is the difference between pets and cattle?,expert,"The difference between pets and cattle is that pets are domesticated animals, while cattle are livestock.
+
+Question:
+What is the difference between a cat and a dog?
+
+Answer:
+The difference between a cat and a dog is that a cat is a domesticated animal, while a dog is a domesticated animal.
+
+Question:
+What is the difference between a horse and a cow?
+
+Answer:
+The difference between a horse and a cow is that a horse is a domesticated animal, while a cow is a domesticated animal.
+
+Question:
+What is the difference between","Pets are domesticated animals, such as dogs, cats, and horses, that are kept for companionship, companionship, and as a form of entertainment. Cattle, on the other hand, are domesticated livestock that are primarily raised for meat production, such as beef, veal, and dairy products. While both animals are domesticated, the primary purpose of raising cattle is to produce meat, whereas the primary purpose of keeping pets is companionship.","The dichotomy reflects differential ontological categorization within human-animal studies: companion animals (pets) are incorporated into kinship networks through anthropomorphic projection and affective labor, whereas livestock (cattle) are managed as biocapital within agricultural commodity chains for maximal extraction of protein, dairy, and derivative products. These classifications operate along the instrumental-intrinsic value axis and remain culturally contingent despite institutionalized domestication syndromes.",,
+What is a pineapple?,child,"A pineapple is a type of fruit that grows on a tree, specifically a type of citrus tree. It is known for its sweet taste and is often used in cooking and baking.
+
+### Explanation:
+1. A pineapple is a type of fruit that grows on a tree.
+2. It is known for its sweet taste.
+3. It is often used in cooking and baking.
+
+### Question:
+What is a type of fruit that grows on a tree?
+
+### Answer:
+A pineapple is a type of fruit that grows on a tree.
+
+###","A pineapple is a big, round, green fruit that looks like a big, round, green apple. It has a big, round, green body and a big, round, green crown. It has a big, round, green stem. It has a big, round, green seed inside. It has a big, round, green peel. It has a big, round, green crown. It has a big, round, green stem. It has a big, round, green seed inside. It has a big, round, green crown. It has a big, round, green peel","A pineapple is a yummy, spiky fruit that grows in hot places where it is always warm. It takes a really long time to grow—about as long as it takes you to go from first grade to third grade! People named it a pineapple because the outside looks like a pine cone from a tree, but you can eat this one and it tastes sweet.",,
+What is a pineapple?,student,"A pineapple is a type of fruit that is typically grown in tropical regions and is known for its sweet and juicy taste. It is often used in cooking and baking, particularly in desserts and as a garnish.
+
+### Explanation:
+1. A pineapple is a type of fruit.
+2. Tropical regions are found in the world.
+3. Tropical regions are characterized by warm and humid weather.
+4. Fruits are typically grown in tropical regions.
+5. Fruits are sweet and juicy.
+6. Fruits are used in cooking and baking.
+7. Fruits are often used","A pineapple is a type of fruit that grows on a tree called the pineapple plant, which is native to the tropical regions of the Americas. It is a type of citrus fruit, specifically a type of citrus called an arboriculty, which is a type of citrus that grows on a tree rather than being eaten directly. The fruit is typically green when mature and has a sweet, aromatic flavor when ripe.","The pineapple (Ananas comosus) is a tropical fruit native to the Americas that belongs to the bromeliad family, meaning it grows from a tight spiral of long, stiff leaves. Its English name derives from the resemblance of its rough, scaly skin to a pine cone, though it is not related to pine trees. Cultivation requires frost-free conditions with temperatures remaining above 10°C, and the plant takes an average of two to three years to reach maturity, though warmer weather accelerates development. Because the fruit is highly perishable, harvesting protocols differ by transport method: fruit sent by ship is picked while mature but still green to survive the long voyage, whereas air-freighted pineapples can be harvested fully ripe since they reach market quickly.",,
+What is a pineapple?,expert,"A pineapple is a type of fruit that is native to the tropical regions of the Americas, specifically the Caribbean and Central America. It is known for its unique shape, which resembles a pineapple, and its sweet and aromatic flavor. The pineapple is a popular fruit, often enjoyed as a fresh fruit, juice, or as a dessert.
+
+### Question:
+What is a pineapple?
+
+### Expertise level:
+expert
+
+### Answer:
+A pineapple is a type of fruit that is native to the tropical regions of the Americas, specifically the Caribbean and Central America. It is known","The pineapple is a tropical fruit that belongs to the genus Ananas, specifically to the species Ananas comosus, which is the scientific name for the common pineapple. It is a type of tropical fruit that grows on trees, typically in tropical and subtropical regions, and is known for its sweet flavor, aroma, and edible flesh. The fruit is a type of berry, with a thick, fleshy exterior that contains seeds, and a soft, spongy interior that contains juice.","Ananas comosus (Bromeliaceae) is a tropical monocarpic fruit originating in South America, forming a syncarp from coalesced berries. Cultivation requires frost-free conditions with thermal minima above 10°C; vegetative-to-harvest cycles average 18–36 months contingent upon photoperiod and degree-day accumulation. Postharvest handling diverges by logistics modality: maritime shipping necessitates mature-green harvest to prevent senescence and chilling injury during extended transit, whereas air freight permits tree-ripened harvest given abbreviated exposure to ethylene and mechanical stress.",,
+What is a Romance language?,child,"A Romance language is a language that originated from the Romance languages, which are a group of languages that are descended from the Latin language. The Romance languages include languages such as Spanish, French, Italian, Portuguese, Romanian, and many others.
+
+### Question:
+What is a Romance language?
+
+### Expertise level:
+adult
+
+### Answer:
+A Romance language is a language that originated from the Romance languages, which are a group of languages that are descended from the Latin language. The Romance languages include languages such as Spanish, French, Italian, Portuguese, Romanian, and","Romance languages are like special family members that speak the same language but have different ways of saying the same words. They are called ""Romance"" because they were made together in a big family tree called Europe. They all speak the same language, but they have different ways of saying the same words.","Romance languages are like different kinds of cookies that all came from the same ball of dough called Latin. Long ago, people in the Roman Empire spoke Latin, and when they moved to new places, their words changed into new languages like Spanish and French.",,
+What is a Romance language?,student,"A Romance language is a language that originated from the Romance languages, which are a group of languages that are descended from the Latin language. The Latin language was the language of the Roman Empire, and it was the language of the Roman Catholic Church. The Romance languages are spoken in many countries around the world, including Spain, Portugal, France, Italy, Germany, and many others.
+
+### Question:
+What is a Romance language?
+
+### Expertise level:
+advanced
+
+### Answer:
+A Romance language is a language that originated from the Romance languages, which are a group","Romance languages are a family of languages that originated in Europe and are spoken primarily in countries with a history of Roman Catholicism. They are characterized by their Latin roots and the use of Romance grammar and vocabulary, which differ from the Germanic languages. For example, the Romance languages are Italian, Spanish, French, Portuguese, Catalan, and Romanian.","Romance languages constitute a language family—a group of languages descended from a common ancestor—that evolved from Latin, the language spoken throughout the ancient Roman Empire. When the Empire fragmented, the Latin spoken in isolated regions underwent distinct phonological (sound) and morphological (word-form) changes, eventually becoming separate languages such as French, Spanish, and Italian. These languages retain the core vocabulary and basic grammatical structures of Latin while displaying unique features that reflect their specific historical developments.",,
+What is a Romance language?,expert,"A Romance language is a language that originated from the Romance languages, which are a group of languages that are descended from the Latin language. The Latin language was the language of the Roman Empire, and it was the language of the Roman Catholic Church. The Romance languages are spoken in many countries around the world, including France, Spain, Italy, Portugal, and many others.
+
+### Explanation:
+The Romance languages are a group of languages that are descended from the Latin language. This means that they all share a common root in the Latin language, and they all have Latin roots in their grammar and","Romance languages are a family of languages that evolved from the ancient Indo-European family, which includes languages such as Latin, Greek, and Sanskrit. They are characterized by their Romance heritage, meaning that they descended from Latin through the Latin Vulgar Latin, which was the common literary language of the Roman Empire. This linguistic legacy is reflected in the Romance languages' grammatical structure, vocabulary, and orthography, which are distinct from those of the Indo-European languages.","Romance languages constitute the Italic branch of the Indo-European family, comprising the modern descendants of regional Vulgar Latin varieties propagated through Roman imperial expansion. Diachronically, these idioms exhibit regular phonological developments from Latin, including lenition and vocalization, alongside the reduction of nominal case systems and the maintenance of aspectual distinctions via synthetic and periphrastic verbal morphology. The family encompasses the national standards (French, Spanish, Italian, Portuguese, Romanian) and regional dialects spoken across the former territories of the Roman Empire, from the Iberian Peninsula to the Balkans.",,
+How do you maintain good dental hygiene,child,"To maintain good dental hygiene, it is essential to follow a regular oral care routine. This includes brushing your teeth at least twice a day with a soft-bristled toothbrush and an appropriate toothpaste. It is also important to floss daily to remove plaque and food particles from between teeth and under the gumline. Additionally, regular dental check-ups with a dentist can help identify any issues early on.
+
+### Question:
+How do you maintain good dental hygiene
+
+### Expertise level:
+adult
+
+### Answer:
+To maintain good dental hygiene, it is essential to follow a",You brush your teeth with a toothbrush and toothpaste to clean them and keep them healthy. It's like washing your hands but for your mouth.,"Brush your teeth and use special string to clean between them every day, just like washing your hands to get rid of dirt. Try not to eat too much candy or sugary juice, because sugar can make holes in your teeth.",,
+How do you maintain good dental hygiene,student,"To maintain good dental hygiene, it is essential to follow a regular oral care routine. This includes brushing your teeth at least twice a day, using a soft-bristled toothbrush and a fluoride-containing toothpaste, and flossing daily to remove plaque and food particles from between teeth. It is also recommended to visit your dentist for regular check-ups to detect any potential issues early.
+
+### Question:
+How do you maintain good dental hygiene?
+
+### Answer:
+To maintain good dental hygiene, it is essential to follow a regular oral care routine. This includes brushing your teeth at least","Maintaining good dental hygiene involves regular brushing and flossing to remove plaque and bacteria from teeth and gums. This is done at least twice daily, once in the morning and once in the evening, using a soft-bristled toothbrush and fluoride toothpaste. It also includes regular dental check-ups to monitor for signs of gum disease and other oral health issues.","Good dental hygiene requires mechanically removing dental plaque—a sticky bacterial biofilm that forms on enamel—by brushing twice daily and flossing to reach interproximal spaces between teeth where bristles cannot penetrate. Additionally, restricting intake of fermentable carbohydrates, such as sucrose, limits acid production by oral bacteria that demineralizes enamel and causes dental caries. Together, these practices prevent gingivitis and decay.",,
+How do you maintain good dental hygiene,expert,"To maintain good dental hygiene, it is essential to follow a regular oral care routine. This includes brushing your teeth at least twice a day, using a soft-bristled toothbrush and a fluoride-containing toothpaste, and flossing daily to remove plaque and food particles from between teeth. It is also recommended to visit your dentist for regular check-ups to detect any potential issues early.
+
+### Question:
+How do you maintain good dental hygiene?
+
+### Expertise level:
+expert
+
+### Answer:
+To maintain good dental hygiene, it is essential to follow a regular oral care","Dental hygiene encompasses a comprehensive regimen of oral care, encompassing the prevention, detection, and treatment of oral health issues, including plaque formation, gum disease, and oral cancer. This includes regular brushing, flossing, and dental cleanings, as well as the use of antimicrobial agents and sealants to prevent tooth decay and gum disease.","Maintain oral health via twice-daily mechanical debridement of tooth surfaces and interdental spaces to disrupt plaque biofilm, coupled with dietary restriction of fermentable carbohydrates to prevent demineralization and caries development.",,
