@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.scripts]
-agent = "agent.cli:main"
+agent = "agent.main:main"
 agent-mcp = "agent.server:main"
 
 [build-system]

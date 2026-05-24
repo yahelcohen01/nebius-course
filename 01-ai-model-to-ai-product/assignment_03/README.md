@@ -45,7 +45,7 @@ uv run fastmcp client stdio "uv run agent-mcp"
 1. Open this folder (`assignment_03/`) directly in VS Code so `${workspaceFolder}` resolves correctly.
 2. `Cmd+Shift+P` → **Python: Select Interpreter** → pick `./.venv/bin/python`.
 3. Set a breakpoint, then open **Run & Debug** (`Cmd+Shift+D`) and pick a configuration:
-   - **Debug agent CLI** — runs `python -m agent.cli --session debug_session --user gabi`. Edit the `args` array in `launch.json` to pass different CLI flags.
+   - **Debug agent CLI** — runs `python -m agent.main --session debug_session --user gabi`. Edit the `args` array in `launch.json` to pass different CLI flags.
    - **Debug current file** — runs whichever `.py` is in focus (handy for poking at `dataset.py` or `tools.py` standalone).
 4. Press **F5** to launch.
 
@@ -85,6 +85,6 @@ src/agent/
   graph/
     main_graph.py    LangGraph StateGraph wiring
     memory.py        SqliteSaver + per-user profile store
-  cli.py             interactive CLI entry point (`uv run agent`)
+  main.py            interactive CLI entry point (`uv run agent`)
   server.py          FastMCP server entry point (`uv run agent-mcp`)
 ```
