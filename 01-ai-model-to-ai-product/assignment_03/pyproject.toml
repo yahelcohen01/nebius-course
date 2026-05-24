@@ -1,0 +1,29 @@
+[project]
+name = "customer-service-agent"
+version = "0.1.0"
+description = "LangGraph ReAct agent + FastMCP server for the Bitext Customer Service dataset"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets>=3.0",
+    "fastmcp>=2.0",
+    "langchain>=0.3",
+    "langchain-openai>=0.2",
+    "langgraph>=0.2.50",
+    "langgraph-checkpoint-sqlite>=2.0",
+    "pandas>=2.2",
+    "pydantic>=2.9",
+    "python-dotenv>=1.0",
+    "rich>=13.9",
+]
+
+[project.scripts]
+agent = "agent.cli:main"
+agent-mcp = "agent.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent"]

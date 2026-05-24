@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+.python-version-local
+.env
+.env.local
+
+# data + memory artifacts
+data/checkpoints.sqlite
+data/checkpoints.sqlite-*
+data/profiles/
+
+# editors / OS
+.DS_Store
+.idea/
+.vscode/
