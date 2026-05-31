@@ -10,7 +10,8 @@ data/checkpoints.sqlite
 data/checkpoints.sqlite-*
 data/profiles/
 
-# editors / OS
+# editors / OS / local agent state
 .DS_Store
 .idea/
 .vscode/
+.claude/
